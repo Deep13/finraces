@@ -1,0 +1,40 @@
+import React from 'react'
+import avatar from '../assets/images/avatar.png'
+import person2 from '../assets/images/person2.png'
+import dollar from '../assets/images/dollar.png'
+
+const ProfileCardHomepage = ({
+    isFirst = false,
+}) => {
+
+    // cards must be designed in pixels
+    return (
+        <div className='h-[19.5rem] w-[14.60rem] flex-1 bg-white rounded-[18px] px-[0.76rem] py-[0.58rem]'>
+
+            {/* div for profile username and avatar */}
+            <div className='w-full flex gap-[8px] justify-start items-center mb-[10px]'>
+                <div className='w-[31px] h-[31px]'>
+                    <img className='w-full h-full object-cover' src={avatar} alt="avatar image" />
+                </div>
+                <p>@Aslace</p>
+            </div>
+            <div className='w-full h-[12rem] overflow-hidden rounded-[10px] mb-[4px]'>
+                <img className='w-full h-full object-cover' src={person2} alt="a seedha saadha person" />
+            </div>
+            <div className='w-full flex justify-between h-[62px]'>
+                <div className='flex-1 h-full'>
+                    <p className={`${isFirst ? 'text-[#ff0000]' : 'text-black'} text-[12px] font-normal`}>Hippi Monster <span className='text-[15px] font-bold'>#1</span></p>
+                    <div className='flex justify-start items-center'>
+                        <img src={dollar} alt="dollar icon" />
+                        <p className='text-[16px] font-bold text-[#bdbdbd]'>40,25425</p>
+                    </div>
+                </div>
+                <div className='flex-1 h-full flex justify-center items-center'>
+                    <button className={`${isFirst ? 'text-[#ff0000]' : 'text-black'} rounded-[33px] w-[5.6rem] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default ProfileCardHomepage
