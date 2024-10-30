@@ -4,6 +4,7 @@ import OngoingRaces from '../Sections/Homepage/OngoingRaces'
 import Leaderboard from '../Sections/Homepage/Leaderboard'
 import UpcomingRaces from '../Sections/Homepage/UpcomingRaces'
 import KeyFeatures from '../Sections/Homepage/KeyFeatures'
+import Heading from '../Sections/Homepage/Heading'
 
 const Home = () => {
   return (
@@ -13,6 +14,7 @@ const Home = () => {
       <Leaderboard/>
       <UpcomingRaces/>
       <KeyFeatures/>
+      <Heading/>
     </div>
   )
 }
