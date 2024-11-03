@@ -28,7 +28,7 @@ const Leaderboard = () => {
             </div>
 
             {/* Top players profile cards  */}
-            <div className='bg-[#e5f4ff] w-full rounded-[20px] flex justify-center items-center gap-[1.3rem] px-[1.3rem] py-[1.11rem]'>
+            <div className='bg-[#e5f4ff] w-full rounded-[20px] flex justify-center items-center flex-wrap gap-[1.3rem] px-[1.3rem] py-[1.11rem]'>
                 <ProfileCardHomepage isFirst />
                 <ProfileCardHomepage/>
                 <ProfileCardHomepage/>

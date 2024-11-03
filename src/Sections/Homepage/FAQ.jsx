@@ -2,54 +2,21 @@ import { BsChevronCompactDown, BsChevronCompactUp } from "react-icons/bs";
 import { AiOutlineArrowRight } from "react-icons/ai"; 
 import React, { useState } from 'react'
 import line from '../../assets/images/Group.png'
+import { accordionData } from "../../Utils/Data";
 
 const FAQ = () => {
 
     const [activeIndex, setActiveIndex] = useState(null);
 
-    // Data for each FAQ item
-    const accordionData = [
-        {
-            title: "Aliquam erat volutpat. Vestibulum efficitur risus?",
-            content: "Aliquam sit amet nisl volutpat, sollicitudin orci nec, sagittis risus."
-        },
-        {
-            title: "Aliquam erat volutpat. Vestibulum efficitur risus?",
-            content: "Aliquam sit amet nisl volutpat, sollicitudin orci nec, sagittis risus."
-        },
-        {
-            title: "Aliquam erat volutpat. Vestibulum efficitur risus?",
-            content: "Aliquam sit amet nisl volutpat, sollicitudin orci nec, sagittis risus."
-        },
-        {
-            title: "Suspendisse potenti. Etiam venenatis metus?",
-            content: "Donec convallis lacus in libero finibus, ut interdum sapien lobortis."
-        },
-        {
-            title: "Quisque ut nibh nec nulla viverra?",
-            content: "Pellentesque commodo ex nec dolor eleifend, id cursus erat convallis."
-        },
-        {
-            title: "Quisque ut nibh nec nulla viverra?",
-            content: "Pellentesque commodo ex nec dolor eleifend, id cursus erat convallis."
-        },
-        {
-            title: "Quisque ut nibh nec nulla viverra?",
-            content: "Pellentesque commodo ex nec dolor eleifend, id cursus erat convallis."
-        },
-        {
-            title: "Quisque ut nibh nec nulla viverra?",
-            content: "Pellentesque commodo ex nec dolor eleifend, id cursus erat convallis."
-        },
-    ];
+  
 
     const toggleAccordion = (index) => {
         setActiveIndex(prevIndex => (prevIndex === index ? null : index));
     };
 
     return (
-        <div className='w-full relative mb-[3.29rem] flex justify-between items-start'>
-            <div className='w-[22rem]'>
+        <div className='w-full relative mb-[3.29rem] flex justify-between items-start flex-wrap'>
+            <div className='w-[22rem] mb-[2rem]'>
                 <h4 className='text-[3.1rem] leading-[3.64rem] font-extrabold mb-[21.48px]'>
                     Frequently asked questions
                 </h4>

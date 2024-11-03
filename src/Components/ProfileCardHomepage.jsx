@@ -9,7 +9,7 @@ const ProfileCardHomepage = ({
 
     // cards must be designed in pixels
     return (
-        <div className='h-[19.5rem] w-[14.60rem] flex-1 bg-white rounded-[18px] px-[0.76rem] py-[0.58rem]'>
+        <div className='h-[332px] w-[248px] bg-white rounded-[18px] px-[13px] py-[10px] flex flex-col'>
 
             {/* div for profile username and avatar */}
             <div className='w-full flex gap-[8px] justify-start items-center mb-[10px]'>
@@ -18,7 +18,7 @@ const ProfileCardHomepage = ({
                 </div>
                 <p>@Aslace</p>
             </div>
-            <div className='w-full h-[12rem] overflow-hidden rounded-[10px] mb-[4px]'>
+            <div className='w-full flex-1 overflow-hidden rounded-[10px] mb-[4px]'>
                 <img className='w-full h-full object-cover' src={person2} alt="a seedha saadha person" />
             </div>
             <div className='w-full flex justify-between h-[62px]'>
@@ -30,7 +30,7 @@ const ProfileCardHomepage = ({
                     </div>
                 </div>
                 <div className='flex-1 h-full flex justify-center items-center'>
-                    <button className={`${isFirst ? 'text-[#ff0000]' : 'text-black'} rounded-[33px] w-[5.6rem] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
+                    <button className={`${isFirst ? 'text-[#ff0000]' : 'text-black'} rounded-[33px] w-[96px] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
                 </div>
             </div>
         </div>

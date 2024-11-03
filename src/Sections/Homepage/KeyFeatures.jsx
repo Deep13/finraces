@@ -11,8 +11,8 @@ const KeyFeatures = () => {
       </a>
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem]'>Key Features</h2>
       {/* info section  */}
-      <div className="w-full flex flex-col gap-[22px] mb-[3.5rem] justify-center items-center">
-        <div className="w-full flex gap-[23px] justify-center items-center">
+      <div className="w-full flex flex-col gap-[22px] mb-[3.5rem] justify-center items-center flex-wrap">
+        <div className="w-full flex gap-[23px] justify-center items-center flex-wrap">
           {/* card  */}
           <div className='w-[533.6px] h-[134.4px] flex gap-[23px]'>
             <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>01</div>
@@ -30,7 +30,7 @@ const KeyFeatures = () => {
             </div>
           </div>
         </div>
-        <div className="w-full flex gap-[23px] justify-center items-center">
+        <div className="w-full flex gap-[23px] justify-center items-center flex-wrap">
           {/* card  */}
           <div className='w-[533.6px] h-[134.4px] flex gap-[23px]'>
             <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>02</div>
@@ -55,7 +55,7 @@ const KeyFeatures = () => {
           <img src={news_icon} alt="video to show How does it work" />
           <h3 className='text-[1.25rem] font-medium'>How does it work ?</h3>
         </div>
-        <div className='flex justify-center gap-[36px] pb-[48px]'>
+        <div className='flex justify-center gap-[36px] pb-[48px] flex-wrap'>
           {/* here will be the cards */}
           {/* card */}
           <KeyFeaturesCard />
