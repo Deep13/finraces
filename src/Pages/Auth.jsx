@@ -7,7 +7,7 @@ import pattern from '../assets/images/pattern.svg'
 const Auth = () => {
   return (
     <div className='w-screen h-screen  relative flex overflow-auto'>
-      <div className='flex-1 flex justify-center items-start py-24 overflow-auto'>
+      <div className='flex-1 flex justify-center items-start overflow-auto'>
         <Form />
       </div>
       <div className='flex-1 h-full bg-[#171624] flex justify-center items-center relative overflow-hidden'>

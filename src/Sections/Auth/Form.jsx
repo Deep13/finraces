@@ -166,7 +166,7 @@ const Form = () => {
           </div>
         </div>
        :
-      <div className='w-[22.5rem] relative flex items-center flex-col gap-[2rem]'>
+      <div className='w-[22.5rem] h-full relative flex items-center flex-col gap-[2rem] scale-75'>
         <div className='w-full bg-[#f5f5f5] p-[10px] rounded-full flex justify-center items-center gap-3'>
           <button onClick={() => setActiveTab(tabs.signup)} className={`flex-1 rounded-full text-[1rem] py-2 ${activeTab === tabs.signup ? 'bg-[#212121] text-white' : 'bg-transparent text-[#212121]'}`}>Sign up</button>
           <button onClick={() => setActiveTab(tabs.login)} className={` flex-1 rounded-full text-[1rem] py-2 ${activeTab === tabs.login ? 'bg-[#212121] text-white' : 'bg-transparent text-[#212121]'}`}>Log in</button>
