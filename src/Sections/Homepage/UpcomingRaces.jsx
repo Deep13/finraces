@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import UpcomingRaceCardHomepage from '../../Components/UpcomingRaceCardHomepage';
+import { BiChevronRight } from "react-icons/bi"; 
 
 const UpcomingRaces = () => {
   // State to keep track of the active tab
@@ -12,8 +13,8 @@ const UpcomingRaces = () => {
 
   return (
     <div className='w-full relative mb-[3.29rem]'>
-      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline' href="">
-        See All >
+      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
+            See All <BiChevronRight size={18} />
       </a>
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem]'>Upcoming Races</h2>
       

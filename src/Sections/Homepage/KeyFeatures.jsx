@@ -2,12 +2,13 @@ import React from 'react'
 import cardImage from '../../assets/images/card_video_image.png'
 import news_icon from '../../assets/images/news_icon.svg'
 import KeyFeaturesCard from '../../Components/KeyFeaturesCard'
+import { BiChevronRight } from "react-icons/bi"; 
 
 const KeyFeatures = () => {
   return (
     <div className='w-full relative mb-[3.29rem]'>
-      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline' href="">
-          See All >
+      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
+            See All <BiChevronRight size={18} />
       </a>
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem]'>Key Features</h2>
       {/* info section  */}

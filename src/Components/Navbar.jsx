@@ -1,5 +1,6 @@
 import { HiMenu } from "react-icons/hi";
 import React, { useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import logo from '../assets/icons/logofinraces.svg'
 import globe from '../assets/icons/globe_icon.svg'
 import search from '../assets/icons/search_icon.svg'
@@ -15,6 +16,8 @@ import recent from '../assets/icons/sidebar/recent.svg'
 const Navbar = () => {
 
     const [toggle, setToggle] = useState(false)
+    const navigate = useNavigate()
+    const token = localStorage.getItem('token')
 
     return (
         <>
@@ -48,29 +51,34 @@ const Navbar = () => {
                     My Watchlist
                 </button>
             </div>
-            <nav className='w-full pl-[1.5rem] py-[1.1rem] bg-[#e5f4ff] flex items-center justify-between sticky top-0 z-[10]'>
+            <nav className='w-full px-[1.5rem] py-[0.8rem] bg-[#e5f4ff] flex items-center justify-between sticky top-0 z-[10]'>
                 <div className="flex items-center">
-                    <button onClick={() => setToggle(prev => !prev)} className='w-[2.9rem] h-[2.9rem] grid place-items-center bg-white rounded-[8px] mr-[106px]'>
+                    {/* <button onClick={() => setToggle(prev => !prev)} className='w-[2.9rem] h-[2.9rem] grid place-items-center rounded-[8px] mr-[106px]'>
                         <HiMenu size={24} color="black" />
-                    </button>
+                    </button> */}
                     <div>
                         <img src={logo} alt="Finraces logo" />
                     </div>
                 </div>
-                <div className="flex gap-[12px] justify-start items-center mr-[173px]">
-                    <button className='w-[2.9rem] h-[2.9rem] grid place-items-center bg-white rounded-[8px]'>
+                <div className="flex gap-[12px] justify-start items-center">
+                    <button className='aspect-square h-[2.35rem] grid place-items-center bg-white rounded-[8px]'>
                         <img src={search} alt="Search" />
                     </button>
-                    <button className="w-[5.64rem] bg-[#e4eaf0] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black">
-                        Log in
+                    {
+                    !token ?
+                    <button onClick={() => navigate('/auth')} className="bg-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
+                        Log in / Sign up
+                    </button> : 
+                    <button onClick={() =>{
+                        localStorage.removeItem('token')
+                    }} className="bg-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
+                        Log out
                     </button>
-                    <button className="w-[5.64rem] h-[2.35rem] text-[0.9rem] rounded-[8px] bg-[#c9c9c9] grid place-items-center font-extrabold text-black">
-                        Sign up
-                    </button>
-                    <button className='w-[2.9rem] h-[2.9rem] grid place-items-center bg-white rounded-[8px]'>
+                    }
+                    <button className='aspect-square h-[2.35rem] grid place-items-center bg-white rounded-[8px]'>
                         <img src={support} alt="Search" />
                     </button>
-                    <button className='w-[2.9rem] h-[2.9rem] grid place-items-center bg-white rounded-[8px]'>
+                    <button className='aspect-square h-[2.35rem] grid place-items-center bg-white rounded-[8px]'>
                         <img src={globe} alt="Search" />
                     </button>
                 </div>

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import ProfileCardHomepage from '../../Components/ProfileCardHomepage';
+import { BiChevronRight } from "react-icons/bi"; 
+
 
 const Leaderboard = () => {
   // State to keep track of the active tab
@@ -12,9 +14,9 @@ const Leaderboard = () => {
 
   return (
     <div className='w-full relative mb-[3.29rem]'>
-      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline' href="">
-        See All >
-      </a>
+      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
+            See All <BiChevronRight size={18} />
+        </a>
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem]'>LeaderBoard</h2>
       
       {/* Tab layout */}
