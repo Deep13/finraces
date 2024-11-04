@@ -23,7 +23,7 @@ const KeyFeatures = () => {
           </div>
           {/* card  */}
           <div className='w-[533.6px] h-[134.4px] flex gap-[23px] justify-center items-center'>
-            <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>03</div>
+            <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>02</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold'>Intuitive Dashboard</p>
               <p className='text-[15.15px] leading-[30.3px]'>Manage your resources with a user-friendly interface that puts you in control.  </p>
@@ -33,7 +33,7 @@ const KeyFeatures = () => {
         <div className="w-full flex gap-[23px] justify-center items-center flex-wrap">
           {/* card  */}
           <div className='w-[533.6px] h-[134.4px] flex gap-[23px]'>
-            <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>02</div>
+            <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>03</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold'>Customizable Solutions</p>
               <p className='text-[15.15px] leading-[30.3px]'>Tailor the cloud experience to meet your specific needs with flexible plans and options.  </p>

@@ -16,7 +16,7 @@ import g from '../assets/images/g.png'
 
 const RaceCardHomepage = () => {
   return (
-    <div className='w-[29.7rem] h-[23.7rem] rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] flex flex-col'>
+    <div className='w-[29.7rem] h-[23.7rem] rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] flex flex-col overflow-hidden'>
         <div className='w-full flex justify-between mb-[14px]'>
             <div className='flex gap-[0.76rem]'>
                 <img src={box} alt="box icon" />

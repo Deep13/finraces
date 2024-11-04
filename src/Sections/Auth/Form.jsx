@@ -3,6 +3,8 @@ import { FcGoogle } from "react-icons/fc";
 import React, { useEffect, useState } from 'react'
 import facebook_icon from '../../assets/icons/facebook_icon.svg'
 import Verified from '../../assets/icons/Featured_icon.svg'
+import { RegisterUser, Login as LoginUser} from "../../Utils/api";
+import { useNavigate } from "react-router-dom";
 
 
 const tabs = {
@@ -10,6 +12,7 @@ const tabs = {
   login: 'login',
   success: 'success',
 }
+
 
 const Form = () => {
 
@@ -29,6 +32,9 @@ const Form = () => {
   })
   const [loginActive, setLoginActive]= useState(false)
   const [signupActive, setSignupActive]= useState(false)
+
+  const navigate = useNavigate()
+
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -81,24 +87,50 @@ const Form = () => {
     return true
   }
 
+  function splitFullName(fullName) {
+    const trimmedName = fullName.trim();
+    if (trimmedName.includes(" ")) {
+      const [firstName, ...lastNameArray] = trimmedName.split(" ");
+      const lastName = lastNameArray.join(" ");
+      
+      return { firstName, lastName };
+    } else {
+      return { firstName: trimmedName, lastName: "" };
+    }
+  }
+
   const Signup = () => {
     if(!validateSignup()) {
       return
     }
-    alert('ok your are registered')
-    setActiveTab(tabs.success)
-    setSignupCreds({
-      fullName: '',
-      email: '',
-      password: '',
+    // here the signup function is called
+    // alert('ok your are registered')
+    let {email, password, fullName} = signupCreds
+    const {firstName, lastName} = splitFullName(fullName)
+    RegisterUser(email, password, firstName, lastName, () => {
+      alert('Something went wrong')
+    }, () => {
+      setActiveTab(tabs.success)
+      setSignupCreds({
+        fullName: '',
+        email: '',
+        password: '',
+      })
     })
   }
 
   const Login = () => {
     if(!validateLogin()) {
+      // error handling
       return
     }
-    alert('ok your are Loggedin')
+    // alert('ok your are Loggedin')
+    const { email, password} = loginCreds
+    LoginUser(email, password, () => {
+      navigate('/')
+    }, () => {
+      alert('something went wrong')
+    })
     setLoginCreds({
       email: '',
       password: '',
@@ -127,7 +159,7 @@ const Form = () => {
             </div>
             <div className='text-[24px] text-[#1a1e25] font-semibold text-center'>Congratulations</div>
             <p className="text-[#384453]">Your email has been successfully verified</p>
-            <button onClick={()=> setActiveTab(tabs.signup)} className="bg-[#0d5ce5] text-white px-[22px] py-[20px] w-[330px] rounded-[10px] flex gap-1 justify-center">
+            <button onClick={()=> setActiveTab(tabs.login)} className="bg-[#0d5ce5] text-white px-[22px] py-[20px] w-[330px] rounded-[10px] flex gap-1 justify-center">
               Continue
               <BiCheckCircle color="white" size={24} />
             </button>
