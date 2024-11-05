@@ -3,8 +3,8 @@ import cardImage from '../assets/images/card_video_image.png'
 
 const KeyFeaturesCard = () => {
     return (
-        <div className='w-[233px] flex flex-col gap-[16px]'>
-            <div className='w-full h-[167px]'>
+        <div className='flex flex-col gap-[16px]'>
+            <div className='w-full rounded-[1rem]'>
                 <img className='w-full h-full object-cover' src={cardImage} alt="card video iamge that you can click" />
             </div>
             <div className='w-full'>

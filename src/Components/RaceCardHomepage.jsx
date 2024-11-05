@@ -16,7 +16,7 @@ import g from '../assets/images/g.png'
 
 const RaceCardHomepage = () => {
   return (
-    <div className='w-[29.7rem] h-[23.7rem] rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] flex flex-col overflow-hidden'>
+    <div className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] flex flex-col overflow-hidden'>
         <div className='w-full flex justify-between mb-[14px]'>
             <div className='flex gap-[0.76rem]'>
                 <img src={box} alt="box icon" />
@@ -33,43 +33,93 @@ const RaceCardHomepage = () => {
                   <p className='text-[0.7rem]'>20 Participants</p>
               </div>
         </div>
+
         <div className='w-full flex justify-center items-center mb-[25px]'>
             {/* absolute elements */}
             <img src={line_beside_medals} alt="" />
 
-            <div className='w-full flex justify-center items-center gap-[8px] scale-100 relative'>    
-                <div className='relative w-[72px] aspect-square p-[22px]'>
-                    <img className='z-[15] w-full h-full object-cover scale-125 relative top-[3px]' src={person2} alt="silver medal position" />
-                    <img className='absolute top-0 left-0 w-full h-full object-cover z-[15]' src={silver_crown} alt="1st position person" />
-                    <p className='absolute -bottom-[20px] left-[2.5px] w-full text-center font-semibold text-[10px] text-[#b9b9b9]'>Nik</p>
+            <div className='w-full flex justify-center items-center gap-[25px]'>    
+                {/* <div className='relative aspect-square p-[22px]'>
+                    <img src={person2} alt="silver medal position" />
+                    <img src={silver_crown} alt="1st position person" />
+                    <p >Nik</p>
+                </div> */}
+
+                <div className='relative aspect-square p-[22px] scale-90'>
+                    <div className='absolute top-4 left-0 scale-75'>
+                        <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
+                    </div>
+                    <div className='absolute top-0 left-0 scale-125'>
+                        <img className='w-full h-full object-cover' src={silver_crown} alt="1st position person" />
+                    </div>
+                    <p >Nik</p>
                 </div>
-                <div className='relative w-[104px] aspect-square p-[30px]'>
-                    <img className='z-[15] w-full h-full object-cover' src={person2} alt="gold medal position" />
-                    <img className='absolute top-0 left-0 w-full h-full object-cover z-[15]' src={gold_crown} alt="1st position person" />
-                    <p className='absolute -bottom-[20px] left-[2.5px] w-full text-center font-semibold text-[10px] text-[#b9b9b9]'>Jon</p>
+
+                <div className='relative aspect-square p-[22px]'>
+                    <div className='absolute top-2 left-0 scale-75'>
+                        <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
+                    </div>
+                    <div className='absolute top-0 left-0 scale-125'>
+                        <img className='w-full h-full object-cover' src={gold_crown} alt="1st position person" />
+                    </div>
+                    <p >Nik</p>
                 </div>
-                <div className='relative w-[72px] aspect-square p-[22px]'>
-                    <img className='z-[15] w-full h-full object-cover scale-125 relative top-[3px]' src={person2} alt="bronze medal position" />
-                    <img className='absolute top-0 left-0 w-full h-full object-cover z-[15]' src={bronze_corwn} alt="1st position person" />
-                    <p className='absolute -bottom-[20px] left-[2.5px] w-full text-center font-semibold text-[10px] text-[#b9b9b9]'>dave</p>
+                
+                <div className='relative aspect-square p-[22px] scale-90'>
+                    <div className='absolute top-4 left-0 scale-75'>
+                        <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
+                    </div>
+                    <div className='absolute top-0 left-0 scale-125'>
+                        <img className='w-full h-full object-cover' src={bronze_corwn} alt="1st position person" />
+                    </div>
+                    <p >Nik</p>
                 </div>
+              
+                {/* <div className='relative aspect-square p-[22px]'>
+                    <img src={person2} alt="bronze medal position" />
+                    <img src={bronze_corwn} alt="1st position person" />
+                    <p>dave</p>
+                </div> */}
 
                 {/* absolute elements */}
                 <img className='-scale-100' src={line_beside_medals} alt="" />
             </div>
         </div>
-        <div className='w-full flex-1 relative border-l border-r border-black bg-[#edf7ff]'>
-            
-            <div className='absolute top-0 left-0 w-full'>
-                <img src={dashed_line} alt="" />
+
+        <div className='w-full flex-1 relative border border-dashed border-black  bg-[#edf7ff] flex justify-between items-center py-[2rem]'>
+            <div className='bg-[#edf7ff]'>
+                <img src={start} alt="" />
             </div>
+            <div className='flex-1 border-dashed border-black border-t relative'>
+              <div className='absolute -top-[1.5rem] left-8 flex justify-center gap-2'>
+                    <div className='w-[45px] aspect-square'>
+                        <img src={a} alt="" />
+                        <p className='font-semibold relative -top-[4.5rem] text-center text-[20px] text-black'>3</p>
+                    </div>
+                    <div className='w-[45px] aspect-square'>
+                        <img src={g} alt="" />
+                        <p className='font-semibold relative -top-[4.5rem] text-center text-[20px] text-black'>2</p>
+                    </div>
+                    <div className='w-[45px] aspect-square'>
+                        <img src={f} alt="" />
+                        <p className='font-semibold relative -top-[4.5rem] text-center text-[20px] text-black'>1</p>
+                    </div>
+              </div>
+            </div>
+            <div className='bg-[#edf7ff]'>
+                <img src={finish} alt="" />
+            </div>
+
+            {/* <div className='absolute top-0 left-0 w-full'>
+                <img src={dashed_line} alt="" />
+            </div> */}
             {/* race line  */}
-            <div className='absolute top-1/2 left-0 w-full'>
-                <div className='w-full relative'>
-                    <img src={dashed_line} alt="" />
+            {/* <div className='absolute top-1/2 left-0 w-full'> */}
+                {/* <div className='w-full relative'> */}
+                    {/* <img src={dashed_line} alt="" /> */}
 
                      {/* stocks icons with text  */}
-                    <div className='relative flex gap-3 -top-6 w-full justify-center'>
+                    {/* <div className='relative flex gap-3 -top-6 w-full justify-center'>
                         <div className='relative w-[45px] aspect-square'>
                             <img src={a} alt="" />
                             <p className='font-semibold absolute -top-[2rem] left-0 w-full text-center text-[20px] text-black'>3</p>
@@ -82,23 +132,23 @@ const RaceCardHomepage = () => {
                             <img src={f} alt="" />
                             <p className='font-semibold absolute -top-[2rem] left-0 w-full text-center text-[20px] text-black'>1</p>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div className='absolute bottom-0 left-0 w-full'>
+                    </div> */}
+                {/* </div> */}
+            {/* </div> */}
+            {/* <div className='absolute bottom-0 left-0 w-full'>
                 <img src={dashed_line} alt="" />
             </div>
             <div className='absolute bottom-0 right-0 w-full'>
                 <img src={dashedline_breaks} alt="" />
-            </div>
+            </div> */}
 
             {/* absolute  */}
-            <div className='absolute top-[40px] -left-[8px] bg-[#edf7ff] px-[4]'>
+            {/* <div className='absolute top-[40px] -left-[8px] bg-[#edf7ff] px-[4]'>
                 <img src={start} alt="" />
             </div>
             <div className='absolute top-[40px] -right-[8px] bg-[#edf7ff] px-[4]'>
                 <img src={finish} alt="" />
-            </div>
+            </div> */}
         </div>
     </div>
   )

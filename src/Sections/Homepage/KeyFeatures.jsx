@@ -6,16 +6,16 @@ import { BiChevronRight } from "react-icons/bi";
 
 const KeyFeatures = () => {
   return (
-    <div className='w-full relative mb-[3.29rem]'>
+    <div className='max-h-[1400px] relative mb-[5rem] md:mb-[3.29rem]'>
       <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
             See All <BiChevronRight size={18} />
       </a>
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem]'>Key Features</h2>
       {/* info section  */}
-      <div className="w-full flex flex-col gap-[22px] mb-[3.5rem] justify-center items-center flex-wrap">
-        <div className="w-full flex gap-[23px] justify-center items-center flex-wrap">
+      <div className="w-full gap-[22px] mb-[3.5rem]">
+        <div className="gap-[23px] grid grid-cols-1 md:grid-cols-2">
           {/* card  */}
-          <div className='w-[533.6px] h-[134.4px] flex gap-[23px]'>
+          <div className='flex gap-[23px]'>
             <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>01</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold'>AI Powered:</p>
@@ -23,7 +23,7 @@ const KeyFeatures = () => {
             </div>
           </div>
           {/* card  */}
-          <div className='w-[533.6px] h-[134.4px] flex gap-[23px] justify-center items-center'>
+          <div className='flex gap-[23px]'>
             <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>02</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold'>Intuitive Dashboard</p>
@@ -31,9 +31,9 @@ const KeyFeatures = () => {
             </div>
           </div>
         </div>
-        <div className="w-full flex gap-[23px] justify-center items-center flex-wrap">
+        <div className="gap-[23px] grid grid-cols-1 md:grid-cols-2">
           {/* card  */}
-          <div className='w-[533.6px] h-[134.4px] flex gap-[23px]'>
+          <div className='flex gap-[23px]'>
             <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>03</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold'>Customizable Solutions</p>
@@ -41,7 +41,7 @@ const KeyFeatures = () => {
             </div>
           </div>
           {/* card  */}
-          <div className='w-[533.6px] h-[134.4px] flex gap-[23px]'>
+          <div className='flex gap-[23px]'>
             <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient'>04</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold'>Advanced</p>
@@ -56,7 +56,7 @@ const KeyFeatures = () => {
           <img src={news_icon} alt="video to show How does it work" />
           <h3 className='text-[1.25rem] font-medium'>How does it work ?</h3>
         </div>
-        <div className='flex justify-center gap-[36px] pb-[48px] flex-wrap'>
+        <div className='grid grid-cols-2 md:grid-cols-4 gap-[36px] pb-[48px]'>
           {/* here will be the cards */}
           {/* card */}
           <KeyFeaturesCard />

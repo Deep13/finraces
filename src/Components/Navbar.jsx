@@ -71,6 +71,7 @@ const Navbar = () => {
                     </button> : 
                     <button onClick={() =>{
                         localStorage.removeItem('token')
+                        navigate('/auth')
                     }} className="bg-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
                         Log out
                     </button>

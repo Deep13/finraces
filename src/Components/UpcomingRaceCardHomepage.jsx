@@ -3,7 +3,7 @@ import stocks from '../assets/images/stonks.svg'
 
 const UpcomingRaceCardHomepage = () => {
   return (
-    <div className='rounded-[15px] bg-[#E5f4ff] w-[534px] h-auto pl-[30px] px-[38px] pt-[31px] pb-[24.92px]'>
+    <div className='rounded-[15px] bg-[#E5f4ff] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem]'>
         <div className='w-full flex justify-between items-center mb-[5px]'>
             <div className='flex justify-between'>
                 <p className='font-bold text-[20px]'>Race will start at 2PM</p>

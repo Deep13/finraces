@@ -9,7 +9,7 @@ import FAQ from '../Sections/Homepage/FAQ'
 
 const Home = () => {
   return (
-    <div className='w-full relative h-auto px-[10.3rem] pt-[2.1rem]'>
+    <div className='w-full relative h-auto px-[2%] md:px-[6%] pt-[2.1rem] flex flex-col items-center'>
       <Hero/>
       <OngoingRaces/>
       <Leaderboard/>
