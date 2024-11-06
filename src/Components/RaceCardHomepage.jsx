@@ -34,9 +34,11 @@ const RaceCardHomepage = () => {
               </div>
         </div>
 
-        <div className='w-full flex justify-center items-center mb-[25px]'>
+        <div className='w-full flex justify-center items-center mb-[25px] relative'>
             {/* absolute elements */}
-            <img src={line_beside_medals} alt="" />
+            <div className='absolute left-0 top-1/2'>
+                <img src={line_beside_medals} alt="" />
+            </div>
 
             <div className='w-full flex justify-center items-center gap-[25px]'>    
                 {/* <div className='relative aspect-square p-[22px]'>
@@ -45,34 +47,34 @@ const RaceCardHomepage = () => {
                     <p >Nik</p>
                 </div> */}
 
-                <div className='relative aspect-square p-[22px] scale-90'>
+                <div className='relative aspect-square p-[22px] scale-90 z-[5]'>
                     <div className='absolute top-4 left-0 scale-75'>
                         <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
                     </div>
                     <div className='absolute top-0 left-0 scale-125'>
                         <img className='w-full h-full object-cover' src={silver_crown} alt="1st position person" />
                     </div>
-                    <p >Nik</p>
+                    <p className='relative top-[3.5rem] font-semibold text-[12px]'>Nik</p>
                 </div>
 
-                <div className='relative aspect-square p-[22px]'>
+                <div className='relative aspect-square p-[22px] z-[5]'>
                     <div className='absolute top-2 left-0 scale-75'>
                         <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
                     </div>
                     <div className='absolute top-0 left-0 scale-125'>
                         <img className='w-full h-full object-cover' src={gold_crown} alt="1st position person" />
                     </div>
-                    <p >Nik</p>
+                    <p className='relative top-[3rem] font-semibold text-[12px]'>Jon</p>
                 </div>
                 
-                <div className='relative aspect-square p-[22px] scale-90'>
+                <div className='relative aspect-square p-[22px] scale-90 z-[5]'>
                     <div className='absolute top-4 left-0 scale-75'>
                         <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
                     </div>
                     <div className='absolute top-0 left-0 scale-125'>
                         <img className='w-full h-full object-cover' src={bronze_corwn} alt="1st position person" />
                     </div>
-                    <p >Nik</p>
+                    <p className='relative top-[3.5rem] font-semibold text-[12px]'>Saif</p>
                 </div>
               
                 {/* <div className='relative aspect-square p-[22px]'>
@@ -82,7 +84,9 @@ const RaceCardHomepage = () => {
                 </div> */}
 
                 {/* absolute elements */}
-                <img className='-scale-100' src={line_beside_medals} alt="" />
+                <div className='absolute right-0 top-1/2'>
+                    <img className='-scale-100' src={line_beside_medals} alt="" />
+                </div>
             </div>
         </div>
 

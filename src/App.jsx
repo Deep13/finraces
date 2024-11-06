@@ -5,6 +5,7 @@ import Home from './Pages/Home'
 import Auth from './Pages/Auth'
 import NavFootWrapper from './Components/layouts/NavFootWrapper'
 import GlobalProvider from './Contexts'
+import RacePage from './Pages/RacePage'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<NavFootWrapper />}>
             <Route path="" element={<Home />} />
+            <Route path="race" element={<RacePage />} />
           </Route>
           <Route path="/auth" element={<Auth />} />
         </Routes>
