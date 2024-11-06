@@ -1,5 +1,5 @@
 import axios from "axios";
-let URL = 'http://18.215.253.160:3020'
+let URL = 'https://www.missionatal.com'
 
 
 export const RegisterUser = async (
@@ -22,7 +22,7 @@ export const RegisterUser = async (
     try {
         // console.log('Registration payload', payload);
 
-        const response = await axios.post(`http://18.215.253.160:3020/api/v1/auth/email/register`, payload);
+        const response = await axios.post(`https://www.missionatal.com/api/v1/auth/email/register`, payload);
         const data = await response.data
         console.log('Registration successful', data);
         onSuccess()
@@ -48,7 +48,7 @@ export const Login = async (
     try {
       console.log('login payload', payload);
 
-      const response = await axios.post('http://18.215.253.160:3020/api/v1/auth/email/login', payload);
+      const response = await axios.post('https://www.missionatal.com/api/v1/auth/email/login', payload);
 
       console.log('response', response.data);
 
