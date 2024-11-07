@@ -25,7 +25,7 @@ const Navbar = () => {
                     {/* <button onClick={() => setToggle(prev => !prev)} className='w-[2.9rem] h-[2.9rem] grid place-items-center rounded-[8px] mr-[106px]'>
                     <HiMenu size={24} color="black" />
                 </button> */}
-                    <div>
+                    <div onClick={() => navigate('/')} className="cursor-pointer">
                         <img src={logo} alt="Finraces logo" />
                     </div>
                 </div>

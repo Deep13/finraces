@@ -64,8 +64,88 @@ export const Login = async (
     }
   };
 
+  export const getStocks = async (
+    onSuccess = () => {},
+    onError = () => {},
+  ) => {
+    let token = localStorage.getItem('token')
+    try {
+        let response = await axios.get(`https://www.missionatal.com/api/v1/stocks`, {
+            headers: {
+                'Authorization': `Bearer ${token}`, // Example for passing a token
+            }
+        })
+        let result = await response.data
+        // console.log('result success', result)
+        onSuccess(result)
+        // setStocks(result.data)
+    } catch (e) {
+        console.error('stock error', e.response.data.message)
+        if (e.response.data.message === 'Unauthorized') {
+            alert('You are not Authorized')
+            onError()
+            // navigate('/auth')
+        }
+    }
+}
 
-// export function isValidEmail(email) {
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//     return emailRegex.test(email);
-//   }
+export  const createRaceAndJoinUser = async (
+    raceDetails, 
+    racePredictions,
+    onSuccess = () => {},
+    onError = () => {},
+) => {
+  try {
+
+    const {start_date, duration, start_time} = raceDetails
+
+    const startDateTimeString = `${start_date}T${start_time}`;
+
+    const startDateTime = new Date(startDateTimeString);
+    let [hours, minutes] = duration.split(':').map(Number)
+    console.log('This is da time', hours + " " + minutes)
+    const endTime = new Date(startDateTime.getTime() + (hours*3600 + minutes*60) * 1000);
+
+    let stocksArray = racePredictions.map(curr => {
+        return curr.stock_id
+    })
+     
+      if (!stocksArray || stocksArray.length === 0) {
+          throw new Error('No stocks selected for the race.');
+      }
+
+
+      let token = localStorage.getItem('token');
+      if (!token) {
+          throw new Error('Authentication token is missing. Please log in.');
+      }
+
+      let raceData = {
+        race: {
+            "isSimulation": false,
+            "end_date": endTime,
+            "start_date": startDateTime,
+            "name": raceDetails.name,
+            "stocks": stocksArray
+        },
+        racePredictions
+      }
+
+      console.log('Race Payload object',raceData)
+      console.log('Race Payload',JSON.stringify(raceData))
+    //   return
+
+      const response = await axios.post(
+          `https://www.missionatal.com/api/v1/race-users/race`,
+          raceData,
+          { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const result = response.data
+      onSuccess(result)
+    //   navigate(`/race/${response.data.id}`);
+  } catch (error) {
+      console.error('Error during race creation and prediction:', error.message);
+      onError(error)
+  }
+};
