@@ -7,6 +7,7 @@ import info from '../assets/images/ongoingRaces/info_icon.svg'
 import { Switch } from "@headlessui/react";
 import Select from 'react-select'
 import { createRaceAndJoinUser, getStocks } from "../Utils/api";
+import { useNavigate } from "react-router-dom";
 
 const CreateRace = ({
   setCreateRace = () => { },
@@ -30,6 +31,7 @@ const CreateRace = ({
     "start_date": "2024-11-07T02:04:00.570Z",
     "name": ""
   })
+  const navigate = useNavigate()
 
   // race data schema
   // const [raceData, setRaceData] = useState({
@@ -128,6 +130,8 @@ const CreateRace = ({
   useEffect(() => {
     getStocks((res) => {
       setStockList(res.data)
+    }, () => {
+      navigate('/auth')
     })
   }, [])
 

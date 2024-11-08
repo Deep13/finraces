@@ -45,15 +45,15 @@ const Navbar = () => {
                                 }} className="bg-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
                                     Log out
                                 </button>
-                                <button onClick={() => {
-                                    // create Race
-                                    setCreateRaceState(true)
-                                }} className="bg-[#e4eaf0] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
-                                    Create Race
-                                    <IoIosAdd size={20} />
-                                </button>
                             </>
                     }
+                    <button onClick={() => {
+                            // create Race
+                            setCreateRaceState(true)
+                        }} className="bg-[#e4eaf0] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
+                            Create Race
+                            <IoIosAdd size={20} />
+                    </button>
                     <button className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={support} alt="Search" />
                     </button>

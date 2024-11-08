@@ -84,7 +84,6 @@ export const Login = async (
         if (e.response.data.message === 'Unauthorized') {
             alert('You are not Authorized')
             onError()
-            // navigate('/auth')
         }
     }
 }
