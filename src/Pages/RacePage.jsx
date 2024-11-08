@@ -25,7 +25,7 @@ import diamond from '../assets/images/kerechi_diamondo.png'
 
 const RacePage = () => {
     return (
-        <div className='w-full relative overflow-auto flex pb-8'>
+        <div className='w-full relative h-auto flex pb-8'>
             {/* Ensure sidebar is inside a container with sufficient height */}
             <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
                 <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
@@ -61,9 +61,9 @@ const RacePage = () => {
             </div>
 
             {/* dashboard  */}
-            <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem] flex justify-center h-auto'> 
+            <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'> 
                 {/* this is full width container cuz we need the sidebar to remain at correct place */}
-                <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex gap-[15px] rounded-[24px] bg-[#faebff]'>
+                <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-[24px] bg-[#faebff]'>
 
                     {/* actual dashboard  */}
                     <div className='flex-1 px-[22px] py-[18px]'>
@@ -186,8 +186,7 @@ const RacePage = () => {
                                 <p className="font-medium text-[0.9rem]">Stock Ranking</p>
                                 <button><CgChevronRightO size={20} /></button>
                             </div>
-                            <div className="w-full overflow-auto flex gap-[10px]">
-                                <StockPriceCard/>
+                            <div className="w-full overflow-hidden flex gap-[10px]">
                                 <StockPriceCard/>
                                 <StockPriceCard/>
                                 <StockPriceCard/>

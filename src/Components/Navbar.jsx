@@ -30,7 +30,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="flex gap-[12px] justify-start items-center">
-                    <button className='aspect-square h-[2.35rem] grid place-items-center bg-white rounded-[8px]'>
+                    <button className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={search} alt="Search" />
                     </button>
                     {
@@ -54,10 +54,10 @@ const Navbar = () => {
                                 </button>
                             </>
                     }
-                    <button className='aspect-square h-[2.35rem] grid place-items-center bg-white rounded-[8px]'>
+                    <button className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={support} alt="Search" />
                     </button>
-                    <button className='aspect-square h-[2.35rem] grid place-items-center bg-white rounded-[8px]'>
+                    <button className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={globe} alt="Search" />
                     </button>
                 </div>
