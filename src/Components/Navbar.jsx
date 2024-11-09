@@ -19,7 +19,7 @@ const Navbar = () => {
 
     return (
         <>
-            {createRaceState && <CreateRace setCreateRace={setCreateRaceState}/>}
+            {createRaceState && <CreateRace setCreateRace={setCreateRaceState} />}
             <nav className='w-full px-[1.5rem] py-[0.8rem] bg-[#e5f4ff] flex items-center justify-between sticky top-0 z-[10]'>
                 <div className="flex items-center">
                     {/* <button onClick={() => setToggle(prev => !prev)} className='w-[2.9rem] h-[2.9rem] grid place-items-center rounded-[8px] mr-[106px]'>
@@ -48,11 +48,14 @@ const Navbar = () => {
                             </>
                     }
                     <button onClick={() => {
-                            // create Race
-                            setCreateRaceState(true)
-                        }} className="bg-[#e4eaf0] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
-                            Create Race
-                            <IoIosAdd size={20} />
+                        // create Race
+                        if (!token) {
+                            navigate('/auth')
+                        }
+                        setCreateRaceState(true)
+                    }} className="bg-[#e4eaf0] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
+                        Create Race
+                        <IoIosAdd size={20} />
                     </button>
                     <button className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={support} alt="Search" />

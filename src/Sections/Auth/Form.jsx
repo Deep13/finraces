@@ -1,3 +1,4 @@
+import { BsPersonCircle } from "react-icons/bs"; 
 import { BiCheckCircle } from "react-icons/bi"; 
 import { FcGoogle } from "react-icons/fc";
 import React, { useEffect, useState } from 'react'
@@ -5,6 +6,7 @@ import facebook_icon from '../../assets/icons/facebook_icon.svg'
 import Verified from '../../assets/icons/Featured_icon.svg'
 import { RegisterUser, Login as LoginUser} from "../../Utils/api";
 import { useNavigate } from "react-router-dom";
+import { joinAsGuest } from "../../Utils/api";
 
 
 const tabs = {
@@ -213,6 +215,14 @@ const Form = () => {
         {/* login form end  */}
 
         <div className="w-full flex flex-col gap-[24px]">
+          <a onClick={() => {
+            joinAsGuest(() => {
+             navigate('/') 
+            })
+          }} className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd]">
+            <BsPersonCircle size={24} />
+            Login as Guest User
+          </a>
           <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd]">
             <FcGoogle size={24} />
             Sign in with Google

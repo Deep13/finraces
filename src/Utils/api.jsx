@@ -21,7 +21,6 @@ export const RegisterUser = async (
 
     try {
         // console.log('Registration payload', payload);
-
         const response = await axios.post(`https://www.missionatal.com/api/v1/auth/email/register`, payload);
         const data = await response.data
         console.log('Registration successful', data);
@@ -148,3 +147,128 @@ export  const createRaceAndJoinUser = async (
       onError(error)
   }
 };
+
+
+export const getRaceList = async (
+  status = 'scheduled',
+  onSuccess = () => {},  
+  onError = () => {}
+) => {
+
+  let token = localStorage.getItem('token')
+  try {
+      const response = await fetch(`https://www.missionatal.com/api/v1/races?limit=10&statuses=${status}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+          },
+      });
+
+      if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const responseData = await response.json()
+      const data = await responseData.data
+      // console.log('racelist', data)
+      onSuccess(data)
+
+  } catch (error) {
+      console.error('Fetch request failed:', error);
+      onError(error)
+  }
+};
+
+
+export const fetchRaceData = async (
+  raceId, 
+  onSuccess = () => {},
+  onError = () => {},
+) => {
+  try {
+      const token = localStorage.getItem('token')
+      if (!token) throw new Error('Authentication token is missing. Please log in.');
+
+      const response = await fetch(`https://www.missionatal.com/api/v1/races/${raceId}`, {
+          method: 'GET',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+          }
+      })
+      const thisData = await response.json()
+      // console.log(thisData)
+      // setRaceStartTime(thisData.start_date)
+      const start = new Date(thisData.start_date)
+      const end = new Date(thisData.end_date)
+      // setStartTimeString(`${start.getHours()} : ${start.getMinutes()}`)
+      // setEndTimeString(`${end.getHours()} : ${end.getMinutes()}`)
+      onSuccess(thisData)
+
+  } catch (e) {
+      console.error(e)
+      onError(e)
+  }
+}
+
+export const fetchAlreadyJoinedUsers = async (
+  race_id, 
+  onSuccess = () => {},
+  onError = () => {}
+) => {
+  try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error('No token found in localStorage');
+
+      const response = await fetch(
+          `https://www.missionatal.com/api/v1/race-users/search/?race_id=${race_id}`,
+          {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${token}`,
+              },
+          }
+      );
+
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+      const responseData = await response.json();
+      let userList = responseData.map(curr => {
+          return curr.user.firstName + " " + curr.user.lastName + " has joined the Race"
+      })
+      console.log("Already joined users list: ", userList)
+      // setMessage(userList)
+      onSuccess(responseData)
+  } catch (e) {
+      console.log('users that aleready joined error: ', e)
+      onError(e)
+  }
+}
+
+export const joinAsGuest = async (
+    onSuccess = () => {},
+    onError = () => {},
+) => {
+
+    try {
+      // console.log('Registration payload', payload);
+
+      const response = await axios.post('https://www.missionatal.com/api/v1/auth/email/guest')
+      const data = await response.data
+      console.log('Registration successful', data);
+      localStorage.setItem('guest_email', data.email)
+      localStorage.setItem('guest_password', data.password)
+      localStorage.setItem('userName', data.firstName)
+      localStorage.setItem('userId', data.id)
+      localStorage.setItem('token', data.token)
+      localStorage.setItem('refreshToken', data.refreshToken)
+      // right now there is no token recieved when registering a user so I use login function 
+      // just after signing up
+      onSuccess(data)
+    } catch (error) {
+      console.error('Registration failed:', error.response ? error.response.data : error.message);
+      onError(error)
+    }
+  }

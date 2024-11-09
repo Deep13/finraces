@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<NavFootWrapper />}>
             <Route path="" element={<Home />} />
-            <Route path="race" element={<RacePage />} />
+            <Route path="race/:race_id" element={<RacePage />} />
           </Route>
           <Route path="/auth" element={<Auth />} />
         </Routes>

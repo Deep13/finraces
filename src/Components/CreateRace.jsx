@@ -1,4 +1,3 @@
-import { RxCross1 } from "react-icons/rx"; 
 import { IoIosAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import React, { useState, useEffect } from 'react'
@@ -8,6 +7,7 @@ import { Switch } from "@headlessui/react";
 import Select from 'react-select'
 import { createRaceAndJoinUser, getStocks } from "../Utils/api";
 import { useNavigate } from "react-router-dom";
+import StockEntryRow from "./StockEntryRow";
 
 const CreateRace = ({
   setCreateRace = () => { },
@@ -229,42 +229,22 @@ const CreateRace = ({
           {
             racePredictions[0] ? racePredictions?.map((curr, index) => {
               return (
-                <>
-                  <div key={index + 1} className="w-full flex gap-[2.5rem] mb-[1.2rem] items-center">
-                    <div className="flex flex-col w-[4rem]">
-                      <label className="mb-[10px]" htmlFor="race_name">Rank</label>
-                      <input value={curr.prediction_rank} onChange={(e) => handleRacePredictionsChange(index, 'prediction_rank', e.target.value)} className="px-[0.7rem] rounded-[4px] py-[15px] shadow-inner" type="number" id="race_name" />
-                      {/* <p>1.</p> */}
-                    </div>
-                    <div className="flex flex-col flex-1">
-                      <label className="mb-[10px]" htmlFor="race_name">Select Stock</label>
-                      {/* <input className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="text" id="race_name" /> */}
-                      <Select
-                        onChange={(arg) => handleRacePredictionsChange(index, 'stock_id', arg.value)}
-                        classNames={{
-                          control: () => 'px-[1.1rem] bg-[#f5f5f5] rounded-[4px] py-[8px] shadow-inner'
-                        }}
-                        options={transformedData} isSearchable isClearable />
-                    </div>
-                    <div className="flex flex-col flex-1">
-                      <label className="mb-[10px]" htmlFor="race_name">Percentage / Value</label>
-                      <input value={curr.prediction_price} onChange={(e) => handleRacePredictionsChange(index, 'prediction_price', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="number" id="race_name" />
-                    </div>
-
-                    <button className="p-2 rounded-full bg-red-400 text-white relative top-4" onClick={() => {
-                      removeStock(index)
-                    }}>
-                      <RxCross1 size={12}/>
-                    </button>
-                  </div>
-                </>
+                <StockEntryRow
+                  key= {index +1}
+                  prediction_price={curr.prediction_price}
+                  prediction_rank={curr.prediction_rank}
+                  removeStock={removeStock}
+                  index={index}
+                  transformedData={transformedData}
+                  handleRacePredictionsChange={handleRacePredictionsChange}
+                />
               )
             }) : <div className="w-full text-center text-slate-500">Add some Stocks</div>
           }
 
         </div>
         <button onClick={() => {
-          createRaceAndJoinUser(raceDetails, racePredictions, () => {
+          createRaceAndJoinUser(raceDetails, racePredictions, (res) => {
             setRaceDetails({
               "isSimulation": false,
               "end_date": "2024-11-07T02:04:00.570Z",
@@ -272,6 +252,8 @@ const CreateRace = ({
               "name": ""
             })
             setRacePredicitons([])
+            setCreateRace(false)
+            res.id && navigate(`/race/${res.id}`)
           })
         }} className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">
           Submit
