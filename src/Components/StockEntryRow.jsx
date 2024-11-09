@@ -10,10 +10,9 @@ const StockEntryRow = ({
   index,
   transformedData,
   removeStock,
+  percentageTrue
 
 }) => {
-
-  const [closed, setClosed] = useState(false)
 
   return (
     <>
@@ -34,16 +33,7 @@ const StockEntryRow = ({
             options={transformedData} isSearchable isClearable />
         </div>
         <div className="flex flex-col flex-1">
-          <label className="mb-[10px]" htmlFor="percentage_toogle">Value type</label>
-          <Switch
-            checked={closed}
-            onChange={setClosed}
-            className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-600 shadow-inner">
-            <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
-          </Switch>
-        </div>
-        <div className="flex flex-col flex-1">
-          <label className="mb-[10px]" htmlFor="race_name">{closed ? 'Percentage (%)' : 'Price value (₹)'}</label>
+          <label className="mb-[10px]" htmlFor="race_name">{percentageTrue ? 'Percentage (%)' : 'Price value (₹)'}</label>
           <input value={prediction_price} onChange={(e) => handleRacePredictionsChange(index, 'prediction_price', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="number" id="race_name" />
         </div>
 

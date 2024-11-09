@@ -6,7 +6,8 @@ import CountDown from '../Components/CountDown'
 const RaceWaitingZone = ({
     closeCard = () => { },
     start_date,
-    joinedUsersList
+    joinedUsersList,
+    status,
 }) => {
 
     const {
@@ -14,13 +15,12 @@ const RaceWaitingZone = ({
         hours,
         minutes,
         seconds,
-        countdownComplete
     } = CountDown(start_date)
 
     useEffect(() => {
-        if(countdownComplete) {
-            closeCard(true)
-        }
+        // if(countdownComplete) {
+        //     closeCard(true)
+        // }
     }, [])
 
     return (
@@ -28,7 +28,7 @@ const RaceWaitingZone = ({
             <div className='bg-white rounded-md h-full py-[2rem] flex flex-col items-center px-[5rem] z-[30] shadow-lg relative'>
                 <button onClick={closeCard} className="absolute top-8 right-8"><RxCross2 size={25} /></button>
                 <h2 className='font-semibold text-[1.5rem] mb-[0.5rem]'>Race Name</h2>
-                <p className='font-medium text-[1rem] text-[#919191] mb-[1rem]'>Status</p>
+                <p className='font-medium text-[1rem] text-[#919191] mb-[1rem]'>{status}</p>
                 <div>
                     <img src={image} alt="" />
                 </div>
@@ -42,9 +42,13 @@ const RaceWaitingZone = ({
                 {/* live joining users tile  */}
                 <p className='w-full text-center text-[#2177cb] uppercase text-[1.2rem] font-semibold'>Users joining</p>
                 <div className='w-full flex-1 text-center flex flex-col items-center gap-[5px] overflow-y-auto joining-users' style={{ maxHeight: '180px' }}>
-                    <p>xyz has joined successfully</p>
-                    <p>xyz has joined successfully</p>
-                    <p>xyz has joined successfully</p>
+                    {
+                        joinedUsersList?.map((curr, index) => {
+                            return(
+                                <p key={index+1}>{curr.user.firstName} has joined successfully</p>
+                            )
+                        })
+                    }
                 </div>
             </div>
         </div>

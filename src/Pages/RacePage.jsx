@@ -43,6 +43,7 @@ const RacePage = () => {
             setRaceDetails(res)
         })
         fetchAlreadyJoinedUsers(race_id, (result) => {
+            console.log(result)
             setParticipantsCount(result.length)
             setJoinedUsers(result)
         })
@@ -91,6 +92,7 @@ const RacePage = () => {
             // console.log('Message from server:', JSON.stringify(data, null, 2));
             if (data.event === 'user-joined') {
                 console.log(data.data)
+                setJoinedUsers(previous => ([...previous, data.data.firstName]))
                 // setMessage(prev => [...prev, `${data.data.firstName} ${data.data.lastName} has joined the race.`])
             }
             if (data.event === 'race-data') {
@@ -121,7 +123,8 @@ const RacePage = () => {
             !isRaceStarted && <RaceWaitingZone 
             start_date={raceDetails?.start_date} 
             joinedUsersList={joinedUsers}
-            raceEnded = {false}
+            status={raceDetails?.status}
+            // raceEnded = {false}
             closeCard={setIsRaceStarted} />
             }
             <div className='w-full relative h-auto flex pb-8'>

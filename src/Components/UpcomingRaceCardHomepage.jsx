@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import stocks from '../assets/images/stonks.svg'
 import { useNavigate } from 'react-router-dom'
+import JoinRace from './JoinRace'
 
 const UpcomingRaceCardHomepage = ({
     raceName, 
@@ -11,6 +12,7 @@ const UpcomingRaceCardHomepage = ({
 }) => {
 
   const navigate = useNavigate()
+  const [joinRaceFormVisible, setJoinRaceFormVisible] = useState(false)
 
   function calculateDuration(start_date, end_date) {
     // Parse the start and end dates
@@ -36,6 +38,12 @@ const UpcomingRaceCardHomepage = ({
 
   return (
     <div className='rounded-[15px] bg-[#E5f4ff] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem]'>
+        {
+            joinRaceFormVisible && <JoinRace 
+            raceName={raceName}
+            closeForm={setJoinRaceFormVisible} 
+            race_id={raceId} />
+        }
         <p className='mb-[0.4rem] font-bold text-[2rem]'>{raceName}</p>
         <div className='w-full flex justify-between items-center mb-[5px]'>
             <div className='flex justify-between'>
@@ -54,7 +62,10 @@ const UpcomingRaceCardHomepage = ({
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
         </p>
         <div className='flex gap-[20px]'>
-            <button onClick={() => navigate(`/race/${raceId}`)} className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>Join</button>
+            <button 
+            // onClick={() => navigate(`/race/${raceId}`)} 
+            onClick={() => setJoinRaceFormVisible(true)}
+            className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>Join</button>
             <button className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>View Details</button>
         </div>
     </div>

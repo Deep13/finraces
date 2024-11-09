@@ -14,6 +14,7 @@ const CreateRace = ({
 }) => {
 
   const [closed, setClosed] = useState(false) // race type will be open initially
+  const[percentage, setPercentage] = useState(false)
   const [Inputs, setInputs] = useState([
     // {"id": 'somestockId', "value": 0, 'rank': 0}
   ])
@@ -205,6 +206,7 @@ const CreateRace = ({
             </div>
           </div>
 
+
           <div className="w-full flex justify-start items-center gap-4 mb-[14px]">
             <p>Race Type</p>
             <div title="Anyone can join open race but only authorized members can join closed race." className='relative'>
@@ -226,6 +228,17 @@ const CreateRace = ({
             <p className="mb-[19px] font-semibold">Add Stocks <span className="text-[#838386]">(upto 10)</span></p>
             <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">Add Stocks <IoIosAdd size={24} /></button>
           </div>
+
+          <div className="flex flex-col flex-1">
+            <label className="mb-[10px]" htmlFor="percentage_toogle">Value type (Percentage)</label>
+            <Switch
+              checked={percentage}
+              onChange={setPercentage}
+              className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-600 shadow-inner">
+              <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
+            </Switch>
+          </div>
+
           {
             racePredictions[0] ? racePredictions?.map((curr, index) => {
               return (
@@ -235,6 +248,7 @@ const CreateRace = ({
                   prediction_rank={curr.prediction_rank}
                   removeStock={removeStock}
                   index={index}
+                  percentageTrue={percentage}
                   transformedData={transformedData}
                   handleRacePredictionsChange={handleRacePredictionsChange}
                 />

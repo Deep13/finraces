@@ -58,7 +58,7 @@ const CountDown = ( deadline ) => {
         hours, 
         minutes,
         seconds,
-        countdownComplete
+        isComplete
     }
 };
 
