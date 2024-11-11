@@ -100,38 +100,24 @@ export const createRaceAndJoinUser = async (
   onError = () => { },
 ) => {
   try {
+    const { start_date, start_time, end_date, end_time, name } = raceDetails;
 
-    const { 
-      start_date, 
-      start_time,
-      end_time,
-      end_date
-     } = raceDetails
+    // Construct start and end date-time using Date.UTC to avoid timezone issues
+    const startDateTime = new Date(Date.UTC(
+      ...start_date.split('-').map(Number),
+      ...start_time.split(':').map(Number)
+    ));
 
-    //  console.log(
-    //   start_date, 
-    //   start_time,
-    //   end_time,
-    //   end_date
-    // )
+    const endDateTime = new Date(Date.UTC(
+      ...end_date.split('-').map(Number),
+      ...end_time.split(':').map(Number)
+    ));
 
-    const startDateTimeString = `${start_date}T${start_time}`;
-    const endDateTimeString = `${end_date}T${end_time}`;
-
-    const startDateTime = new Date(startDateTimeString);
-    const endDateTime = new Date(endDateTimeString);
-
-    // console.log(startDateTime, endDateTime);
-    
-
-    let stocksArray = racePredictions.map(curr => {
-      return curr.stock_id
-    })
+    let stocksArray = racePredictions.map(curr => curr.stock_id);
 
     if (!stocksArray || stocksArray.length === 0) {
       throw new Error('No stocks selected for the race.');
     }
-
 
     let token = localStorage.getItem('token');
     if (!token) {
@@ -140,20 +126,17 @@ export const createRaceAndJoinUser = async (
 
     let raceData = {
       race: {
-        "isSimulation": true,
-        "end_date": endDateTime,
-        "start_date": startDateTime,
-        "name": raceDetails.name,
-        "stocks": stocksArray
+        isSimulation: true,
+        end_date: endDateTime.toISOString(),  // Convert to ISO string
+        start_date: startDateTime.toISOString(),  // Convert to ISO string
+        name,
+        stocks: stocksArray
       },
       racePredictions
-    }
-    console.log(raceData)
-    // return
+    };
 
-    console.log('Race Payload object', raceData)
-    console.log('Race Payload', JSON.stringify(raceData))
-    //   return
+    console.log('Race Payload object', raceData);
+    console.log('Race Payload', JSON.stringify(raceData));
 
     const response = await axios.post(
       `https://www.missionatal.com/api/v1/race-users/race`,
@@ -161,12 +144,11 @@ export const createRaceAndJoinUser = async (
       { headers: { Authorization: `Bearer ${token}` } }
     );
 
-    const result = response.data
-    onSuccess(result)
-    //   navigate(`/race/${response.data.id}`);
+    const result = response.data;
+    onSuccess(result);
   } catch (error) {
     console.error('Error during race creation and prediction:', error.message);
-    onError(error)
+    onError(error);
   }
 };
 

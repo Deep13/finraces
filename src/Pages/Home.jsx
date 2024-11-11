@@ -22,46 +22,44 @@ const Home = () => {
       <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
         <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
           <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-              <img src={compass} alt="discover" />
-              Discover
+            <img src={compass} alt="discover" />
+            Discover
           </button>
           <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-              <img src={stats} alt="stocks" />
-              Stocks
+            <img src={stats} alt="stocks" />
+            Stocks
           </button>
           <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-              <img src={eth} alt="crypto" />
-              Crypto
+            <img src={eth} alt="crypto" />
+            Crypto
           </button>
           <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-              <img src={live_streaming} alt="live races" />
-              Live Races
+            <img src={live_streaming} alt="live races" />
+            Live Races
           </button>
           <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-              <img src={recent} alt="upcoming races" />
-              Upcoming Races
+            <img src={recent} alt="upcoming races" />
+            Upcoming Races
           </button>
           <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-              <img src={finance_idea} alt="my races" />
-              My Races
+            <img src={finance_idea} alt="my races" />
+            My Races
           </button>
           <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-              <img src={forward} alt="my watchlist" />
-              My Watchlist
+            <img src={forward} alt="my watchlist" />
+            My Watchlist
           </button>
         </div>
       </div>
-      
-      <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
-        <Hero/>
-        <OngoingRaces/>
-        <Leaderboard/>
-        <UpcomingRaces/>
-        <KeyFeatures/>
-        <Heading/>
-        <FAQ/>
-        <CountDown deadline={1731330333320} />
 
+      <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
+        <Hero />
+        <OngoingRaces />
+        <Leaderboard />
+        <UpcomingRaces />
+        <KeyFeatures />
+        <Heading />
+        <FAQ />
       </div>
     </div>
   )

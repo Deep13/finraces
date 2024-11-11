@@ -115,17 +115,20 @@ const RacePage = () => {
         }, 2000);
     }, [])
 
+    useEffect(() => {
+        console.log(raceDetails);
 
+    }, [raceDetails])
 
     return (
         <>
             {
-            !isRaceStarted && <RaceWaitingZone 
-            start_date={raceDetails?.start_date} 
-            joinedUsersList={joinedUsers}
-            status={raceDetails?.status}
-            // raceEnded = {false}
-            closeCard={setIsRaceStarted} />
+                raceDetails.status === 'scheduled' && <RaceWaitingZone
+                    start_date={raceDetails.start_date}
+                    joinedUsersList={joinedUsers}
+                    status={raceDetails?.status}
+                    // raceEnded = {false}
+                    closeCard={setIsRaceStarted} />
             }
             <div className='w-full relative h-auto flex pb-8'>
                 {/* Ensure sidebar is inside a container with sufficient height */}
