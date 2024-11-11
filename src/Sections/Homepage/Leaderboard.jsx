@@ -35,7 +35,7 @@ const Leaderboard = () => {
 
       {/* Top players profile cards */}
       <div className='bg-[#e5f4ff] w-full rounded-[20px] grid lg:grid-cols-4 md:grid-cols-2 gap-[1.3rem] md:px-[1.3rem] px-[0.7rem] py-[1.11rem]'>
-        <ProfileCardHomepage isFirst />
+        <ProfileCardHomepage/>
         <ProfileCardHomepage />
         <ProfileCardHomepage />
         <ProfileCardHomepage />

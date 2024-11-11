@@ -13,6 +13,7 @@ import live_streaming from '../assets/icons/sidebar/live_streaming.svg'
 import forward from '../assets/icons/sidebar/forward.svg'
 import eth from '../assets/icons/sidebar/eth.svg'
 import recent from '../assets/icons/sidebar/recent.svg'
+import CountDown from '../Components/CountDown'
 
 const Home = () => {
   return (
@@ -59,6 +60,8 @@ const Home = () => {
         <KeyFeatures/>
         <Heading/>
         <FAQ/>
+        <CountDown deadline={1731330333320} />
+
       </div>
     </div>
   )

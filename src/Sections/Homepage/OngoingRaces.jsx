@@ -23,11 +23,18 @@ const OngoingRaces = () => {
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem]'>Ongoing Races</h2>
       <div className='w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2'>
         {
-          raceList && raceList.slice(0, 4).map((curr, index) => {
+          raceList[0] ? raceList.slice(0, 4).map((curr, index) => {
             return (
               <RaceCardHomepage raceName={curr.name} raceId={curr.id} key={index + 1} />
-            )
+            ) 
           })
+          :
+          <>
+          <RaceCardHomepage />
+          <RaceCardHomepage />
+          <RaceCardHomepage />
+          <RaceCardHomepage />
+          </>
         }
         {/* <RaceCardHomepage /> */}
         {/* <RaceCardHomepage />

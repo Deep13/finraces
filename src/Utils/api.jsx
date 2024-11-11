@@ -140,7 +140,7 @@ export const createRaceAndJoinUser = async (
 
     let raceData = {
       race: {
-        "isSimulation": false,
+        "isSimulation": true,
         "end_date": endDateTime,
         "start_date": startDateTime,
         "name": raceDetails.name,
