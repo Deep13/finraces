@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const CountDown = ( deadline ) => {
+const CountDown = ({ deadline }) => {
     // Parse the ISO8601 deadline into a Date object
     const deadlineDate = new Date(deadline);
 
@@ -20,7 +20,6 @@ const CountDown = ( deadline ) => {
                 if (prevTime <= 0) {
                     clearInterval(timerInterval);
                     setIsComplete(true); // Set complete state when countdown ends
-                    // setRaceStartTime(0)
                     console.log('Countdown complete!');
                     return 0;
                 } else {
@@ -39,27 +38,14 @@ const CountDown = ( deadline ) => {
     const minutes = Math.floor((timeRemaining % 3600) / 60);
     const seconds = timeRemaining % 60;
 
-    // Determine if the countdown should be complete based on days
-    const countdownComplete = timeRemaining <= 0 || days > 0;
-
-    // return (
-    //     <div className='mb-4'>
-    //         <p className='text-lg font-semibold text-center'>Remaining Time</p>
-    //         {/* {countdownComplete ? (
-    //             <p>The countdown is complete!</p>
-    //         ) : ( */}
-    //             <p className='text-2xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-blue-600'>{`${days}d ${hours}h ${minutes}m ${seconds}s`}</p>
-    //         {/* )} */}
-    //     </div>
-    // );
-
-    return {
-        days,
-        hours, 
-        minutes,
-        seconds,
-        isComplete
-    }
+    return (
+        <div className='w-full flex justify-center items-center gap-[0.5rem] mb-[1.5rem]'>
+            <div className='text-[2.1rem] text-[#2177cb] relative'>{days} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Days</p></div>
+            <div className='text-[2.1rem] text-[#2177cb] relative'>{hours} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Hours</p></div>
+            <div className='text-[2.1rem] text-[#2177cb] relative'>{minutes} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Minutes</p></div>
+            <div className='text-[2.1rem] text-[#2177cb] relative'>{seconds} <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Seconds</p></div>
+        </div>
+    );
 };
 
-export default CountDown
+export default CountDown;

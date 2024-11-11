@@ -52,7 +52,7 @@ const RacePage = () => {
 
     useEffect(() => {
         // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
-        const socket = io('http://18.215.253.160:3000', {
+        const socket = io('https://www.missionatal.com', {
             reconnection: true, // Automatically reconnect if the connection is lost
             reconnectionAttempts: Infinity,
             reconnectionDelay: 1000,

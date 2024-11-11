@@ -90,12 +90,12 @@ const JoinRace = ({
 
           <div className="flex flex-col flex-1">
             <label className="mb-[10px]" htmlFor="percentage_toogle">Value type (Percentage)</label>
-            <Switch
+            {/* <Switch
               checked={percentage}
               onChange={setPercentage}
               className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-600 shadow-inner">
               <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
-            </Switch>
+            </Switch> */}
           </div>
 
           <hr className="my-[1.2rem] border-t border-solid border-black" />
