@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Select from 'react-select'
 import { Switch } from '@headlessui/react'
 import { RxCross1 } from "react-icons/rx";
@@ -10,9 +10,20 @@ const StockEntryRow = ({
   index,
   transformedData,
   removeStock,
-  percentageTrue
+  percentageTrue,
+  stockList
 
 }) => {
+
+  const [currentStockId, setCurrentStockId] = useState("")
+
+  const findStockPrice = (id) => {
+    return stockList.find(stock => stock.id === id);
+  }
+
+  useEffect(() => {
+    console.log(JSON.stringify(stockList))
+  })
 
   return (
     <>
@@ -26,14 +37,23 @@ const StockEntryRow = ({
           <label className="mb-[10px]" htmlFor="race_name">Select Stock</label>
           {/* <input className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="text" id="race_name" /> */}
           <Select
-            onChange={(arg) => handleRacePredictionsChange(index, 'stock_id', arg.value)}
+            onChange={(arg) => {
+              handleRacePredictionsChange(index, 'stock_id', arg.value)
+              setCurrentStockId(arg.value)
+            }}
             classNames={{
               control: () => 'px-[1.1rem] bg-[#f5f5f5] rounded-[4px] py-[8px] shadow-inner'
             }}
             options={transformedData} isSearchable isClearable />
         </div>
         <div className="flex flex-col flex-1">
-          <label className="mb-[10px]" htmlFor="race_name">{percentageTrue ? 'Percentage (%)' : 'Price value (₹)'}</label>
+          <label className="mb-[10px]" htmlFor="race_name">Current Price</label>
+          <div className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="number" id="race_name" >
+             {currentStockId ? findStockPrice(currentStockId)?.price : 0}
+          </div>
+        </div>
+        <div className="flex flex-col flex-1">
+          <label className="mb-[10px]" htmlFor="race_name">{percentageTrue === 'percentage' ? 'Percentage (%)' : 'Price value (₹)'}</label>
           <input value={prediction_price} onChange={(e) => handleRacePredictionsChange(index, 'prediction_price', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="number" id="race_name" />
         </div>
 

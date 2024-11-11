@@ -1,16 +1,18 @@
 @tailwind base;
+
 input {
-    @apply placeholder-[#b3bfbc] rounded-[14px] bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32];
+  @apply placeholder-[#b3bfbc] rounded-[14px] bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32];
 }
+
 @tailwind components;
 @tailwind utilities;
 
 
 @layer base {
-    @font-face {
-            font-family: 'Raleway';
-            src: url('./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf') format('truetype');
-        }
+  @font-face {
+    font-family: 'Raleway';
+    src: url('./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf') format('truetype');
+  }
 }
 
 /* input[type='password'] {
@@ -21,50 +23,136 @@ input[type='password'] {
     font-family: Verdana;
     letter-spacing: 0.125em;
 } */
- /* This was meant for making passwod dots bigger */
+/* This was meant for making passwod dots bigger */
 
 
- .hero-gradient{
-    background: rgb(229, 244, 255);
-    background: linear-gradient(90deg, rgba(229, 244, 255, 1) 49%, rgba(0, 0, 0, 0.2508059376094187) 100%);
- }
- 
- .profile_card_button_grad{
-    background: rgb(102, 217, 255);
-    background: linear-gradient(90deg, rgba(102, 217, 255, 1) 0%, rgba(18, 83, 153, 1) 100%);
- }
+.hero-gradient {
+  background: rgb(229, 244, 255);
+  background: linear-gradient(90deg, rgba(229, 244, 255, 1) 49%, rgba(0, 0, 0, 0.2508059376094187) 100%);
+}
 
- /** Text Gradient Example */ 
+.profile_card_button_grad {
+  background: rgb(102, 217, 255);
+  background: linear-gradient(90deg, rgba(102, 217, 255, 1) 0%, rgba(18, 83, 153, 1) 100%);
+}
+
+/** Text Gradient Example */
 .text-gradient {
-    color: #06896A; 
-    background-image: linear-gradient(45deg, #06896A 16%, #045841 75%); 
-    background-clip: text; 
-    -webkit-background-clip: text; 
-    -webkit-text-fill-color: transparent; 
+  color: #06896A;
+  background-image: linear-gradient(45deg, #06896A 16%, #045841 75%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Custom scrollbar for users joining container */
 .joining-users {
-    max-height: 150px;
-    overflow-y: auto;
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: rgba(150, 150, 150, 0.6) transparent; /* Grey thumb with transparent track for Firefox */
+  max-height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: rgba(150, 150, 150, 0.6) transparent;
+  /* Grey thumb with transparent track for Firefox */
 }
 
 /* For WebKit-based browsers (Chrome, Safari) */
 .joining-users::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 .joining-users::-webkit-scrollbar-track {
-    background: transparent; /* Transparent track */
+  background: transparent;
+  /* Transparent track */
 }
 
 .joining-users::-webkit-scrollbar-thumb {
-    background-color: rgba(150, 150, 150, 0.6); /* Visible grey thumb */
-    border-radius: 8px; /* Rounded ends */
+  background-color: rgba(150, 150, 150, 0.6);
+  /* Visible grey thumb */
+  border-radius: 8px;
+  /* Rounded ends */
 }
 
 .joining-users::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(100, 100, 100, 0.8); /* Darker grey on hover */
+  background-color: rgba(100, 100, 100, 0.8);
+  /* Darker grey on hover */
+}
+
+
+.selected-item {
+  text-align: center;
+}
+
+.controls-container {
+  --highlight-width: auto;
+  --highlight-x-pos: 0;
+
+  display: flex;
+  margin: 100px 0 25px;
+}
+
+.controls {
+  display: inline-flex;
+  justify-content: space-between;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  max-width: 500px;
+  padding: 5px;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.controls input {
+  opacity: 0;
+  margin: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  cursor: pointer;
+  height: 100%;
+}
+
+.segment {
+  /* width: 100%; uncomment for each segment to have matching width */
+  min-width: 120px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+}
+
+.segment label {
+  cursor: pointer;
+  display: block;
+  /* font-weight: 700; */
+  padding: 10px;
+  font-size: 16px;
+  transition: color 0.5s ease;
+}
+
+.segment.active label {
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.controls::before {
+  content: "";
+  background: #e4eaf0;
+  border-radius: 8px;
+  width: var(--highlight-width);
+  transform: translateX(var(--highlight-x-pos));
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  z-index: 0;
+}
+
+/* Only allow transitions once component is ready */
+.controls.ready::before {
+  transition: transform 0.3s ease, width 0.3s ease;
 }

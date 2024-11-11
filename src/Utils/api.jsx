@@ -53,8 +53,14 @@ export const Login = async (
 
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('refreshToken', response.data.refreshToken);
-    localStorage.setItem('userName', response.data.user.firstName)
-    localStorage.setItem('userId', response.data.user.id)
+    // localStorage.setItem('userName', response.data.user.firstName)
+    // localStorage.setItem('userId', response.data.user.id)
+    let loginUserDetails = {
+      userName: response.data.user.firstName,
+      userId: response.data.user.id
+    }
+    localStorage.setItem('userDetails', btoa(JSON.stringify(loginUserDetails)))
+    localStorage.removeItem('guest_details')
     onSuccess()
 
   } catch (error) {
@@ -95,14 +101,18 @@ export const createRaceAndJoinUser = async (
 ) => {
   try {
 
-    const { start_date, duration, start_time } = raceDetails
+    const { 
+      start_date, 
+      start_time,
+      end_time,
+      end_date
+     } = raceDetails
 
     const startDateTimeString = `${start_date}T${start_time}`;
+    const endDateTimeString = `${end_date}T${end_time}`;
 
     const startDateTime = new Date(startDateTimeString);
-    let [hours, minutes] = duration.split(':').map(Number)
-    console.log('This is da time', hours + " " + minutes)
-    const endTime = new Date(startDateTime.getTime() + (hours * 3600 + minutes * 60) * 1000);
+    const endDateTime = new Date(endDateTimeString);
 
     let stocksArray = racePredictions.map(curr => {
       return curr.stock_id
@@ -121,7 +131,7 @@ export const createRaceAndJoinUser = async (
     let raceData = {
       race: {
         "isSimulation": false,
-        "end_date": endTime,
+        "end_date": endDateTime,
         "start_date": startDateTime,
         "name": raceDetails.name,
         "stocks": stocksArray
@@ -258,10 +268,17 @@ export const joinAsGuest = async (
     const response = await axios.post('https://www.missionatal.com/api/v1/auth/email/guest')
     const data = await response.data
     console.log('Registration successful', data);
-    localStorage.setItem('guest_email', data.email)
-    localStorage.setItem('guest_password', data.password)
-    localStorage.setItem('userName', data.firstName)
-    localStorage.setItem('userId', data.id)
+    // localStorage.setItem('guest_email', data.email)
+    // localStorage.setItem('guest_password', data.password)
+    // localStorage.setItem('userName', data.firstName)
+    // localStorage.setItem('userId', data.id)
+    let details = {
+      userName: data.firstName,
+      userId: data.id,
+      guest_email: data.email,
+      guest_password: data.password
+    }
+    localStorage.setItem('guest_details', btoa(JSON.stringify(details)))
     localStorage.setItem('token', data.token)
     localStorage.setItem('refreshToken', data.refreshToken)
     // right now there is no token recieved when registering a user so I use login function 
@@ -367,7 +384,7 @@ export const RefreshToken = async (
   };
 
   try {
-    const response = await axios.post('https://www.missionatal.com/api/v1/auth/refresh', {} ,{headers});
+    const response = await axios.post('https://www.missionatal.com/api/v1/auth/refresh', {}, { headers });
 
     // console.log('response', response.data);
 

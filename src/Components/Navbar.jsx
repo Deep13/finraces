@@ -15,6 +15,7 @@ const Navbar = () => {
     // const { setCreateRaceState } = useContext(GlobalContext)
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
+    const userDetails = localStorage.getItem('userDetails')
 
 
     return (
@@ -34,13 +35,15 @@ const Navbar = () => {
                         <img src={search} alt="Search" />
                     </button>
                     {
-                        !token ?
+                        !userDetails ?
                             <button onClick={() => navigate('/auth')} className="bg-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
                                 Log in / Sign up
                             </button> :
                             <>
                                 <button onClick={() => {
                                     localStorage.removeItem('token')
+                                    localStorage.removeItem('refreshToken')
+                                    localStorage.removeItem('userDetails')
                                     navigate('/auth')
                                 }} className="bg-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
                                     Log out
