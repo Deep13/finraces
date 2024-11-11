@@ -47,7 +47,7 @@ const RacePage = () => {
     const { race_id } = useParams()
     const joinedUsersRef = useRef([])
     const animationBoxRef = useRef()
-    const [values, setValues] = useState([100,300,150])
+    const [values, setValues] = useState([0, 0, 0])
     const [chartData, setChartData] = useState({
         labels: Array.from({ length: 10 }, (_, i) => (i + 1).toString()), // Ranking from 1 to 10
         datasets: [
@@ -65,15 +65,47 @@ const RacePage = () => {
     });
 
     const getValue = (arg) => {
-        let num = (Math.floor(Math.random() * 4) + 1)*100
-        let nu2 = (Math.floor(Math.random() * 4) + 1)*100
-        let nu3 = (Math.floor(Math.random() * 4) + 1)*100
-        setValues(prev => [num, nu2, nu3])
-    } 
+        // Prevent further execution if any value is 500 or more
+        // if(!isRaceStarted) return
+        if (values[0] >= 700 || values[1] >= 700 || values[2] >= 700) {
+            return;
+        }
+
+        let nu3 = Math.floor(Math.random() * 3) + 1;
+
+        setValues(prev => {
+            let [val1, val2, val3] = prev;
+
+            // Create a new set of updated values based on the random choice
+            let newVal1 = val1, newVal2 = val2, newVal3 = val3;
+
+            if (nu3 === 1) {
+                newVal1 = Math.min(val1 + 200, 700);  // Larger step
+                newVal2 = Math.min(val2 + 50, 700);   // Larger step
+            } else if (nu3 === 2) {
+                newVal1 = Math.min(val1 + 50, 700);   // Larger step
+                newVal3 = Math.min(val3 + 50, 700);   // Larger step
+            } else if (nu3 === 3) {
+                newVal1 = Math.min(val1 + 100, 700);  // Larger step
+                newVal2 = Math.min(val2 + 75, 700);   // Larger step
+                newVal3 = Math.min(val3 + 150, 700);  // Larger step
+            }
+
+            // Ensure no two values are equal after the update
+            if (newVal1 === newVal2 || newVal1 === newVal3 || newVal2 === newVal3) {
+                return prev;  // If they would meet, return the original values (no update)
+            }
+
+            // Return the updated values
+            return [newVal1, newVal2, newVal3];
+        });
+    };
+
+
 
     useEffect(() => {
         setInterval(getValue, 5000)
-    },[])
+    }, [])
 
     useEffect(() => {
         const fetchRankingData = async () => {
@@ -403,22 +435,22 @@ const RacePage = () => {
                                             initial={{ x: 0, }}
                                             animate={{ x: values[0] }}
                                             transition={{ duration: 1, }}
-                                            className="top-4 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
-                                                <img className="w-full h-full" src={fb} alt="" />
+                                            className="top-4 z-20 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
+                                            <img className="w-full h-full" src={fb} alt="" />
                                         </motion.div>
                                         <motion.div
                                             initial={{ x: 0, }}
                                             animate={{ x: values[1] }}
                                             transition={{ duration: 1, }}
-                                            className="top-4 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
-                                                <img className="w-full h-full" src={a} alt="" />
+                                            className="top-4 z-20 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
+                                            <img className="w-full h-full" src={a} alt="" />
                                         </motion.div>
                                         <motion.div
                                             initial={{ x: 0, }}
-                                            animate={{ x: values[2]}}
+                                            animate={{ x: values[2] }}
                                             transition={{ duration: 1, }}
-                                            className="top-4 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
-                                                <img className="w-full h-full" src={g} alt="" />
+                                            className="top-4 z-20 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
+                                            <img className="w-full h-full" src={g} alt="" />
                                         </motion.div>
 
                                     </div>
