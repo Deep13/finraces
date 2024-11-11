@@ -352,3 +352,31 @@ export const joinUserToRace = async (
     console.log(`Join race error: ${error.message}`);
   }
 };
+
+
+export const RefreshToken = async (
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+
+  let refreshToken = localStorage.getItem('refreshToken')
+  const headers = {
+    'Content-Type': 'application/json', // Adjust if needed
+    'Authorization': `Bearer ${refreshToken}`, // Example for Bearer token
+    // Add any other headers you need here
+  };
+
+  try {
+    const response = await axios.post('https://www.missionatal.com/api/v1/auth/refresh', {} ,{headers});
+
+    // console.log('response', response.data);
+
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('refreshToken', response.data.refreshToken);
+    onSuccess()
+
+  } catch (error) {
+    // console.error('Login failed:', error.response ? error.response.data : error.message);
+    onError(error)
+  }
+};
