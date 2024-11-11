@@ -168,14 +168,14 @@ const CreateRace = ({
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race_name"> Race Name</label>
-              <input placeholder="Enter the name for Race here" value={raceDetails.name} onChange={e => handleRaceDetails('name', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="text" id="race_name" />
+              <input placeholder="Enter the name for Race here" value={raceDetails.name} onChange={e => handleRaceDetails('name', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="text" id="race_name" />
             </div>
           </div>
 
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-start-date">Start Date</label>
-              <input id='race-start-date' placeholder="Race Starting Date" value={raceDetails.start_date} onChange={e => handleRaceDetails('start_date', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="date" />
+              <input id='race-start-date' placeholder="Race Starting Date" value={raceDetails.start_date} onChange={e => handleRaceDetails('start_date', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date" />
             </div>
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-start-time">Start Time</label>
@@ -184,9 +184,9 @@ const CreateRace = ({
                 placeholder="Race Starting time"
                 value={raceDetails.start_time} onChange={e => handleRaceDetails('start_time', e.target.value)}
                 id="race-start-time"
-                className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner"
+                className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner"
                 type="time"
-                step="1"
+                // step="1"
               />
             </div>
           </div>
@@ -194,7 +194,7 @@ const CreateRace = ({
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-end-date">End Date</label>
-              <input id='race-end-date' placeholder="Race Ending Date" value={raceDetails.end_date} onChange={e => handleRaceDetails('end_date', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="date"/>
+              <input id='race-end-date' placeholder="Race Ending Date" value={raceDetails.end_date} onChange={e => handleRaceDetails('end_date', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date"/>
             </div>
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-end-time">End Time</label>
@@ -203,9 +203,9 @@ const CreateRace = ({
                 placeholder="Race Starting time"
                 value={raceDetails.end_time} onChange={e => handleRaceDetails('end_time', e.target.value)}
                 id="race-end-time"
-                className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner"
+                className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner"
                 type="time"
-                step="1"
+                // step="1"
               />
             </div>
           </div>
@@ -253,7 +253,7 @@ const CreateRace = ({
 
           {/* stocks with prices and values  */}
           <p className="font-semibold mt-12 mb-4">Add Stocks <span className="text-[#838386]">(upto 10)</span></p>
-          <div className="flex mb-4 w-full justify-between items-center">
+          <div className="flex mb-8 w-full justify-between items-end">
               <div className="flex flex-col flex-1 gap-[10px] items-baseline">
                 <label className="mb-[10px]" htmlFor="percentage_toogle">Value type </label>
                 <SegmentedControl
@@ -274,7 +274,7 @@ const CreateRace = ({
                 ]}
                 />
               </div>
-            <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">Add Stocks <IoIosAdd size={24} /></button>
+            <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[8px] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">Add Stocks <IoIosAdd size={24} /></button>
           </div>
 
 

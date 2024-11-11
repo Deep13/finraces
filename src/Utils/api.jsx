@@ -108,11 +108,21 @@ export const createRaceAndJoinUser = async (
       end_date
      } = raceDetails
 
+    //  console.log(
+    //   start_date, 
+    //   start_time,
+    //   end_time,
+    //   end_date
+    // )
+
     const startDateTimeString = `${start_date}T${start_time}`;
     const endDateTimeString = `${end_date}T${end_time}`;
 
     const startDateTime = new Date(startDateTimeString);
     const endDateTime = new Date(endDateTimeString);
+
+    // console.log(startDateTime, endDateTime);
+    
 
     let stocksArray = racePredictions.map(curr => {
       return curr.stock_id
@@ -138,6 +148,8 @@ export const createRaceAndJoinUser = async (
       },
       racePredictions
     }
+    console.log(raceData)
+    // return
 
     console.log('Race Payload object', raceData)
     console.log('Race Payload', JSON.stringify(raceData))
