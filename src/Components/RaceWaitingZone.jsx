@@ -6,8 +6,9 @@ import CountDownTimer from '../Components/CountDown'
 const RaceWaitingZone = ({
     closeCard = () => { },
     start_date,
-    joinedUsersList,
+    joinedUsersList, // api call
     status,
+    liveUsers // socket
 }) => {
 
 
@@ -36,6 +37,13 @@ const RaceWaitingZone = ({
                         joinedUsersList?.map((curr, index) => {
                             return (
                                 <p key={index + 1}>{curr?.user?.firstName} has joined successfully</p>
+                            )
+                        })
+                    }
+                    {
+                        liveUsers?.map((curr, index) => {
+                            return (
+                                <p key={index + 1}>{curr?.firstName} has joined successfully</p>
                             )
                         })
                     }

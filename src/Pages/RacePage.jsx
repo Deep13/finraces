@@ -1,5 +1,5 @@
 import { CgChevronRightO } from "react-icons/cg";
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import compass from '../assets/icons/sidebar/compass.svg'
 import finance_idea from '../assets/icons/sidebar/finance_idea.svg'
 import stats from '../assets/icons/sidebar/stats.svg'
@@ -28,6 +28,12 @@ import { fetchRaceData, fetchAlreadyJoinedUsers } from "../Utils/api";
 import io from 'socket.io-client'
 import Countdown from "react-countdown";
 import { ColorRing } from "react-loader-spinner";
+import { Line } from 'react-chartjs-2';
+import { motion } from "framer-motion";
+import google from '../assets/images/g.svg'
+import fb from '../assets/images/f.png'
+import a from '../assets/images/a.png'
+import g from '../assets/images/g.png'
 
 const RacePage = () => {
 
@@ -36,7 +42,80 @@ const RacePage = () => {
     const [isLoading, setisLoading] = useState(true)
     const [participantsCount, setParticipantsCount] = useState(0)
     const [joinedUsers, setJoinedUsers] = useState([])
+    const [liveUsers, setLiveUsers] = useState([])
+    const [Refresh, setRefresh] = useState('')
     const { race_id } = useParams()
+    const joinedUsersRef = useRef([])
+    const animationBoxRef = useRef()
+    const [values, setValues] = useState([100,300,150])
+    const [chartData, setChartData] = useState({
+        labels: Array.from({ length: 10 }, (_, i) => (i + 1).toString()), // Ranking from 1 to 10
+        datasets: [
+            {
+                label: 'Player Rankings',
+                data: Array(10).fill(null),
+                borderColor: 'blue',
+                backgroundColor: 'blue',
+                pointBackgroundColor: 'blue',
+                pointBorderColor: 'white',
+                pointRadius: 5,
+                pointHoverRadius: 7,
+            },
+        ],
+    });
+
+    const getValue = (arg) => {
+        let num = (Math.floor(Math.random() * 4) + 1)*100
+        let nu2 = (Math.floor(Math.random() * 4) + 1)*100
+        let nu3 = (Math.floor(Math.random() * 4) + 1)*100
+        setValues(prev => [num, nu2, nu3])
+    } 
+
+    useEffect(() => {
+        setInterval(getValue, 5000)
+    },[])
+
+    useEffect(() => {
+        const fetchRankingData = async () => {
+            try {
+                // Example API call to fetch updated player rankings
+                const response = await fetch('/api/your-ranking-endpoint'); // Replace with your API endpoint
+                const data = await response.json();
+
+                // Process data to extract player names and ranks
+                const playerNames = data.map(player => player.name);
+                const rankings = data.map(player => player.rank);
+
+                setChartData({
+                    labels: rankings.map(rank => rank.toString()), // X-axis (ranking from 1 to 10)
+                    datasets: [
+                        {
+                            label: 'Player Rankings',
+                            data: playerNames, // Y-axis (player names)
+                            borderColor: 'blue',
+                            backgroundColor: 'blue',
+                            pointBackgroundColor: 'blue',
+                            pointBorderColor: 'white',
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                        },
+                    ],
+                });
+            } catch (error) {
+                console.error('Error fetching ranking data:', error);
+            }
+        };
+
+        // Initial data fetch
+        fetchRankingData();
+
+        // Refresh data every 5 seconds
+        const intervalId = setInterval(fetchRankingData, 5000);
+
+        // Clear interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []);
+
 
     useEffect(() => {
         // check if race started or not and then set the state of waiting card.
@@ -57,6 +136,10 @@ const RacePage = () => {
             setJoinedUsers(result)
         })
     }, [])
+
+    useEffect(() => {
+        setLiveUsers(joinedUsersRef.current)
+    }, [Refresh])
 
 
     useEffect(() => {
@@ -102,7 +185,13 @@ const RacePage = () => {
             if (data.event === 'user-joined') {
                 console.log(data.data.firstName)
                 if (data.data.firstName) {
-                    setJoinedUsers(previous => ([...previous, data.data.firstName]))
+                    // setJoinedUsers(previous => ([...previous, data.data.firstName]))
+                    const objectAlreadyThere = joinedUsersRef.current.filter(curr => curr.id === data.data.id)
+
+                    if (objectAlreadyThere.length === 0) {
+                        joinedUsersRef.current = [...joinedUsersRef.current, data.data]
+                        setRefresh('1')
+                    }
                 }
                 // setMessage(prev => [...prev, `${data.data.firstName} ${data.data.lastName} has joined the race.`])
             }
@@ -151,6 +240,7 @@ const RacePage = () => {
                         start_date={raceDetails?.start_date}
                         raceStarted={isRaceStarted}
                         joinedUsersList={joinedUsers}
+                        liveUsers={liveUsers}
                         status={raceDetails?.status}
                         // raceEnded = {false}
                         closeCard={setIsRaceStarted} />
@@ -302,9 +392,37 @@ const RacePage = () => {
 
                                 {/* race tile  */}
                                 <div className="w-full flex justify-between border-dashed border-black border py-[3rem] relative">
-                                    <div className="bg-[#f5f5f5] relative -left-2">
+                                    <div className="bg-[#f5f5f5] relative -left-2 top-5">
                                         <img src={start} alt="" />
                                     </div>
+
+                                    {/* here happens the magic  */}
+                                    <div ref={animationBoxRef} id="animationBox" className="flex-1 flex flex-col w-full">
+
+                                        <motion.div
+                                            initial={{ x: 0, }}
+                                            animate={{ x: values[0] }}
+                                            transition={{ duration: 1, }}
+                                            className="top-4 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
+                                                <img className="w-full h-full" src={fb} alt="" />
+                                        </motion.div>
+                                        <motion.div
+                                            initial={{ x: 0, }}
+                                            animate={{ x: values[1] }}
+                                            transition={{ duration: 1, }}
+                                            className="top-4 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
+                                                <img className="w-full h-full" src={a} alt="" />
+                                        </motion.div>
+                                        <motion.div
+                                            initial={{ x: 0, }}
+                                            animate={{ x: values[2]}}
+                                            transition={{ duration: 1, }}
+                                            className="top-4 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
+                                                <img className="w-full h-full" src={g} alt="" />
+                                        </motion.div>
+
+                                    </div>
+
 
                                     {/* absolute elements  */}
                                     <div className="absolute w-full top-1/2 border-dashed border-black border">
@@ -314,7 +432,7 @@ const RacePage = () => {
                                     </div>
 
 
-                                    <div className="bg-[#f5f5f5] relative -right-2">
+                                    <div className="bg-[#f5f5f5] relative -right-2 top-5">
                                         <img src={finish} alt="" />
                                     </div>
                                 </div>

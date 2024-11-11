@@ -9,6 +9,7 @@ const OngoingRaces = () => {
   useEffect(() => {
     getRaceList('running', (data) => {
       // alert('success')
+      console.log('running races', data)
       setRaceList(data)
     }, () => {
       // alert('failure')
@@ -25,16 +26,16 @@ const OngoingRaces = () => {
         {
           raceList[0] ? raceList.slice(0, 4).map((curr, index) => {
             return (
-              <RaceCardHomepage raceName={curr.name} raceId={curr.id} key={index + 1} />
-            ) 
+              <RaceCardHomepage start_Date={curr.start_date} end_date={curr.end_date} raceName={curr.name} raceId={curr.id} key={index + 1} />
+            )
           })
-          :
-          <>
-          <RaceCardHomepage />
-          <RaceCardHomepage />
-          <RaceCardHomepage />
-          <RaceCardHomepage />
-          </>
+            :
+            <>
+              <RaceCardHomepage />
+              <RaceCardHomepage />
+              <RaceCardHomepage />
+              <RaceCardHomepage />
+            </>
         }
         {/* <RaceCardHomepage /> */}
         {/* <RaceCardHomepage />

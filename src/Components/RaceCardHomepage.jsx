@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import box from '../assets/images/ongoingRaces/focus_box.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
 import dashed_line from '../assets/images/dashed_line.svg'
@@ -14,30 +14,64 @@ import a from '../assets/images/a.png'
 import f from '../assets/images/f.png'
 import g from '../assets/images/g.png'
 import { useNavigate } from 'react-router-dom'
+import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+
 
 const RaceCardHomepage = ({
     raceId = '54asdffasaFSf',
     raceName = 'Abstrace Race',
     end_date,
+    start_Date
     // participants,
 }) => {
 
     const navigate = useNavigate()
 
+    const getRemainingSeconds = (targetDate, initial_date) => {
+        const targetTime = new Date(targetDate).getTime(); // Convert target date to milliseconds
+        const currentTime = new Date(initial_date).getTime(); // Get current time in milliseconds
+
+        // Calculate difference in seconds
+        const remainingSeconds = Math.floor((targetTime - currentTime) / 1000);
+
+        return remainingSeconds > 0 ? remainingSeconds : 0; // Return 0 if the date has passed
+    }
+
+
     return (
         <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] flex flex-col overflow-hidden cursor-pointer'>
             <div className='w-full flex justify-between mb-[14px]'>
-                <div className='flex gap-[0.76rem]'>
+                <div className='flex gap-[0.76rem] flex-1'>
                     <img src={box} alt="box icon" />
                     <div className='h-full'>
                         <h3 className='text-[1.05rem] font-bold'>{raceName}</h3>
-                        <p className='text-[0.7rem]'>XYZ</p>
+                        {/* <p className='text-[0.7rem]'>XYZ</p> */}
                     </div>
-                    <div className='relative top-1'>
-                        <img src={info} alt="info icon" />
+                    <div className=''>
+                        <img className='w-[10px] h-[10px]' src={info} alt="info icon" />
                     </div>
                 </div>
-                <div className='h-full flex flex-col justify-between items-end'>
+                <div className='flex-1 flex justify-center'>
+                    <CountdownCircleTimer
+                        isPlaying
+                        size={50}
+                        strokeWidth={3}
+                        duration={getRemainingSeconds(end_date, start_Date)} // total duration depcits a full circle.
+                        colors={['#004777']}
+                        initialRemainingTime={getRemainingSeconds(end_date, new Date())} // time that is remaining from now
+                        colorsTime={[7]}>
+                        {({ remainingTime }) => {
+                            const hours = Math.floor(remainingTime / 3600)
+                            const minutes = Math.floor((remainingTime % 3600) / 60)
+                            const seconds = remainingTime % 60
+
+                            return <div className='text-[0.7rem] font-semibold'>
+                                {hours}:{minutes}:{seconds}`
+                            </div>
+                        }}
+                    </CountdownCircleTimer>
+                </div>
+                <div className='h-full flex flex-col justify-between items-end flex-1'>
                     <h3 className='text-[1.05rem] font-bold'>Tech Stocks</h3>
                     <p className='text-[0.7rem]'>20Participants</p>
                 </div>
