@@ -17,8 +17,9 @@ import { useNavigate } from 'react-router-dom'
 
 const RaceCardHomepage = ({
     raceId = '54asdffasaFSf',
-    raceName,
-    participants,
+    raceName = 'Abstrace Race',
+    end_date,
+    // participants,
 }) => {
 
     const navigate = useNavigate()
@@ -38,7 +39,7 @@ const RaceCardHomepage = ({
                 </div>
                 <div className='h-full flex flex-col justify-between items-end'>
                     <h3 className='text-[1.05rem] font-bold'>Tech Stocks</h3>
-                    <p className='text-[0.7rem]'>20 Participants</p>
+                    <p className='text-[0.7rem]'>20Participants</p>
                 </div>
             </div>
 

@@ -25,14 +25,14 @@ const OngoingRaces = () => {
         {
           raceList && raceList.slice(0, 4).map((curr, index) => {
             return (
-              <RaceCardHomepage raceId={curr.id} key={index + 1} />
+              <RaceCardHomepage raceName={curr.name} raceId={curr.id} key={index + 1} />
             )
           })
         }
+        {/* <RaceCardHomepage /> */}
+        {/* <RaceCardHomepage />
         <RaceCardHomepage />
-        <RaceCardHomepage />
-        <RaceCardHomepage />
-        <RaceCardHomepage />
+        <RaceCardHomepage /> */}
       </div>
     </div>
   )

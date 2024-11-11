@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { IoIosAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import box from '../assets/images/ongoingRaces/focus_box.svg'
@@ -8,6 +8,7 @@ import Select from 'react-select'
 import { fetchStocks, joinUserToRace } from "../Utils/api";
 import { useNavigate } from "react-router-dom";
 import StockEntryRow2 from "./StockEntryRow2";
+import SegmentedControl from './SegmentedControl'
 
 const JoinRace = ({
   closeForm = () => { },
@@ -20,7 +21,7 @@ const JoinRace = ({
 
 
   const [stockList, setStockList] = useState([])
-  const [percentage, setPercentage] = useState(false)
+  const [percentage, setPercentage] = useState('')
   const [racePredictions, setRacePredicitons] = useState([
     {
       "prediction_price": 0,
@@ -63,19 +64,20 @@ const JoinRace = ({
   return (
     <div className='w-screen h-screen fixed top-0 left-0 z-[20] grid place-items-center backdrop-blur-lg bg-transparent py-[3%] overflow-auto'>
       <div className='rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem]'>
+
         {/* heading  */}
-        <div className='flex justify-between items-center gap-[450px] mb-[1.8rem]'>
-          <div className='flex gap-[0.76rem] justify-center items-center'>
+        <div className='flex items-center mb-[1.8rem] relative'>
+          <div className='flex gap-[12px] items-center'>
             <img src={box} alt="box icon" />
-            <div className='h-full'>
+            <div className='flex-1 flex gap-[8px]'>
               <h3 className='text-[1.75rem] font-semibold'>Join {raceName}</h3>
+              <div className='relative'>
+                <img src={info} alt="info icon" />
+              </div>
             </div>
-            <div className='relative'>
-              <img src={info} alt="info icon" />
-            </div>
-            <p className='text-sm font-semibold'>#{race_id}</p>
+            <p className='text-sm font-semibold flex-1'>#{race_id}</p>
           </div>
-          <button onClick={() => {
+          <button className='absolute right-0 top-0' onClick={() => {
             closeForm(false)
           }}>
             <RxCross2 size={35} />
@@ -89,13 +91,23 @@ const JoinRace = ({
           {/* inputs  */}
 
           <div className="flex flex-col flex-1">
-            <label className="mb-[10px]" htmlFor="percentage_toogle">Value type (Percentage)</label>
-            {/* <Switch
-              checked={percentage}
-              onChange={setPercentage}
-              className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-[checked]:bg-blue-600 shadow-inner">
-              <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-[checked]:translate-x-6" />
-            </Switch> */}
+            <label className="mb-[10px]" htmlFor="percentage_toogle">Value type </label>
+            <SegmentedControl
+              name="group-1"
+              callback={(val) => setPercentage(val)}
+              controlRef={useRef()}
+              segments={[
+                {
+                  label: "Percentage",
+                  value: "percentage",
+                  ref: useRef()
+                },
+                {
+                  label: "Price",
+                  value: "price",
+                  ref: useRef()
+                }
+              ]}/>
           </div>
 
           <hr className="my-[1.2rem] border-t border-solid border-black" />
