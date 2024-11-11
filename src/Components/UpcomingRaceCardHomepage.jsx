@@ -62,15 +62,15 @@ const UpcomingRaceCardHomepage = ({
                 <p className='text-[12px] font-bold'>1.2k Participants</p>
                 <p className='text-[12px]'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
             </div>
-            <p className='text-[14px] mb-[1.8rem]'>
+            {/* <p className='text-[14px] mb-[1.8rem]'>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-            </p>
+            </p> */}
             <div className='flex gap-[20px]'>
                 <button
                     // onClick={() => navigate(`/race/${raceId}`)} 
                     onClick={() => setJoinRaceFormVisible(true)}
                     className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>Join</button>
-                <button className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>View Details</button>
+                {/* <button className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>View Details</button> */}
             </div>
         </div>
     )

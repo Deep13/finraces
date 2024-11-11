@@ -27,11 +27,13 @@ import { useParams } from "react-router-dom";
 import { fetchRaceData, fetchAlreadyJoinedUsers } from "../Utils/api";
 import io from 'socket.io-client'
 import Countdown from "react-countdown";
+import { ColorRing } from "react-loader-spinner";
 
 const RacePage = () => {
 
     const [isRaceStarted, setIsRaceStarted] = useState(false)
     const [raceDetails, setRaceDetails] = useState(null)
+    const [isLoading, setisLoading] = useState(true)
     const [participantsCount, setParticipantsCount] = useState(0)
     const [joinedUsers, setJoinedUsers] = useState([])
     const { race_id } = useParams()
@@ -42,6 +44,12 @@ const RacePage = () => {
         fetchRaceData(race_id, (res) => {
             console.log('racedata:', res);
             setRaceDetails(res)
+            if (res.status === 'running') {
+                setIsRaceStarted(true)
+            } else {
+                setIsRaceStarted(false)
+            }
+            setisLoading(false)
         })
         fetchAlreadyJoinedUsers(race_id, (result) => {
             console.log(result)
@@ -92,8 +100,10 @@ const RacePage = () => {
         socket.on('message', (data) => {
             // console.log('Message from server:', JSON.stringify(data, null, 2));
             if (data.event === 'user-joined') {
-                console.log(data.data)
-                setJoinedUsers(previous => ([...previous, data.data.firstName]))
+                console.log(data.data.firstName)
+                if (data.data.firstName) {
+                    setJoinedUsers(previous => ([...previous, data.data.firstName]))
+                }
                 // setMessage(prev => [...prev, `${data.data.firstName} ${data.data.lastName} has joined the race.`])
             }
             if (data.event === 'race-data') {
@@ -124,12 +134,26 @@ const RacePage = () => {
     return (
         <>
             {
-                !isRaceStarted && raceDetails && <RaceWaitingZone
-                    start_date={raceDetails?.start_date}
-                    joinedUsersList={joinedUsers}
-                    status={raceDetails?.status}
-                    // raceEnded = {false}
-                    closeCard={setIsRaceStarted} />
+                isLoading ? <div className="fixed bg-black opacity-40 w-full h-screen top-0 left-0 grid place-items-center z-[999]">
+                    <div>
+                        <ColorRing
+                            visible={true}
+                            height="80"
+                            width="80"
+                            ariaLabel="color-ring-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="color-ring-wrapper"
+                            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                        />
+                    </div>
+                </div> :
+                    !isRaceStarted && raceDetails && <RaceWaitingZone
+                        start_date={raceDetails?.start_date}
+                        raceStarted={isRaceStarted}
+                        joinedUsersList={joinedUsers}
+                        status={raceDetails?.status}
+                        // raceEnded = {false}
+                        closeCard={setIsRaceStarted} />
             }
             <div className='w-full relative h-auto flex pb-8'>
                 {/* Ensure sidebar is inside a container with sufficient height */}
