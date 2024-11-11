@@ -26,11 +26,12 @@ import RaceWaitingZone from "../Components/RaceWaitingZone";
 import { useParams } from "react-router-dom";
 import { fetchRaceData, fetchAlreadyJoinedUsers } from "../Utils/api";
 import io from 'socket.io-client'
+import Countdown from "react-countdown";
 
 const RacePage = () => {
 
     const [isRaceStarted, setIsRaceStarted] = useState(false)
-    const [raceDetails, setRaceDetails] = useState({})
+    const [raceDetails, setRaceDetails] = useState(null)
     const [participantsCount, setParticipantsCount] = useState(0)
     const [joinedUsers, setJoinedUsers] = useState([])
     const { race_id } = useParams()
@@ -39,7 +40,7 @@ const RacePage = () => {
         // check if race started or not and then set the state of waiting card.
         // socket connection will be established here 
         fetchRaceData(race_id, (res) => {
-            // console.log(res);
+            console.log('racedata:', res);
             setRaceDetails(res)
         })
         fetchAlreadyJoinedUsers(race_id, (result) => {
@@ -123,8 +124,8 @@ const RacePage = () => {
     return (
         <>
             {
-                raceDetails.status === 'scheduled' && <RaceWaitingZone
-                    start_date={raceDetails.start_date}
+                !isRaceStarted && raceDetails && <RaceWaitingZone
+                    start_date={raceDetails?.start_date}
                     joinedUsersList={joinedUsers}
                     status={raceDetails?.status}
                     // raceEnded = {false}
@@ -175,10 +176,20 @@ const RacePage = () => {
 
                             <div className='w-full flex justify-between mb-[3.8rem]'>
                                 <div className='flex gap-[0.76rem]'>
-                                    <img src={box} alt="box icon" />
+                                    <div></div>
                                     <div className='h-full'>
-                                        <h3 className='text-[1.05rem] font-bold'>{raceDetails.name}</h3>
-                                        <p className='text-[0.7rem]'>Remaining time <span className="font-semibold">6.55</span></p>
+                                        <h3 className='text-[1.05rem] font-bold'>{raceDetails?.name}</h3>
+                                        <p className='text-[0.7rem]'>
+                                            Remaining time
+                                            <span className="font-semibold ml-2">
+                                                {raceDetails && <Countdown
+                                                    date={raceDetails && raceDetails['end_date']}
+                                                    renderer={({ hours, minutes, seconds }) => {
+                                                        return `${hours}:${minutes}:${seconds}`
+                                                    }}
+                                                />}
+                                            </span>
+                                        </p>
                                     </div>
                                     <div className='relative top-1'>
                                         <img src={info} alt="info icon" />

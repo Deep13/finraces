@@ -9,6 +9,7 @@ import { createRaceAndJoinUser, getStocks } from "../Utils/api";
 import { useNavigate } from "react-router-dom";
 import StockEntryRow from "./StockEntryRow";
 import SegmentedControl from '../Components/SegmentedControl'
+import DatePicker from "react-date-picker";
 
 const CreateRace = ({
   setCreateRace = () => { },
@@ -186,7 +187,7 @@ const CreateRace = ({
                 id="race-start-time"
                 className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner"
                 type="time"
-                // step="1"
+              // step="1"
               />
             </div>
           </div>
@@ -194,7 +195,7 @@ const CreateRace = ({
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-end-date">End Date</label>
-              <input id='race-end-date' placeholder="Race Ending Date" value={raceDetails.end_date} onChange={e => handleRaceDetails('end_date', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date"/>
+              <input id='race-end-date' placeholder="Race Ending Date" value={raceDetails.end_date} onChange={e => handleRaceDetails('end_date', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date" />
             </div>
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-end-time">End Time</label>
@@ -205,7 +206,7 @@ const CreateRace = ({
                 id="race-end-time"
                 className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner"
                 type="time"
-                // step="1"
+              // step="1"
               />
             </div>
           </div>
@@ -218,27 +219,27 @@ const CreateRace = ({
                 <img src={info} alt="info icon" />
               </div>
             </div>
-            
+
             <div className="">
-            <SegmentedControl
-              name="group-1"
-              callback={(val) => setOpenCloseRaceValue(val)}
-              controlRef={useRef()}
-              segments={[
-                {
-                  label: "Close",
-                  value: "close",
-                  ref: useRef()
-                },
-                {
-                  label: "Open",
-                  value: "open",
-                  ref: useRef()
-                }
-              ]}
+              <SegmentedControl
+                name="group-1"
+                callback={(val) => setOpenCloseRaceValue(val)}
+                controlRef={useRef()}
+                segments={[
+                  {
+                    label: "Close",
+                    value: "close",
+                    ref: useRef()
+                  },
+                  {
+                    label: "Open",
+                    value: "open",
+                    ref: useRef()
+                  }
+                ]}
               />
             </div>
-          {/* segmented control  */}
+            {/* segmented control  */}
 
           </div>
           {/* <Switch
@@ -254,9 +255,9 @@ const CreateRace = ({
           {/* stocks with prices and values  */}
           <p className="font-semibold mt-12 mb-4">Add Stocks <span className="text-[#838386]">(upto 10)</span></p>
           <div className="flex mb-8 w-full justify-between items-end">
-              <div className="flex flex-col flex-1 gap-[10px] items-baseline">
-                <label className="mb-[10px]" htmlFor="percentage_toogle">Value type </label>
-                <SegmentedControl
+            <div className="flex flex-col flex-1 gap-[10px] items-baseline">
+              <label className="mb-[10px]" htmlFor="percentage_toogle">Value type </label>
+              <SegmentedControl
                 name="group-2"
                 callback={(val) => setpercentValue(val)}
                 controlRef={useRef()}
@@ -272,8 +273,8 @@ const CreateRace = ({
                     ref: useRef()
                   }
                 ]}
-                />
-              </div>
+              />
+            </div>
             <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[8px] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">Add Stocks <IoIosAdd size={24} /></button>
           </div>
 

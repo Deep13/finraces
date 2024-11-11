@@ -156,3 +156,7 @@ input[type='password'] {
 .controls.ready::before {
   transition: transform 0.3s ease, width 0.3s ease;
 }
+
+.cont input {
+
+}

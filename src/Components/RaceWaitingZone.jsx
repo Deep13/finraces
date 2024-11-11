@@ -28,12 +28,6 @@ const RaceWaitingZone = ({
                     <img src={image} alt="" />
                 </div>
                 <p className='w-full text-center font-bold text-[#2177cb] uppercase my-[1rem] text-[1.2rem]'>Ready to launch in...</p>
-                {/* <div className='w-full flex justify-center items-center gap-[0.5rem] mb-[1.5rem]'>
-                    <div className='text-[2.1rem] text-[#2177cb] relative'>{days} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Days</p></div>
-                    <div className='text-[2.1rem] text-[#2177cb] relative'>{hours} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Hours</p></div>
-                    <div className='text-[2.1rem] text-[#2177cb] relative'>{minutes} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Minutes</p></div>
-                    <div className='text-[2.1rem] text-[#2177cb] relative'>{seconds} <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Seconds</p></div>
-                </div> */}
                 <CountDownTimer deadline={start_date} />
                 {/* live joining users tile  */}
                 <p className='w-full text-center text-[#2177cb] uppercase text-[1.2rem] font-semibold'>Users joining</p>

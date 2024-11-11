@@ -93,6 +93,7 @@ export const getStocks = async (
   }
 }
 
+
 export const createRaceAndJoinUser = async (
   raceDetails,
   racePredictions,
@@ -101,17 +102,6 @@ export const createRaceAndJoinUser = async (
 ) => {
   try {
     const { start_date, start_time, end_date, end_time, name } = raceDetails;
-
-    // Construct start and end date-time using Date.UTC to avoid timezone issues
-    const startDateTime = new Date(Date.UTC(
-      ...start_date.split('-').map(Number),
-      ...start_time.split(':').map(Number)
-    ));
-
-    const endDateTime = new Date(Date.UTC(
-      ...end_date.split('-').map(Number),
-      ...end_time.split(':').map(Number)
-    ));
 
     let stocksArray = racePredictions.map(curr => curr.stock_id);
 
@@ -124,11 +114,19 @@ export const createRaceAndJoinUser = async (
       throw new Error('Authentication token is missing. Please log in.');
     }
 
+    // Extract year, month, and day from start_date and end_date
+    const [startYear, startMonth, startDay] = start_date.split('-');
+    const [endYear, endMonth, endDay] = end_date.split('-');
+
+    // Combine extracted date and time into ISO string format
+    const startDateTime = new Date(`${startYear}-${startMonth}-${startDay}T${start_time}`).toISOString();
+    const endDateTime = new Date(`${endYear}-${endMonth}-${endDay}T${end_time}`).toISOString();
+
     let raceData = {
       race: {
         isSimulation: true,
-        end_date: endDateTime.toISOString(),  // Convert to ISO string
-        start_date: startDateTime.toISOString(),  // Convert to ISO string
+        end_date: endDateTime,
+        start_date: startDateTime,
         name,
         stocks: stocksArray
       },
@@ -151,6 +149,7 @@ export const createRaceAndJoinUser = async (
     onError(error);
   }
 };
+
 
 
 export const getRaceList = async (
