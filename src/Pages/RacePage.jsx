@@ -44,10 +44,12 @@ const RacePage = () => {
     const [joinedUsers, setJoinedUsers] = useState([])
     const [liveUsers, setLiveUsers] = useState([])
     const [Refresh, setRefresh] = useState('')
+    const [stockRankList, setStockRankList] = useState(null)
+    const [rankList, setRankList] = useState(null)
     const { race_id } = useParams()
     const joinedUsersRef = useRef([])
-    const animationBoxRef = useRef()
-    const [values, setValues] = useState([0, 0, 0])
+    // const [raceResults, setRaceResults] = useState(null)
+
     const [chartData, setChartData] = useState({
         labels: Array.from({ length: 10 }, (_, i) => (i + 1).toString()), // Ranking from 1 to 10
         datasets: [
@@ -64,96 +66,82 @@ const RacePage = () => {
         ],
     });
 
-    const getValue = (arg) => {
-        // Prevent further execution if any value is 500 or more
-        // if(!isRaceStarted) return
-        if (values[0] >= 700 || values[1] >= 700 || values[2] >= 700) {
-            return;
-        }
+    const getParticipantsWithRanks = (raceResult, participantsWithNoRank) => {
+        // console.log(raceResult, participantsWithNoRank)
+        const result = [];
 
-        let nu3 = Math.floor(Math.random() * 3) + 1;
-
-        setValues(prev => {
-            let [val1, val2, val3] = prev;
-
-            // Create a new set of updated values based on the random choice
-            let newVal1 = val1, newVal2 = val2, newVal3 = val3;
-
-            if (nu3 === 1) {
-                newVal1 = Math.min(val1 + 200, 700);  // Larger step
-                newVal2 = Math.min(val2 + 50, 700);   // Larger step
-            } else if (nu3 === 2) {
-                newVal1 = Math.min(val1 + 50, 700);   // Larger step
-                newVal3 = Math.min(val3 + 50, 700);   // Larger step
-            } else if (nu3 === 3) {
-                newVal1 = Math.min(val1 + 100, 700);  // Larger step
-                newVal2 = Math.min(val2 + 75, 700);   // Larger step
-                newVal3 = Math.min(val3 + 150, 700);  // Larger step
-            }
-
-            // Ensure no two values are equal after the update
-            if (newVal1 === newVal2 || newVal1 === newVal3 || newVal2 === newVal3) {
-                return prev;  // If they would meet, return the original values (no update)
-            }
-
-            // Return the updated values
-            return [newVal1, newVal2, newVal3];
-        });
-    };
-
-
-
-    useEffect(() => {
-        setInterval(getValue, 5000)
-    }, [])
-
-    useEffect(() => {
-        const fetchRankingData = async () => {
-            try {
-                // Example API call to fetch updated player rankings
-                const response = await fetch('/api/your-ranking-endpoint'); // Replace with your API endpoint
-                const data = await response.json();
-
-                // Process data to extract player names and ranks
-                const playerNames = data.map(player => player.name);
-                const rankings = data.map(player => player.rank);
-
-                setChartData({
-                    labels: rankings.map(rank => rank.toString()), // X-axis (ranking from 1 to 10)
-                    datasets: [
-                        {
-                            label: 'Player Rankings',
-                            data: playerNames, // Y-axis (player names)
-                            borderColor: 'blue',
-                            backgroundColor: 'blue',
-                            pointBackgroundColor: 'blue',
-                            pointBorderColor: 'white',
-                            pointRadius: 5,
-                            pointHoverRadius: 7,
-                        },
-                    ],
+        // Add participants with ranks from race_result
+        Object.entries(raceResult).forEach(([rank, rankData]) => {
+            rankData?.participants?.forEach(participant => {
+                result.push({
+                    user_id: participant.user_id,
+                    user_name: participant.user_name,
+                    rank: rank || "-" // Use the key as rank, or "-" if rank is not found
                 });
-            } catch (error) {
-                console.error('Error fetching ranking data:', error);
-            }
-        };
+            });
+        });
 
-        // Initial data fetch
-        fetchRankingData();
+        // Add participants with no rank, assigning rank as "-"
+        participantsWithNoRank?.forEach(participant => {
+            result.push({
+                user_id: participant.user_id,
+                user_name: participant.user_name,
+                rank: "-"
+            });
+        });
 
-        // Refresh data every 5 seconds
-        const intervalId = setInterval(fetchRankingData, 5000);
+        return result;
+    }
 
-        // Clear interval on component unmount
-        return () => clearInterval(intervalId);
-    }, []);
+
+
+    // useEffect(() => {
+    //     const fetchRankingData = async () => {
+    //         try {
+    //             // Example API call to fetch updated player rankings
+    //             const response = await fetch('https://www.missionatal.com/api/your-ranking-endpoint'); // Replace with your API endpoint
+    //             const data = await response.json();
+
+    //             // Process data to extract player names and ranks
+    //             const playerNames = data.map(player => player.name);
+    //             const rankings = data.map(player => player.rank);
+
+    //             setChartData({
+    //                 labels: rankings.map(rank => rank.toString()), // X-axis (ranking from 1 to 10)
+    //                 datasets: [
+    //                     {
+    //                         label: 'Player Rankings',
+    //                         data: playerNames, // Y-axis (player names)
+    //                         borderColor: 'blue',
+    //                         backgroundColor: 'blue',
+    //                         pointBackgroundColor: 'blue',
+    //                         pointBorderColor: 'white',
+    //                         pointRadius: 5,
+    //                         pointHoverRadius: 7,
+    //                     },
+    //                 ],
+    //             });
+    //         } catch (error) {
+    //             console.error('Error fetching ranking data:', error);
+    //         }
+    //     };
+
+    //     // Initial data fetch
+    //     fetchRankingData();
+
+    //     // Refresh data every 5 seconds
+    //     const intervalId = setInterval(fetchRankingData, 5000);
+
+    //     // Clear interval on component unmount
+    //     return () => clearInterval(intervalId);
+    // }, []);
 
 
     useEffect(() => {
         // check if race started or not and then set the state of waiting card.
         // socket connection will be established here 
         fetchRaceData(race_id, (res) => {
-            console.log('racedata:', res);
+            // console.log('racedata:', res);
             setRaceDetails(res)
             if (res.status === 'running') {
                 setIsRaceStarted(true)
@@ -163,7 +151,7 @@ const RacePage = () => {
             setisLoading(false)
         })
         fetchAlreadyJoinedUsers(race_id, (result) => {
-            console.log(result)
+            // console.log(result)
             setParticipantsCount(result.length)
             setJoinedUsers(result)
         })
@@ -186,7 +174,7 @@ const RacePage = () => {
 
         // Event listeners for the connection
         socket.on('connect', () => {
-            console.log('Connected to the server with id:', socket.id);
+            // console.log('Connected to the server with id:', socket.id);
 
             const joinData = {
                 raceId: race_id
@@ -228,14 +216,10 @@ const RacePage = () => {
                 // setMessage(prev => [...prev, `${data.data.firstName} ${data.data.lastName} has joined the race.`])
             }
             if (data.event === 'race-data') {
-                // setLiveData(data)
-                // var thesePositions = Object.keys(data.data.race_result).reduce((acc, rank) => {
-                //     const stockNames = (data.data.race_result[rank].stocks || []).map(stock => stock.stock_name);
-                //     acc[`rank${rank}`] = stockNames;
-                //     return acc;
-                // }, {});
-                // setPositions(thesePositions)
-                // setAnimationTrigger(prev => prev + 1);
+                // console.log(JSON.stringify(data.data))
+                // setRaceResults(data.data)
+                setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
+                setStockRankList(data.data['stocks'])
             }
         });
 
@@ -248,9 +232,8 @@ const RacePage = () => {
     }, [])
 
     useEffect(() => {
-        console.log(raceDetails);
-
-    }, [raceDetails])
+        console.log(stockRankList);
+    }, [stockRankList])
 
     return (
         <>
@@ -331,7 +314,8 @@ const RacePage = () => {
                                                 {raceDetails && <Countdown
                                                     date={raceDetails && raceDetails['end_date']}
                                                     renderer={({ hours, minutes, seconds }) => {
-                                                        return `${hours}:${minutes}:${seconds}`
+                                                        const formatTime = (time) => String(time).padStart(2, '0');
+                                                        return `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`
                                                     }}
                                                 />}
                                             </span>
@@ -424,36 +408,12 @@ const RacePage = () => {
 
                                 {/* race tile  */}
                                 <div className="w-full flex justify-between border-dashed border-black border py-[3rem] relative">
-                                    <div className="bg-[#f5f5f5] relative -left-2 top-5">
+                                    <div className="bg-[#f5f5f5] relative right-2">
                                         <img src={start} alt="" />
                                     </div>
 
                                     {/* here happens the magic  */}
-                                    <div ref={animationBoxRef} id="animationBox" className="flex-1 flex flex-col w-full">
 
-                                        <motion.div
-                                            initial={{ x: 0, }}
-                                            animate={{ x: values[0] }}
-                                            transition={{ duration: 1, }}
-                                            className="top-4 z-20 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
-                                            <img className="w-full h-full" src={fb} alt="" />
-                                        </motion.div>
-                                        <motion.div
-                                            initial={{ x: 0, }}
-                                            animate={{ x: values[1] }}
-                                            transition={{ duration: 1, }}
-                                            className="top-4 z-20 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
-                                            <img className="w-full h-full" src={a} alt="" />
-                                        </motion.div>
-                                        <motion.div
-                                            initial={{ x: 0, }}
-                                            animate={{ x: values[2] }}
-                                            transition={{ duration: 1, }}
-                                            className="top-4 z-20 left-4 w-[3rem] h-[3rem] rounded-full bg-blue-400 flex">
-                                            <img className="w-full h-full" src={g} alt="" />
-                                        </motion.div>
-
-                                    </div>
 
 
                                     {/* absolute elements  */}
@@ -464,22 +424,41 @@ const RacePage = () => {
                                     </div>
 
 
-                                    <div className="bg-[#f5f5f5] relative -right-2 top-5">
+                                    <div className="bg-[#f5f5f5] relative left-2">
                                         <img src={finish} alt="" />
                                     </div>
                                 </div>
                             </div>
 
                             {/* other stocks rally  */}
-                            <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] shadow-md">
+                            <div className="flex-1 rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
                                 <div className="flex justify-between w-full items-center mb-[18px]">
                                     <p className="font-medium text-[0.9rem]">Stock Ranking</p>
                                     <button><CgChevronRightO size={20} /></button>
                                 </div>
-                                <div className="w-full overflow-hidden flex gap-[10px]">
-                                    <StockPriceCard />
-                                    <StockPriceCard />
-                                    <StockPriceCard />
+                                <div className="flex-1 flex justify-start gap-[10px] custom-scrollbar overflow-auto">
+                                    {
+                                        stockRankList ?
+                                            stockRankList?.map((curr, index) => {
+                                                return (<StockPriceCard
+                                                    key={curr.stock_id}
+                                                    stockName={curr.stock_name}
+                                                    rank={index}
+                                                    percentChange={curr.percent_change}
+                                                    stockId={curr.stock_id}
+                                                    stockLastRate={curr.stock_last_rate}
+                                                />)
+                                            }) :
+                                            <ColorRing
+                                                visible={true}
+                                                height="25"
+                                                width="25"
+                                                ariaLabel="color-ring-loading"
+                                                wrapperStyle={{}}
+                                                wrapperClass="color-ring-wrapper"
+                                                colors={['#e15b64', '#f47e60',]}
+                                            />
+                                    }
                                 </div>
                             </div>
 
@@ -491,20 +470,30 @@ const RacePage = () => {
                                 <button className='w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px]' >Leaderboard</button>
                                 <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px]' >Your Bets</button>
                             </div>
-                            <div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5]'>
+                            <div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen'>
                                 <div className='w-full flex justify-between items-center mb-[14px]'>
                                     <p className="font-semibold text-4">View all</p>
                                     <CgChevronRightO size={20} />
                                 </div>
-                                <div className="w-full flex flex-col gap-[9px]">
-                                    <UserRankingCard />
-                                    <UserRankingCard />
-                                    <UserRankingCard />
-                                    <UserRankingCard />
-                                    <UserRankingCard />
-                                    <UserRankingCard />
-                                    <UserRankingCard />
-                                    <UserRankingCard />
+                                <div className="w-full flex flex-col gap-[9px] items-center">
+                                    {
+                                        rankList ?
+                                            rankList?.map((curr) =>
+                                                <UserRankingCard
+                                                    userName={curr.user_name}
+                                                    userRank={curr.rank}
+                                                    key={curr.user_id}
+                                                />) :
+                                            <ColorRing
+                                                visible={true}
+                                                height="25"
+                                                width="25"
+                                                ariaLabel="color-ring-loading"
+                                                wrapperStyle={{}}
+                                                wrapperClass="color-ring-wrapper"
+                                                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                                            />
+                                    }
                                 </div>
                             </div>
                         </div>

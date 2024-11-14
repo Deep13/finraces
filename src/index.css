@@ -160,3 +160,27 @@ input[type='password'] {
 .cont input {
 
 }
+
+
+.custom-scrollbar {
+  overflow: auto; /* Enables scrolling for vertical overflow */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;  /* Width of the scrollbar */
+  height: 8px; /* Height of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.6); /* Darker blackish color */
+  border-radius: 20px;                  /* Rounded edges */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Transparent track */
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin; /* Thin scrollbar for Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.6) transparent; /* Dark thumb, transparent track */
+}
