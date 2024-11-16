@@ -48,7 +48,138 @@ const RacePage = () => {
     const [rankList, setRankList] = useState(null)
     const { race_id } = useParams()
     const joinedUsersRef = useRef([])
-    // const [raceResults, setRaceResults] = useState(null)
+    const [raceResults, setRaceResults] = useState(null)
+    const [dummyData, setDummyData] = useState({
+        "created_by": {
+            "id": 3,
+            "firstName": "Mohit",
+            "lastName": "Ash"
+        },
+        "status": "running",
+        "end_date": "2024-11-14T14:30:00.000Z",
+        "start_date": "2024-11-14T10:05:00.000Z",
+        "name": "Open Race",
+        "id": "114c9d42-fcb2-4700-8a7f-960a0858f0cd",
+        "isSimulation": false,
+        "createdAt": "2024-11-14T10:01:51.412Z",
+        "updatedAt": "2024-11-14T10:05:00.538Z",
+        "stocks": [
+            {
+                "stock_id": "72bc8105-a110-4612-8928-1f67d0a6bb6e",
+                "stock_name": "ACU",
+                "stock_start_rate": "41.67",
+                "stock_last_rate": 41.67,
+                "percent_change": 0,
+                "rank": 1,
+                "participants": [
+                    {
+                        "user_id": 3,
+                        "user_name": "Mohit Ash",
+                        "prediction_price": "50.00",
+                        "prediction_rank": 1,
+                        "delta": 19.99040076793856,
+                        "rank": 1
+                    },
+                    {
+                        "user_id": 87,
+                        "user_name": "Guest Guest",
+                        "prediction_price": "55.00",
+                        "prediction_rank": 1,
+                        "delta": 31.989440844732414,
+                        "rank": 2
+                    }
+                ]
+            },
+            {
+                "stock_id": "8d145f65-69a6-43b0-afb3-e34b62205eb6",
+                "stock_name": "ADRT",
+                "stock_start_rate": "11.40",
+                "stock_last_rate": 11.4,
+                "percent_change": 0,
+                "rank": 1,
+                "participants": [
+                    {
+                        "user_id": 87,
+                        "user_name": "Guest Guest",
+                        "prediction_price": "13.00",
+                        "prediction_rank": 2,
+                        "delta": 14.035087719298241,
+                        "rank": -1
+                    },
+                    {
+                        "user_id": 3,
+                        "user_name": "Mohit Ash",
+                        "prediction_price": "13.00",
+                        "prediction_rank": 2,
+                        "delta": 14.035087719298241,
+                        "rank": -1
+                    }
+                ]
+            }
+        ],
+        "race_result": {
+            "1": {
+                "stocks": [
+                    {
+                        "stock_id": "72bc8105-a110-4612-8928-1f67d0a6bb6e",
+                        "stock_name": "ACU"
+                    },
+                    {
+                        "stock_id": "8d145f65-69a6-43b0-afb3-e34b62205eb6",
+                        "stock_name": "ADRT"
+                    }
+                ],
+                "participants": [
+                    {
+                        "user_id": 3,
+                        "user_name": "Mohit Ash"
+                    }
+                ]
+            },
+            "2": {
+                "stocks": [
+                    {
+                        "stock_id": "8d145f65-69a6-43b0-afb3-e34b62205eb6",
+                        "stock_name": "ADRT"
+                    }
+                ],
+                "participants": [
+                    {
+                        "user_id": 87,
+                        "user_name": "Guest Guest"
+                    }
+                ]
+            },
+            "3": {
+                "stocks": [
+                    {
+                        "stock_id": "72bc8105-a110-4612-8928-1f67d0a6bb6e",
+                        "stock_name": "ACU"
+                    }
+                ],
+                "participants": [
+                    {
+                        "user_id": 87,
+                        "user_name": "Guest Guest"
+                    },
+                    {
+                        "user_id": 3,
+                        "user_name": "Mohit Ash"
+                    }
+                ]
+            }
+        },
+        "participantsWithNoRank": [
+            {
+                "user_id": 87,
+                "user_name": "Guest Guest",
+                "prediction_price": "13.00",
+                "prediction_rank": 2,
+                "delta": 14.035087719298241,
+                "rank": -1
+            }
+        ]
+    })
 
     const [chartData, setChartData] = useState({
         labels: Array.from({ length: 10 }, (_, i) => (i + 1).toString()), // Ranking from 1 to 10
@@ -217,7 +348,7 @@ const RacePage = () => {
             }
             if (data.event === 'race-data') {
                 // console.log(JSON.stringify(data.data))
-                // setRaceResults(data.data)
+                setRaceResults(data.data)
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
             }
@@ -333,7 +464,7 @@ const RacePage = () => {
 
                             {/* top 3 users  */}
                             <div className="flex-1 flex justify-center items-center gap-[2rem]">
-                                <div className="flex justify-center flex-col items-center">
+                                {raceResults?.race_result[3]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center">
                                     <div>
                                         <img src={silver_king_crown} alt="" />
                                         <div className="flex justify-center items-center">
@@ -344,9 +475,9 @@ const RacePage = () => {
                                         <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={Person} alt="" />
                                         <img className="z-[5]" src={silver_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">David Copper</p>
-                                </div>
-                                <div className="flex justify-center flex-col items-center relative bottom-8">
+                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[3]?.participants[0]?.user_name}</p>
+                                </div>}
+                                {raceResults?.race_result[1]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center relative bottom-8">
                                     <div className="mb-[1rem]">
                                         <img src={golden_king_corwn} alt="" />
                                         <div className="flex justify-center items-center">
@@ -357,9 +488,9 @@ const RacePage = () => {
                                         <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-[80%]" src={Person} alt="" />
                                         <img className="z-[5]" src={golden_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">Burt Macklin</p>
-                                </div>
-                                <div className="flex justify-center flex-col items-center">
+                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[1]?.participants[0]?.user_name}</p>
+                                </div>}
+                                {raceResults?.race_result[2]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center">
                                     <div>
                                         <img src={bronze_king_crown} alt="" />
                                         <div className="flex justify-center items-center">
@@ -370,8 +501,8 @@ const RacePage = () => {
                                         <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={Person} alt="" />
                                         <img className="z-[5]" src={bronze_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">David Goggin</p>
-                                </div>
+                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[2]?.participants[0]?.user_name}</p>
+                                </div>}
                             </div>
 
                             <div className="flex-1 flex justify-center items-end gap-[2rem]">
