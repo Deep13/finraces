@@ -7,12 +7,10 @@ import live_streaming from '../assets/icons/sidebar/live_streaming.svg'
 import forward from '../assets/icons/sidebar/forward.svg'
 import eth from '../assets/icons/sidebar/eth.svg'
 import recent from '../assets/icons/sidebar/recent.svg'
-import UserRankingCard from "../Components/UserRankingCard";
 import box from '../assets/images/ongoingRaces/focus_box.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
 import start from '../assets/images/start.svg'
 import finish from '../assets/images/finish.svg'
-import StockPriceCard from "../Components/StockPriceCard";
 import golden_frame from '../assets/images/golden_frame.png'
 import silver_frame from '../assets/images/silver_frame.png'
 import bronze_frame from '../assets/images/bronze_frame.png'
@@ -29,11 +27,11 @@ import io from 'socket.io-client'
 import Countdown from "react-countdown";
 import { ColorRing } from "react-loader-spinner";
 import { Line } from 'react-chartjs-2';
-import { motion } from "framer-motion";
 import google from '../assets/images/g.svg'
-import fb from '../assets/images/f.png'
-import a from '../assets/images/a.png'
-import g from '../assets/images/g.png'
+import StockRankList from '../Components/StockRankList'
+import UserRankingList from "../Components/UserRankingList";
+
+import RaceTile from "../Components/RaceTile";
 
 const RacePage = () => {
 
@@ -49,153 +47,15 @@ const RacePage = () => {
     const { race_id } = useParams()
     const joinedUsersRef = useRef([])
     const [raceResults, setRaceResults] = useState(null)
-    const [dummyData, setDummyData] = useState({
-        "created_by": {
-            "id": 3,
-            "firstName": "Mohit",
-            "lastName": "Ash"
-        },
-        "status": "running",
-        "end_date": "2024-11-14T14:30:00.000Z",
-        "start_date": "2024-11-14T10:05:00.000Z",
-        "name": "Open Race",
-        "id": "114c9d42-fcb2-4700-8a7f-960a0858f0cd",
-        "isSimulation": false,
-        "createdAt": "2024-11-14T10:01:51.412Z",
-        "updatedAt": "2024-11-14T10:05:00.538Z",
-        "stocks": [
-            {
-                "stock_id": "72bc8105-a110-4612-8928-1f67d0a6bb6e",
-                "stock_name": "ACU",
-                "stock_start_rate": "41.67",
-                "stock_last_rate": 41.67,
-                "percent_change": 0,
-                "rank": 1,
-                "participants": [
-                    {
-                        "user_id": 3,
-                        "user_name": "Mohit Ash",
-                        "prediction_price": "50.00",
-                        "prediction_rank": 1,
-                        "delta": 19.99040076793856,
-                        "rank": 1
-                    },
-                    {
-                        "user_id": 87,
-                        "user_name": "Guest Guest",
-                        "prediction_price": "55.00",
-                        "prediction_rank": 1,
-                        "delta": 31.989440844732414,
-                        "rank": 2
-                    }
-                ]
-            },
-            {
-                "stock_id": "8d145f65-69a6-43b0-afb3-e34b62205eb6",
-                "stock_name": "ADRT",
-                "stock_start_rate": "11.40",
-                "stock_last_rate": 11.4,
-                "percent_change": 0,
-                "rank": 1,
-                "participants": [
-                    {
-                        "user_id": 87,
-                        "user_name": "Guest Guest",
-                        "prediction_price": "13.00",
-                        "prediction_rank": 2,
-                        "delta": 14.035087719298241,
-                        "rank": -1
-                    },
-                    {
-                        "user_id": 3,
-                        "user_name": "Mohit Ash",
-                        "prediction_price": "13.00",
-                        "prediction_rank": 2,
-                        "delta": 14.035087719298241,
-                        "rank": -1
-                    }
-                ]
-            }
-        ],
-        "race_result": {
-            "1": {
-                "stocks": [
-                    {
-                        "stock_id": "72bc8105-a110-4612-8928-1f67d0a6bb6e",
-                        "stock_name": "ACU"
-                    },
-                    {
-                        "stock_id": "8d145f65-69a6-43b0-afb3-e34b62205eb6",
-                        "stock_name": "ADRT"
-                    }
-                ],
-                "participants": [
-                    {
-                        "user_id": 3,
-                        "user_name": "Mohit Ash"
-                    }
-                ]
-            },
-            "2": {
-                "stocks": [
-                    {
-                        "stock_id": "8d145f65-69a6-43b0-afb3-e34b62205eb6",
-                        "stock_name": "ADRT"
-                    }
-                ],
-                "participants": [
-                    {
-                        "user_id": 87,
-                        "user_name": "Guest Guest"
-                    }
-                ]
-            },
-            "3": {
-                "stocks": [
-                    {
-                        "stock_id": "72bc8105-a110-4612-8928-1f67d0a6bb6e",
-                        "stock_name": "ACU"
-                    }
-                ],
-                "participants": [
-                    {
-                        "user_id": 87,
-                        "user_name": "Guest Guest"
-                    },
-                    {
-                        "user_id": 3,
-                        "user_name": "Mohit Ash"
-                    }
-                ]
-            }
-        },
-        "participantsWithNoRank": [
-            {
-                "user_id": 87,
-                "user_name": "Guest Guest",
-                "prediction_price": "13.00",
-                "prediction_rank": 2,
-                "delta": 14.035087719298241,
-                "rank": -1
-            }
-        ]
+    const [ranks, setRanks] = useState({
+        1: Math.floor(Math.random() * 3) + 1,
+        2: Math.floor(Math.random() * 3) + 1,
+        3: Math.floor(Math.random() * 3) + 1,
     })
 
-    const [chartData, setChartData] = useState({
-        labels: Array.from({ length: 10 }, (_, i) => (i + 1).toString()), // Ranking from 1 to 10
-        datasets: [
-            {
-                label: 'Player Rankings',
-                data: Array(10).fill(null),
-                borderColor: 'blue',
-                backgroundColor: 'blue',
-                pointBackgroundColor: 'blue',
-                pointBorderColor: 'white',
-                pointRadius: 5,
-                pointHoverRadius: 7,
-            },
-        ],
-    });
+
+
+
 
     const getParticipantsWithRanks = (raceResult, participantsWithNoRank) => {
         // console.log(raceResult, participantsWithNoRank)
@@ -223,7 +83,6 @@ const RacePage = () => {
 
         return result;
     }
-
 
 
     // useEffect(() => {
@@ -269,8 +128,14 @@ const RacePage = () => {
 
 
     useEffect(() => {
-        // check if race started or not and then set the state of waiting card.
-        // socket connection will be established here 
+        let interval = setInterval(() => {
+            setRanks({
+                1: Math.floor(Math.random() * 3) + 1,
+                2: Math.floor(Math.random() * 3) + 1,
+                3: Math.floor(Math.random() * 3) + 1,
+            })
+        }, 4000)
+
         fetchRaceData(race_id, (res) => {
             // console.log('racedata:', res);
             setRaceDetails(res)
@@ -286,6 +151,12 @@ const RacePage = () => {
             setParticipantsCount(result.length)
             setJoinedUsers(result)
         })
+
+        // console.log('animation box width', box.current ? box.current.offsetWidth : 'no width is displayed')
+
+        return () => {
+            clearInterval(interval)
+        }
     }, [])
 
     useEffect(() => {
@@ -362,9 +233,6 @@ const RacePage = () => {
         }, 2000);
     }, [])
 
-    useEffect(() => {
-        console.log(stockRankList);
-    }, [stockRankList])
 
     return (
         <>
@@ -528,7 +396,6 @@ const RacePage = () => {
                                     </div>
                                     <p className="font-medium text-4">WR: #12</p>
                                 </div>
-
                             </div>
 
                             <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md">
@@ -539,13 +406,74 @@ const RacePage = () => {
 
                                 {/* race tile  */}
                                 <div className="w-full flex justify-between border-dashed border-black border py-[3rem] relative">
-                                    <div className="bg-[#f5f5f5] relative right-2">
+                                    <div className="bg-[#f5f5f5] relative right-2 z-10">
                                         <img src={start} alt="" />
                                     </div>
-
                                     {/* here happens the magic  */}
-
-
+                                    {/* each time socket fires data you extract stocks from that data and
+                                    assign rank  */}
+                                    {/* logic here will be like I will be extracging all the stocks 
+                                    and then assign rank each time data is upadated to each of them.
+                                    make sure the list of stocks you are bringing here is in sorted
+                                     order   only the rank field is changing for them*/}
+                                    {/* we should supply here only the array of stocks with rank field  */}
+                                    {/* it is coming from the stocksList  */}
+                                    <RaceTile
+                                        ranks={ranks}
+                                        stockRankList={[
+                                            {
+                                                "stock_id": "72bc8105-a110-4612-8928-1f67d0a6bb6e",
+                                                "stock_name": "ACU",
+                                                "stock_start_rate": "41.67",
+                                                "stock_last_rate": 41.67,
+                                                "percent_change": 0,
+                                                "rank": 1,
+                                                "participants": [
+                                                    {
+                                                        "user_id": 3,
+                                                        "user_name": "Mohit Ash",
+                                                        "prediction_price": "50.00",
+                                                        "prediction_rank": 1,
+                                                        "delta": 19.99040076793856,
+                                                        "rank": 1
+                                                    },
+                                                    {
+                                                        "user_id": 87,
+                                                        "user_name": "Guest Guest",
+                                                        "prediction_price": "55.00",
+                                                        "prediction_rank": 1,
+                                                        "delta": 31.989440844732414,
+                                                        "rank": 2
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "stock_id": "8d145f65-69a6-43b0-afb3-e34b62205eb6",
+                                                "stock_name": "ADRT",
+                                                "stock_start_rate": "11.40",
+                                                "stock_last_rate": 11.4,
+                                                "percent_change": 0,
+                                                "rank": 1,
+                                                "participants": [
+                                                    {
+                                                        "user_id": 87,
+                                                        "user_name": "Guest Guest",
+                                                        "prediction_price": "13.00",
+                                                        "prediction_rank": 2,
+                                                        "delta": 14.035087719298241,
+                                                        "rank": -1
+                                                    },
+                                                    {
+                                                        "user_id": 3,
+                                                        "user_name": "Mohit Ash",
+                                                        "prediction_price": "13.00",
+                                                        "prediction_rank": 2,
+                                                        "delta": 14.035087719298241,
+                                                        "rank": -1
+                                                    }
+                                                ]
+                                            }
+                                        ]} />
 
                                     {/* absolute elements  */}
                                     <div className="absolute w-full top-1/2 border-dashed border-black border">
@@ -567,30 +495,8 @@ const RacePage = () => {
                                     <p className="font-medium text-[0.9rem]">Stock Ranking</p>
                                     <button><CgChevronRightO size={20} /></button>
                                 </div>
-                                <div className="flex-1 flex justify-start gap-[10px] custom-scrollbar overflow-auto">
-                                    {
-                                        stockRankList ?
-                                            stockRankList?.map((curr, index) => {
-                                                return (<StockPriceCard
-                                                    key={curr.stock_id}
-                                                    stockName={curr.stock_name}
-                                                    rank={index}
-                                                    percentChange={curr.percent_change}
-                                                    stockId={curr.stock_id}
-                                                    stockLastRate={curr.stock_last_rate}
-                                                />)
-                                            }) :
-                                            <ColorRing
-                                                visible={true}
-                                                height="25"
-                                                width="25"
-                                                ariaLabel="color-ring-loading"
-                                                wrapperStyle={{}}
-                                                wrapperClass="color-ring-wrapper"
-                                                colors={['#e15b64', '#f47e60',]}
-                                            />
-                                    }
-                                </div>
+
+                                <StockRankList stockRankList={stockRankList} />
                             </div>
 
                         </div>
@@ -606,26 +512,7 @@ const RacePage = () => {
                                     <p className="font-semibold text-4">View all</p>
                                     <CgChevronRightO size={20} />
                                 </div>
-                                <div className="w-full flex flex-col gap-[9px] items-center">
-                                    {
-                                        rankList ?
-                                            rankList?.map((curr) =>
-                                                <UserRankingCard
-                                                    userName={curr.user_name}
-                                                    userRank={curr.rank}
-                                                    key={curr.user_id}
-                                                />) :
-                                            <ColorRing
-                                                visible={true}
-                                                height="25"
-                                                width="25"
-                                                ariaLabel="color-ring-loading"
-                                                wrapperStyle={{}}
-                                                wrapperClass="color-ring-wrapper"
-                                                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-                                            />
-                                    }
-                                </div>
+                                <UserRankingList rankList={rankList} />
                             </div>
                         </div>
                     </div>
