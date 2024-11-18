@@ -23,17 +23,7 @@ const RaceTile = ({
 
 
     return (
-        <div className="h-full w-full flex flex-col gap-8 absolute left-0 top-0 justify-center pr-8 bg-red-300">
-            <div
-                style={{
-                    width: `${calculateWidhtByPosition(length, ranks['1'])}%`,
-                    transition: 'all 0.9s ease-out'
-                }}
-                className="bg-red-500 h-1 border-t-4 border-red-400 relative flex transition-all ease-in-out duration-500">
-                <div className="w-8 h-8 overflow-hidden z-20 rounded-full absolute -right-4 -top-4 border-2 border-black">
-                    <img className="w-full h-full object-cover" src={a} alt="stock" />
-                </div>
-            </div>
+        <div className="h-full w-full flex flex-col gap-8 absolute left-0 top-0 justify-center pr-8">
 
             {
                 stockRankList?.map((curr, index) => {

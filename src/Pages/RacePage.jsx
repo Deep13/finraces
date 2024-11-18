@@ -420,60 +420,7 @@ const RacePage = () => {
                                     {/* it is coming from the stocksList  */}
                                     <RaceTile
                                         ranks={ranks}
-                                        stockRankList={[
-                                            {
-                                                "stock_id": "72bc8105-a110-4612-8928-1f67d0a6bb6e",
-                                                "stock_name": "ACU",
-                                                "stock_start_rate": "41.67",
-                                                "stock_last_rate": 41.67,
-                                                "percent_change": 0,
-                                                "rank": 1,
-                                                "participants": [
-                                                    {
-                                                        "user_id": 3,
-                                                        "user_name": "Mohit Ash",
-                                                        "prediction_price": "50.00",
-                                                        "prediction_rank": 1,
-                                                        "delta": 19.99040076793856,
-                                                        "rank": 1
-                                                    },
-                                                    {
-                                                        "user_id": 87,
-                                                        "user_name": "Guest Guest",
-                                                        "prediction_price": "55.00",
-                                                        "prediction_rank": 1,
-                                                        "delta": 31.989440844732414,
-                                                        "rank": 2
-                                                    }
-                                                ]
-                                            },
-                                            {
-                                                "stock_id": "8d145f65-69a6-43b0-afb3-e34b62205eb6",
-                                                "stock_name": "ADRT",
-                                                "stock_start_rate": "11.40",
-                                                "stock_last_rate": 11.4,
-                                                "percent_change": 0,
-                                                "rank": 1,
-                                                "participants": [
-                                                    {
-                                                        "user_id": 87,
-                                                        "user_name": "Guest Guest",
-                                                        "prediction_price": "13.00",
-                                                        "prediction_rank": 2,
-                                                        "delta": 14.035087719298241,
-                                                        "rank": -1
-                                                    },
-                                                    {
-                                                        "user_id": 3,
-                                                        "user_name": "Mohit Ash",
-                                                        "prediction_price": "13.00",
-                                                        "prediction_rank": 2,
-                                                        "delta": 14.035087719298241,
-                                                        "rank": -1
-                                                    }
-                                                ]
-                                            }
-                                        ]} />
+                                        stockRankList={stockRankList} />
 
                                     {/* absolute elements  */}
                                     <div className="absolute w-full top-1/2 border-dashed border-black border">
