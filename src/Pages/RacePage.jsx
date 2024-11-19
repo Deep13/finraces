@@ -166,7 +166,7 @@ const RacePage = () => {
 
     useEffect(() => {
         // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
-        const socket = io('https://www.missionatal.com', {
+        const socket = io('http://3.90.114.42:3000', {
             reconnection: true, // Automatically reconnect if the connection is lost
             reconnectionAttempts: Infinity,
             reconnectionDelay: 1000,
@@ -358,7 +358,7 @@ const RacePage = () => {
                                     </div>
                                     <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[1]?.participants[0]?.user_name}</p>
                                 </div>}
-                                {raceResults?.race_result[2]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center">
+                                {/* {raceResults?.race_result[2]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center">
                                     <div>
                                         <img src={bronze_king_crown} alt="" />
                                         <div className="flex justify-center items-center">
@@ -370,7 +370,7 @@ const RacePage = () => {
                                         <img className="z-[5]" src={bronze_frame} alt="" />
                                     </div>
                                     <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[2]?.participants[0]?.user_name}</p>
-                                </div>}
+                                </div>} */}
                             </div>
 
                             <div className="flex-1 flex justify-center items-end gap-[2rem]">
@@ -419,7 +419,7 @@ const RacePage = () => {
                                     {/* we should supply here only the array of stocks with rank field  */}
                                     {/* it is coming from the stocksList  */}
                                     <RaceTile
-                                        ranks={ranks}
+                                        ranks={ranks} // these are arbitrary ranks
                                         stockRankList={stockRankList} />
 
                                     {/* absolute elements  */}

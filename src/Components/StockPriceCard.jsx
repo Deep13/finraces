@@ -2,7 +2,7 @@ import React from 'react'
 import fb from '../assets/images/facebook.svg'
 
 const StockPriceCard = ({
-  stockName='AnyStock',
+  stockName = 'AnyStock',
   rank = 1,
   percentChange = 50,
   stockId = 'asfdsfalkfl',
@@ -19,9 +19,9 @@ const StockPriceCard = ({
       </div>
       {/* <p className='font-semibold text-[0.9rem]'>facebook.com</p> */}
       {/* url of company is needed  */}
-      <p className='text-[1.3rem] font-medium'>${stockLastRate}</p>
+      <p className='text-[1.3rem] font-medium'>${parseFloat(stockLastRate).toFixed(3)}</p>
       {/* last price  */}
-      <p className='font-semibold text-[0.9rem] text-[#15af4d]'>{percentChange}%</p>
+      <p className='font-semibold text-[0.9rem] text-[#15af4d]'>{parseFloat(percentChange).toFixed(3)}%</p>
       {/* percent change  */}
     </div>
   )
