@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import box from '../assets/images/ongoingRaces/focus_box.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
 import dashed_line from '../assets/images/dashed_line.svg'
@@ -15,6 +15,8 @@ import f from '../assets/images/f.png'
 import g from '../assets/images/g.png'
 import { useNavigate } from 'react-router-dom'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
+import { io } from 'socket.io-client'
+import RaceTile from '../Components/RaceTile'
 
 
 const RaceCardHomepage = ({
@@ -24,6 +26,70 @@ const RaceCardHomepage = ({
     start_Date
     // participants,
 }) => {
+
+    const [stockRankList, setStockRankList] = useState(null)
+    const [raceResult, setRaceResult] = useState(null)
+
+
+    useEffect(() => {
+        // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
+        const socket = io('http://3.90.114.42:3000', {
+            reconnection: true, // Automatically reconnect if the connection is lost
+            reconnectionAttempts: Infinity,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax: 5000,
+            transports: ['websocket'], // Use WebSocket transport
+        });
+
+        // Event listeners for the connection
+        socket.on('connect', () => {
+            // console.log('Connected to the server with id:', socket.id);
+
+            const joinData = {
+                raceId: raceId
+            };
+
+            socket.emit('watch-race', joinData);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Disconnected from the server');
+        });
+
+        socket.on('reconnect_attempt', () => {
+            console.log('Attempting to reconnect...');
+        });
+
+        socket.on('reconnect', (attemptNumber) => {
+            console.log('Reconnected to the server after', attemptNumber, 'attempts');
+        });
+
+        socket.on('reconnect_failed', () => {
+            console.log('Failed to reconnect to the server');
+        });
+
+        // Listening for any custom event (for example, a message event)
+        socket.on('message', (data) => {
+            // console.log('Message from server:', JSON.stringify(data, null, 2));
+            if (data.event === 'user-joined') {
+                console.log(data.data.firstName)
+
+                // setMessage(prev => [...prev, `${data.data.firstName} ${data.data.lastName} has joined the race.`])
+            }
+            if (data.event === 'race-data') {
+                console.log(data.data)
+                setStockRankList(data.data['stocks'].slice(0, 3))
+                setRaceResult(data.data.race_result)
+            }
+        });
+
+        // Sending a message to the server
+        setTimeout(() => {
+            console.log('Sending message to server...');
+            socket.emit('events', { content: 'Hello from client!' });
+        }, 2000);
+    }, [])
+
 
     const navigate = useNavigate()
 
@@ -134,68 +200,19 @@ const RaceCardHomepage = ({
             </div>
 
             <div className='w-full flex-1 relative border border-dashed border-black  bg-[#edf7ff] flex justify-between items-center py-[2rem]'>
-                <div className='bg-[#edf7ff]'>
+                <RaceTile
+                    stockRankList={stockRankList} />
+                <div className='bg-[#edf7ff] z-20 relative -left-2'>
                     <img src={start} alt="" />
                 </div>
                 <div className='flex-1 border-dashed border-black border-t relative'>
                     <div className='absolute -top-[1.5rem] left-8 flex justify-center gap-2'>
-                        <div className='w-[45px] aspect-square'>
-                            <img src={a} alt="" />
-                            <p className='font-semibold relative -top-[4.5rem] text-center text-[20px] text-black'>3</p>
-                        </div>
-                        <div className='w-[45px] aspect-square'>
-                            <img src={g} alt="" />
-                            <p className='font-semibold relative -top-[4.5rem] text-center text-[20px] text-black'>2</p>
-                        </div>
-                        <div className='w-[45px] aspect-square'>
-                            <img src={f} alt="" />
-                            <p className='font-semibold relative -top-[4.5rem] text-center text-[20px] text-black'>1</p>
-                        </div>
+
                     </div>
                 </div>
-                <div className='bg-[#edf7ff]'>
+                <div className='bg-[#edf7ff] z-20 relative -right-2'>
                     <img src={finish} alt="" />
                 </div>
-
-                {/* <div className='absolute top-0 left-0 w-full'>
-                <img src={dashed_line} alt="" />
-            </div> */}
-                {/* race line  */}
-                {/* <div className='absolute top-1/2 left-0 w-full'> */}
-                {/* <div className='w-full relative'> */}
-                {/* <img src={dashed_line} alt="" /> */}
-
-                {/* stocks icons with text  */}
-                {/* <div className='relative flex gap-3 -top-6 w-full justify-center'>
-                        <div className='relative w-[45px] aspect-square'>
-                            <img src={a} alt="" />
-                            <p className='font-semibold absolute -top-[2rem] left-0 w-full text-center text-[20px] text-black'>3</p>
-                        </div>
-                        <div className='relative w-[45px] aspect-square'>
-                            <img src={g} alt="" />
-                            <p className='font-semibold absolute -top-[2rem] left-0 w-full text-center text-[20px] text-black'>2</p>
-                        </div>
-                        <div className='relative w-[45px] aspect-square'>
-                            <img src={f} alt="" />
-                            <p className='font-semibold absolute -top-[2rem] left-0 w-full text-center text-[20px] text-black'>1</p>
-                        </div>
-                    </div> */}
-                {/* </div> */}
-                {/* </div> */}
-                {/* <div className='absolute bottom-0 left-0 w-full'>
-                <img src={dashed_line} alt="" />
-            </div>
-            <div className='absolute bottom-0 right-0 w-full'>
-                <img src={dashedline_breaks} alt="" />
-            </div> */}
-
-                {/* absolute  */}
-                {/* <div className='absolute top-[40px] -left-[8px] bg-[#edf7ff] px-[4]'>
-                <img src={start} alt="" />
-            </div>
-            <div className='absolute top-[40px] -right-[8px] bg-[#edf7ff] px-[4]'>
-                <img src={finish} alt="" />
-            </div> */}
             </div>
         </div>
     )

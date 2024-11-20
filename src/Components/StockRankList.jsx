@@ -5,6 +5,7 @@ import StockPriceCard from './StockPriceCard'
 const StockRankList = ({
     stockRankList
 }) => {
+      
     return (
         <div className="flex-1 flex justify-start gap-[10px] custom-scrollbar overflow-auto">
             {
@@ -13,7 +14,7 @@ const StockRankList = ({
                         return (<StockPriceCard
                             key={curr.stock_id}
                             stockName={curr.stock_name}
-                            rank={index}
+                            rank={index+1}
                             percentChange={curr.percent_change}
                             stockId={curr.stock_id}
                             stockLastRate={curr.stock_last_rate}

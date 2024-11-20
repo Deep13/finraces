@@ -30,8 +30,9 @@ import { Line } from 'react-chartjs-2';
 import google from '../assets/images/g.svg'
 import StockRankList from '../Components/StockRankList'
 import UserRankingList from "../Components/UserRankingList";
-
 import RaceTile from "../Components/RaceTile";
+import avatar from '../assets/images/placeholderavatar.png'
+
 
 const RacePage = () => {
 
@@ -332,7 +333,7 @@ const RacePage = () => {
 
                             {/* top 3 users  */}
                             <div className="flex-1 flex justify-center items-center gap-[2rem]">
-                                {raceResults?.race_result[3]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center">
+                                <div className="flex justify-center flex-col items-center">
                                     <div>
                                         <img src={silver_king_crown} alt="" />
                                         <div className="flex justify-center items-center">
@@ -340,12 +341,12 @@ const RacePage = () => {
                                         </div>
                                     </div>
                                     <div className="relative">
-                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={Person} alt="" />
+                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={raceResults?.race_result[3]?.participants[0]?.user_name ? Person : avatar} alt="" />
                                         <img className="z-[5]" src={silver_frame} alt="" />
                                     </div>
                                     <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[3]?.participants[0]?.user_name}</p>
-                                </div>}
-                                {raceResults?.race_result[1]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center relative bottom-8">
+                                </div>
+                                <div className="flex justify-center flex-col items-center relative bottom-8">
                                     <div className="mb-[1rem]">
                                         <img src={golden_king_corwn} alt="" />
                                         <div className="flex justify-center items-center">
@@ -353,11 +354,11 @@ const RacePage = () => {
                                         </div>
                                     </div>
                                     <div className="relative">
-                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-[80%]" src={Person} alt="" />
+                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-[80%]" src={raceResults?.race_result[1]?.participants[0]?.user_name ? Person : avatar} alt="" />
                                         <img className="z-[5]" src={golden_frame} alt="" />
                                     </div>
                                     <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[1]?.participants[0]?.user_name}</p>
-                                </div>}
+                                </div>
                                 {/* {raceResults?.race_result[2]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center">
                                     <div>
                                         <img src={bronze_king_crown} alt="" />
@@ -371,6 +372,19 @@ const RacePage = () => {
                                     </div>
                                     <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[2]?.participants[0]?.user_name}</p>
                                 </div>} */}
+                                <div className="flex justify-center flex-col items-center">
+                                    <div>
+                                        <img src={bronze_king_crown} alt="" />
+                                        <div className="flex justify-center items-center">
+                                            <img src={Polygon7} alt="" />
+                                        </div>
+                                    </div>
+                                    <div className="relative">
+                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={raceResults?.race_result[2]?.participants[0]?.user_name ? Person : avatar} alt="" />
+                                        <img className="z-[5]" src={bronze_frame} alt="" />
+                                    </div>
+                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[2]?.participants[0]?.user_name}</p>
+                                </div>
                             </div>
 
                             <div className="flex-1 flex justify-center items-end gap-[2rem]">
@@ -400,7 +414,7 @@ const RacePage = () => {
 
                             <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md">
                                 <div className="flex justify-between w-full items-center mb-[18px]">
-                                    <p className="font-medium text-[0.9rem]">Race created by- Max</p>
+                                    <p className="font-medium text-[0.9rem]">Race created by- {raceResults?.created_by?.firstName + " " + raceResults?.created_by?.lastName}</p>
                                     <p className="font-medium text-[0.9rem]">60 Minutes</p>
                                 </div>
 

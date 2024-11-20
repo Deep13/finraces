@@ -6,7 +6,8 @@ const StockPriceCard = ({
   rank = 1,
   percentChange = 50,
   stockId = 'asfdsfalkfl',
-  stockLastRate = '445'
+  stockLastRate = '445',
+  lineColor
 }) => {
   return (
     <div className='h-auto w-[11rem] rounded-[10px] py-[0.9rem] px-[0.8rem] border border-solid border-[#e1e4e5] flex flex-col gap-[0.7rem] flex-shrink-0 bg-[#f5f5f5]'>
