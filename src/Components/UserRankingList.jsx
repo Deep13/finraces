@@ -11,10 +11,10 @@ const UserRankingList = ({
                 rankList ?
                     rankList?.map((curr, index) =>
                         <UserRankingCard
-                            key={curr.user_id}
+                            key={curr.user_id + index}
                             userName={curr.user_name}
                             userRank={curr.rank}
-                            lastItem = {rankList?.length === index}
+                            lastItem={rankList?.length === index}
                         />) :
                     <ColorRing
                         visible={true}

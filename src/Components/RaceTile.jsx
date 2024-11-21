@@ -66,7 +66,7 @@ const RaceTile = ({
                                     {imageUrl && <img className="w-full h-full object-cover" src={imageUrl ? imageUrl : a} alt="stock" />}
                                     {!imageUrl && <div className='grid place-items-center font-bold text-blace bg-blue-300 text-white w-full h-full'>{curr?.stock_name?.substring(0, 2)}</div>}
                                 </div>
-                                <div className='text-xs font-semibold text-center'>{curr.stock_name}</div>
+                                {/* <div className='text-xs font-semibold text-center'>{curr.stock_name}</div> */}
                             </div>
                         </div>
                     )

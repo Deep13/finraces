@@ -313,10 +313,15 @@ const RacePage = () => {
                                         </div>
                                     </div>
                                     <div className="relative">
-                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={raceResults?.race_result[3]?.participants[0]?.user_name ? Person : avatar} alt="" />
+                                        {/* raceResults?.race_result['3']?.participants[0]?.user_name  */}
+                                        {
+                                            raceResults?.race_result[3]?.participants?.length > 0 ?
+                                                <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={Person} alt="" /> :
+                                                <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={avatar} alt="" />
+                                        }
                                         <img className="z-[5]" src={silver_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[3]?.participants[0]?.user_name}</p>
+                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result['3']?.participants?.[0]?.user_name}</p>
                                 </div>
                                 <div className="flex justify-center flex-col items-center relative bottom-8">
                                     <div className="mb-[1rem]">
@@ -326,10 +331,10 @@ const RacePage = () => {
                                         </div>
                                     </div>
                                     <div className="relative">
-                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-[80%]" src={raceResults?.race_result[1]?.participants[0]?.user_name ? Person : avatar} alt="" />
+                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-[80%]" src={raceResults?.race_result['1']?.participants?.[0]?.user_name ? Person : avatar} alt="" />
                                         <img className="z-[5]" src={golden_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[1]?.participants[0]?.user_name}</p>
+                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result['1']?.participants?.[0]?.user_name}</p>
                                 </div>
                                 {/* {raceResults?.race_result[2]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center">
                                     <div>
@@ -352,10 +357,14 @@ const RacePage = () => {
                                         </div>
                                     </div>
                                     <div className="relative">
-                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={raceResults?.race_result[2]?.participants[0]?.user_name ? Person : avatar} alt="" />
+                                        {
+                                            raceResults?.race_result['2']?.participants?.length > 0 ?
+                                                <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={Person} alt="" /> :
+                                                <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={avatar} alt="" />
+                                        }
                                         <img className="z-[5]" src={bronze_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[2]?.participants[0]?.user_name}</p>
+                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result['2']?.participants?.[0]?.user_name}</p>
                                 </div>
                             </div>
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import box from '../assets/images/ongoingRaces/focus_box.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
-import dashed_line from '../assets/images/dashed_line.svg'
-import dashedline_breaks from '../assets/images/dashedline_breaks.svg'
+// import dashed_line from '../assets/images/dashed_line.svg'
+// import dashedline_breaks from '../assets/images/dashedline_breaks.svg'
 import gold_crown from '../assets/images/gold_crown.svg'
 import silver_crown from '../assets/images/silver_corwn.svg'
 import bronze_corwn from '../assets/images/bronze_corwn.svg'
@@ -10,13 +10,14 @@ import line_beside_medals from '../assets/images/line_beside_medals.png'
 import person2 from '../assets/images/person2.png'
 import start from '../assets/images/start.svg'
 import finish from '../assets/images/finish.svg'
-import a from '../assets/images/a.png'
-import f from '../assets/images/f.png'
-import g from '../assets/images/g.png'
+// import a from '../assets/images/a.png'
+// import f from '../assets/images/f.png'
+// import g from '../assets/images/g.png'
 import { useNavigate } from 'react-router-dom'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { io } from 'socket.io-client'
 import RaceTile from '../Components/RaceTile'
+import { getStocksDataForRace } from '../Utils/api'
 
 
 const RaceCardHomepage = ({
@@ -28,8 +29,14 @@ const RaceCardHomepage = ({
 }) => {
 
     const [stockRankList, setStockRankList] = useState(null)
-    const [raceResult, setRaceResult] = useState(null)
+    // const [raceResult, setRaceResult] = useState(null)
+    const [stocksDataForRace, setStocksDataForRace] = useState(null)
 
+    useEffect(() => {
+        getStocksDataForRace(raceId, (data) => {
+            setStocksDataForRace(data)
+        })
+    }, [])
 
     useEffect(() => {
         // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
@@ -73,22 +80,39 @@ const RaceCardHomepage = ({
             // console.log('Message from server:', JSON.stringify(data, null, 2));
             if (data.event === 'user-joined') {
                 console.log(data.data.firstName)
+                if (data.data.firstName) {
+                    // setJoinedUsers(previous => ([...previous, data.data.firstName]))
+                    const objectAlreadyThere = joinedUsersRef.current.filter(curr => curr.id === data.data.id)
 
-                // setMessage(prev => [...prev, `${data.data.firstName} ${data.data.lastName} has joined the race.`])
+                    if (objectAlreadyThere.length === 0) {
+                        joinedUsersRef.current = [...joinedUsersRef.current, data.data]
+                        setRefresh('1')
+                    }
+                }
+                // setMessage(prev => [...prev, ${data.data.firstName} ${data.data.lastName} has joined the race.])
             }
             if (data.event === 'race-data') {
-                console.log(data.data)
-                setStockRankList(data.data['stocks'].slice(0, 3))
-                setRaceResult(data.data.race_result)
+                // console.log(JSON.stringify(data.data))
+                // setRaceResults(data.data)
+                // setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
+                setStockRankList(data.data['stocks'])
             }
         });
 
         // Sending a message to the server
         setTimeout(() => {
             console.log('Sending message to server...');
+
             socket.emit('events', { content: 'Hello from client!' });
         }, 2000);
-    }, [])
+
+        // Cleanup the socket connection when the component unmounts
+        return () => {
+            socket.disconnect();
+            console.log('Socket disconnected');
+        };
+    }, [raceId])
+
 
 
     const navigate = useNavigate()
@@ -201,6 +225,7 @@ const RaceCardHomepage = ({
 
             <div className='w-full flex-1 relative border border-dashed border-black  bg-[#edf7ff] flex justify-between items-center py-[2rem]'>
                 <RaceTile
+                    stocksData={stocksDataForRace}
                     stockRankList={stockRankList} />
                 <div className='bg-[#edf7ff] z-20 relative -left-2'>
                     <img src={start} alt="" />
