@@ -6,14 +6,15 @@ const UserRankingList = ({
     rankList
 }) => {
     return (
-        <div className="w-full flex flex-col gap-[9px] items-center">
+        <div className="w-full flex flex-col gap-[9px] items-center overflow-auto">
             {
                 rankList ?
-                    rankList?.map((curr) =>
+                    rankList?.map((curr, index) =>
                         <UserRankingCard
+                            key={curr.user_id}
                             userName={curr.user_name}
                             userRank={curr.rank}
-                            key={curr.user_id}
+                            lastItem = {rankList?.length === index}
                         />) :
                     <ColorRing
                         visible={true}

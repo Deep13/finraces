@@ -32,6 +32,7 @@ import StockRankList from '../Components/StockRankList'
 import UserRankingList from "../Components/UserRankingList";
 import RaceTile from "../Components/RaceTile";
 import avatar from '../assets/images/placeholderavatar.png'
+import { getStocksDataForRace } from "../Utils/api";
 
 
 const RacePage = () => {
@@ -48,6 +49,7 @@ const RacePage = () => {
     const { race_id } = useParams()
     const joinedUsersRef = useRef([])
     const [raceResults, setRaceResults] = useState(null)
+    const [stocksDataForRace, setStocksDataForRace] = useState(null)
     const [ranks, setRanks] = useState({
         1: Math.floor(Math.random() * 3) + 1,
         2: Math.floor(Math.random() * 3) + 1,
@@ -86,48 +88,6 @@ const RacePage = () => {
     }
 
 
-    // useEffect(() => {
-    //     const fetchRankingData = async () => {
-    //         try {
-    //             // Example API call to fetch updated player rankings
-    //             const response = await fetch('https://www.missionatal.com/api/your-ranking-endpoint'); // Replace with your API endpoint
-    //             const data = await response.json();
-
-    //             // Process data to extract player names and ranks
-    //             const playerNames = data.map(player => player.name);
-    //             const rankings = data.map(player => player.rank);
-
-    //             setChartData({
-    //                 labels: rankings.map(rank => rank.toString()), // X-axis (ranking from 1 to 10)
-    //                 datasets: [
-    //                     {
-    //                         label: 'Player Rankings',
-    //                         data: playerNames, // Y-axis (player names)
-    //                         borderColor: 'blue',
-    //                         backgroundColor: 'blue',
-    //                         pointBackgroundColor: 'blue',
-    //                         pointBorderColor: 'white',
-    //                         pointRadius: 5,
-    //                         pointHoverRadius: 7,
-    //                     },
-    //                 ],
-    //             });
-    //         } catch (error) {
-    //             console.error('Error fetching ranking data:', error);
-    //         }
-    //     };
-
-    //     // Initial data fetch
-    //     fetchRankingData();
-
-    //     // Refresh data every 5 seconds
-    //     const intervalId = setInterval(fetchRankingData, 5000);
-
-    //     // Clear interval on component unmount
-    //     return () => clearInterval(intervalId);
-    // }, []);
-
-
     useEffect(() => {
         let interval = setInterval(() => {
             setRanks({
@@ -153,6 +113,11 @@ const RacePage = () => {
             setJoinedUsers(result)
         })
 
+        getStocksDataForRace(race_id, (data) => {
+            console.log("API Response ", data)
+            setStocksDataForRace(data)
+        })
+
         // console.log('animation box width', box.current ? box.current.offsetWidth : 'no width is displayed')
 
         return () => {
@@ -164,6 +129,8 @@ const RacePage = () => {
         setLiveUsers(joinedUsersRef.current)
     }, [Refresh])
 
+
+    // can you try this
 
     useEffect(() => {
         // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
@@ -216,7 +183,7 @@ const RacePage = () => {
                         setRefresh('1')
                     }
                 }
-                // setMessage(prev => [...prev, `${data.data.firstName} ${data.data.lastName} has joined the race.`])
+                // setMessage(prev => [...prev, ${data.data.firstName} ${data.data.lastName} has joined the race.])
             }
             if (data.event === 'race-data') {
                 // console.log(JSON.stringify(data.data))
@@ -232,8 +199,13 @@ const RacePage = () => {
 
             socket.emit('events', { content: 'Hello from client!' });
         }, 2000);
-    }, [])
 
+        // Cleanup the socket connection when the component unmounts
+        return () => {
+            socket.disconnect();
+            console.log('Socket disconnected');
+        };
+    }, [race_id])
 
     return (
         <>
@@ -434,6 +406,7 @@ const RacePage = () => {
                                     {/* it is coming from the stocksList  */}
                                     <RaceTile
                                         ranks={ranks} // these are arbitrary ranks
+                                        stocksData={stocksDataForRace}
                                         stockRankList={stockRankList} />
 
                                     {/* absolute elements  */}
@@ -457,7 +430,9 @@ const RacePage = () => {
                                     <button><CgChevronRightO size={20} /></button>
                                 </div>
 
-                                <StockRankList stockRankList={stockRankList} />
+                                <StockRankList
+                                    stocksData={stocksDataForRace} // data from api below is data from socket
+                                    stockRankList={stockRankList} />
                             </div>
 
                         </div>
@@ -468,7 +443,7 @@ const RacePage = () => {
                                 <button className='w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px]' >Leaderboard</button>
                                 <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px]' >Your Bets</button>
                             </div>
-                            <div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen'>
+                            <div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar'>
                                 <div className='w-full flex justify-between items-center mb-[14px]'>
                                     <p className="font-semibold text-4">View all</p>
                                     <CgChevronRightO size={20} />

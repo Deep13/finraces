@@ -390,3 +390,33 @@ export const RefreshToken = async (
     onError(error)
   }
 };
+
+export const getStocksDataForRace = async (race_id, onSuccess, onError) => {
+  try {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      throw new Error("Authorization token not found in localStorage");
+    }
+
+    const response = await fetch(`http://3.90.114.42:3020/api/v1/stocks/race/${race_id}`, {
+      method: "GET", // Adjust the method if needed (e.g., POST, PUT, DELETE)
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    // console.log("API Response:", data);
+    onSuccess(data)
+  } catch (error) {
+    console.error("Error fetching stocks data for race:", error.message);
+    onError(error)
+  }
+};

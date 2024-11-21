@@ -10,7 +10,7 @@ import { Hourglass } from 'react-loader-spinner'
 const RaceTile = ({
     ranks,
     stockRankList,
-    colorsArray
+    stocksData
 }) => {
     const colors = [
         "#4CFF4C", // Fluorescent Green
@@ -34,8 +34,12 @@ const RaceTile = ({
         return (stepSizePercent * (numberOfStocks - position)) + 20// will be a number in percentage
     }
 
+    const sortedStockRankList = stockRankList?.slice().sort((a, b) =>
+        a.stock_name.localeCompare(b.stock_name)
+    )
+
     useEffect(() => {
-        console.log('ranks', ranks)
+        // console.log('ranks', ranks)
         // stockRankList && console.log(getRandomColors(stockRankList.length))
     }, [ranks])
 
@@ -44,8 +48,10 @@ const RaceTile = ({
         <div className="h-full w-full flex flex-col gap-8 absolute left-0 top-0 justify-center pr-8">
 
             {
-                stockRankList?.map((curr, index) => {
-                    console.log(`This is ${index} color: ${colors[index]}`)
+                sortedStockRankList?.map((curr, index) => {
+                    // console.log(`This is ${index} color: ${colors[index]}`)
+                    let imageUrl = stocksData[Object.keys(stocksData).find(element => element === curr.stock_id)]?.icon_url
+                    // console.log(imageUrl)
                     return (
                         <div
                             key={curr.stock_id}
@@ -55,8 +61,12 @@ const RaceTile = ({
                                 borderTopColor: colors[index]
                             }}
                             className={`h-1 border-t-4 relative flex transition-all ease-in-out duration-500`}>
-                            <div className="w-8 h-8 overflow-hidden z-20 rounded-full absolute -right-4 -top-4 border-2 border-black">
-                                <img className="w-full h-full object-cover" src={a} alt="stock" />
+                            <div className="absolute -right-4 -top-4 z-20">
+                                <div className='w-8 h-8 overflow-hidden z-20 rounded-full border-2 border-black mb-1'>
+                                    {imageUrl && <img className="w-full h-full object-cover" src={imageUrl ? imageUrl : a} alt="stock" />}
+                                    {!imageUrl && <div className='grid place-items-center font-bold text-blace bg-blue-300 text-white w-full h-full'>{curr?.stock_name?.substring(0, 2)}</div>}
+                                </div>
+                                <div className='text-xs font-semibold text-center'>{curr.stock_name}</div>
                             </div>
                         </div>
                     )

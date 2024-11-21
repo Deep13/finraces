@@ -7,9 +7,10 @@ import person2 from '../assets/images/person2.png'
 const UserRankingCard = ({
     userName,
     userRank,
+    lastItem
 }) => {
     return (
-        <div className='rounded-[10px] flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md'>
+        <div className={`rounded-[10px] flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md`}>
             <div className='flex gap-[15px]'>
                 <div className='w-[2.8rem] aspect-square'>
                     <img className='w-full h-full object-cover' src={person2} alt="" />
