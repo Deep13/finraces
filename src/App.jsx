@@ -6,20 +6,31 @@ import Auth from './Pages/Auth'
 import NavFootWrapper from './Components/layouts/NavFootWrapper'
 import GlobalProvider from './Contexts'
 import RacePage from './Pages/RacePage'
+import Profile from './Pages/Profile'
+import Leaderboard from './Pages/Leaderboard'
+import { ErrorBoundary } from 'react-error-boundary'
+import ErrorPage from './Pages/ErrorPage'
+import Fallback from './Components/Fallback'
 
 function App() {
 
+
   return (
     <>
-      <GlobalProvider>
-        <Routes>
-          <Route path='/' element={<NavFootWrapper />}>
-            <Route path="" element={<Home />} />
-            <Route path="race/:race_id" element={<RacePage />} />
-          </Route>
-          <Route path="/auth" element={<Auth />} />
-        </Routes>
-      </GlobalProvider>
+      <ErrorBoundary fallback={<Fallback />}>
+        <GlobalProvider>
+          <Routes>
+            <Route path='/' element={<NavFootWrapper />}>
+              <Route path="" element={<Home />} />
+              <Route path="race/:race_id" element={<RacePage />} />
+              <Route path="/profile" element={<Profile />} />
+            </Route>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
+        </GlobalProvider>
+      </ErrorBoundary>
     </>
   )
 }
