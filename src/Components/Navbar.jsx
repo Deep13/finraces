@@ -21,7 +21,7 @@ const Navbar = () => {
     return (
         <>
             {createRaceState && <CreateRace setCreateRace={setCreateRaceState} />}
-            <nav className='w-full px-[1.5rem] py-[0.8rem] bg-[#e5f4ff] flex items-center justify-between sticky top-0 z-[50]'>
+            <nav className='w-full px-[1.5rem] py-[0.8rem] bg-[#e5f4ff] flex items-center justify-between sticky top-0 z-[10]'>
                 <div className="flex items-center">
                     {/* <button onClick={() => setToggle(prev => !prev)} className='w-[2.9rem] h-[2.9rem] grid place-items-center rounded-[8px] mr-[106px]'>
                     <HiMenu size={24} color="black" />

@@ -33,6 +33,7 @@ import UserRankingList from "../Components/UserRankingList";
 import RaceTile from "../Components/RaceTile";
 import avatar from '../assets/images/placeholderavatar.png'
 import { getStocksDataForRace } from "../Utils/api";
+import RaceResult from "../Components/RaceResult";
 
 
 const RacePage = () => {
@@ -50,6 +51,7 @@ const RacePage = () => {
     const joinedUsersRef = useRef([])
     const [raceResults, setRaceResults] = useState(null)
     const [stocksDataForRace, setStocksDataForRace] = useState(null)
+    const [raceStatus, setRaceStatus] = useState('')
     const [ranks, setRanks] = useState({
         1: Math.floor(Math.random() * 3) + 1,
         2: Math.floor(Math.random() * 3) + 1,
@@ -129,6 +131,10 @@ const RacePage = () => {
         setLiveUsers(joinedUsersRef.current)
     }, [Refresh])
 
+    useEffect(() => {
+        console.log("This is race status >>>>>>>>", raceStatus);
+    }, [raceStatus])
+
 
     // can you try this
 
@@ -188,6 +194,7 @@ const RacePage = () => {
             if (data.event === 'race-data') {
                 // console.log(JSON.stringify(data.data))
                 setRaceResults(data.data)
+                setRaceStatus(data.data.status)
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
             }
@@ -233,6 +240,8 @@ const RacePage = () => {
                         closeCard={setIsRaceStarted} />
             }
             <div className='w-full relative h-auto flex pb-8'>
+                {(raceStatus === 'finished') && <RaceResult race_id={race_id} />}
+                {/* {<RaceResult race_id={race_id} />} */}
                 {/* Ensure sidebar is inside a container with sufficient height */}
                 <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
                     <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
