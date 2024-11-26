@@ -10,7 +10,8 @@ import { Hourglass } from 'react-loader-spinner'
 const RaceTile = ({
     ranks,
     stockRankList,
-    stocksData
+    stocksData,
+    raceStatus
 }) => {
     const colors = [
         "#4CFF4C", // Fluorescent Green
@@ -45,32 +46,37 @@ const RaceTile = ({
 
 
     return (
-        <div className="h-full w-full flex flex-col gap-8 absolute left-0 top-0 justify-center pr-8">
+        <div className="h-full w-full flex flex-col gap-8 justify-center pr-12 items-start">
 
             {
-                sortedStockRankList?.map((curr, index) => {
-                    // console.log(`This is ${index} color: ${colors[index]}`)
-                    let imageUrl = stocksData[Object.keys(stocksData).find(element => element === curr.stock_id)]?.icon_url
-                    // console.log(imageUrl)
-                    return (
-                        <div
-                            key={curr.stock_id}
-                            style={{
-                                width: `${calculateWidhtByPosition(length, curr.rank)}%`,
-                                transition: 'all 0.9s ease-out',
-                                borderTopColor: colors[index]
-                            }}
-                            className={`h-1 border-t-4 relative flex transition-all ease-in-out duration-500`}>
-                            <div className="absolute -right-4 -top-4 z-20">
-                                <div className='w-8 h-8 overflow-hidden z-20 rounded-full border-2 border-black mb-1'>
-                                    {imageUrl && <img className="w-full h-full object-cover" src={imageUrl ? imageUrl : a} alt="stock" />}
-                                    {!imageUrl && <div className='grid place-items-center font-bold text-blace bg-blue-300 text-white w-full h-full'>{curr?.stock_name?.substring(0, 2)}</div>}
+                raceStatus === 'finished' ?
+                    <div className='rounded-lg bg-white shadow-xl italic px-8 py-4 w-[50%] z-20 grid place-items-center text-3xl font-bold'>
+                        Race Finished
+                    </div>
+                    :
+                    sortedStockRankList?.map((curr, index) => {
+                        // console.log(`This is ${index} color: ${colors[index]}`)
+                        let imageUrl = stocksData[Object.keys(stocksData).find(element => element === curr.stock_id)]?.icon_url
+                        // console.log(imageUrl)
+                        return (
+                            <div
+                                key={curr.stock_id}
+                                style={{
+                                    width: `${calculateWidhtByPosition(length, curr.rank)}%`,
+                                    transition: 'all 0.9s ease-out',
+                                    borderTopColor: colors[index]
+                                }}
+                                className={`h-1 border-t-4 relative flex transition-all ease-in-out duration-500`}>
+                                <div className="absolute -right-4 -top-4 z-20">
+                                    <div className='w-8 h-8 overflow-hidden z-20 rounded-full border-2 border-black mb-1'>
+                                        {imageUrl && <img className="w-full h-full object-cover" src={imageUrl ? imageUrl : a} alt="stock" />}
+                                        {!imageUrl && <div className='grid place-items-center font-bold text-blace bg-blue-300 text-white w-full h-full'>{curr?.stock_name?.substring(0, 2)}</div>}
+                                    </div>
+                                    {/* <div className='text-xs font-semibold text-center'>{curr.stock_name}</div> */}
                                 </div>
-                                {/* <div className='text-xs font-semibold text-center'>{curr.stock_name}</div> */}
                             </div>
-                        </div>
-                    )
-                })
+                        )
+                    })
             }
             {!stockRankList &&
                 <div className='w-full h-full grid place-items-center'>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
 import Home from './Pages/Home'
@@ -11,9 +11,21 @@ import Leaderboard from './Pages/Leaderboard'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorPage from './Pages/ErrorPage'
 import Fallback from './Components/Fallback'
+// import Lenis from 'lenis'
 
 function App() {
 
+
+  // useEffect(() => {
+  //   const lenis = new Lenis({
+  //     autoRaf: true,
+  //   });
+
+  //   // Listen for the scroll event and log the event data
+  //   lenis.on('scroll', (e) => {
+  //     console.log(e);
+  //   })
+  // })
 
   return (
     <>

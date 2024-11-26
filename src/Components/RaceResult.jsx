@@ -15,6 +15,7 @@ const RaceResult = ({
     return (
         <div className='w-full h-screen fixed top-0 left-0 backdrop-blur-lg grid place-items-center z-[100] py-[8]'>
             <div className='bg-white rounded-lg p-8 shadow-lg min-w-[450px]'>
+                <p className='text-lg text-center mb-4'>Race Finished</p>
                 <h1 className='text-2xl text-center font-bold mb-4'>Winner Stocks!</h1>
                 <div className='w-full flex flex-col'>
                     <div className='flex-1 flex py-2 font-bold text-sm bg-green-200'>

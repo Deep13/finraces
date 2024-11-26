@@ -13,11 +13,25 @@ import live_streaming from '../assets/icons/sidebar/live_streaming.svg'
 import forward from '../assets/icons/sidebar/forward.svg'
 import eth from '../assets/icons/sidebar/eth.svg'
 import recent from '../assets/icons/sidebar/recent.svg'
-import CountDown from '../Components/CountDown'
+// import CountDown from '../Components/CountDown'
+import { motion } from 'motion/react'
 
 const Home = () => {
   return (
-    <div className='w-full relative h-auto flex pb-8'>
+    <motion.div
+      initial={{
+        y: 120,
+        opacity: 0
+      }}
+      animate={{
+        y: 0,
+        opacity: 1
+      }}
+      transition={{
+        duration: 0.4,
+        ease: 'easeInOut'
+      }}
+      className='w-full relative h-auto flex pb-8'>
       {/* Ensure sidebar is inside a container with sufficient height */}
       <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
         <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
@@ -61,7 +75,7 @@ const Home = () => {
         <Heading />
         <FAQ />
       </div>
-    </div>
+    </motion.div>
   )
 }
 

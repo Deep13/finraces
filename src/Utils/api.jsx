@@ -451,3 +451,83 @@ export const getRaceResults = async (race_id, onSuccess, onError) => {
     onError(error)
   }
 };
+
+
+
+export const getUserDetails = async (onSuccess, onError) => {
+  try {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No token found in localStorage');
+    }
+
+    // Make the GET request with the authorization header
+    const response = await fetch('http://3.90.114.42:3020/api/v1/auth/me', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json', // Optional, adjust if needed
+      },
+    });
+
+    // Check if the response is OK
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return the JSON data
+    const data = await response.json();
+    console.log("user", data)
+    onSuccess(data)
+  } catch (error) {
+    // Handle and log errors
+    console.error('Error fetching data:', error.message);
+    // throw error; // Re-throw to allow further handling if needed
+    onError(error)
+  }
+};
+
+export const uploadProfilePicture = async (file, onSuccess, onError) => {
+  const UPLOAD_URL = 'http://3.90.114.42:3020/api/v1/files/upload'; // Replace with your upload endpoint
+  const token = localStorage.getItem('token')
+  let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
+  // console.log(JSON.parse(atob(userDetails)))
+
+  try {
+    // Create FormData object and append file
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Make the fetch request with Authorization header
+    const response = await fetch(UPLOAD_URL, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the Bearer token
+      },
+    });
+
+    // Check if the response is OK(status in the range 200 - 299)
+    if (!response.ok) {
+      const errorText = await response.text(); // Extract error message from server if any
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to upload file: ${response.status} ${response.statusText}`);
+    }
+
+    // Parse response JSON
+    const data = await response.json();
+    console.log('File uploaded successfully:', data);
+    userDetails.profilePic = data.file
+    await console.log(userDetails)
+    await localStorage.setItem('userDetails', btoa(userDetails))
+    onSuccess(data)
+
+  } catch (error) {
+    // Catch network or other unexpected errors
+    console.error('Upload failed:', error.message || error);
+    // throw new Error(`An error occurred while uploading: ${error.message}`);
+    onError(error)
+  }
+};

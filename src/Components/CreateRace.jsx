@@ -15,6 +15,42 @@ const CreateRace = ({
   setCreateRace = () => { },
 }) => {
 
+  const generateRandomStockRaceName = () => {
+    // Get user details from localStorage
+    const encodedUserDetails = localStorage.getItem('userDetails');
+    if (!encodedUserDetails) {
+      throw new Error("User details not found in localStorage");
+    }
+
+    // Decode and parse user details
+    const decodedUserDetails = JSON.parse(atob(encodedUserDetails));
+    const userName = decodedUserDetails.userName;
+
+    if (!userName) {
+      throw new Error("Username not found in userDetails");
+    }
+
+    // Creative stock-related phrases
+    const stockPhrases = [
+      "Charge of the Bulls",
+      "Bear's Retreat",
+      "Portfolio Blitz",
+      "Trader's Triumph",
+      "Capital Crusade",
+      "Equity Escapade",
+      "Stock Surge Showdown",
+      "Investor's Arena",
+      "Exchange Frenzy",
+      "Market Mayhem"
+    ];
+
+    // Generate a random phrase
+    const randomPhrase = stockPhrases[Math.floor(Math.random() * stockPhrases.length)];
+
+    // Generate the race name
+    return `${userName}'s ${randomPhrase}`;
+  };
+
   // const [closed, setClosed] = useState(false) // race type will be open initially
   const [OpenCloseRaceValue, setOpenCloseRaceValue] = useState("close")
   const [percentValue, setpercentValue] = useState('price')
@@ -34,7 +70,7 @@ const CreateRace = ({
     "isSimulation": false,
     "end_date": "2024-11-07T02:04:00.570Z",
     "start_date": "2024-11-07T02:04:00.570Z",
-    "name": ""
+    "name": generateRandomStockRaceName()
   })
   const navigate = useNavigate()
 
@@ -44,6 +80,7 @@ const CreateRace = ({
     value: item.id,
     label: item.name
   }));
+
 
   const addStock = () => {
     let theseItems = [...racePredictions]
@@ -275,7 +312,6 @@ const CreateRace = ({
                 ]}
               />
             </div>
-            <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[8px] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">Add Stocks <IoIosAdd size={24} /></button>
           </div>
 
 
@@ -296,23 +332,28 @@ const CreateRace = ({
               )
             }) : <div className="w-full text-center text-slate-500">Add some Stocks</div>
           }
+          <div className="w-full flex justify-center items-center mt-4">
+            <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[8px] font-semibold flex gap-2 rounded-[8px] active:scale-95 border border-slate-500">Add Stocks <IoIosAdd size={24} /></button>
+          </div>
 
         </div>
-        <button onClick={() => {
-          createRaceAndJoinUser(raceDetails, racePredictions, (res) => {
-            setRaceDetails({
-              "isSimulation": false,
-              "end_date": "2024-11-07T02:04:00.570Z",
-              "start_date": "2024-11-07T02:04:00.570Z",
-              "name": ""
+        <div className="w-full flex justify-center items-center mt-4">
+          <button onClick={() => {
+            createRaceAndJoinUser(raceDetails, racePredictions, (res) => {
+              setRaceDetails({
+                "isSimulation": false,
+                "end_date": "2024-11-07T02:04:00.570Z",
+                "start_date": "2024-11-07T02:04:00.570Z",
+                "name": ""
+              })
+              setRacePredicitons([])
+              setCreateRace(false)
+              res.id && navigate(`/race/${res.id}`)
             })
-            setRacePredicitons([])
-            setCreateRace(false)
-            res.id && navigate(`/race/${res.id}`)
-          })
-        }} className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">
-          Submit
-        </button>
+          }} className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">
+            Submit
+          </button>
+        </div>
       </div>
     </div>
   )

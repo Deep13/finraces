@@ -13,7 +13,7 @@ const StockPriceCard = ({
   return (
     <div className='h-auto w-[11rem] rounded-[10px] py-[0.9rem] px-[0.8rem] border border-solid border-[#e1e4e5] flex flex-col gap-[0.7rem] flex-shrink-0 bg-[#f5f5f5]'>
       <div className='flex justify-between w-full items-center'>
-        <div className='font-semibold text-[1.1rem]'>{rank}. {tickerName}</div>
+        <div className='font-semibold text-[1.1rem] w-[80%]'>{rank}. {tickerName}</div>
         <div className='w-8 h-8 overflow-hidden border border-black rounded-full'>
           {imageUrl && <img src={imageUrl} alt="" />}
           {!imageUrl && <div className='grid place-items-center font-bold text-blace bg-blue-300 text-white w-full h-full'>{tickerName?.substring(0, 2)}</div>}

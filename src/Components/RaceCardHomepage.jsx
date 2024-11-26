@@ -223,18 +223,14 @@ const RaceCardHomepage = ({
                 </div>
             </div>
 
-            <div className='w-full flex-1 relative border border-dashed border-black  bg-[#edf7ff] flex justify-between items-center py-[2rem]'>
-                <RaceTile
-                    stocksData={stocksDataForRace}
-                    stockRankList={stockRankList} />
+            <div className='w-full flex-1 mt-3 relative border border-dashed border-black  bg-[#edf7ff] flex justify-between items-center py-[2rem]'>
                 <div className='bg-[#edf7ff] z-20 relative -left-2'>
                     <img src={start} alt="" />
                 </div>
-                <div className='flex-1 border-dashed border-black border-t relative'>
-                    <div className='absolute -top-[1.5rem] left-8 flex justify-center gap-2'>
-
-                    </div>
-                </div>
+                <RaceTile
+                    stocksData={stocksDataForRace}
+                    stockRankList={stockRankList} />
+                <div className="absolute w-full top-1/2 border-dashed border-black border" />
                 <div className='bg-[#edf7ff] z-20 relative -right-2'>
                     <img src={finish} alt="" />
                 </div>

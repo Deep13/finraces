@@ -22,7 +22,7 @@ import Person from '../assets/images/person2.png'
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
 import { useParams } from "react-router-dom";
-import { fetchRaceData, fetchAlreadyJoinedUsers } from "../Utils/api";
+import { fetchRaceData, fetchAlreadyJoinedUsers, getRaceResults } from "../Utils/api";
 import io from 'socket.io-client'
 import Countdown from "react-countdown";
 import { ColorRing } from "react-loader-spinner";
@@ -33,7 +33,10 @@ import UserRankingList from "../Components/UserRankingList";
 import RaceTile from "../Components/RaceTile";
 import avatar from '../assets/images/placeholderavatar.png'
 import { getStocksDataForRace } from "../Utils/api";
-import RaceResult from "../Components/RaceResult";
+// import RaceResult from "../Components/RaceResult";
+import ConfettiExplosion from 'react-confetti-explosion';
+import { motion } from "motion/react";
+
 
 
 const RacePage = () => {
@@ -57,6 +60,7 @@ const RacePage = () => {
         2: Math.floor(Math.random() * 3) + 1,
         3: Math.floor(Math.random() * 3) + 1,
     })
+    const [isExploding, setIsExploding] = useState(false)
 
 
 
@@ -106,6 +110,21 @@ const RacePage = () => {
                 setIsRaceStarted(true)
             } else {
                 setIsRaceStarted(false)
+                if (res.status === 'finished') {
+                    getRaceResults(race_id, (data) => {
+                        console.log("These are finished race results", data.result)
+                        // just like when you get the race data in socket
+                        // setFinishedRaceResults(data.result)
+                        setRaceResults(data.result)
+                        setIsExploding(true)
+                        setRaceStatus('finished')
+                        setStockRankList(data.result.stocks)
+                        setRankList(getParticipantsWithRanks(data.result['race_result'], data.result['participantsWithNoRank']))
+                        setTimeout(() => {
+                            setIsExploding(false)
+                        }, 4000)
+                    })
+                }
             }
             setisLoading(false)
         })
@@ -133,7 +152,14 @@ const RacePage = () => {
 
     useEffect(() => {
         console.log("This is race status >>>>>>>>", raceStatus);
+        if (raceStatus === 'finished') {
+            setIsExploding(true)
+            setTimeout(() => {
+                setIsExploding(false)
+            }, 4000)
+        }
     }, [raceStatus])
+
 
 
     // can you try this
@@ -235,13 +261,25 @@ const RacePage = () => {
                         raceStarted={isRaceStarted}
                         joinedUsersList={joinedUsers}
                         liveUsers={liveUsers}
+                        race_id={race_id}
                         status={raceDetails?.status}
                         // raceEnded = {false}
                         closeCard={setIsRaceStarted} />
             }
-            <div className='w-full relative h-auto flex pb-8'>
-                {(raceStatus === 'finished') && <RaceResult race_id={race_id} />}
-                {/* {<RaceResult race_id={race_id} />} */}
+            <motion.div
+                initial={{
+                    y: 120,
+                    opacity: 0
+                }}
+                animate={{
+                    y: 0,
+                    opacity: 1
+                }}
+                transition={{
+                    duration: 0.4,
+                    ease: 'easeInOut'
+                }}
+                className='w-full relative h-auto flex pb-8'>
                 {/* Ensure sidebar is inside a container with sufficient height */}
                 <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
                     <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
@@ -305,6 +343,13 @@ const RacePage = () => {
                                     <div className='relative top-1'>
                                         <img src={info} alt="info icon" />
                                     </div>
+                                </div>
+                                <div>
+                                    {isExploding && <ConfettiExplosion
+                                        particleCount={200}
+                                        particleSize={5}
+                                        duration={2800}
+                                    />}
                                 </div>
                                 <div className='h-full flex flex-col justify-between items-end'>
                                     <h3 className='text-[1.05rem] font-bold'>Tech Stocks</h3>
@@ -409,7 +454,7 @@ const RacePage = () => {
                                 </div>
 
                                 {/* race tile  */}
-                                <div className="w-full flex justify-between border-dashed border-black border py-[3rem] relative">
+                                <div className="w-full h-auto flex justify-between border-dashed border-black border py-[3rem] relative items-center">
                                     <div className="bg-[#f5f5f5] relative right-2 z-10">
                                         <img src={start} alt="" />
                                     </div>
@@ -423,13 +468,13 @@ const RacePage = () => {
                                     {/* we should supply here only the array of stocks with rank field  */}
                                     {/* it is coming from the stocksList  */}
                                     <RaceTile
+                                        raceStatus={raceStatus}
                                         ranks={ranks} // these are arbitrary ranks
                                         stocksData={stocksDataForRace}
                                         stockRankList={stockRankList} />
 
                                     {/* absolute elements  */}
-                                    <div className="absolute w-full top-1/2 border-dashed border-black border">
-                                    </div>
+                                    <div className="absolute w-full top-1/2 border-dashed border-black border" />
                                     <div className="absolute top-0 left-0 w-full h-full">
                                         <div className="border-r border-solid w-1/4"></div>
                                     </div>
@@ -471,7 +516,7 @@ const RacePage = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
         </>
     )
 }
