@@ -15,27 +15,35 @@ import badges from '../assets/images/badges.png'
 import coin from '../assets/images/coin2.png'
 import { getUserDetails } from "../Utils/api";
 import PicUploadPopUpd from "../Components/PicUploadPopUpd";
+import { Oval } from "react-loader-spinner";
 
 
 const Profile = () => {
 
   const [data, setData] = useState(null)
   const [uploadPopup, setUploadPopup] = useState(false)
+  const [imageIsLoading, setImageIsLoading] = useState(false)
+  const [imageUrl, setImageUrl] = useState("http://3.90.114.42:3020" + data?.photo?.path.substring(data.photo.path.indexOf('/api')))
 
 
   useLayoutEffect(() => {
+    setImageIsLoading(true)
     getUserDetails((data) => {
       setData(data)
+      setImageUrl("http://3.90.114.42:3020" + data?.photo?.path.substring(data.photo.path.indexOf('/api')))
+      setTimeout(() => setImageIsLoading(false), 2500)
     })
   }, [])
 
   return (
     <>
       {
-        uploadPopup && 
+        uploadPopup &&
         <PicUploadPopUpd
-        exit={setUploadPopup}
-         />
+          setImageUrl={setImageUrl}
+          setImageIsLoading={setImageIsLoading}
+          exit={setUploadPopup}
+        />
       }
       <div className='w-full relative h-auto flex pb-8 pt-8'>
         {/* Ensure sidebar is inside a container with sufficient height */}
@@ -77,7 +85,7 @@ const Profile = () => {
             {/* profile picture and buttons  */}
             <div className='flex gap-4 flex-wrap'>
               <div className=' overflow-hidden'>
-                <div className="relative w-[200px] overflow-hidden h-full rounded-lg group">
+                <div className="relative w-[200px] overflow-hidden h-[15rem] rounded-lg group">
                   <div className="absolute bg-black bg-opacity-30 place-items-center hidden group-hover:grid top-0 left-0 w-full h-full transition-all ease-in-out duration-200">
                     <button
                       onClick={() => {
@@ -88,7 +96,18 @@ const Profile = () => {
                       Edit Profile Pic
                     </button>
                   </div>
-                  <img className="w-full h-full object-cover" src={Person} alt="" />
+                  {imageIsLoading && <div className="absolute bg-black bg-opacity-30 place-items-center grid top-0 left-0 w-full h-full transition-all ease-in-out duration-200">
+                    <Oval
+                      visible={true}
+                      height="35"
+                      width="35"
+                      color="#000"
+                      ariaLabel="oval-loading"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                  </div>}
+                  <img loading="lazy" className="w-full h-full object-cover" src={imageUrl} alt="" />
                   {/* <img className="z-[5]" src={golden_frame} alt="" /> */}
                 </div>
               </div>

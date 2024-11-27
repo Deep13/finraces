@@ -1,10 +1,12 @@
 import { RxCross1 } from "react-icons/rx";
 import { BsUpload } from "react-icons/bs";
 import React, { useState } from 'react'
-import { uploadProfilePicture } from "../Utils/api";
+import { uploadProfilePicture, updatePhoto } from "../Utils/api";
 
 const PicUploadPopUpd = ({
-    exit
+    exit,
+    setImageUrl,
+    setImageIsLoading
 }) => {
 
 
@@ -43,7 +45,14 @@ const PicUploadPopUpd = ({
                             // upload the image
                             // alert('Image uploaded successfully')
                             if (selectedFile) {
-                                uploadProfilePicture(selectedFile)
+                                uploadProfilePicture(selectedFile, (data) => {
+                                    setImageIsLoading(true)
+                                    updatePhoto(data.file.id, (data) => {
+                                        // set the pic data here
+                                        setImageUrl("http://3.90.114.42:3020" + data?.photo?.path.substring(data.photo.path.indexOf('/api')))
+                                    })
+                                    setTimeout(() => setImageIsLoading(false), 2500)
+                                })
                             }
                         } else {
                             document.getElementById('fileInput')?.click()

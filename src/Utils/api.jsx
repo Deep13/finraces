@@ -521,13 +521,61 @@ export const uploadProfilePicture = async (file, onSuccess, onError) => {
     console.log('File uploaded successfully:', data);
     userDetails.profilePic = data.file
     await console.log(userDetails)
-    await localStorage.setItem('userDetails', btoa(userDetails))
+    await localStorage.setItem('userDetails', btoa(JSON.stringify(userDetails)))
     onSuccess(data)
 
   } catch (error) {
     // Catch network or other unexpected errors
     console.error('Upload failed:', error.message || error);
     // throw new Error(`An error occurred while uploading: ${error.message}`);
+    onError(error)
+  }
+};
+
+
+export const updatePhoto = async (photoId, onSuccess, onError) => {
+  try {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('User is not authenticated. Token is missing.');
+    }
+
+    // Define the API endpoint
+    const url = 'http://3.90.114.42:3020/api/v1/auth/me'
+
+    // Create the payload
+    const payload = {
+      photo: {
+        id: photoId,
+      },
+    };
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // Handle non-OK responses
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${errorData.message}`);
+    }
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Photo updated successfully:', data);
+    onSuccess(data)
+    // return data;
+  } catch (error) {
+    // Handle errors
+    console.error('Error updating photo:', error.message);
+    // return null; // Or handle the error further as needed
     onError(error)
   }
 };
