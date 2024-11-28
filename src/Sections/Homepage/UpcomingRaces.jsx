@@ -28,16 +28,16 @@ const UpcomingRaces = () => {
       <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
         See All <BiChevronRight size={18} />
       </a>
-      <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem]'>Upcoming Races</h2>
+      <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Upcoming Races</h2>
 
       {/* Tab layout */}
       <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem]'>
-        {["Stocks", "NFT", "Crypto", "Finance", "Agro"].map((tab) => (
+        {["Tech Stocks", "Healthcare", "Energy", "Pharmaceuticals", "Automotive"].map((tab) => (
           <button
             key={tab}
             onClick={() => handleTabClick(tab)}
-            className={`flex justify-center items-center w-[5rem] md:w-[9rem] px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
-              ${activeTab === tab ? 'bg-[#e5f4ff]' : 'bg-white'}`}
+            className={`flex dark:text-white justify-center items-center w-[5rem] md:w-[9rem] px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
+              ${activeTab === tab ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]' : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'}`}
           >
             {tab}
           </button>
@@ -49,12 +49,12 @@ const UpcomingRaces = () => {
         {
           raceList && raceList.slice(0, 4).map((curr, index) => {
             return (
-              <UpcomingRaceCardHomepage 
-              startDate={curr.start_date}
-              endDate={curr.end_date}
-              raceName={curr.name} 
-              raceId={curr.id}
-              key={index + 1} />
+              <UpcomingRaceCardHomepage
+                startDate={curr.start_date}
+                endDate={curr.end_date}
+                raceName={curr.name}
+                raceId={curr.id}
+                key={index + 1} />
             )
           })
         }

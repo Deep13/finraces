@@ -157,30 +157,54 @@ input[type='password'] {
   transition: transform 0.3s ease, width 0.3s ease;
 }
 
-.cont input {
-
-}
+.cont input {}
 
 
 .custom-scrollbar {
-  overflow: auto; /* Enables scrolling for vertical overflow */
+  overflow: auto;
+  /* Enables scrolling for vertical overflow */
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;  /* Width of the scrollbar */
-  height: 8px; /* Height of the scrollbar */
+  width: 8px;
+  /* Width of the scrollbar */
+  height: 8px;
+  /* Height of the scrollbar */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.6); /* Darker blackish color */
-  border-radius: 20px;                  /* Rounded edges */
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Darker blackish color */
+  border-radius: 20px;
+  /* Rounded edges */
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent; /* Transparent track */
+  background: transparent;
+  /* Transparent track */
 }
 
 .custom-scrollbar {
-  scrollbar-width: thin; /* Thin scrollbar for Firefox */
-  scrollbar-color: rgba(0, 0, 0, 0.6) transparent; /* Dark thumb, transparent track */
+  scrollbar-width: thin;
+  /* Thin scrollbar for Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.6) transparent;
+  /* Dark thumb, transparent track */
+}
+
+
+/* .online_text{
+  text-shadow: rgba(12, 159, 66, 0.67) 0px 0px 21px;
+} */
+
+
+.table-row-light:hover {
+  background-color: none;
+}
+
+.table-row-dark:hover {
+  background-color: none;
+}
+
+.antd-table-head {
+  background: #000;
 }

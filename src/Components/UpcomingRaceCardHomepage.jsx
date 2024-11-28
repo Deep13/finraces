@@ -37,21 +37,21 @@ const UpcomingRaceCardHomepage = ({
 
 
     return (
-        <div className='rounded-[15px] bg-[#E5f4ff] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem]'>
+        <div className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem]'>
             {
                 joinRaceFormVisible && <JoinRace
                     raceName={raceName}
                     closeForm={setJoinRaceFormVisible}
                     race_id={raceId} />
             }
-            <p className='mb-[0.4rem] font-bold text-[2rem]'>{raceName}</p>
+            <p className='mb-[0.4rem] font-bold text-[2rem] dark:text-white'>{raceName}</p>
             <div className='w-full flex justify-between items-center mb-[5px]'>
                 <div className='flex justify-between items-baseline'>
-                    <p className='font-bold text-[20px] mr-[1rem]'>Race will start at {new Date(startDate).toLocaleTimeString(navigator.language, {
+                    <p className='font-bold text-[20px] mr-[1rem] dark:text-white'>Race will start at {new Date(startDate).toLocaleTimeString(navigator.language, {
                         hour: '2-digit',
                         minute: '2-digit'
                     })}</p>
-                    <p className='text-[12px]'>{new Date(startDate).toLocaleDateString()}</p>
+                    <p className='text-[12px] dark:text-white'>{new Date(startDate).toLocaleDateString()}</p>
                 </div>
                 <div className='flex gap-[6px] items-center'>
                     <img src={stocks} alt="stocks images" />
@@ -59,8 +59,8 @@ const UpcomingRaceCardHomepage = ({
                 </div>
             </div>
             <div className='flex flex-col gap-[5px] mb-[14px]'>
-                <p className='text-[12px] font-bold'>1.2k Participants</p>
-                <p className='text-[12px]'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
+                <p className='text-[12px] font-bold dark:text-white'>1.2k Participants</p>
+                <p className='text-[12px] dark:text-white'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
             </div>
             {/* <p className='text-[14px] mb-[1.8rem]'>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
@@ -69,7 +69,7 @@ const UpcomingRaceCardHomepage = ({
                 <button
                     // onClick={() => navigate(`/race/${raceId}`)} 
                     onClick={() => setJoinRaceFormVisible(true)}
-                    className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>Join</button>
+                    className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>Join</button>
                 {/* <button className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>View Details</button> */}
             </div>
         </div>

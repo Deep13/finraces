@@ -4,6 +4,7 @@ import fb from '../assets/images/f.png'
 import a from '../assets/images/a.png'
 import g from '../assets/images/g.png'
 import { Hourglass } from 'react-loader-spinner'
+import useDarkMode from '../Utils/DarkMode'
 
 
 
@@ -28,6 +29,7 @@ const RaceTile = ({
 
 
     const length = stockRankList && stockRankList.length
+    const { darkModeEnabled } = useDarkMode()
 
     const calculateWidhtByPosition = (numberOfStocks, position) => {
         let stepSizePercent = 100 / numberOfStocks
@@ -46,7 +48,7 @@ const RaceTile = ({
 
 
     return (
-        <div className="h-full w-full flex flex-col gap-8 justify-center pr-12 items-start">
+        <div className="h-full w-full flex flex-col gap-8 justify-center pr-12 items-start dark:bg-[#002864]">
 
             {
                 raceStatus === 'finished' ?
@@ -87,7 +89,7 @@ const RaceTile = ({
                         ariaLabel="hourglass-loading"
                         wrapperStyle={{}}
                         wrapperClass="relative left-4"
-                        colors={['#000', '#000']}
+                        colors={!darkModeEnabled ? ['#fff', '#fff'] : ['#000', '#000']}
                     />
                 </div>
             }

@@ -21,7 +21,7 @@ const OngoingRaces = () => {
       <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
         See All <BiChevronRight size={18} />
       </a>
-      <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem]'>Ongoing Races</h2>
+      <h2 className='text-[2.14rem] text-start font-bold mb-[1.4rem] dark:text-white'>Ongoing Races</h2>
       <div className='w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2'>
         {
           raceList[0] && raceList.slice(0, 4).map((curr, index) => {

@@ -579,3 +579,48 @@ export const updatePhoto = async (photoId, onSuccess, onError) => {
     onError(error)
   }
 };
+
+export const searchStock = async (prefix) => {
+
+  const transformedList = (data) => {
+    return data.map(item => ({
+      value: item.id,
+      label: item.name
+    }))
+  }
+
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('User is not authenticated. Token is missing.');
+    }
+
+    const url = `http://3.90.114.42:3020/api/v1/stocks/search?prefix=${prefix}`
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Handle non-OK responses
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${errorData.message}`);
+    }
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Searched Stock with prefix', data);
+    // onSuccess(transformedList(data))
+    // return transformedList(data)
+    return data
+  } catch (error) {
+    // Handle errors
+    console.error('Something went wrong:', error.message);
+    // onError(error)
+  }
+};

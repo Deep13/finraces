@@ -33,9 +33,10 @@ import UserRankingList from "../Components/UserRankingList";
 import RaceTile from "../Components/RaceTile";
 import avatar from '../assets/images/placeholderavatar.png'
 import { getStocksDataForRace } from "../Utils/api";
-// import RaceResult from "../Components/RaceResult";
 import ConfettiExplosion from 'react-confetti-explosion';
 import { motion } from "motion/react";
+import Sidebar from "../Components/Sidebar";
+import useDarkMode from "../Utils/DarkMode";
 
 
 
@@ -61,6 +62,7 @@ const RacePage = () => {
         3: Math.floor(Math.random() * 3) + 1,
     })
     const [isExploding, setIsExploding] = useState(false)
+    const { darkModeEnabled } = useDarkMode()
 
 
 
@@ -279,45 +281,14 @@ const RacePage = () => {
                     duration: 0.4,
                     ease: 'easeInOut'
                 }}
-                className='w-full relative h-auto flex pb-8'>
+                className='w-full relative h-auto flex pb-8 dark:bg-[#000924]'>
                 {/* Ensure sidebar is inside a container with sufficient height */}
-                <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
-                    <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
-                        <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                            <img src={compass} alt="discover" />
-                            Discover
-                        </button>
-                        <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                            <img src={stats} alt="stocks" />
-                            Stocks
-                        </button>
-                        <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                            <img src={eth} alt="crypto" />
-                            Crypto
-                        </button>
-                        <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                            <img src={live_streaming} alt="live races" />
-                            Live Races
-                        </button>
-                        <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                            <img src={recent} alt="upcoming races" />
-                            Upcoming Races
-                        </button>
-                        <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                            <img src={finance_idea} alt="my races" />
-                            My Races
-                        </button>
-                        <button className="w-[3.35rem] h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                            <img src={forward} alt="my watchlist" />
-                            My Watchlist
-                        </button>
-                    </div>
-                </div>
+                <Sidebar />
 
                 {/* dashboard  */}
                 <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
                     {/* this is full width container cuz we need the sidebar to remain at correct place */}
-                    <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-[24px] bg-[#faebff]'>
+                    <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-[24px] dark:bg-[#000D38] bg-[#faebff]'>
 
                         {/* actual dashboard  */}
                         <div className='flex-1 px-[22px] py-[18px]'>
@@ -326,8 +297,8 @@ const RacePage = () => {
                                 <div className='flex gap-[0.76rem]'>
                                     <div></div>
                                     <div className='h-full'>
-                                        <h3 className='text-[1.05rem] font-bold'>{raceDetails?.name}</h3>
-                                        <p className='text-[0.7rem]'>
+                                        <h3 className='text-[1.05rem] font-bold dark:text-white'>{raceDetails?.name}</h3>
+                                        <p className='text-[0.7rem] dark:text-white'>
                                             Remaining time
                                             <span className="font-semibold ml-2">
                                                 {raceDetails && <Countdown
@@ -352,8 +323,8 @@ const RacePage = () => {
                                     />}
                                 </div>
                                 <div className='h-full flex flex-col justify-between items-end'>
-                                    <h3 className='text-[1.05rem] font-bold'>Tech Stocks</h3>
-                                    <p className='text-[0.7rem]'>{participantsCount} Participants</p>
+                                    <h3 className='text-[1.05rem] font-bold dark:text-white'>Tech Stocks</h3>
+                                    <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p>
                                 </div>
                             </div>
 
@@ -424,21 +395,21 @@ const RacePage = () => {
 
                             <div className="flex-1 flex justify-center items-end gap-[2rem]">
 
-                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5]">
+                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white">
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>
                                     </div>
                                     <p className="font-medium text-4">WR: #12</p>
                                 </div>
-                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[3rem] items-center rounded-t-[10px] bg-[#eaf5f5]">
+                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[3rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white">
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>
                                     </div>
                                     <p className="font-medium text-4">WR: #12</p>
                                 </div>
-                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5]">
+                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white">
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>
@@ -447,14 +418,14 @@ const RacePage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md">
-                                <div className="flex justify-between w-full items-center mb-[18px]">
+                            <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md dark:bg-[#002763] dark:border dark:border-[#00387E]">
+                                <div className="flex justify-between w-full items-center mb-[18px] dark:text-white">
                                     <p className="font-medium text-[0.9rem]">Race created by- {raceResults?.created_by?.firstName + " " + raceResults?.created_by?.lastName}</p>
                                     <p className="font-medium text-[0.9rem]">60 Minutes</p>
                                 </div>
 
                                 {/* race tile  */}
-                                <div className="w-full h-auto flex justify-between border-dashed border-black border py-[3rem] relative items-center">
+                                <div className="w-full h-auto flex justify-between border-dashed dark:border-white border-black border py-[3rem] relative items-center">
                                     <div className="bg-[#f5f5f5] relative right-2 z-10">
                                         <img src={start} alt="" />
                                     </div>
@@ -474,7 +445,7 @@ const RacePage = () => {
                                         stockRankList={stockRankList} />
 
                                     {/* absolute elements  */}
-                                    <div className="absolute w-full top-1/2 border-dashed border-black border" />
+                                    <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" />
                                     <div className="absolute top-0 left-0 w-full h-full">
                                         <div className="border-r border-solid w-1/4"></div>
                                     </div>
@@ -489,8 +460,8 @@ const RacePage = () => {
                             {/* other stocks rally  */}
                             <div className="flex-1 rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
                                 <div className="flex justify-between w-full items-center mb-[18px]">
-                                    <p className="font-medium text-[0.9rem]">Stock Ranking</p>
-                                    <button><CgChevronRightO size={20} /></button>
+                                    <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
+                                    <button><CgChevronRightO color={!darkModeEnabled ? 'white' : 'black'} size={20} /></button>
                                 </div>
 
                                 <StockRankList
@@ -503,13 +474,13 @@ const RacePage = () => {
                         {/* leaderboard  */}
                         <div className='flex flex-col'>
                             <div className='flex gap-[6px] mb-[11px]'>
-                                <button className='w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px]' >Leaderboard</button>
-                                <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px]' >Your Bets</button>
+                                <button className='w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' >Leaderboard</button>
+                                <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white' >Your Bets</button>
                             </div>
-                            <div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar'>
+                            <div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
                                 <div className='w-full flex justify-between items-center mb-[14px]'>
-                                    <p className="font-semibold text-4">View all</p>
-                                    <CgChevronRightO size={20} />
+                                    <p className="font-semibold text-4 dark:text-white">View all</p>
+                                    <CgChevronRightO color={!darkModeEnabled ? 'white' : 'black'} size={20} />
                                 </div>
                                 <UserRankingList rankList={rankList} />
                             </div>

@@ -66,7 +66,7 @@ const LeaderTable = () => {
             key: 'rank',
             render: (data) => {
                 return (
-                    <div className='text-center'>
+                    <div className='text-center dark:text-white'>
                         {data}
                     </div>
                 )
@@ -82,7 +82,7 @@ const LeaderTable = () => {
                         <div className=" w-10 h-10 rounded-full overflow-hidden">
                             <img className='h-full w-full object-cover' src={data.imageUrl} alt={data.userName} />
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col dark:text-white">
                             <p className='font-semibold text-lg'>{data.name}</p>
                             <p className='font-light text-sm'>{data.userName}</p>
                         </div>
@@ -94,21 +94,36 @@ const LeaderTable = () => {
             title: 'Most Races Won',
             dataIndex: 'mostRacesWon',
             key: 'mostRacesWon',
+            render: (data) => {
+                return (
+                    <div className='text-start dark:text-white'>
+                        {data}
+                    </div>
+                )
+            }
         },
         {
             title: 'Total Points',
             dataIndex: 'totalPoints',
             key: 'totalPoints',
+            render: (data) => {
+                return (
+                    <div className='text-start dark:text-white'>
+                        {data}
+                    </div>
+                )
+            }
         },
     ];
 
     const updatedDataSource = formatRanks(dataSource);
 
+
     return (
-        <div>
+        <div className='w-full dark:bg-[#000D38]'>
             <Table
                 // showHeader={false}
-                rowClassName={(record, index) => index % 2 === 0 ? 'bg-[#ffffff]' : 'bg-[#f5f5f5]'}
+                rowClassName={(record, index) => index % 2 === 0 ? 'bg-[#ffffff] dark:bg-[#000D38] hover:bg-transparent' : 'bg-[#f5f5f5] dark:bg-[#002763] hover:bg-transparent'}
                 dataSource={updatedDataSource}
                 pagination={false}
                 columns={columns} />

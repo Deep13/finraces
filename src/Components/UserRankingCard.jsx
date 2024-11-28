@@ -10,18 +10,18 @@ const UserRankingCard = ({
     lastItem
 }) => {
     return (
-        <div className={`rounded-[10px] flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md`}>
+        <div className={`rounded-[10px] flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md dark:border-[#00387E] dark:bg-[#002763]`}>
             <div className='flex gap-[15px]'>
                 <div className='w-[2.8rem] aspect-square'>
                     <img className='w-full h-full object-cover' src={person2} alt="" />
                 </div>
                 <div className='flex flex-col justify-between items-start'>
-                    <p className='text-[1rem] font-semibold'>{userName}</p>
+                    <p className='text-[1rem] font-semibold dark:text-white'>{userName}</p>
                     <div className='flex gap-[4px] items-baseline'>
                         <div>
                             <img src={vector} alt="" />
                         </div>
-                        <p className='text-[0.75rem]'>8/10</p>
+                        <p className='text-[0.75rem] dark:text-white'>8/10</p>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@ const UserRankingCard = ({
                 {userRank !== '-' && <div>
                     <img src={rank} alt="" />
                 </div>}
-                <p className='text-[1rem] font-medium'>{!(userRank === '-') ? `#${userRank}` : userRank}</p>
+                <p className='text-[1rem] font-medium dark:text-white'>{!(userRank === '-') ? `#${userRank}` : userRank}</p>
             </div>
         </div>
     )

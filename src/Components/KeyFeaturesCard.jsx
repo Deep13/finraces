@@ -9,8 +9,8 @@ const KeyFeaturesCard = () => {
             </div>
             <div className='w-full'>
                 {/* text content */}
-                <p className='text-[16px] font-bold mb-[8px]'>How does it work ?</p>
-                <p className='text-[14px] pr-[25px] text-[#b1a7a7]'>Use a simplified login system to enjoy all  gaming experience.</p>
+                <p className='text-[16px] font-bold mb-[8px] dark:text-white'>How does it work ?</p>
+                <p className='text-[14px] pr-[25px] text-[#b1a7a7] dark:text-white'>Use a simplified login system to enjoy all  gaming experience.</p>
             </div>
         </div>
     )

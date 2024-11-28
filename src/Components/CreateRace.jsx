@@ -49,9 +49,9 @@ const CreateRace = ({
 
     // Generate a random phrase
     const randomPhrase = stockPhrases[Math.floor(Math.random() * stockPhrases.length)];
-
+    let today = Date.now()
     // Generate the race name
-    return `${userName}'s ${randomPhrase}`;
+    return `${userName}'s ${randomPhrase} ${today}`;
   };
 
   // const [closed, setClosed] = useState(false) // race type will be open initially

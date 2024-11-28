@@ -129,12 +129,12 @@ const RaceCardHomepage = ({
 
 
     return (
-        <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] flex flex-col overflow-hidden cursor-pointer'>
+        <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
             <div className='w-full flex justify-between mb-[14px]'>
                 <div className='flex gap-[0.76rem] flex-1'>
-                    <img src={box} alt="box icon" />
+                    <img className='w-12 h-12' src={box} alt="box icon" />
                     <div className='h-full'>
-                        <h3 className='text-[1.05rem] font-bold'>{raceName}</h3>
+                        <h3 className='text-[1.05rem] font-bold dark:text-white'>{raceName}</h3>
                         {/* <p className='text-[0.7rem]'>XYZ</p> */}
                     </div>
                     <div className=''>
@@ -147,7 +147,7 @@ const RaceCardHomepage = ({
                         size={50}
                         strokeWidth={3}
                         duration={getRemainingSeconds(end_date, start_Date)} // total duration depcits a full circle.
-                        colors={['#004777']}
+                        colors={['#5b89ff']}
                         initialRemainingTime={getRemainingSeconds(end_date, new Date())} // time that is remaining from now
                         colorsTime={[7]}>
                         {({ remainingTime }) => {
@@ -155,15 +155,15 @@ const RaceCardHomepage = ({
                             const minutes = Math.floor((remainingTime % 3600) / 60)
                             const seconds = remainingTime % 60
 
-                            return <div className='text-[0.7rem] font-semibold'>
+                            return <div className='text-[0.7rem] font-semibold dark:text-white'>
                                 {hours}:{minutes}:{seconds}`
                             </div>
                         }}
                     </CountdownCircleTimer>
                 </div>
-                <div className='h-full flex flex-col justify-between items-end flex-1'>
-                    <h3 className='text-[1.05rem] font-bold'>Tech Stocks</h3>
-                    <p className='text-[0.7rem]'>20Participants</p>
+                <div className='h-full flex flex-col justify-start items-end flex-1'>
+                    <h3 className='text-[1.05rem] font-bold dark:text-white'>Tech Stocks</h3>
+                    <p className='text-[0.7rem] dark:text-white'>20Participants</p>
                 </div>
             </div>
 
@@ -187,7 +187,7 @@ const RaceCardHomepage = ({
                         <div className='absolute top-0 left-0 scale-125'>
                             <img className='w-full h-full object-cover' src={silver_crown} alt="1st position person" />
                         </div>
-                        <p className='relative top-[3.5rem] font-semibold text-[12px]'>Nik</p>
+                        <p className='relative top-[3.5rem] font-semibold text-[12px] dark:text-white'>Nik</p>
                     </div>
 
                     <div className='relative aspect-square p-[22px] z-[5]'>
@@ -197,7 +197,7 @@ const RaceCardHomepage = ({
                         <div className='absolute top-0 left-0 scale-125'>
                             <img className='w-full h-full object-cover' src={gold_crown} alt="1st position person" />
                         </div>
-                        <p className='relative top-[3rem] font-semibold text-[12px]'>Jon</p>
+                        <p className='relative top-[3rem] font-semibold text-[12px] dark:text-white'>Jon</p>
                     </div>
 
                     <div className='relative aspect-square p-[22px] scale-90 z-[5]'>
@@ -207,7 +207,7 @@ const RaceCardHomepage = ({
                         <div className='absolute top-0 left-0 scale-125'>
                             <img className='w-full h-full object-cover' src={bronze_corwn} alt="1st position person" />
                         </div>
-                        <p className='relative top-[3.5rem] font-semibold text-[12px]'>Saif</p>
+                        <p className='relative top-[3.5rem] font-semibold text-[12px] dark:text-white'>Saif</p>
                     </div>
 
                     {/* <div className='relative aspect-square p-[22px]'>
@@ -223,14 +223,14 @@ const RaceCardHomepage = ({
                 </div>
             </div>
 
-            <div className='w-full flex-1 mt-3 relative border border-dashed border-black  bg-[#edf7ff] flex justify-between items-center py-[2rem]'>
+            <div className='w-full flex-1 mt-3 relative border border-dashed border-black dark:border-white  bg-[#edf7ff] flex justify-between items-center py-[2rem] dark:bg-[#002864]'>
                 <div className='bg-[#edf7ff] z-20 relative -left-2'>
                     <img src={start} alt="" />
                 </div>
                 <RaceTile
                     stocksData={stocksDataForRace}
                     stockRankList={stockRankList} />
-                <div className="absolute w-full top-1/2 border-dashed border-black border" />
+                <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" />
                 <div className='bg-[#edf7ff] z-20 relative -right-2'>
                     <img src={finish} alt="" />
                 </div>
