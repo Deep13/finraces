@@ -1,3 +1,4 @@
+import { BiError } from "react-icons/bi";
 import { IoIosAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import React, { useState, useEffect, useRef } from 'react'
@@ -15,6 +16,8 @@ const CreateRace = ({
   setCreateRace = () => { },
 }) => {
 
+
+  const today = new Date().toISOString().split("T")[0];
   const generateRandomStockRaceName = () => {
     // Get user details from localStorage
     const encodedUserDetails = localStorage.getItem('userDetails');
@@ -68,9 +71,19 @@ const CreateRace = ({
   ])
   const [raceDetails, setRaceDetails] = useState({
     "isSimulation": false,
-    "end_date": "2024-11-07T02:04:00.570Z",
-    "start_date": "2024-11-07T02:04:00.570Z",
+    "end_date": "",
+    "start_date": "",
+    "start_time": "",
+    "end_time": "",
     "name": generateRandomStockRaceName()
+  })
+  const [validation, setValidation] = useState({ // this will only contain bool value
+    // true means ok you can proceed forward and false means you should correct the values
+    start_date: true,
+    end_date: true,
+    name: true,
+    start_time: true,
+    end_time: true,
   })
   const navigate = useNavigate()
 
@@ -169,12 +182,28 @@ const CreateRace = ({
   }, [])
 
   useEffect(() => {
-    console.log(racePredictions);
+    console.log("Race Predictions: ==>>", racePredictions);
 
   }, [racePredictions])
 
   useEffect(() => {
-    console.log(raceDetails);
+    // console.log(raceDetails);
+    let { start_date, end_date, name } = raceDetails
+    if (!name) {
+      setValidation(prev => ({ ...prev, name: false }))
+    } else {
+      setValidation(prev => ({ ...prev, name: true }))
+    }
+    if (start_date && end_date) {
+      let start = new Date(start_date)
+      let end = new Date(end_date)
+      if (start > end) {
+        // alert('Starting Date cannot be more than Ending Date')
+        setValidation(prev => ({ ...prev, start_date: false, end_date: false }))
+      } else {
+        setValidation(prev => ({ ...prev, start_date: true, end_date: true }))
+      }
+    }
 
   }, [raceDetails])
 
@@ -207,13 +236,22 @@ const CreateRace = ({
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race_name"> Race Name</label>
               <input placeholder="Enter the name for Race here" value={raceDetails.name} onChange={e => handleRaceDetails('name', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="text" id="race_name" />
+              {!validation.name && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Race Name is Required</p>}
             </div>
           </div>
 
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-start-date">Start Date</label>
-              <input id='race-start-date' placeholder="Race Starting Date" value={raceDetails.start_date} onChange={e => handleRaceDetails('start_date', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date" />
+              <input
+                id='race-start-date'
+                placeholder="Race Starting Date"
+                value={raceDetails.start_date}
+                onChange={e => handleRaceDetails('start_date', e.target.value)}
+                className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date"
+                min={today}
+              />
+              {!validation.start_date && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Start Date should be less than or equal to End Date</p>}
             </div>
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-start-time">Start Time</label>
@@ -226,13 +264,22 @@ const CreateRace = ({
                 type="time"
               // step="1"
               />
+              {!validation.start_time && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Start time is Required</p>}
             </div>
           </div>
 
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-end-date">End Date</label>
-              <input id='race-end-date' placeholder="Race Ending Date" value={raceDetails.end_date} onChange={e => handleRaceDetails('end_date', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date" />
+              <input
+                id='race-end-date'
+                placeholder="Race Ending Date"
+                value={raceDetails.end_date}
+                onChange={e => handleRaceDetails('end_date', e.target.value)}
+                className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date"
+                min={today}
+              />
+              {!validation.end_date && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Start Date should be less than End Date</p>}
             </div>
             <div className="flex flex-col flex-1">
               <label className="mb-[10px]" htmlFor="race-end-time">End Time</label>
@@ -245,6 +292,8 @@ const CreateRace = ({
                 type="time"
               // step="1"
               />
+              {!validation.end_time && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>End time is required</p>}
+
             </div>
           </div>
 
@@ -339,12 +388,47 @@ const CreateRace = ({
         </div>
         <div className="w-full flex justify-center items-center mt-4">
           <button onClick={() => {
+            let { start_date, end_date, name, start_time, end_time } = raceDetails
+            if (!(start_date && end_date && name && start_time, end_time)) {
+              alert('fill all the fields')
+              return
+            }
+            if (start_date && end_date) {
+              let start = new Date(start_date)
+              let end = new Date(end_date)
+              if (start > end) {
+                alert('Start Date must be less than or equal to End Date')
+                return
+              }
+              if (start_date == end_date) {
+                if (end_time < start_time) {
+                  alert('The time is not correct for the race Ending in Same Day')
+                  return
+                }
+              }
+            }
+            // now for the race predictions
+            if (racePredictions.length === 0) {
+              alert('Stocks Predicitions are required')
+              return
+            } else {
+              racePredictions.forEach(element => {
+                if (element.stock_id === '') {
+                  alert('You should select the stock for an Entry')
+                  return
+                }
+              })
+            }
+
+
             createRaceAndJoinUser(raceDetails, racePredictions, (res) => {
               setRaceDetails({
                 "isSimulation": false,
                 "end_date": "2024-11-07T02:04:00.570Z",
                 "start_date": "2024-11-07T02:04:00.570Z",
                 "name": ""
+              }, (error) => {
+                alert(error.message)
               })
               setRacePredicitons([])
               setCreateRace(false)

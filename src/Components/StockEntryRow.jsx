@@ -21,9 +21,9 @@ const StockEntryRow = ({
     return stockList.find(stock => stock.id === id);
   }
 
-  useEffect(() => {
-    console.log(JSON.stringify(stockList))
-  })
+  // useEffect(() => {
+  // console.log(JSON.stringify(stockList))
+  // })
 
   return (
     <>
@@ -52,11 +52,11 @@ const StockEntryRow = ({
         <div className="flex flex-col flex-1">
           <label className="mb-[10px]" htmlFor="race_name">Current Price</label>
           <div className="px-[1.1rem] rounded-[4px] py-[8px] text-start" type="number" id="race_name" >
-             {currentStockId ? findStockPrice(currentStockId)?.price : 0}
+            {currentStockId ? findStockPrice(currentStockId)?.price : 0}
           </div>
         </div>
         <div className="flex flex-col flex-1">
-          <label className="mb-[10px]" htmlFor="race_name">{percentageTrue === 'percentage' ? 'Percentage (%)' : 'Price value (₹)'}</label>
+          <label className="mb-[10px]" htmlFor="race_name">{percentageTrue === 'percentage' ? 'Percentage (%)' : 'Target Price ($)'}</label>
           <input value={prediction_price} onChange={(e) => handleRacePredictionsChange(index, 'prediction_price', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="number" id="race_name" />
         </div>
 
