@@ -6,7 +6,7 @@ import pattern from '../assets/images/pattern.svg'
 
 const Auth = () => {
   return (
-    <div className='w-screen h-screen  relative flex overflow-auto'>
+    <div className='w-screen h-screen  relative flex overflow-auto dark:bg-[#000924]'>
       <div className='flex-1 flex justify-center items-start overflow-auto'>
         <Form />
       </div>

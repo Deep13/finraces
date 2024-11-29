@@ -65,6 +65,7 @@ const RacePage = () => {
     })
     const [isExploding, setIsExploding] = useState(false)
     const { darkModeEnabled } = useContext(DarkModeContext)
+    const [tabs, setTabs] = useState('leaderboard')
 
 
 
@@ -476,16 +477,23 @@ const RacePage = () => {
                         {/* leaderboard  */}
                         <div className='flex flex-col'>
                             <div className='flex gap-[6px] mb-[11px]'>
-                                <button className='w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' >Leaderboard</button>
-                                <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white' >Your Bets</button>
+                                <button onClick={() => setTabs('leaderboard')} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
+                                <button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>
                             </div>
-                            <div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
-                                <div className='w-full flex justify-between items-center mb-[14px]'>
-                                    <p className="font-semibold text-4 dark:text-white">View all</p>
-                                    <CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} />
-                                </div>
-                                <UserRankingList rankList={rankList} />
-                            </div>
+                            {<div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
+                                {
+                                    tabs === 'leaderboard' ?
+                                    <>
+                                        <div className='w-full flex justify-between items-center mb-[14px]'>
+                                            <p className="font-semibold text-4 dark:text-white">View all</p>
+                                            <CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} />
+                                        </div>
+                                        <UserRankingList rankList={rankList} />
+                                    </>
+                                    :
+                                    'hello'
+                                }
+                            </div>}
                         </div>
                     </div>
                 </div>

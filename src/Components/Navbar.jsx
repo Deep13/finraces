@@ -12,12 +12,14 @@ import CreateRace from "./CreateRace";
 import { Switch } from "antd";
 import darkLogo from '../assets/images/darklogo.png'
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
+import PopupForm from "./PopupForm";
 // import { GlobalContext } from "../Contexts";
 
 const Navbar = () => {
 
     const { darkModeEnabled, toggle } = useContext(DarkModeContext)
     const [createRaceState, setCreateRaceState] = useState(false)
+    const [showForm, setShowForm] = useState(false)
     const [darkMode, setDarkMode] = useState(darkModeEnabled)
     // const { setCreateRaceState } = useContext(GlobalContext)
     const navigate = useNavigate()
@@ -28,6 +30,7 @@ const Navbar = () => {
     return (
         <>
             {createRaceState && <CreateRace setCreateRace={setCreateRaceState} />}
+            {showForm && <PopupForm closePopup={setShowForm} />}
             <nav className='w-full px-[1.5rem] py-[0.8rem] bg-[#e5f4ff] dark:bg-[#002864] flex items-center justify-between sticky top-0 z-[10]'>
                 <div className="flex items-center">
                     {/* <button onClick={() => setToggle(prev => !prev)} className='w-[2.9rem] h-[2.9rem] grid place-items-center rounded-[8px] mr-[106px]'>
@@ -65,7 +68,10 @@ const Navbar = () => {
                     </button>
                     {
                         !userDetails ?
-                            <button onClick={() => navigate('/auth')} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
+                            <button onClick={() => {
+                                // navigate('/auth')
+                                setShowForm(true)
+                            }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
                                 Log in / Sign up
                             </button> :
                             <>
@@ -82,7 +88,9 @@ const Navbar = () => {
                     <button onClick={() => {
                         // create Race
                         if (!token) {
-                            navigate('/auth')
+                            setShowForm(true)
+                            // navigate('/auth')
+                            return
                         }
                         setCreateRaceState(true)
                     }} className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
