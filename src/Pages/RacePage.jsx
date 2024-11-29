@@ -1,13 +1,5 @@
 import { CgChevronRightO } from "react-icons/cg";
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import compass from '../assets/icons/sidebar/compass.svg'
-import finance_idea from '../assets/icons/sidebar/finance_idea.svg'
-import stats from '../assets/icons/sidebar/stats.svg'
-import live_streaming from '../assets/icons/sidebar/live_streaming.svg'
-import forward from '../assets/icons/sidebar/forward.svg'
-import eth from '../assets/icons/sidebar/eth.svg'
-import recent from '../assets/icons/sidebar/recent.svg'
-import box from '../assets/images/ongoingRaces/focus_box.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
 import start from '../assets/images/start.svg'
 import startdark from '../assets/images/startdark.svg'
@@ -20,7 +12,8 @@ import golden_king_corwn from '../assets/images/golden_king_corwn.svg'
 import silver_king_crown from '../assets/images/silver_king_crown.svg'
 import bronze_king_crown from '../assets/images/bronze_king_crown.svg'
 import Polygon7 from '../assets/images/Polygon7.svg'
-import Person from '../assets/images/person2.png'
+import Person from '../assets/images/person3.png'
+import Person2 from '../assets/images/person23.png'
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
 import { useParams } from "react-router-dom";
@@ -39,6 +32,15 @@ import ConfettiExplosion from 'react-confetti-explosion';
 import { motion } from "motion/react";
 import Sidebar from "../Components/Sidebar";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
+import ImageSlider from "../Components/ImageSlider";
+import YourBetsCard from '../Components/YourBetsCard'
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
 
 
 
@@ -66,6 +68,10 @@ const RacePage = () => {
     const [isExploding, setIsExploding] = useState(false)
     const { darkModeEnabled } = useContext(DarkModeContext)
     const [tabs, setTabs] = useState('leaderboard')
+    const [imageData, setImageData] = useState([Person])
+    const [imageData2, setImageData2] = useState([Person2])
+    const [imageData3, setImageData3] = useState([Person])
+    const [currentImage, setCurrentImage] = useState(0)
 
 
 
@@ -96,6 +102,25 @@ const RacePage = () => {
         });
 
         return result;
+    }
+
+    const updateUser = () => {
+        let arr = [...imageData]
+        arr[1] = Person2
+        setImageData(arr)
+        setCurrentImage(1)
+    }
+    const updateUser2 = () => {
+        let arr = [...imageData]
+        arr[1] = Person
+        setImageData2(arr)
+        setCurrentImage(1)
+    }
+    const updateUser3 = () => {
+        let arr = [...imageData]
+        arr[1] = Person2
+        setImageData3(arr)
+        setCurrentImage(1)
     }
 
 
@@ -223,7 +248,7 @@ const RacePage = () => {
                 // setMessage(prev => [...prev, ${data.data.firstName} ${data.data.lastName} has joined the race.])
             }
             if (data.event === 'race-data') {
-                // console.log(JSON.stringify(data.data))
+                console.log(JSON.stringify(data.data))
                 setRaceResults(data.data)
                 setRaceStatus(data.data.status)
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
@@ -342,12 +367,22 @@ const RacePage = () => {
                                     </div>
                                     <div className="relative">
                                         {/* raceResults?.race_result['3']?.participants[0]?.user_name  */}
-                                        {
+                                        {/* {
                                             raceResults?.race_result[3]?.participants?.length > 0 ?
-                                                <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={Person} alt="" /> :
-                                                <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={avatar} alt="" />
-                                        }
-                                        <img className="z-[5]" src={silver_frame} alt="" />
+                                                <img className={`absolute ${darkModeEnabled && 'glow'} w-full h-full object-cover top-0 left-0 z-[4] scale-75`} src={Person} alt="" /> :
+                                                <img className={`absolute ${darkModeEnabled && 'glow'} w-full h-full object-cover top-0 left-0 z-[4] scale-75`} src={avatar} alt="" />
+                                        } */}
+                                        <img className="z-[5] relative w-[100%] h-[145px]" src={silver_frame} alt="" />
+                                        <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[14px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
+                                            <ImageSlider
+                                                data={imageData2}
+                                                currentImage={currentImage}
+                                                removePreviousUser={() => {
+                                                    setImageData([imageData[1]])
+                                                    setCurrentImage(0)
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                     <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result['3']?.participants?.[0]?.user_name}</p>
                                 </div>
@@ -359,8 +394,18 @@ const RacePage = () => {
                                         </div>
                                     </div>
                                     <div className="relative">
-                                        <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-[80%]" src={raceResults?.race_result['1']?.participants?.[0]?.user_name ? Person : avatar} alt="" />
-                                        <img className="z-[5]" src={golden_frame} alt="" />
+                                        <img className="z-[5] relative w-[100%] h-[145px]" src={golden_frame} alt="" />
+                                        {/* <img className={`absolute ${darkModeEnabled && 'glow'} w-full h-full object-cover top-0 left-0 z-[4] scale-75`} src={raceResults?.race_result['1']?.participants?.[0]?.user_name ? Person : avatar} alt="" /> */}
+                                        <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[14px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
+                                            <ImageSlider
+                                                data={imageData3}
+                                                currentImage={currentImage}
+                                                removePreviousUser={() => {
+                                                    setImageData([imageData[1]])
+                                                    setCurrentImage(0)
+                                                }}
+                                            />
+                                        </div>
                                     </div>
                                     <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result['1']?.participants?.[0]?.user_name}</p>
                                 </div>
@@ -377,6 +422,7 @@ const RacePage = () => {
                                     </div>
                                     <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result[2]?.participants[0]?.user_name}</p>
                                 </div>} */}
+                                {/* <ImageSlider /> */}
                                 <div className="flex justify-center flex-col items-center">
                                     <div>
                                         <img src={bronze_king_crown} alt="" />
@@ -384,13 +430,23 @@ const RacePage = () => {
                                             <img src={Polygon7} alt="" />
                                         </div>
                                     </div>
-                                    <div className="relative">
-                                        {
+                                    <div className="relative w-full h-full">
+                                        <img className="z-[5] relative w-[100%] h-[145px]" src={bronze_frame} alt="" />
+                                        <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[12px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
+                                            <ImageSlider
+                                                data={imageData}
+                                                currentImage={currentImage}
+                                                removePreviousUser={() => {
+                                                    setImageData([imageData[1]])
+                                                    setCurrentImage(0)
+                                                }}
+                                            />
+                                        </div>
+                                        {/* {
                                             raceResults?.race_result['2']?.participants?.length > 0 ?
-                                                <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={Person} alt="" /> :
-                                                <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-75" src={avatar} alt="" />
-                                        }
-                                        <img className="z-[5]" src={bronze_frame} alt="" />
+                                                <img className={`absolute asp ${darkModeEnabled && 'glow'} w-full h-full object-cover top-0 left-0 z-[4] scale-75`} src={Person} alt="" /> :
+                                                <img className={`absolute ${darkModeEnabled && 'glow'} w-full h-full object-cover top-0 left-0 z-[4] scale-75`} src={avatar} alt="" />
+                                        } */}
                                     </div>
                                     <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result['2']?.participants?.[0]?.user_name}</p>
                                 </div>
@@ -398,21 +454,21 @@ const RacePage = () => {
 
                             <div className="flex-1 flex justify-center items-end gap-[2rem]">
 
-                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white">
+                                <div className={`w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>
                                     </div>
                                     <p className="font-medium text-4">WR: #12</p>
                                 </div>
-                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[3rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white">
+                                <div className={`w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>
                                     </div>
                                     <p className="font-medium text-4">WR: #12</p>
                                 </div>
-                                <div className="w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white">
+                                <div className={`w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>
@@ -477,21 +533,53 @@ const RacePage = () => {
                         {/* leaderboard  */}
                         <div className='flex flex-col'>
                             <div className='flex gap-[6px] mb-[11px]'>
-                                <button onClick={() => setTabs('leaderboard')} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
+                                <button onClick={() => {
+                                    updateUser();
+                                    updateUser2();
+                                    updateUser3();
+                                    setTabs('leaderboard')
+                                }} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
                                 <button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>
                             </div>
                             {<div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
                                 {
                                     tabs === 'leaderboard' ?
-                                    <>
-                                        <div className='w-full flex justify-between items-center mb-[14px]'>
-                                            <p className="font-semibold text-4 dark:text-white">View all</p>
-                                            <CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} />
+                                        <>
+                                            <div className='w-full flex justify-between items-center mb-[14px]'>
+                                                <p className="font-semibold text-4 dark:text-white">View all</p>
+                                                <CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} />
+                                            </div>
+                                            <UserRankingList rankList={rankList} />
+                                        </>
+                                        :
+                                        <div className="w-full flex flex-col gap-4">
+                                            {
+                                                stockRankList ?
+                                                    stockRankList?.map((curr, index) => {
+                                                        let stock = stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === curr.stock_id)]
+                                                        let imageUrl = stock.icon_url
+                                                        console.log(curr)
+                                                        return (
+                                                            <YourBetsCard
+                                                                key={curr.stock_id}
+                                                                stocksDataForRace={stocksDataForRace}
+                                                                stockName={curr.stock_name}
+                                                                imageUrl={imageUrl}
+                                                                participants={curr.participants}
+                                                            />
+                                                        )
+                                                    }) :
+                                                    <ColorRing
+                                                        visible={true}
+                                                        height="25"
+                                                        width="25"
+                                                        ariaLabel="color-ring-loading"
+                                                        wrapperStyle={{}}
+                                                        wrapperClass="color-ring-wrapper"
+                                                        colors={['#e15b64', '#f47e60',]}
+                                                    />
+                                            }
                                         </div>
-                                        <UserRankingList rankList={rankList} />
-                                    </>
-                                    :
-                                    'hello'
                                 }
                             </div>}
                         </div>

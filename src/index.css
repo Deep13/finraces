@@ -13,6 +13,7 @@ input {
     font-family: 'Raleway';
     src: url('./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf') format('truetype');
   }
+
   :root {
     --radius: 0.5rem;
   }
@@ -216,4 +217,13 @@ input[type='password'] {
 
 .antd-table-head {
   background: #000;
+}
+
+
+.shadowImperial {
+  box-shadow: inset -1px -4px 20px 6px #0000004d;
+}
+
+.glow {
+  box-shadow: -1px -20px 91px 3px #0076D6;
 }

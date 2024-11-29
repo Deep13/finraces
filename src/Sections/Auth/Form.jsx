@@ -220,17 +220,19 @@ const Form = ({
           {/* login form end  */}
 
           <div className="w-full flex flex-col gap-[24px]">
-            <a onClick={() => {
-              joinAsGuest(() => {
-                closeForm(false)
-                navigate('/')
-              }, () => {
-                alert('something went wrong')
-              })
-            }} className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
-              <BsPersonCircle size={24} />
-              Login as Guest User
-            </a>
+            {!localStorage.getItem('guest_details') &&
+              <a onClick={() => {
+                joinAsGuest(() => {
+                  closeForm(false)
+                  navigate('/')
+                }, () => {
+                  alert('something went wrong')
+                })
+              }} className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
+                <BsPersonCircle size={24} />
+                Login as Guest User
+              </a>
+            }
             <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
               <FcGoogle size={24} />
               Sign in with Google

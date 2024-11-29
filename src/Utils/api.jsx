@@ -271,6 +271,7 @@ export const joinAsGuest = async (
       guest_email: data.email,
       guest_password: data.password
     }
+    console.log(details)
     localStorage.setItem('guest_details', btoa(JSON.stringify(details)))
     localStorage.setItem('token', data.token)
     localStorage.setItem('refreshToken', data.refreshToken)
