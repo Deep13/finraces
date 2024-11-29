@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 // import "./styles.css";
+import useDarkMode from "../Utils/DarkMode";
 
 /*
  * Read the blog post here:
@@ -14,6 +15,7 @@ const SegmentedControl = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex);
   const componentReady = useRef();
+  const { darkModeEnabled } = useDarkMode()
 
   // Determine when the component is "ready"
   useEffect(() => {
@@ -51,7 +53,7 @@ const SegmentedControl = ({
               onChange={() => onInputChange(item.value, i)}
               checked={i === activeIndex}
             />
-            <label htmlFor={item.label}>{item.label}</label>
+            <label className={`${darkModeEnabled ? 'dark' : ''}`} htmlFor={item.label}>{item.label}</label>
           </div>
         ))}
       </div>

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import fb from '../assets/images/f.png'
 import a from '../assets/images/a.png'
 import g from '../assets/images/g.png'
 import { Hourglass } from 'react-loader-spinner'
-import useDarkMode from '../Utils/DarkMode'
+import { DarkModeContext } from '../Contexts/DarkModeProvider'
 
 
 
@@ -29,7 +29,7 @@ const RaceTile = ({
 
 
     const length = stockRankList && stockRankList.length
-    const { darkModeEnabled } = useDarkMode()
+    const { darkModeEnabled } = useContext(DarkModeContext)
 
     const calculateWidhtByPosition = (numberOfStocks, position) => {
         let stepSizePercent = 100 / numberOfStocks
@@ -89,7 +89,7 @@ const RaceTile = ({
                         ariaLabel="hourglass-loading"
                         wrapperStyle={{}}
                         wrapperClass="relative left-4"
-                        colors={!darkModeEnabled ? ['#fff', '#fff'] : ['#000', '#000']}
+                        colors={darkModeEnabled ? ['#fff', '#fff'] : ['#000', '#000']}
                     />
                 </div>
             }

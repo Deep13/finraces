@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { IoIosAdd } from "react-icons/io";
+import React, { useEffect, useState, useRef, useContext } from 'react'
+// import { IoIosAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import box from '../assets/images/ongoingRaces/focus_box.svg'
+import boxdark from '../assets/images/boxdark.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
 import { Switch } from "@headlessui/react";
 import Select from 'react-select'
@@ -9,6 +10,7 @@ import { fetchStocks, joinUserToRace } from "../Utils/api";
 import { useNavigate } from "react-router-dom";
 import StockEntryRow2 from "./StockEntryRow2";
 import SegmentedControl from './SegmentedControl'
+import { DarkModeContext } from '../Contexts/DarkModeProvider';
 
 const JoinRace = ({
   closeForm = () => { },
@@ -40,6 +42,7 @@ const JoinRace = ({
     },
   ])
   const navigate = useNavigate()
+  const { darkModeEnabled } = useContext(DarkModeContext)
 
   const handleRacePredictionsChange = (index, field, value) => {
     setStockList(prevPredictions => {
@@ -63,24 +66,24 @@ const JoinRace = ({
 
   return (
     <div className='w-screen h-screen fixed top-0 left-0 z-[20] grid place-items-center backdrop-blur-lg bg-transparent py-[3%] overflow-auto'>
-      <div className='rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem]'>
+      <div className='rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem] dark:bg-[#002763]'>
 
         {/* heading  */}
         <div className='flex items-center mb-[1.8rem] relative'>
           <div className='flex gap-[12px] items-center'>
-            <img src={box} alt="box icon" />
+            <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
             <div className='flex-1 flex gap-[8px]'>
-              <h3 className='text-[1.75rem] font-semibold'>Join {raceName}</h3>
-              <div className='relative'>
+              <h3 className='text-[1.75rem] font-semibold dark:text-white'>Join {raceName}</h3>
+              {/* <div className='relative'>
                 <img src={info} alt="info icon" />
-              </div>
+              </div> */}
             </div>
-            <p className='text-sm font-semibold flex-1'>#{race_id}</p>
+            <p className='text-sm font-semibold flex-1 dark:text-white'>#{race_id}</p>
           </div>
           <button className='absolute right-0 top-0' onClick={() => {
             closeForm(false)
           }}>
-            <RxCross2 size={35} />
+            <RxCross2 color={darkModeEnabled ? 'white' : 'black'} size={35} />
           </button>
         </div>
 
@@ -91,7 +94,7 @@ const JoinRace = ({
           {/* inputs  */}
 
           <div className="flex flex-col flex-1">
-            <label className="mb-[10px]" htmlFor="percentage_toogle">Value type </label>
+            <label className="mb-[10px] dark:text-white" htmlFor="percentage_toogle">Value type </label>
             <SegmentedControl
               name="group-1"
               callback={(val) => setPercentage(val)}
@@ -107,7 +110,7 @@ const JoinRace = ({
                   value: "price",
                   ref: useRef()
                 }
-              ]}/>
+              ]} />
           </div>
 
           <hr className="my-[1.2rem] border-t border-solid border-black" />
@@ -145,7 +148,7 @@ const JoinRace = ({
             navigate(`/race/${race_id}`)
           })
 
-        }} className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">
+        }} className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95 dark:text-white dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]">
           Submit
         </button>
       </div>

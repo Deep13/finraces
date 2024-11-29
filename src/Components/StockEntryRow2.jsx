@@ -18,23 +18,23 @@ const StockEntryRow2 = ({
     <>
       <div className="w-full flex gap-[2.5rem] mb-[1.2rem] items-center">
         <div className="flex flex-col w-[4rem]">
-          <label className="mb-[10px]" htmlFor="race_name">Rank</label>
+          <label className="mb-[10px] dark:text-white text-center" htmlFor="race_name">Rank</label>
           <input
             value={prediction_rank}
             onChange={(e) => handleRacePredictionsChange(index, 'prediction_rank', e.target.value)}
             className="px-[0.7rem] rounded-[4px] py-[8px] shadow-inner" type="number" id="race_name" />
           {/* <p>1.</p> */}
         </div>
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 dark:text-white">
           <label className="mb-[10px]" htmlFor="race_name">Stock Name</label>
           <div className="px-[1.1rem] rounded-[4px] py-[8px]" >{stockName}</div>
         </div>
         <div className="flex flex-col">
-          <label className="mb-[10px]" htmlFor="race_name">Current Price</label>
-          <div className="px-[1.1rem] rounded-[4px] py-[8px]" >{currentPrice}</div>
+          <label className="mb-[10px] dark:text-white" htmlFor="race_name">Current Price</label>
+          <div className="px-[1.1rem] rounded-[4px] py-[8px] dark:text-white" >{currentPrice}</div>
         </div>
         <div className="flex flex-col flex-1">
-          <label className="mb-[10px]" htmlFor="race_name">{percentageTrue === "percentage" ? 'Percentage (%)' : 'Price value (₹)'}</label>
+          <label className="mb-[10px] dark:text-white" htmlFor="race_name">{percentageTrue === "percentage" ? 'Percentage (%)' : 'Price value (₹)'}</label>
           <input
             value={prediction_price}
             onChange={(e) => handleRacePredictionsChange(index, 'prediction_price', e.target.value)}

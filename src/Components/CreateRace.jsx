@@ -1,8 +1,9 @@
 import { BiError } from "react-icons/bi";
 import { IoIosAdd } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
 import box from '../assets/images/ongoingRaces/focus_box.svg'
+import boxdark from '../assets/images/boxdark.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
 import { Switch } from "@headlessui/react";
 import Select from 'react-select'
@@ -10,7 +11,7 @@ import { createRaceAndJoinUser, getStocks } from "../Utils/api";
 import { useNavigate } from "react-router-dom";
 import StockEntryRow from "./StockEntryRow";
 import SegmentedControl from '../Components/SegmentedControl'
-import DatePicker from "react-date-picker";
+import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 const CreateRace = ({
   setCreateRace = () => { },
@@ -86,6 +87,7 @@ const CreateRace = ({
     end_time: true,
   })
   const navigate = useNavigate()
+  const { darkModeEnabled } = useContext(DarkModeContext)
 
 
 
@@ -209,32 +211,32 @@ const CreateRace = ({
 
   return (
     <div className='w-screen h-screen fixed top-0 left-0 z-[25] grid place-items-center backdrop-blur-lg bg-transparent py-[3%] overflow-auto'>
-      <div className='rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem]'>
+      <div className='rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem] dark:bg-[#002763]'>
         {/* heading  */}
         <div className='flex justify-between items-center gap-[450px] mb-[1.8rem]'>
           <div className='flex gap-[0.76rem] justify-center items-center'>
-            <img src={box} alt="box icon" />
+            <img className="w-14 h-14" src={darkModeEnabled ? boxdark : box} alt="box icon" />
             <div className='h-full'>
-              <h3 className='text-[1.75rem] font-semibold'>Create Race</h3>
+              <h3 className='text-[1.75rem] font-semibold dark:text-white'>Create Race</h3>
             </div>
             <div className='relative'>
               <img src={info} alt="info icon" />
             </div>
           </div>
           <button onClick={() => setCreateRace(false)}>
-            <RxCross2 size={35} />
+            <RxCross2 color={darkModeEnabled ? 'white' : 'black'} size={35} />
           </button>
         </div>
 
         {/* Race details section  */}
         <div className="">
-          <h4 className="font-semibold text-[1.2rem] mb-[1.2rem]">
+          <h4 className="font-semibold text-[1.2rem] mb-[1.2rem] dark:text-white">
             Race Details
           </h4>
           {/* inputs  */}
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
-              <label className="mb-[10px]" htmlFor="race_name"> Race Name</label>
+              <label className="mb-[10px] dark:text-white" htmlFor="race_name"> Race Name</label>
               <input placeholder="Enter the name for Race here" value={raceDetails.name} onChange={e => handleRaceDetails('name', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="text" id="race_name" />
               {!validation.name && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Race Name is Required</p>}
             </div>
@@ -242,7 +244,7 @@ const CreateRace = ({
 
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
-              <label className="mb-[10px]" htmlFor="race-start-date">Start Date</label>
+              <label className="mb-[10px] dark:text-white" htmlFor="race-start-date">Start Date</label>
               <input
                 id='race-start-date'
                 placeholder="Race Starting Date"
@@ -254,7 +256,7 @@ const CreateRace = ({
               {!validation.start_date && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Start Date should be less than or equal to End Date</p>}
             </div>
             <div className="flex flex-col flex-1">
-              <label className="mb-[10px]" htmlFor="race-start-time">Start Time</label>
+              <label className="mb-[10px] dark:text-white" htmlFor="race-start-time">Start Time</label>
               {/* <input className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="time" defaultValue={} id="race-start-time" /> */}
               <input
                 placeholder="Race Starting time"
@@ -270,7 +272,7 @@ const CreateRace = ({
 
           <div className="w-full flex gap-[2.5rem] mb-[1.2rem]">
             <div className="flex flex-col flex-1">
-              <label className="mb-[10px]" htmlFor="race-end-date">End Date</label>
+              <label className="mb-[10px] dark:text-white" htmlFor="race-end-date">End Date</label>
               <input
                 id='race-end-date'
                 placeholder="Race Ending Date"
@@ -282,7 +284,7 @@ const CreateRace = ({
               {!validation.end_date && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Start Date should be less than End Date</p>}
             </div>
             <div className="flex flex-col flex-1">
-              <label className="mb-[10px]" htmlFor="race-end-time">End Time</label>
+              <label className="mb-[10px] dark:text-white" htmlFor="race-end-time">End Time</label>
               {/* <input className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="time" defaultValue={} id="race-end-time" /> */}
               <input
                 placeholder="Race Starting time"
@@ -300,7 +302,7 @@ const CreateRace = ({
 
           <div className="w-full flex flex-col gap-4 mb-[14px]">
             <div className="flex items-center gap-[10px]">
-              <p>Race Type</p>
+              <p className="dark:text-white">Race Type</p>
               <div title="Anyone can join open race but only authorized members can join closed race." className='relative'>
                 <img src={info} alt="info icon" />
               </div>
@@ -339,10 +341,10 @@ const CreateRace = ({
           {/* <hr className="my-[1.2rem] border-t border-solid border-black" /> */}
 
           {/* stocks with prices and values  */}
-          <p className="font-semibold mt-12 mb-4">Add Stocks <span className="text-[#838386]">(upto 10)</span></p>
+          <p className="font-semibold mt-12 mb-4 dark:text-white">Add Stocks <span className="text-[#838386]">(upto 10)</span></p>
           <div className="flex mb-8 w-full justify-between items-end">
             <div className="flex flex-col flex-1 gap-[10px] items-baseline">
-              <label className="mb-[10px]" htmlFor="percentage_toogle">Value type </label>
+              <label className="mb-[10px] dark:text-white" htmlFor="percentage_toogle">Value type </label>
               <SegmentedControl
                 name="group-2"
                 callback={(val) => setpercentValue(val)}
@@ -379,10 +381,10 @@ const CreateRace = ({
                   handleRacePredictionsChange={handleRacePredictionsChange}
                 />
               )
-            }) : <div className="w-full text-center text-slate-500">Add some Stocks</div>
+            }) : <div className="w-full text-center text-slate-500 dark:text-white">Add some Stocks</div>
           }
           <div className="w-full flex justify-center items-center mt-4">
-            <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[8px] font-semibold flex gap-2 rounded-[8px] active:scale-95 border border-slate-500">Add Stocks <IoIosAdd size={24} /></button>
+            <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[8px] font-semibold flex gap-2 rounded-[8px] active:scale-95 border border-slate-500 dark:text-white">Add Stocks <IoIosAdd size={24} /></button>
           </div>
 
         </div>
@@ -434,7 +436,7 @@ const CreateRace = ({
               setCreateRace(false)
               res.id && navigate(`/race/${res.id}`)
             })
-          }} className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95">
+          }} className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95 dark:text-white dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]">
             Submit
           </button>
         </div>

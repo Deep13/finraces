@@ -11,37 +11,29 @@ import Leaderboard from './Pages/Leaderboard'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorPage from './Pages/ErrorPage'
 import Fallback from './Components/Fallback'
+import DarkModeProvider from './Contexts/DarkModeProvider'
 // import Lenis from 'lenis'
 
 function App() {
 
 
-  // useEffect(() => {
-  //   const lenis = new Lenis({
-  //     autoRaf: true,
-  //   });
-
-  //   // Listen for the scroll event and log the event data
-  //   lenis.on('scroll', (e) => {
-  //     console.log(e);
-  //   })
-  // })
-
   return (
     <>
       <ErrorBoundary fallback={<Fallback />}>
-        <GlobalProvider>
-          <Routes>
-            <Route path='/' element={<NavFootWrapper />}>
-              <Route path="" element={<Home />} />
-              <Route path="race/:race_id" element={<RacePage />} />
-              <Route path="/profile" element={<Profile />} />
-            </Route>
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/leaderboard" element={<Leaderboard />} />
-            <Route path="*" element={<ErrorPage />} />
-          </Routes>
-        </GlobalProvider>
+        <DarkModeProvider>
+          <GlobalProvider>
+            <Routes>
+              <Route path='/' element={<NavFootWrapper />}>
+                <Route path="" element={<Home />} />
+                <Route path="race/:race_id" element={<RacePage />} />
+                <Route path="/profile" element={<Profile />} />
+              </Route>
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/leaderboard" element={<Leaderboard />} />
+              <Route path="*" element={<ErrorPage />} />
+            </Routes>
+          </GlobalProvider>
+        </DarkModeProvider >
       </ErrorBoundary>
     </>
   )

@@ -1,19 +1,29 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import shape from '../assets/images/Footer/shape.svg'
+import shapedark from '../assets/images/shapedark.svg'
 import fb from '../assets/images/fb.svg'
+import fbdark from '../assets/images/fbdark.svg'
 import g from '../assets/images/g.svg'
+import gdark from '../assets/images/gdark.svg'
 import Youtube from '../assets/images/Youtube.svg'
+import Youtubedark from '../assets/images/Youtubedark.svg'
 import insta from '../assets/images/insta.svg'
+import instadark from '../assets/images/instadark.svg'
 import whatsapp from '../assets/images/whatsapp.svg'
+import whatsappdark from '../assets/images/whatsappdark.svg'
 import telegram from '../assets/images/telegram.svg'
+import telegramdark from '../assets/images/telegramdark.svg'
+import { DarkModeContext } from '../Contexts/DarkModeProvider'
+
 
 
 
 const Footer = () => {
+  const { darkModeEnabled } = useContext(DarkModeContext)
   return (
     <footer className='w-full bg-[#e5f4ff] dark:bg-[#002763] gap-[1.9rem] grid grid-cols-1 md:grid-cols-2 pt-[2.8rem] px-[5%] relative'>
       <div className='absolute bottom-0 left-0 w-full'>
-        <img className='w-[34.23rem]' src={shape} alt="shape" />
+        <img className='w-[34.23rem]' src={darkModeEnabled ? shapedark : shape} alt="shape" />
       </div>
 
       {/* first column  */}
@@ -61,17 +71,17 @@ const Footer = () => {
           <div className='flex flex-col gap-[6px]'>
             <h5 className='text-[1rem] mb-[1.4rem] font-semibold dark:text-white'>follow us</h5>
             <div className='w-full flex gap-[10px]'>
-              <img src={fb} alt="" />
-              <img src={g} alt="" />
-              <img src={insta} alt="" />
-              <img src={Youtube} alt="" />
+              <img src={darkModeEnabled ? fbdark : fb} alt="" />
+              <img src={darkModeEnabled ? gdark : g} alt="" />
+              <img src={darkModeEnabled ? instadark : insta} alt="" />
+              <img src={darkModeEnabled ? Youtubedark : Youtube} alt="" />
             </div>
           </div>
           <div className='flex flex-col gap-[6px]'>
             <h5 className='text-[1rem] mb-[1.4rem] text-start font-semibold dark:text-white'>Lets chat</h5>
             <div className='flex gap-[10px]'>
-              <img src={telegram} alt="" />
-              <img src={whatsapp} alt="" />
+              <img src={darkModeEnabled ? telegramdark : telegram} alt="" />
+              <img src={darkModeEnabled ? whatsappdark : whatsapp} alt="" />
             </div>
           </div>
         </div>

@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import box from '../assets/images/ongoingRaces/focus_box.svg'
+import boxdark from '../assets/images/boxdark.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
-// import dashed_line from '../assets/images/dashed_line.svg'
-// import dashedline_breaks from '../assets/images/dashedline_breaks.svg'
 import gold_crown from '../assets/images/gold_crown.svg'
 import silver_crown from '../assets/images/silver_corwn.svg'
 import bronze_corwn from '../assets/images/bronze_corwn.svg'
 import line_beside_medals from '../assets/images/line_beside_medals.png'
+import linedark from '../assets/images/linedark.svg'
 import person2 from '../assets/images/person2.png'
 import start from '../assets/images/start.svg'
+import startdark from '../assets/images/startdark.svg'
 import finish from '../assets/images/finish.svg'
-// import a from '../assets/images/a.png'
-// import f from '../assets/images/f.png'
-// import g from '../assets/images/g.png'
+import finishdark from '../assets/images/finishdark.svg'
 import { useNavigate } from 'react-router-dom'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { io } from 'socket.io-client'
 import RaceTile from '../Components/RaceTile'
 import { getStocksDataForRace } from '../Utils/api'
+import { DarkModeContext } from '../Contexts/DarkModeProvider'
 
 
 const RaceCardHomepage = ({
@@ -31,6 +31,7 @@ const RaceCardHomepage = ({
     const [stockRankList, setStockRankList] = useState(null)
     // const [raceResult, setRaceResult] = useState(null)
     const [stocksDataForRace, setStocksDataForRace] = useState(null)
+    const { darkModeEnabled } = useContext(DarkModeContext)
 
     useEffect(() => {
         getStocksDataForRace(raceId, (data) => {
@@ -132,7 +133,7 @@ const RaceCardHomepage = ({
         <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
             <div className='w-full flex justify-between mb-[14px]'>
                 <div className='flex gap-[0.76rem] flex-1'>
-                    <img className='w-12 h-12' src={box} alt="box icon" />
+                    <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
                     <div className='h-full'>
                         <h3 className='text-[1.05rem] font-bold dark:text-white'>{raceName}</h3>
                         {/* <p className='text-[0.7rem]'>XYZ</p> */}
@@ -169,8 +170,8 @@ const RaceCardHomepage = ({
 
             <div className='w-full flex justify-center items-center mb-[25px] relative'>
                 {/* absolute elements */}
-                <div className='absolute left-0 top-1/2'>
-                    <img src={line_beside_medals} alt="" />
+                <div className='absolute left-0 top-1/2 -scale-100'>
+                    <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
                 </div>
 
                 <div className='w-full flex justify-center items-center gap-[25px]'>
@@ -218,21 +219,21 @@ const RaceCardHomepage = ({
 
                     {/* absolute elements */}
                     <div className='absolute right-0 top-1/2'>
-                        <img className='-scale-100' src={line_beside_medals} alt="" />
+                        <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
                     </div>
                 </div>
             </div>
 
             <div className='w-full flex-1 mt-3 relative border border-dashed border-black dark:border-white  bg-[#edf7ff] flex justify-between items-center py-[2rem] dark:bg-[#002864]'>
-                <div className='bg-[#edf7ff] z-20 relative -left-2'>
-                    <img src={start} alt="" />
+                <div className='bg-[#edf7ff] z-20 relative -left-2 dark:bg-[#002864]'>
+                    <img src={darkModeEnabled ? startdark : start} alt="" />
                 </div>
                 <RaceTile
                     stocksData={stocksDataForRace}
                     stockRankList={stockRankList} />
                 <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" />
-                <div className='bg-[#edf7ff] z-20 relative -right-2'>
-                    <img src={finish} alt="" />
+                <div className='bg-[#edf7ff] z-20 relative -right-2 dark:bg-[#002864]'>
+                    <img src={darkModeEnabled ? finishdark : finish} alt="" />
                 </div>
             </div>
         </div>

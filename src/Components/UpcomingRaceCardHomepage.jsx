@@ -44,7 +44,7 @@ const UpcomingRaceCardHomepage = ({
                     closeForm={setJoinRaceFormVisible}
                     race_id={raceId} />
             }
-            <p className='mb-[0.4rem] font-bold text-[2rem] dark:text-white'>{raceName}</p>
+            <p className='mb-[0.4rem] font-bold text-[2rem] dark:text-white max-w-[75%]'>{raceName}</p>
             <div className='w-full flex justify-between items-center mb-[5px]'>
                 <div className='flex justify-between items-baseline'>
                     <p className='font-bold text-[20px] mr-[1rem] dark:text-white'>Race will start at {new Date(startDate).toLocaleTimeString(navigator.language, {
@@ -54,7 +54,7 @@ const UpcomingRaceCardHomepage = ({
                     <p className='text-[12px] dark:text-white'>{new Date(startDate).toLocaleDateString()}</p>
                 </div>
                 <div className='flex gap-[6px] items-center'>
-                    <img src={stocks} alt="stocks images" />
+                    <img className='w-18 h-18' src={stocks} alt="stocks images" />
                     <p className='font-semibold text-[16px] text-[#b5b5b5]'>+10</p>
                 </div>
             </div>

@@ -2,26 +2,27 @@ import { BsSunFill } from "react-icons/bs";
 import { BsMoon } from "react-icons/bs";
 import { IoIosAdd } from "react-icons/io";
 import { HiMenu } from "react-icons/hi";
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import logo from '../assets/icons/logofinraces.svg'
 import globe from '../assets/icons/globe_icon.svg'
 import search from '../assets/icons/search_icon.svg'
 import support from '../assets/icons/support_icon.svg'
 import CreateRace from "./CreateRace";
-import useDarkMode from '../Utils/DarkMode'
 import { Switch } from "antd";
 import darkLogo from '../assets/images/darklogo.png'
+import { DarkModeContext } from "../Contexts/DarkModeProvider";
 // import { GlobalContext } from "../Contexts";
 
 const Navbar = () => {
 
+    const { darkModeEnabled, toggle } = useContext(DarkModeContext)
     const [createRaceState, setCreateRaceState] = useState(false)
+    const [darkMode, setDarkMode] = useState(darkModeEnabled)
     // const { setCreateRaceState } = useContext(GlobalContext)
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
     const userDetails = localStorage.getItem('userDetails')
-    const { darkModeEnabled, toggle } = useDarkMode()
 
 
     return (
@@ -34,7 +35,7 @@ const Navbar = () => {
                 </button> */}
                     <div onClick={() => navigate('/')} className="cursor-pointer">
                         {
-                            !darkModeEnabled ?
+                            darkModeEnabled ?
                                 <img src={darkLogo} alt="Finraces logo" />
                                 :
                                 <img src={logo} alt="Finraces logo" />
@@ -44,15 +45,16 @@ const Navbar = () => {
                 <div className="flex gap-[12px] justify-start items-center">
                     <div className="flex gap-2 items-center">
                         <Switch
-                            checked={darkModeEnabled}
-                            onChange={toggle}
+                            checked={darkMode}
+                            onChange={setDarkMode}
+                            onClick={toggle}
                             className="group relative flex w-11 h-[1.4rem] cursor-pointer rounded-full bg-white/10 p-0 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-white/10 items-center bg-blue-200"
                         >
                             <span aria-hidden="true" className="pointer-events-none relative top-2 inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7 m-auto" />
                         </Switch>
                         <button onClick={toggle} className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                             {
-                                !darkModeEnabled ?
+                                darkModeEnabled ?
                                     <BsMoon color="white" size={18} /> :
                                     <BsSunFill size={18} />
                             }

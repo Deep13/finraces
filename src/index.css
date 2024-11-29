@@ -1,7 +1,7 @@
 @tailwind base;
 
 input {
-  @apply placeholder-[#b3bfbc] rounded-[14px] bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32];
+  @apply placeholder-[#b3bfbc] rounded-[14px] dark:bg-[#010B2C] dark:text-white bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32];
 }
 
 @tailwind components;
@@ -13,6 +13,13 @@ input {
     font-family: 'Raleway';
     src: url('./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf') format('truetype');
   }
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 /* input[type='password'] {
@@ -122,6 +129,8 @@ input[type='password'] {
   position: relative;
   text-align: center;
   z-index: 1;
+  background-color: transparent;
+  border-color: #00387E;
 }
 
 .segment label {

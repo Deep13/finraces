@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import compass from '../assets/icons/sidebar/compass.svg'
 import compassdark from '../assets/icons/sidebar/compassdark.svg'
 import finance_idea from '../assets/icons/sidebar/finance_idea.svg'
@@ -13,10 +13,10 @@ import eth from '../assets/icons/sidebar/eth.svg'
 import ethdark from '../assets/icons/sidebar/ethdark.svg'
 import recent from '../assets/icons/sidebar/recent.svg'
 import recentdark from '../assets/icons/sidebar/recentdark.svg'
-import useDarkMode from '../Utils/DarkMode'
+import { DarkModeContext } from '../Contexts/DarkModeProvider'
 
 const Sidebar = () => {
-    const { darkModeEnabled } = useDarkMode()
+    const { darkModeEnabled } = useContext(DarkModeContext)
     return (
         <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
             <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>

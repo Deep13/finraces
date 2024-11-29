@@ -1,5 +1,5 @@
 import { CgChevronRightO } from "react-icons/cg";
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import compass from '../assets/icons/sidebar/compass.svg'
 import finance_idea from '../assets/icons/sidebar/finance_idea.svg'
 import stats from '../assets/icons/sidebar/stats.svg'
@@ -10,6 +10,8 @@ import recent from '../assets/icons/sidebar/recent.svg'
 import box from '../assets/images/ongoingRaces/focus_box.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
 import start from '../assets/images/start.svg'
+import startdark from '../assets/images/startdark.svg'
+import finishdark from '../assets/images/finishdark.svg'
 import finish from '../assets/images/finish.svg'
 import golden_frame from '../assets/images/golden_frame.png'
 import silver_frame from '../assets/images/silver_frame.png'
@@ -36,7 +38,7 @@ import { getStocksDataForRace } from "../Utils/api";
 import ConfettiExplosion from 'react-confetti-explosion';
 import { motion } from "motion/react";
 import Sidebar from "../Components/Sidebar";
-import useDarkMode from "../Utils/DarkMode";
+import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 
 
@@ -62,7 +64,7 @@ const RacePage = () => {
         3: Math.floor(Math.random() * 3) + 1,
     })
     const [isExploding, setIsExploding] = useState(false)
-    const { darkModeEnabled } = useDarkMode()
+    const { darkModeEnabled } = useContext(DarkModeContext)
 
 
 
@@ -346,7 +348,7 @@ const RacePage = () => {
                                         }
                                         <img className="z-[5]" src={silver_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result['3']?.participants?.[0]?.user_name}</p>
+                                    <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result['3']?.participants?.[0]?.user_name}</p>
                                 </div>
                                 <div className="flex justify-center flex-col items-center relative bottom-8">
                                     <div className="mb-[1rem]">
@@ -359,7 +361,7 @@ const RacePage = () => {
                                         <img className="absolute w-full h-full object-cover top-0 left-0 z-[4] scale-[80%]" src={raceResults?.race_result['1']?.participants?.[0]?.user_name ? Person : avatar} alt="" />
                                         <img className="z-[5]" src={golden_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result['1']?.participants?.[0]?.user_name}</p>
+                                    <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result['1']?.participants?.[0]?.user_name}</p>
                                 </div>
                                 {/* {raceResults?.race_result[2]?.participants[0]?.user_name !== undefined && <div className="flex justify-center flex-col items-center">
                                     <div>
@@ -389,7 +391,7 @@ const RacePage = () => {
                                         }
                                         <img className="z-[5]" src={bronze_frame} alt="" />
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px]">{raceResults?.race_result['2']?.participants?.[0]?.user_name}</p>
+                                    <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result['2']?.participants?.[0]?.user_name}</p>
                                 </div>
                             </div>
 
@@ -426,8 +428,8 @@ const RacePage = () => {
 
                                 {/* race tile  */}
                                 <div className="w-full h-auto flex justify-between border-dashed dark:border-white border-black border py-[3rem] relative items-center">
-                                    <div className="bg-[#f5f5f5] relative right-2 z-10">
-                                        <img src={start} alt="" />
+                                    <div className="bg-[#f5f5f5] relative right-2 z-10 dark:bg-[#002763]">
+                                        <img src={darkModeEnabled ? startdark : start} alt="" />
                                     </div>
                                     {/* here happens the magic  */}
                                     {/* each time socket fires data you extract stocks from that data and
@@ -451,8 +453,8 @@ const RacePage = () => {
                                     </div>
 
 
-                                    <div className="bg-[#f5f5f5] relative left-2">
-                                        <img src={finish} alt="" />
+                                    <div className="bg-[#f5f5f5] relative left-2 dark:bg-[#002763]">
+                                        <img src={darkModeEnabled ? finishdark : finish} alt="" />
                                     </div>
                                 </div>
                             </div>
@@ -461,7 +463,7 @@ const RacePage = () => {
                             <div className="flex-1 rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
                                 <div className="flex justify-between w-full items-center mb-[18px]">
                                     <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
-                                    <button><CgChevronRightO color={!darkModeEnabled ? 'white' : 'black'} size={20} /></button>
+                                    <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button>
                                 </div>
 
                                 <StockRankList
@@ -480,7 +482,7 @@ const RacePage = () => {
                             <div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
                                 <div className='w-full flex justify-between items-center mb-[14px]'>
                                     <p className="font-semibold text-4 dark:text-white">View all</p>
-                                    <CgChevronRightO color={!darkModeEnabled ? 'white' : 'black'} size={20} />
+                                    <CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} />
                                 </div>
                                 <UserRankingList rankList={rankList} />
                             </div>
