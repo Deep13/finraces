@@ -18,6 +18,18 @@ const CreateRace = ({
 }) => {
 
 
+  const hasUniqueIds = (array) => {
+    if (!Array.isArray(array)) {
+      throw new Error("Input must be an array.");
+    }
+
+    const ids = array.map(item => item.stock_id);
+    const uniqueIds = new Set(ids);
+
+    return ids.length === uniqueIds.size;
+  }
+
+
   const today = new Date().toISOString().split("T")[0];
   const generateRandomStockRaceName = () => {
     // Get user details from localStorage
@@ -426,6 +438,10 @@ const CreateRace = ({
                   return
                 }
               })
+            }
+            if (!hasUniqueIds(racePredictions)) {
+              alert('You can Enter a pertiction for stock only once')
+              return
             }
 
 

@@ -72,6 +72,7 @@ const RacePage = () => {
     const [imageData2, setImageData2] = useState([Person2])
     const [imageData3, setImageData3] = useState([Person])
     const [currentImage, setCurrentImage] = useState(0)
+    const flag = useRef(0)
 
 
 
@@ -181,6 +182,23 @@ const RacePage = () => {
     }, [Refresh])
 
     useEffect(() => {
+        // if (flag.current < 1) {
+        //     // logic to extract the user wiht positons here
+        //     let obj = {}
+        //     rankList.forEach((curr, index) => {
+        //         obj[curr.id] = {
+        //             url: '',
+        //             position: index
+        //         }
+        //     }) // now we got the obj
+        //     let imageData = [Person, Person2]  // this we will get from api for extracting all the users for a race
+        //     Object.values(obj).forEach(element => {
+        //         imageData.push(element.url)
+        //     }) // now we have image data
+        // }
+    }, [rankList])
+
+    useEffect(() => {
         console.log("This is race status >>>>>>>>", raceStatus);
         if (raceStatus === 'finished') {
             setIsExploding(true)
@@ -196,7 +214,7 @@ const RacePage = () => {
 
     useEffect(() => {
         // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
-        const socket = io('http://3.90.114.42:3000', {
+        const socket = io('https://www.missionatal.com', {
             reconnection: true, // Automatically reconnect if the connection is lost
             reconnectionAttempts: Infinity,
             reconnectionDelay: 1000,
@@ -248,11 +266,11 @@ const RacePage = () => {
                 // setMessage(prev => [...prev, ${data.data.firstName} ${data.data.lastName} has joined the race.])
             }
             if (data.event === 'race-data') {
-                console.log(JSON.stringify(data.data))
                 setRaceResults(data.data)
                 setRaceStatus(data.data.status)
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
+                flag.current += 1
             }
         });
 
@@ -436,10 +454,10 @@ const RacePage = () => {
                                             <ImageSlider
                                                 data={imageData}
                                                 currentImage={currentImage}
-                                                removePreviousUser={() => {
-                                                    setImageData([imageData[1]])
-                                                    setCurrentImage(0)
-                                                }}
+                                            // removePreviousUser={() => {
+                                            //     setImageData([imageData[1]])
+                                            //     setCurrentImage(0)
+                                            // }}
                                             />
                                         </div>
                                         {/* {

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import facebook_icon from '../../assets/icons/facebook_icon.svg'
 import Verified from '../../assets/icons/Featured_icon.svg'
 import { RegisterUser, Login as LoginUser } from "../../Utils/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { joinAsGuest } from "../../Utils/api";
 import { BiChevronRight } from "react-icons/bi";
 
@@ -40,6 +40,7 @@ const Form = ({
   const [signupActive, setSignupActive] = useState(false)
 
   const navigate = useNavigate()
+  const thisLocation = useLocation()
 
 
   const handleInput = (e) => {
@@ -134,7 +135,12 @@ const Form = ({
     const { email, password } = loginCreds
     LoginUser(email, password, () => {
       closeForm(false)
-      navigate('/')
+      if (thisLocation.pathname === '/auth') {
+        navigate('/')
+      } else {
+        window.location.reload()
+      }
+      // thisLocation === '/auth' ? navigate('/') : window.location.reload()
     }, () => {
       alert('something went wrong')
     })
@@ -150,6 +156,9 @@ const Form = ({
     validateLogin()
   }, [signupCreds, loginCreds])
 
+  useEffect(() => {
+    // console.log(typeof (thisLocation.pathname))
+  }, [])
 
   return (
 
@@ -224,7 +233,12 @@ const Form = ({
               <a onClick={() => {
                 joinAsGuest(() => {
                   closeForm(false)
-                  navigate('/')
+                  if (thisLocation.pathname === '/auth') {
+                    navigate('/')
+                  } else {
+                    window.location.reload()
+                  }
+                  // thisLocation === '/auth' ? navigate('/') : window.location.reload()
                 }, () => {
                   alert('something went wrong')
                 })
