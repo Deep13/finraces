@@ -14,6 +14,7 @@ import darkLogo from '../assets/images/darklogo.png'
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import PopupForm from "./PopupForm";
 // import { GlobalContext } from "../Contexts";
+import { useLocation } from "react-router-dom";
 
 const Navbar = () => {
 
@@ -25,6 +26,7 @@ const Navbar = () => {
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
     const userDetails = localStorage.getItem('userDetails')
+    const thisLocation = useLocation()
 
 
     return (

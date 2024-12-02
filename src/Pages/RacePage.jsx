@@ -283,7 +283,7 @@ const RacePage = () => {
 
         // Cleanup the socket connection when the component unmounts
         return () => {
-            socket.disconnect();
+            if (socket) socket.disconnect();
             console.log('Socket disconnected');
         };
     }, [race_id])

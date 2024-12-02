@@ -164,17 +164,17 @@ const Form = ({
 
     <>
       {activeTab === tabs.success ?
-        <div className='w-full flex justify-center items-center'>
-          <div className='w-[504px] relative flex items-center flex-col gap-[29px]'>
+        <div className={`w-full flex justify-center items-center ${thisLocation.pathname === '/' ? 'py-8' : ''}`}>
+          <div className={`w-full  ${thisLocation.pathname === '/' ? 'scale-75' : 'scale-100'} relative flex items-center flex-col gap-[29px]`}>
             <div className="w-full">
-              <h2 className="text-center text-[30px] text-[#292d32]">Email Verified!</h2>
-              <p className="text-[#384453]">We have sent you a 6 digit code. Please enter here to Verify email.</p>
+              <h2 className="text-center text-[30px] text-[#292d32] dark:text-white">Email Verified!</h2>
+              <p className="text-[#384453] dark:text-white">We have sent you a 6 digit code. Please enter here to Verify email.</p>
             </div>
             <div>
               <img src={Verified} alt="verified_mark" />
             </div>
-            <div className='text-[24px] text-[#1a1e25] font-semibold text-center'>Congratulations</div>
-            <p className="text-[#384453]">Your email has been successfully verified</p>
+            <div className='text-[24px] text-[#1a1e25] font-semibold text-center dark:text-white'>Congratulations</div>
+            <p className="text-[#384453] dark:text-white">Your email has been successfully verified</p>
             <button onClick={() => setActiveTab(tabs.login)} className="bg-[#0d5ce5] text-white px-[22px] py-[20px] w-[330px] rounded-[10px] flex gap-1 justify-center">
               Continue
               <BiCheckCircle color="white" size={24} />

@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Fallback = () => {
+    const navigate = useNavigate()
+
     return (
         <div className='w-full h-screen relative backdrop-blur-lg gird place-items-center z-[100]'>
             <div className='p-10 text-xl font font-semibold rounded-md bg-white shadow-lg mb-4'>
