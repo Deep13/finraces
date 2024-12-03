@@ -8,6 +8,7 @@ import bronze_corwn from '../assets/images/bronze_corwn.svg'
 import line_beside_medals from '../assets/images/line_beside_medals.png'
 import linedark from '../assets/images/linedark.svg'
 import person2 from '../assets/images/person2.png'
+import placeholder from '../assets/images/placeholder.png'
 import start from '../assets/images/start.svg'
 import startdark from '../assets/images/startdark.svg'
 import finish from '../assets/images/finish.svg'
@@ -31,7 +32,9 @@ const RaceCardHomepage = ({
     const [stockRankList, setStockRankList] = useState(null)
     // const [raceResult, setRaceResult] = useState(null)
     const [stocksDataForRace, setStocksDataForRace] = useState(null)
+    const [participants, setParticipants] = useState([])
     const { darkModeEnabled } = useContext(DarkModeContext)
+    const [rankList, setRankList] = useState([{ user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }])
 
     useEffect(() => {
         getStocksDataForRace(raceId, (data) => {
@@ -95,7 +98,8 @@ const RaceCardHomepage = ({
             if (data.event === 'race-data') {
                 // console.log(JSON.stringify(data.data))
                 // setRaceResults(data.data)
-                // setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
+                setParticipants(getParticipants(data.data['race_result'], data.data['participantsWithNoRank']))
+                setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
             }
         });
@@ -114,6 +118,41 @@ const RaceCardHomepage = ({
         };
     }, [raceId])
 
+    const getParticipants = (raceResult, participantsWithNoRank) => {
+        // console.log(raceResult, participantsWithNoRank)
+        var result = [];
+        Object.entries(raceResult).forEach(([rank, rankData]) => {
+            rankData?.participants?.forEach(participant => {
+                var ifexist = result.filter(val => val.user_id == participant.user_id);
+
+                if (ifexist.length == 0) {
+                    result.push({
+                        user_id: participant.user_id,
+                        user_name: participant.user_name,
+                        rank: rank || "-" // Use the key as rank, or "-" if rank is not found
+                    });
+                }
+            });
+        });
+
+        // Add participants with no rank, assigning rank as "-"
+        participantsWithNoRank?.forEach(participant => {
+            result.push({
+                user_id: participant.user_id,
+                user_name: participant.user_name,
+                rank: "-"
+            });
+        });
+
+        return result;
+    }
+
+    const getParticipantsWithRanks = (raceResult, participantsWithNoRank) => {
+        // console.log(raceResult, participantsWithNoRank)
+        var result = [];
+        result = [raceResult[1].participants.length > 0 ? raceResult[1].participants[0] : { user_name: "-", user_photo: "" }, raceResult[2].participants.length > 0 ? raceResult[2].participants[0] : { user_name: "-", user_photo: "" }, raceResult[3].participants.length > 0 ? raceResult[3].participants[0] : { user_name: "-", user_photo: "" }]
+        return result;
+    }
 
 
     const navigate = useNavigate()
@@ -164,7 +203,7 @@ const RaceCardHomepage = ({
                 </div>
                 <div className='h-full flex flex-col justify-start items-end flex-1'>
                     <h3 className='text-[1.05rem] font-bold dark:text-white'>Tech Stocks</h3>
-                    <p className='text-[0.7rem] dark:text-white'>20Participants</p>
+                    <p className='text-[0.7rem] dark:text-white'>{`${participants.length} participants`}</p>
                 </div>
             </div>
 
@@ -174,41 +213,35 @@ const RaceCardHomepage = ({
                     <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
                 </div>
 
-                <div className='w-full flex justify-center items-center gap-[25px]'>
+                <div className='w-full flex justify-center items-center'>
                     {/* <div className='relative aspect-square p-[22px]'>
                     <img src={person2} alt="silver medal position" />
                     <img src={silver_crown} alt="1st position person" />
                     <p >Nik</p>
                 </div> */}
 
-                    <div className='relative aspect-square p-[22px] scale-90 z-[5]'>
-                        <div className='absolute top-4 left-0 scale-75'>
-                            <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
+                    <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
+                        <div className='relative flex justify-center items-center'>
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[0].user_photo ? rankList[0].user_photo.path : placeholder} />
+                            <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
                         </div>
-                        <div className='absolute top-0 left-0 scale-125'>
-                            <img className='w-full h-full object-cover' src={silver_crown} alt="1st position person" />
-                        </div>
-                        <p className='relative top-[3.5rem] font-semibold text-[12px] dark:text-white'>Nik</p>
+                        <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[0].user_name}</p>
                     </div>
 
-                    <div className='relative aspect-square p-[22px] z-[5]'>
-                        <div className='absolute top-2 left-0 scale-75'>
-                            <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
+                    <div className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
+                        <div className='relative flex justify-center items-center'>
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[1].user_photo ? rankList[1].user_photo.path : placeholder} />
+                            <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
                         </div>
-                        <div className='absolute top-0 left-0 scale-125'>
-                            <img className='w-full h-full object-cover' src={gold_crown} alt="1st position person" />
-                        </div>
-                        <p className='relative top-[3rem] font-semibold text-[12px] dark:text-white'>Jon</p>
+                        <p className='relative text-center font-semibold text-[12px] dark:text-white'>{rankList[1].user_name}</p>
                     </div>
 
-                    <div className='relative aspect-square p-[22px] scale-90 z-[5]'>
-                        <div className='absolute top-4 left-0 scale-75'>
-                            <img className='w-full h-full object-cover' src={person2} alt="silver medal position" />
+                    <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
+                        <div className='relative flex justify-center items-center'>
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[2].user_photo ? rankList[2].user_photo.path : placeholder} />
+                            <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
                         </div>
-                        <div className='absolute top-0 left-0 scale-125'>
-                            <img className='w-full h-full object-cover' src={bronze_corwn} alt="1st position person" />
-                        </div>
-                        <p className='relative top-[3.5rem] font-semibold text-[12px] dark:text-white'>Saif</p>
+                        <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p>
                     </div>
 
                     {/* <div className='relative aspect-square p-[22px]'>

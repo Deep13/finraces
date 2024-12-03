@@ -32,8 +32,10 @@ const RaceTile = ({
     const { darkModeEnabled } = useContext(DarkModeContext)
 
     const calculateWidhtByPosition = (numberOfStocks, position) => {
+
         let stepSizePercent = 100 / numberOfStocks
         if (position == numberOfStocks) return 10
+        if (position == 1) return 99
         return (stepSizePercent * (numberOfStocks - position)) + 20// will be a number in percentage
     }
 

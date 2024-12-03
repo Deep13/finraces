@@ -13,6 +13,7 @@ import silver_king_crown from '../assets/images/silver_king_crown.svg'
 import bronze_king_crown from '../assets/images/bronze_king_crown.svg'
 import Polygon7 from '../assets/images/Polygon7.svg'
 import Person from '../assets/images/person3.png'
+import Placeholder from '../assets/images/placeholder.png'
 import Person2 from '../assets/images/person23.png'
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
@@ -68,81 +69,13 @@ const RacePage = () => {
     const [isExploding, setIsExploding] = useState(false)
     const { darkModeEnabled } = useContext(DarkModeContext)
     const [tabs, setTabs] = useState('leaderboard')
-    const [imageData, setImageData] = useState([Person])
-    const [imageData2, setImageData2] = useState([Person2])
-    const [imageData3, setImageData3] = useState([Person])
+    const [imageData, setImageData] = useState([Placeholder])
+    const [imageData2, setImageData2] = useState([Placeholder])
+    const [imageData3, setImageData3] = useState([Placeholder])
     const [currentImage, setCurrentImage] = useState(0)
     const [imageRank, setImageRank] = useState({})
     const [bronzeUser, setBronzeUser] = useState(0)
     const [duration, setDuration] = useState('')
-    const [raceUsersData, setRaceUsersData] = useState([
-        {
-            "id": 3,
-            "email": "mohit.ashliya@rudelabs.in",
-            "firstName": "Mohit",
-            "lastName": "Ashliya",
-            "profilePic": Person,
-            "stocks": [
-                {
-                    "prediction_rank": 1,
-                    "prediction_price": "230.00",
-                    "stock": {
-                        "icon_url": "https://finracer-dev-17890.s3.us-east-1.amazonaws.com/stocks/images/CBOE_icon.jpeg",
-                        "logo_url": "https://finracer-dev-17890.s3.us-east-1.amazonaws.com/stocks/images/CBOE.svg",
-                        "id": "9cce64ef-834e-44f7-aa5a-0a8b46050b82",
-                        "ticker": "CBOE",
-                        "price": null,
-                        "name": "Cboe Global Markets, Inc."
-                    }
-                },
-                {
-                    "prediction_rank": 2,
-                    "prediction_price": "4.00",
-                    "stock": {
-                        "icon_url": null,
-                        "logo_url": null,
-                        "id": "66efce7c-a2d6-4567-a5e6-ba14afc9a227",
-                        "ticker": "AWX",
-                        "price": null,
-                        "name": "Avalon Holdings Corp."
-                    }
-                }
-            ]
-        },
-        {
-            "id": 4,
-            "email": "mohit.ashliya@rudelabs.in",
-            "firstName": "Moh",
-            "lastName": "As",
-            "profilePic": Person2,
-            "stocks": [
-                {
-                    "prediction_rank": 1,
-                    "prediction_price": "230.00",
-                    "stock": {
-                        "icon_url": "https://finracer-dev-17890.s3.us-east-1.amazonaws.com/stocks/images/CBOE_icon.jpeg",
-                        "logo_url": "https://finracer-dev-17890.s3.us-east-1.amazonaws.com/stocks/images/CBOE.svg",
-                        "id": "9cce64ef-834e-44f7-aa5a-0a8b46050b82",
-                        "ticker": "CBOE",
-                        "price": null,
-                        "name": "Cboe Global Markets, Inc."
-                    }
-                },
-                {
-                    "prediction_rank": 2,
-                    "prediction_price": "4.00",
-                    "stock": {
-                        "icon_url": null,
-                        "logo_url": null,
-                        "id": "66efce7c-a2d6-4567-a5e6-ba14afc9a227",
-                        "ticker": "AWX",
-                        "price": null,
-                        "name": "Avalon Holdings Corp."
-                    }
-                }
-            ]
-        }
-    ])
     const flag = useRef(0)
 
     const fetchParticipantData = (id) => {
@@ -196,6 +129,7 @@ const RacePage = () => {
                 result.push({
                     user_id: participant.user_id,
                     user_name: participant.user_name,
+                    user_photo: participant.user_photo ? participant.user_photo.path : Placeholder,
                     rank: rank || "-" // Use the key as rank, or "-" if rank is not found
                 });
             });
@@ -206,6 +140,7 @@ const RacePage = () => {
             result.push({
                 user_id: participant.user_id,
                 user_name: participant.user_name,
+                user_photo: participant.user_photo ? participant.user_photo.path : Placeholder,
                 rank: "-"
             });
         });
@@ -222,13 +157,13 @@ const RacePage = () => {
     }
     const updateUser2 = () => {
         let arr = [...imageData]
-        arr[1] = Person
+        arr[1] = Placeholder
         setImageData2(arr)
         setCurrentImage(1)
     }
     const updateUser3 = () => {
         let arr = [...imageData]
-        arr[1] = Person2
+        arr[1] = Placeholder
         setImageData3(arr)
         setCurrentImage(1)
     }
@@ -471,7 +406,7 @@ const RacePage = () => {
                             </div>
 
                             {/* top 3 users  */}
-                            <div className="flex-1 flex justify-center items-center gap-[2rem]">
+                            <div className="flex-1 flex justify-center items-center gap-[2rem] mb-[20px]">
                                 <div className="flex justify-center flex-col items-center">
                                     <div>
                                         <img src={silver_king_crown} alt="" />
@@ -623,7 +558,7 @@ const RacePage = () => {
                         </div>
 
                         {/* leaderboard  */}
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col max-w-[295px]'>
                             <div className='flex gap-[6px] mb-[11px]'>
                                 <button onClick={() => {
                                     updateUser();
@@ -633,7 +568,7 @@ const RacePage = () => {
                                 }} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
                                 <button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>
                             </div>
-                            {<div className='w-full rounded-[24px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
+                            {<div className='w-full rounded-[8px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
                                 {
                                     tabs === 'leaderboard' ?
                                         <>
