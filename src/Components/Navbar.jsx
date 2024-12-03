@@ -49,14 +49,14 @@ const Navbar = () => {
                 </div>
                 <div className="flex gap-[12px] justify-start items-center">
                     <div className="flex gap-2 items-center">
-                        <Switch
+                        {/* <Switch
                             checked={darkMode}
                             onChange={setDarkMode}
                             onClick={toggle}
                             className="group relative flex w-11 h-[1.4rem] cursor-pointer rounded-full bg-white/10 p-0 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white data-[checked]:bg-white/10 items-center bg-blue-200"
                         >
                             <span aria-hidden="true" className="pointer-events-none relative top-2 inline-block size-5 translate-x-0 rounded-full bg-white ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-7 m-auto" />
-                        </Switch>
+                        </Switch> */}
                         <button onClick={toggle} className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                             {
                                 darkModeEnabled ?
