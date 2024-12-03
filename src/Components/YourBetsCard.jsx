@@ -16,9 +16,9 @@ const YourBetsCard = ({
         }
         // console.log(JSON.parse(atob(userDetails)))
         let userId = JSON.parse(atob(userDetails)).userId
-        let rank = participants.find(curr => curr.user_id === userId).rank
+        let rank = participants.find(curr => curr.user_id === userId)?.rank
         // console.log(rank)
-        return rank > 0 ? rank : '-'
+        return rank && rank > 0 ? rank : '-'
     }
     // useEffect(() => {
     //     // console.log();
