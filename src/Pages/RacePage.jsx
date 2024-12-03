@@ -436,7 +436,7 @@ const RacePage = () => {
                 {/* dashboard  */}
                 <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
                     {/* this is full width container cuz we need the sidebar to remain at correct place */}
-                    <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-[24px] dark:bg-[#000D38] bg-[#faebff]'>
+                    <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-[24px] dark:bg-[#000D38] bg-[#EDF7FF]'>
 
                         {/* actual dashboard  */}
                         <div className='flex-1 px-[22px] py-[18px]'>
@@ -558,7 +558,7 @@ const RacePage = () => {
 
                             <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md dark:bg-[#002763] dark:border dark:border-[#00387E]">
                                 <div className="flex justify-between w-full items-center mb-[18px] dark:text-white">
-                                    <p className="font-medium text-[0.9rem]">Race created by- {raceResults?.created_by?.firstName + " " + raceResults?.created_by?.lastName}</p>
+                                    <p className="font-medium text-[0.9rem]">Race created by- {(raceDetails?.created_by?.firstName ? raceResults?.created_by?.firstName : '') + " " + (raceDetails?.created_by?.lastName ? raceResults?.created_by?.firstName : '')}</p>
                                     <div className="font-medium text-[0.9rem] flex gap-2 items-center">
                                         <p>Remaining Time</p>
                                         <div className="font-semibold">

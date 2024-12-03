@@ -9,7 +9,7 @@ import globe from '../assets/icons/globe_icon.svg'
 import search from '../assets/icons/search_icon.svg'
 import support from '../assets/icons/support_icon.svg'
 import CreateRace from "./CreateRace";
-import { Switch } from "antd";
+// import { Switch } from "antd";
 import darkLogo from '../assets/images/darklogo.png'
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import PopupForm from "./PopupForm";
@@ -33,7 +33,7 @@ const Navbar = () => {
         <>
             {createRaceState && <CreateRace setCreateRace={setCreateRaceState} />}
             {showForm && <PopupForm closePopup={setShowForm} />}
-            <nav className='w-full px-[1.5rem] py-[0.8rem] bg-[#e5f4ff] dark:bg-[#002864] flex items-center justify-between sticky top-0 z-[10]'>
+            <nav className='w-full px-[1.5rem] py-[0.8rem] bg-[#e5f4ff] dark:bg-[#002864] flex items-center justify-between sticky top-0 z-40'>
                 <div className="flex items-center">
                     {/* <button onClick={() => setToggle(prev => !prev)} className='w-[2.9rem] h-[2.9rem] grid place-items-center rounded-[8px] mr-[106px]'>
                     <HiMenu size={24} color="black" />
