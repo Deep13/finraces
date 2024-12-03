@@ -49,8 +49,9 @@ const PicUploadPopUpd = ({
                                     setImageIsLoading(true)
                                     updatePhoto(data.file.id, (data) => {
                                         // set the pic data here
-                                        setImageUrl("http://3.90.114.42:3020" + data?.photo?.path.substring(data.photo.path.indexOf('/api')))
+                                        setImageUrl(data?.photo?.path)
                                     })
+                                    exit(false)
                                     setTimeout(() => setImageIsLoading(false), 2500)
                                 })
                             }

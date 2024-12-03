@@ -6,8 +6,8 @@ import Person from '../assets/images/person3.png'
 import Person2 from '../assets/images/person23.png'
 
 const ImageSlider = ({
-    data = [Person],// this is changing constantly,
-    currentImage = 0,
+    data,// this is changing constantly,
+    currentImage,
     removePreviousUser,
 }) => {
     // const [images, setImages] = useState(data);
@@ -37,8 +37,8 @@ const ImageSlider = ({
                 interval={5000}
             >
                 {data.map((img, index) => (
-                    <div key={index}>
-                        <img src={img} alt={`Slide ${index}`} />
+                    <div className="h-[144px] w-[130px] flex justify-center items-center" key={index}>
+                        <img className="w-full h-full object-cover" src={img} alt={`Slide ${index}`} />
                     </div>
                 ))}
             </Carousel>

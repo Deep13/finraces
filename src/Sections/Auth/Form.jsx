@@ -166,9 +166,9 @@ const Form = ({
       {activeTab === tabs.success ?
         <div className={`w-full flex justify-center items-center ${thisLocation.pathname === '/' ? 'py-8' : ''}`}>
           <div className={`w-full  ${thisLocation.pathname === '/' ? 'scale-75' : 'scale-100'} relative flex items-center flex-col gap-[29px]`}>
-            <div className="w-full">
+            <div className="w-full py-4">
               <h2 className="text-center text-[30px] text-[#292d32] dark:text-white">Email Verified!</h2>
-              <p className="text-[#384453] dark:text-white">We have sent you a 6 digit code. Please enter here to Verify email.</p>
+              <p className="text-[#384453] dark:text-white text-center">We have sent you a 6 digit code. Please enter here to Verify email.</p>
             </div>
             <div>
               <img src={Verified} alt="verified_mark" />

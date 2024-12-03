@@ -25,6 +25,12 @@ const RaceWaitingZone = ({
         }
     }, [])
 
+    useEffect(() => {
+        if (isTimerFinished) {
+            closeCard(true)
+        }
+    }, [isTimerFinished])
+
     return (
         <>
             <AnimatePresence>

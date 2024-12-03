@@ -184,7 +184,7 @@ export const getRaceList = async (
 };
 
 
-export const fetchRaceData = async (
+export const fetchRaceData = async ( // change this to the updated api
   raceId,
   onSuccess = () => { },
   onError = () => { },
@@ -208,6 +208,38 @@ export const fetchRaceData = async (
     // setStartTimeString(`${start.getHours()} : ${start.getMinutes()}`)
     // setEndTimeString(`${end.getHours()} : ${end.getMinutes()}`)
     onSuccess(thisData)
+
+  } catch (e) {
+    console.error(e)
+    onError(e)
+  }
+}
+
+export const fetchParticipantsData = async (
+  raceId,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  try {
+    const token = localStorage.getItem('token')
+    if (!token) throw new Error('Authentication token is missing. Please log in.');
+
+    const response = await fetch(`https://www.missionatal.com/api/v1/races/${raceId}/details`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    const thisData = await response.json()
+    // console.log(thisData)
+    // setRaceStartTime(thisData.start_date)
+    // const start = new Date(thisData.start_date)
+    // const end = new Date(thisData.end_date)
+    // setStartTimeString(`${start.getHours()} : ${start.getMinutes()}`)
+    // setEndTimeString(`${end.getHours()} : ${end.getMinutes()}`)
+    onSuccess(thisData)
+    return thisData
 
   } catch (e) {
     console.error(e)

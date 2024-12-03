@@ -102,7 +102,15 @@ const Navbar = () => {
                     <button className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={support} alt="Search" />
                     </button>
-                    <button className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
+                    <button onClick={() => {
+                        let userDetails = localStorage.getItem('userDetails')
+                        if (!userDetails) {
+                            // alert('first create a profile')
+                            setShowForm(true)
+                            return
+                        }
+                        navigate('/profile')
+                    }} className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={globe} alt="Search" />
                     </button>
                 </div>

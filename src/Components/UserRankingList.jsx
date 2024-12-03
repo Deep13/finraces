@@ -11,7 +11,7 @@ const UserRankingList = ({
                 rankList ?
                     rankList?.map((curr, index) =>
                         <UserRankingCard
-                            key={curr.user_id + index}
+                            key={index}
                             userName={curr.user_name}
                             userRank={curr.rank}
                             lastItem={rankList?.length === index}

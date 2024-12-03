@@ -24,14 +24,14 @@ const Profile = () => {
   const [data, setData] = useState(null)
   const [uploadPopup, setUploadPopup] = useState(false)
   const [imageIsLoading, setImageIsLoading] = useState(false)
-  const [imageUrl, setImageUrl] = useState("https://www.missionatal.com" + data?.photo?.path.substring(data.photo.path.indexOf('/api')))
+  const [imageUrl, setImageUrl] = useState(data?.photo?.path)
 
 
   useLayoutEffect(() => {
     setImageIsLoading(true)
     getUserDetails((data) => {
       setData(data)
-      setImageUrl("https://www.missionatal.com" + data?.photo?.path.substring(data.photo.path.indexOf('/api')))
+      setImageUrl(data?.photo?.path)
       setTimeout(() => setImageIsLoading(false), 4000)
     })
   }, [])
