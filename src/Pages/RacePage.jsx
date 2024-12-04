@@ -35,13 +35,13 @@ import Sidebar from "../Components/Sidebar";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import ImageSlider from "../Components/ImageSlider";
 import YourBetsCard from '../Components/YourBetsCard'
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "@/components/ui/carousel"
+// import {
+//     Carousel,
+//     CarouselContent,
+//     CarouselItem,
+//     CarouselNext,
+//     CarouselPrevious,
+// } from "@/components/ui/carousel"
 
 
 
