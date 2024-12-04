@@ -14,18 +14,18 @@ const UserRankingCard = ({
 }) => {
     return (
         <div className={`rounded-[10px] flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md dark:border-[#00387E] dark:bg-[#002763]`}>
-            <div className='flex gap-[15px]'>
+            <div className='flex gap-[15px] items-center'>
                 <div className='w-[2.8rem] aspect-square'>
                     <img className='w-full h-full object-cover' src={userPhoto} alt="" />
                 </div>
-                <div className='flex flex-col justify-between items-start'>
+                <div className='flex flex-col items-center'>
                     <p className='text-[1rem] font-semibold dark:text-white'>{userName}</p>
-                    <div className='flex gap-[4px] items-baseline'>
+                    {/* <div className='flex gap-[4px] items-baseline'>
                         <div>
                             <img src={vector} alt="" />
                         </div>
                         <p className='text-[0.75rem] dark:text-white'>{(pos + 1)}/{total}</p>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className='flex items-center justify-between gap-[8px]'>
