@@ -12,7 +12,10 @@ const UserRankingList = ({
                     rankList?.map((curr, index) =>
                         <UserRankingCard
                             key={index}
+                            pos={index}
+                            total={rankList.length}
                             userName={curr.user_name}
+                            userPhoto={curr.user_photo}
                             userRank={curr.rank}
                             lastItem={rankList?.length === index}
                         />) :
