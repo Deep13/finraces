@@ -2,13 +2,15 @@ import React, { useEffect, useState } from 'react'
 import stocks from '../assets/images/stonks.svg'
 import { useNavigate } from 'react-router-dom'
 import JoinRace from './JoinRace'
+import { motion } from 'motion/react'
 
 const UpcomingRaceCardHomepage = ({
     raceName,
     participants = 4,
     raceId,
     startDate,
-    endDate
+    endDate,
+    index
 }) => {
 
     const navigate = useNavigate()
@@ -34,10 +36,27 @@ const UpcomingRaceCardHomepage = ({
 
     const { hours, minutes } = calculateDuration(startDate, endDate)
 
+    const cardAnimation = { // this is a variant
+        hidden: { scale: 0, opacity: 0 },
+        visible: (i) => ({
+            scale: 1,
+            opacity: 1,
+            transition: {
+                duration: 0.5,
+                delay: i * 0.1
+            }
+        })
+    };
+
 
 
     return (
-        <div className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem] flex flex-col justify-between'>
+        <motion.div
+            custom={index}
+            initial="hidden"
+            animate="visible"
+            variants={cardAnimation}
+            className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem] flex flex-col justify-between'>
             {
                 joinRaceFormVisible && <JoinRace
                     raceName={raceName}
@@ -76,7 +95,7 @@ const UpcomingRaceCardHomepage = ({
                     className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>Join</button>
                 {/* <button className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>View Details</button> */}
             </div>
-        </div>
+        </motion.div>
     )
 }
 

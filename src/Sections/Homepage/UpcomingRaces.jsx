@@ -6,22 +6,23 @@ import { getRaceList } from '../../Utils/api';
 const UpcomingRaces = () => {
   // State to keep track of the active tab
   const [activeTab, setActiveTab] = useState("Tech Stocks");
-  const [raceList, setRaceList] = useState([])
+  const [raceList, setRaceList] = useState([]);
+  const [tabChangeKey, setTabChangeKey] = useState(0); // Key to retrigger animations
 
   // Handler for button clicks
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
+    setTabChangeKey(prevKey => prevKey + 1); // Increment key to trigger re-render
   };
 
   useEffect(() => {
     getRaceList('scheduled', (data) => {
-      // alert('success')
-      console.log('race list here', data)
-      setRaceList(data)
+      console.log('race list here', data);
+      setRaceList(data);
     }, () => {
-      // alert('failure')
-    })
-  }, [])
+      console.error('Failed to fetch race list');
+    });
+  }, []);
 
   return (
     <div className='max-w-[1400px] relative mb-[3.29rem]'>
@@ -50,12 +51,14 @@ const UpcomingRaces = () => {
           raceList && raceList.slice(0, 4).map((curr, index) => {
             return (
               <UpcomingRaceCardHomepage
+                key={`${tabChangeKey}-${index}`} // Unique key based on tabChangeKey
                 startDate={curr.start_date}
                 endDate={curr.end_date}
                 raceName={curr.name}
                 raceId={curr.id}
-                key={index + 1} />
-            )
+                index={index}
+              />
+            );
           })
         }
       </div>

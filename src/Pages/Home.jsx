@@ -8,8 +8,13 @@ import Heading from '../Sections/Homepage/Heading'
 import FAQ from '../Sections/Homepage/FAQ'
 import { motion } from 'motion/react'
 import Sidebar from '../Components/Sidebar'
+import GuestOrLoggedOutHero from '../Sections/Homepage/GuestOrLoggedOutHero'
 
 const Home = () => {
+
+
+  const userDetails = localStorage.getItem('userDetails')
+
   return (
     <motion.div
       initial={{
@@ -29,7 +34,13 @@ const Home = () => {
       <Sidebar />
 
       <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
-        <Hero />
+        {/* <Hero /> */}
+        {
+          userDetails ?
+            <GuestOrLoggedOutHero />
+            :
+            <Hero />
+        }
         <OngoingRaces />
         <Leaderboard />
         <UpcomingRaces />

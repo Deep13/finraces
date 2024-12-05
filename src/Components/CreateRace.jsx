@@ -228,7 +228,7 @@ const CreateRace = ({
   }, [raceDetails])
 
   return (
-    <div className='w-screen h-screen fixed top-0 left-0 z-[25] grid place-items-center backdrop-blur-lg bg-transparent py-[3%] overflow-auto'>
+    <div className='w-screen h-screen fixed top-0 left-0 z-50 grid place-items-center backdrop-blur-lg bg-transparent py-[3%] overflow-auto'>
       <div className='rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem] dark:bg-[#002763]'>
         {/* heading  */}
         <div className='flex justify-between items-center gap-[450px] mb-[1.8rem]'>
