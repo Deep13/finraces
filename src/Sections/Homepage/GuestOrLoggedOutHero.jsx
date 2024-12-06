@@ -51,7 +51,7 @@ const GuestOrLoggedOutHero = () => {
                     {/* <div className='h-full'>
                         <img src={diamond} alt="" />
                     </div> */}
-                    <div className='flex flex-col gap-[8px]'>
+                    <div className='flex flex-col gap-[8px] py-4'>
                         <p className='text-[1rem] dark:text-[#D1D1D1]'>Last Race</p>
                         <p className='text-[1.5rem] dark:text-white font-bold'>1st google</p>
                         <div className='flex font-semibold gap-2 rounded-full bg-[#6BEBA4] bg-opacity-20  justify-start self-start items-center px-2 py-1'>

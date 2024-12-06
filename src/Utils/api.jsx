@@ -54,10 +54,11 @@ export const Login = async (
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('refreshToken', response.data.refreshToken);
     // localStorage.setItem('userName', response.data.user.firstName)
-    // localStorage.setItem('userId', response.data.user.id)
+    // localStorage.setItem('Photo', response.data.user.photo)
     let loginUserDetails = {
       userName: response.data.user.firstName,
-      userId: response.data.user.id
+      userId: response.data.user.id,
+      photo: response.data.user.photo
     }
     localStorage.setItem('userDetails', btoa(JSON.stringify(loginUserDetails)))
     localStorage.removeItem('guest_details')
