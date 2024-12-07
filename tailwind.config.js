@@ -18,6 +18,9 @@ export default {
 			sans: ['Raleway', 'sans-serif']
 		}
 	},
-	plugins: [require("tailwindcss-animate")], // not necessary for the current version for typography only fro daisy UI
+	plugins: [
+		require("tailwindcss-animate"),
+		// require('daisyui')
+	], // not necessary for the current version for typography only fro daisy UI
 }
 

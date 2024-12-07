@@ -23,7 +23,7 @@ const Friends = () => {
                 {
                     Object.keys(tabs).map((curr, index) => {
                         return (
-                            <button onClick={() => setActiveTab(tabs[curr])} key={curr} className={`w-full roudned-xl dark:text-white bg-white text-[0.9rem] ${activeTab === tabs[curr] ? 'dark:bg-[#002763] border border-[#00387E]' : 'dark:bg-[#001B51]'} py-4 px-[1.2rem] rounded-[15px]`}>
+                            <button onClick={() => setActiveTab(tabs[curr])} key={curr} className={`w-full roudned-xl dark:text-white bg-white text-[0.9rem] ${activeTab === tabs[curr] ? 'dark:bg-[#002763] border border-[#00387E]' : 'dark:bg-[#001B51]'} py-4 px-[1.2rem] rounded-[15px] text-start`}>
                                 {tabs[curr]}
                             </button>
                         )
