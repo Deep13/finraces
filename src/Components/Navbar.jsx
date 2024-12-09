@@ -37,9 +37,11 @@ const Navbar = () => {
 
 
     useEffect(() => {
-        // let userDetails = localStorage.getItem('userDetails')
-        console.log("user deatails", atob(userDetails))
-        setUserDetailsObject(JSON.parse(atob(userDetails)))
+        let thisUserDetails = localStorage.getItem('userDetails')
+        if (userDetails) {
+            console.log("user deatails", btoa(thisUserDetails))
+            setUserDetailsObject(JSON.parse(atob(thisUserDetails)))
+        }
     }, [])
 
 

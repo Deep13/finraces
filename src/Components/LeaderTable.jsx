@@ -4,129 +4,83 @@ import person from '../assets/images/person2.png'
 
 const LeaderTable = () => {
 
-    const formatRanks = (data) => {
-        return data.map((item) => ({
-            ...item,
-            rank: String(item.rank).padStart(3, '0'), // Format rank to 3 digits
-        }));
-    }
 
+    const thisData = [
+        {
+            "rank": 1,
+            "player": "John Doe",
+            "most_races_won": 15,
+            "total_points": 3200
+        },
+        {
+            "rank": 2,
+            "player": "Jane Smith",
+            "most_races_won": 12,
+            "total_points": 2950
+        },
+        {
+            "rank": 3,
+            "player": "Mike Johnson",
+            "most_races_won": 10,
+            "total_points": 2700
+        },
+        {
+            "rank": 4,
+            "player": "Emily Davis",
+            "most_races_won": 8,
+            "total_points": 2500
+        },
+        {
+            "rank": 5,
+            "player": "Chris Lee",
+            "most_races_won": 7,
+            "total_points": 2300
+        }
+    ]
 
-    const dataSource = [
-        {
-            key: '1',
-            rank: 1,
-            player: {
-                name: 'Lewis Hamilton',
-                imageUrl: person,
-                userName: 'hamilton44',
-            },
-            mostRacesWon: 10,
-            totalPoints: 350,
-        },
-        {
-            key: '2',
-            rank: 2,
-            player: {
-                name: 'Max Verstappen',
-                imageUrl: person,
-                userName: 'verstappen33',
-            },
-            mostRacesWon: 8,
-            totalPoints: 340,
-        },
-        {
-            key: '3',
-            rank: 3,
-            player: {
-                name: 'Sebastian Vettel',
-                imageUrl: person,
-                userName: 'vettel5',
-            },
-            mostRacesWon: 6,
-            totalPoints: 300,
-        },
-        {
-            key: '4',
-            rank: 4,
-            player: {
-                name: 'Fernando Alonso',
-                imageUrl: person,
-                userName: 'alonso14',
-            },
-            mostRacesWon: 5,
-            totalPoints: 280,
-        },
-    ];
-
-    const columns = [
-        {
-            title: 'Rank',
-            dataIndex: 'rank',
-            key: 'rank',
-            render: (data) => {
-                return (
-                    <div className='text-center dark:text-white'>
-                        {data}
-                    </div>
-                )
-            }
-        },
-        {
-            title: 'Player',
-            dataIndex: 'player',
-            key: 'player',
-            render: (data) => {
-                return (
-                    <div className='flex gap-3'>
-                        <div className=" w-10 h-10 rounded-full overflow-hidden">
-                            <img className='h-full w-full object-cover' src={data.imageUrl} alt={data.userName} />
-                        </div>
-                        <div className="flex flex-col dark:text-white">
-                            <p className='font-semibold text-lg'>{data.name}</p>
-                            <p className='font-light text-sm'>{data.userName}</p>
-                        </div>
-                    </div>
-                )
-            }
-        },
-        {
-            title: 'Most Races Won',
-            dataIndex: 'mostRacesWon',
-            key: 'mostRacesWon',
-            render: (data) => {
-                return (
-                    <div className='text-start dark:text-white'>
-                        {data}
-                    </div>
-                )
-            }
-        },
-        {
-            title: 'Total Points',
-            dataIndex: 'totalPoints',
-            key: 'totalPoints',
-            render: (data) => {
-                return (
-                    <div className='text-start dark:text-white'>
-                        {data}
-                    </div>
-                )
-            }
-        },
-    ];
-
-    const updatedDataSource = formatRanks(dataSource);
 
 
     return (
-        <div className='w-full dark:bg-[#000D38]'>
-            <Table
-                // showHeader={false}
-                rowClassName={(record, index) => index % 2 === 0 ? 'bg-[#ffffff] dark:bg-[#000D38] hover:bg-transparent' : 'bg-[#f5f5f5] dark:bg-[#002763] hover:bg-transparent'}
-                dataSource={updatedDataSource}
-                pagination={false}
-                columns={columns} />
+        <div className='w-full mt-8 flex'>
+            <table className="table border-separate border-spacing-0 w-full text-left dark:text-white">
+                {/* head */}
+                <thead>
+                    <tr>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] px-4 text-center">Rank</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Player</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Most Races Won</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Total Points</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {/* row 1 */}
+                    {
+                        thisData?.map((curr, index) => {
+                            return (
+                                <tr key={index} className="odd:bg-transparent even:bg-[#002760]">
+                                    <td className="text-[1.5rem] py-3 px-4 text-center">{curr.rank}</td>
+                                    <td className="py-3">
+                                        <div className="w-full flex gap-3 justify-start items-center">
+                                            {/* image */}
+                                            <div className="w-12 h-12 rounded-full overflow-hidden">
+                                                <img className="w-full h-full object-cover" src={person} alt="" />
+                                            </div>
+                                            {/* name and badge */}
+                                            <div className="flex flex-col justify-between gap-1">
+                                                <p className="text-4 font-medium">{curr.player}</p>
+                                                <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="text-[1.1rem] py-3">{curr.most_races_won}</td>
+                                    <td className="text-[1.1rem] py-3">{curr.total_points}</td>
+                                </tr>
+                            )
+                        })
+                    }
+                </tbody>
+
+            </table>
         </div>
     )
 }

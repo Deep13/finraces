@@ -16,10 +16,10 @@ const NavFootWrapper = () => {
   }, [])
 
   return (
-    <div className='w-full relative'>
-        <Navbar/>
-            <Outlet/>
-        <Footer/>
+    <div className='w-full relative dark:bg-[#000924]'>
+      <Navbar />
+      <Outlet />
+      <Footer />
     </div>
   )
 }
