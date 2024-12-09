@@ -29,16 +29,21 @@ const StockRankList = ({
                             let imageUrl = stock.icon_url
                             let name = stock.name
                             // console.log(stock)
-                            return (<StockPriceCard
-                                key={curr.stock_id}
-                                stockName={name}
-                                tickerName={curr.stock_name}
-                                rank={index + 1}
-                                percentChange={curr.percent_change}
-                                stockId={curr.stock_id}
-                                stockLastRate={curr.stock_last_rate}
-                                imageUrl={imageUrl}
-                            />)
+                            return (
+                                <CarouselItem
+                                    key={curr.stock_id}
+                                >
+                                    <StockPriceCard
+                                        stockName={name}
+                                        tickerName={curr.stock_name}
+                                        rank={index + 1}
+                                        percentChange={curr.percent_change}
+                                        stockId={curr.stock_id}
+                                        stockLastRate={curr.stock_last_rate}
+                                        imageUrl={imageUrl}
+                                    />
+                                </CarouselItem>
+                            )
                         }) :
                         <ColorRing
                             visible={true}
