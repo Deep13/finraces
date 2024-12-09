@@ -426,6 +426,7 @@ const CreateRace = ({
                   return
                 }
               }
+
             }
             // now for the race predictions
             if (racePredictions.length === 0) {
@@ -439,11 +440,11 @@ const CreateRace = ({
                 }
               })
             }
+
             if (!hasUniqueIds(racePredictions)) {
               alert('You can Enter a pertiction for stock only once')
               return
             }
-
 
             createRaceAndJoinUser(raceDetails, racePredictions, (res) => {
               setRaceDetails({

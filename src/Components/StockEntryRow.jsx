@@ -5,6 +5,7 @@ import { RxCross1 } from "react-icons/rx";
 import { searchStock } from '../Utils/api';
 import { debounce } from 'lodash';
 import { DarkModeContext } from '../Contexts/DarkModeProvider';
+import SelectSearch from './SelectSearch';
 
 const StockEntryRow = ({
   prediction_rank,
@@ -22,64 +23,12 @@ const StockEntryRow = ({
   const [value, setValue] = useState('')
   const [selectedStockList, setStockList] = useState([])
   const { darkModeEnabled } = useContext(DarkModeContext)
+  const [currentStock, setCurrentStock] = useState({})
 
   const findStockPrice = (id) => {
     return stockList.find(stock => stock.id === id);
   }
 
-
-  // const loadOptions = async (
-  //   inputValue,
-  //   callback
-  // ) => {
-  //   // Only proceed if inputValue has 3 or more characters
-  //   if (inputValue.length >= 3) {
-  //     callback([]);
-  //     return;
-  //   }
-
-  //   try {
-  //     const options = await searchStock(inputValue);
-  //     // callback(options);
-  //     setTimeout(() => {
-  //       callback(options);
-  //     }, 1500);
-  //   } catch (error) {
-  //     console.error('Error fetching stocks:', error);
-  //     callback([]);
-  //   }
-  // };
-
-
-  const _loadSuggestions = async (prefix) => {
-    if (prefix.length < 2) {
-      return [];
-    }
-
-    try {
-      const data = await searchStock(prefix);
-      // selectedStockList(data)
-      if (Array.isArray(data)) {
-        return data.map(stock => ({
-          label: stock.name,
-          value: stock.id,
-        }));
-      } else if (data && Array.isArray(data.results)) {
-        // If the API nests the array under `results`
-        return data.results.map(stock => ({
-          label: stock.name,
-          value: stock.id,
-        }));
-      }
-      return [];
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-      return [];
-    }
-  };
-
-
-  const loadSuggestions = debounce(_loadSuggestions, 300);
 
 
   useEffect(() => {
@@ -103,9 +52,9 @@ const StockEntryRow = ({
         <div className="flex flex-col w-[15rem]">
           <label className="mb-[10px] dark:text-white" htmlFor="race_name">Select Stock</label>
           {/* <input className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="text" id="race_name" /> */}
-          <Select
+          {/* <Select
             onChange={(arg) => {
-              handleRacePredictionsChange(index, 'stock_id', arg.value)
+              handleRacePredictionsChange(index, 'stock_id', arg.value) // value is stock_id
               setCurrentStockId(arg.value)
             }}
             classNames={{
@@ -139,26 +88,14 @@ const StockEntryRow = ({
             }}
             options={transformedData}
             isSearchable
-            isClearable />
-          {/* <AsyncSelect
-            cacheOptions
-            defaultOptions
-            placeholder='Search for a stock'
-            loadOptions={loadSuggestions}
-            value={value}
-            classNames={{
-              control: () => 'px-[1.1rem] bg-[#f5f5f5] rounded-[4px] py-[3px] shadow-inner'
-            }}
-            onChange={e => {
-              handleRacePredictionsChange(index, 'stock_id', e.value)
-              setValue(e)
-            }}
-          /> */}
+            isClearable /> */}
+          <SelectSearch setCurrentStock={setCurrentStock} index={index} handlePredicitonChange={handleRacePredictionsChange} />
         </div>
         <div className="flex flex-col flex-1">
           <label className="mb-[10px] dark:text-white" htmlFor="race_name">Current Price</label>
           <div className="px-[1.1rem] rounded-[4px] py-[8px] text-start dark:text-white" type="number" id="race_name" >
-            {currentStockId ? findStockPrice(currentStockId)?.price : 0}
+            {/* {currentStockId ? findStockPrice(currentStockId)?.price : 0} */}
+            {currentStock?.price ? currentStock?.price : 0}
           </div>
         </div>
         <div className="flex flex-col flex-1">
