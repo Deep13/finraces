@@ -1,13 +1,22 @@
 import { BsTelephone } from "react-icons/bs";
 import { FiMessageSquare } from "react-icons/fi";
-import { CgChevronRight } from "react-icons/cg";
-import React, { useState } from 'react'
-import { CgChevronDown } from 'react-icons/cg';
+import { CgChevronRight, CgChevronDown } from "react-icons/cg";
+import React, { useState } from "react";
 
 const HelpAndSupport = () => {
+    const [openAccordion, setOpenAccordion] = useState(null); // Track the open accordion
 
-    const [open, setOpen] = useState(true)
+    // Toggle a specific accordion
+    const toggleAccordion = (index) => {
+        setOpenAccordion(openAccordion === index ? null : index); // Close if already open, else open
+    };
 
+    const faqs = [
+        "Pellentesque ac bibendum tortor?",
+        "Quisque tincidunt vehicula arcu?",
+        "Donec vel ligula id magna?",
+        "Nulla facilisi sed cursus?"
+    ];
 
     return (
         <div className="w-full h-full flex gap-4 flex-col">
@@ -17,56 +26,30 @@ const HelpAndSupport = () => {
                     <CgChevronDown size={24} color="white" />
                 </div>
 
-                {/* one faq  */}
-                <div className="w-full dark:border dark:border-[#00387E] rounded-[15px]">
-                    <div onClick={() => setOpen(prev => !prev)} className="w-full px-6 py-4 justify-between flex">
-                        <div>
-                            <p className="text-[0.9rem] font-semibold">Pellentesque ac bibendum tortor?</p>
+                {/* Loop through FAQ items */}
+                {faqs.map((faq, index) => (
+                    <div key={index} className="w-full dark:border dark:border-[#00387E] rounded-[15px]">
+                        <div
+                            onClick={() => toggleAccordion(index)}
+                            className="w-full px-6 py-4 justify-between flex cursor-pointer"
+                        >
+                            <div>
+                                <p className="text-[0.9rem] font-semibold">{faq}</p>
+                            </div>
+                            {openAccordion === index ? (
+                                <CgChevronDown size={24} color="white" />
+                            ) : (
+                                <CgChevronRight size={24} color="white" />
+                            )}
                         </div>
-                        {!open && <CgChevronRight size={24} color="white" />}
-                        {open && <CgChevronDown size={24} color="white" />}
+                        {openAccordion === index && (
+                            <p className="px-6 pb-4 text-[#CDCDCD]">
+                                Vivamus sit amet interdum elit. Proin lacinia erat ac velit
+                                tempus auctor.
+                            </p>
+                        )}
                     </div>
-                    {open && <p className="px-6 pb-4 text-[#CDCDCD]">
-                        Vivamus sit amet interdum elit. Proin lacinia erat ac velit tempus auctor.
-                    </p>}
-                </div>
-                <div className="w-full dark:border dark:border-[#00387E] rounded-[15px]">
-                    <div onClick={() => setOpen(prev => !prev)} className="w-full px-6 py-4 justify-between flex">
-                        <div>
-                            <p className="text-[0.9rem] font-semibold">Pellentesque ac bibendum tortor?</p>
-                        </div>
-                        {!open && <CgChevronRight size={24} color="white" />}
-                        {open && <CgChevronDown size={24} color="white" />}
-                    </div>
-                    {open && <p className="px-6 pb-4 text-[#CDCDCD]">
-                        Vivamus sit amet interdum elit. Proin lacinia erat ac velit tempus auctor.
-                    </p>}
-                </div>
-                <div className="w-full dark:border dark:border-[#00387E] rounded-[15px]">
-                    <div onClick={() => setOpen(prev => !prev)} className="w-full px-6 py-4 justify-between flex">
-                        <div>
-                            <p className="text-[0.9rem] font-semibold">Pellentesque ac bibendum tortor?</p>
-                        </div>
-                        {!open && <CgChevronRight size={24} color="white" />}
-                        {open && <CgChevronDown size={24} color="white" />}
-                    </div>
-                    {open && <p className="px-6 pb-4 text-[#CDCDCD]">
-                        Vivamus sit amet interdum elit. Proin lacinia erat ac velit tempus auctor.
-                    </p>}
-                </div>
-                <div className="w-full dark:border dark:border-[#00387E] rounded-[15px]">
-                    <div onClick={() => setOpen(prev => !prev)} className="w-full px-6 py-4 justify-between flex">
-                        <div>
-                            <p className="text-[0.9rem] font-semibold">Pellentesque ac bibendum tortor?</p>
-                        </div>
-                        {!open && <CgChevronRight size={24} color="white" />}
-                        {open && <CgChevronDown size={24} color="white" />}
-                    </div>
-                    {open && <p className="px-6 pb-4 text-[#CDCDCD]">
-                        Vivamus sit amet interdum elit. Proin lacinia erat ac velit tempus auctor.
-                    </p>}
-                </div>
-
+                ))}
             </div>
 
             <div className="dark:bg-[#002763] rounded-[15px] dark:border w-full dark:border-[#00387E] dark:text-white flex gap-3 py-4 px-6 justify-between">
@@ -81,9 +64,8 @@ const HelpAndSupport = () => {
                     <BsTelephone color="white" size={24} />
                 </div>
             </div>
-
         </div>
     );
-}
+};
 
-export default HelpAndSupport
+export default HelpAndSupport;

@@ -78,7 +78,7 @@ const GuestOrLoggedOutHero = () => {
 
             <div className='mb-[3.3rem] max-w-[1400px]'>
                 <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Your Watchlist</h2>
-                <div className='w-full flex gap-[10px] justify-center'>
+                <div className='w-full flex gap-[10px] justify-center flex-wrap'>
                     <StockWatchlistCard />
                     <StockWatchlistCard />
                     <StockWatchlistCard />

@@ -6,6 +6,8 @@ import Person from '../../assets/images/person2.png'
 const PrivacySettings = () => {
 
     const [enabled, setEnabled] = useState(false)
+    const [enabled1, setEnabled1] = useState(false)
+    const [enabled2, setEnabled2] = useState(false)
 
     return (
         <div className="w-full h-full flex gap-4 flex-col">
@@ -18,7 +20,7 @@ const PrivacySettings = () => {
                     <Switch
                         checked={enabled}
                         onChange={setEnabled}
-                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1"
+                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1 data-[checked]:bg-green-700"
                     >
                         <span
                             aria-hidden="true"
@@ -32,16 +34,16 @@ const PrivacySettings = () => {
                 <p className="text-4 font-medium w-[12rem]">Freind Requests</p>
                 <div className='flex gap-2'>
                     <p>
-                        {enabled ? 'On' : 'Off'}
+                        {enabled1 ? 'On' : 'Off'}
                     </p>
                     <Switch
-                        checked={enabled}
-                        onChange={setEnabled}
-                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1"
+                        checked={enabled1}
+                        onChange={setEnabled1}
+                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1 data-[checked]:bg-green-700"
                     >
                         <span
                             aria-hidden="true"
-                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled ? 'bg-white' : 'bg-[#001A50]'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
+                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled1 ? 'bg-white' : 'bg-[#001A50]'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
                         />
                     </Switch>
                 </div>
@@ -51,16 +53,16 @@ const PrivacySettings = () => {
                 <p className="text-4 font-medium w-[12rem]">Messages</p>
                 <div className='flex gap-2'>
                     <p>
-                        {enabled ? 'On' : 'Off'}
+                        {enabled2 ? 'On' : 'Off'}
                     </p>
                     <Switch
-                        checked={enabled}
-                        onChange={setEnabled}
-                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1"
+                        checked={enabled2}
+                        onChange={setEnabled2}
+                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1 data-[checked]:bg-green-700"
                     >
                         <span
                             aria-hidden="true"
-                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled ? 'bg-white' : 'bg-[#001A50]'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
+                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled2 ? 'bg-white' : 'bg-[#001A50]'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
                         />
                     </Switch>
                 </div>
@@ -86,9 +88,9 @@ const PrivacySettings = () => {
                             </div>
                         </div>
                     </div>
-                    <p className="text-[0.9rem] underline text-[0.7rem]">unblock</p>
+                    <button className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">unblock</button>
                 </div>
-                
+
                 {/* // one player  */}
                 <div className="w-full dark:border dark:border-[#00387E] rounded-[15px] px-6 py-4 justify-between flex items-center">
                     <div className="text-[0.9rem] flex gap-4 items-center">
@@ -103,7 +105,7 @@ const PrivacySettings = () => {
                             </div>
                         </div>
                     </div>
-                    <p className="text-[0.9rem] underline text-[0.7rem]">unblock</p>
+                    <button className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">unblock</button>
                 </div>
 
 
