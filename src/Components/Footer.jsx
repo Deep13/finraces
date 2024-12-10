@@ -6,7 +6,7 @@ import fbdark from '../assets/images/fbdark.svg'
 import g from '../assets/images/g.svg'
 import gdark from '../assets/images/gdark.svg'
 import Youtube from '../assets/images/Youtube.svg'
-import Youtubedark from '../assets/images/Youtubedark.svg'
+// import Youtubedark from '../assets/images/Youtubedark.svg'
 import insta from '../assets/images/insta.svg'
 import instadark from '../assets/images/instadark.svg'
 import whatsapp from '../assets/images/whatsapp.svg'
@@ -74,7 +74,7 @@ const Footer = () => {
               <img src={darkModeEnabled ? fbdark : fb} alt="" />
               <img src={darkModeEnabled ? gdark : g} alt="" />
               <img src={darkModeEnabled ? instadark : insta} alt="" />
-              <img src={darkModeEnabled ? Youtubedark : Youtube} alt="" />
+              {/* <img src={darkModeEnabled ? Youtubedark : Youtube} alt="" /> */}
             </div>
           </div>
           <div className='flex flex-col gap-[6px]'>
