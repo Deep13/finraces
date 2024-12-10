@@ -8,19 +8,24 @@ import Security from "../Sections/Settings/Security";
 import HelpAndSupport from "../Sections/Settings/HelpAndSupport";
 import PrivacySettings from "../Sections/Settings/PrivacySettings";
 import AccountManagement from "../Sections/Settings/AccountManagement";
+import phone from '../assets/images/settings/phone.png'
+import filters from '../assets/images/settings/filters.png'
+import shield from '../assets/images/settings/shield.png'
+import users from '../assets/images/settings/users.png'
+import shield_off from '../assets/images/settings/shield_off.png'
 
 const tabs = {
-  "User Preferences": "User Preferences",
-  "Account Management": 'Account Management',
-  "Privacy Settings": 'Privacy Settings',
-  "Security": 'Security',
-  "Help and Support": 'Help and Support',
-}
+  "User Preferences": { title: "User Preferences", icon: filters },
+  "Account Management": { title: "Account Management", icon: users },
+  "Privacy Settings": { title: "Privacy Settings", icon: shield_off },
+  "Security": { title: "Security", icon: shield },
+  "Help and Support": { title: "Help and Support", icon: phone },
+};
 
 const Settings = () => {
 
   const { darkModeEnabled } = useContext(DarkModeContext)
-  const [activeTab, setActiveTab] = useState(tabs["User Preferences"])
+  const [activeTab, setActiveTab] = useState(tabs["User Preferences"].title)
 
   return (
     <motion.div
@@ -56,8 +61,9 @@ const Settings = () => {
                   {
                     Object.keys(tabs).map((curr, index) => {
                       return (
-                        <button onClick={() => setActiveTab(tabs[curr])} key={curr} className={`w-full roudned-xl dark:text-white bg-white text-[0.9rem] ${activeTab === tabs[curr] ? 'dark:bg-[#002763] border border-[#00387E]' : 'dark:bg-[#001B51]'} py-4 px-[1.2rem] rounded-[15px] text-start`}>
-                          {tabs[curr]}
+                        <button onClick={() => setActiveTab(tabs[curr].title)} key={curr} className={`w-full flex gap-2 items-center roudned-xl dark:text-white bg-white text-[0.9rem] ${activeTab === tabs[curr].title ? 'dark:bg-[#002763] border border-[#00387E]' : 'dark:bg-[#001B51]'} py-4 px-[1.2rem] rounded-[15px] text-start`}>
+                          <img src={tabs[curr].icon} alt="curr" />
+                          {tabs[curr].title}
                         </button>
                       )
                     })
@@ -66,11 +72,11 @@ const Settings = () => {
 
                 {/* active tab  */}
                 <div className="flex-1 bg-white rounded-xl dark:bg-[#001B51] border dark:border-[#00387E] dark:text-white py-4 px-6 h-full">
-                  {activeTab === tabs["User Preferences"] && <UserPreferences />}
-                  {activeTab === tabs["Security"] && <Security />}
-                  {activeTab === tabs["Help and Support"] && <HelpAndSupport />}
-                  {activeTab === tabs["Privacy Settings"] && <PrivacySettings />}
-                  {activeTab === tabs["Account Management"] && <AccountManagement />}
+                  {activeTab === tabs["User Preferences"].title && <UserPreferences />}
+                  {activeTab === tabs["Security"].title && <Security />}
+                  {activeTab === tabs["Help and Support"].title && <HelpAndSupport />}
+                  {activeTab === tabs["Privacy Settings"].title && <PrivacySettings />}
+                  {activeTab === tabs["Account Management"].title && <AccountManagement />}
                 </div>
               </div>
             </div>

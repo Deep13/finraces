@@ -3,7 +3,7 @@ import { BsSunFill } from "react-icons/bs";
 import { BsMoon } from "react-icons/bs";
 import { IoIosAdd } from "react-icons/io";
 import { HiMenu } from "react-icons/hi";
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import logo from '../assets/icons/logofinraces.svg'
 import globe from '../assets/icons/globe_icon.svg'
@@ -18,6 +18,7 @@ import PopupForm from "./PopupForm";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import PopupSearch from "./PopupSearch";
+import SimpleSwitch from "./Switch";
 
 const Navbar = () => {
 
@@ -33,6 +34,8 @@ const Navbar = () => {
     const token = localStorage.getItem('token')
     const userDetails = localStorage.getItem('userDetails')
     const [userDetailsObject, setUserDetailsObject] = useState({})
+    const dropdownRef = useRef(null)
+    const notificationRef = useRef(null)
     const thisLocation = useLocation()
 
 
@@ -43,6 +46,44 @@ const Navbar = () => {
             setUserDetailsObject(JSON.parse(atob(thisUserDetails)))
         }
     }, [])
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdown(false);
+            }
+            if (notificationToggle && !notificationRef.current.contains(event.target)) {
+                setNotificationToggle(false);
+            }
+        };
+
+        if (dropdown) {
+            document.addEventListener('mousedown', handleOutsideClick);
+        } else {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [dropdown, notificationToggle]); useEffect(() => {
+        const handleOutsideClick = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setDropdown(false);
+            }
+            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+                setNotificationToggle(false);
+            }
+        };
+
+        if (dropdown || notificationToggle) {
+            document.addEventListener('mousedown', handleOutsideClick);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [dropdown, notificationToggle]);
 
 
     return (
@@ -67,7 +108,7 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="flex gap-[12px] justify-start items-center">
-                    <div className="flex gap-2 items-center">
+                    {/* <div className="flex gap-2 items-center">
                         <button onClick={toggle} className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                             {
                                 darkModeEnabled ?
@@ -75,7 +116,7 @@ const Navbar = () => {
                                     <BsSunFill size={18} />
                             }
                         </button>
-                    </div>
+                    </div> */}
                     <button onClick={() => setSearch(prev => !prev)} className='aspect-square h-[2.35rem] dark:bg-[#001a50] grid place-items-center rounded-[8px]'>
                         <img src={searchIcon} alt="Search" />
                     </button>
@@ -113,11 +154,15 @@ const Navbar = () => {
                     <button className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={support} alt="Search" />
                     </button>
-                    <div onClick={() => setNotificationToggle(prev => !prev)} role="button" className={`aspect-square ${notificationToggle && 'dark:bg-opacity-25'} dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px] relative cursor-pointer`}>
+                    <div onClick={() => {
+                        setNotificationToggle(prev => !prev)
+                        setDropdown(false)
+                    }} role="button" className={`aspect-square ${notificationToggle && 'dark:bg-opacity-25'} dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px] relative cursor-pointer`}>
                         <FaRegBell color={darkModeEnabled ? 'white' : 'black'} size={18} />
                         <AnimatePresence>
 
                             {notificationToggle && <motion.div
+                                ref={notificationRef}
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
@@ -160,6 +205,7 @@ const Navbar = () => {
                     <div onClick={() => {
                         // set dropdown
                         setDropdown(prev => !prev)
+                        setNotificationToggle(false)
                     }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
                         <p className="dark:text-white">{userDetailsObject.userName}</p>
                         <div className="bg-white w-9 h-9 rounded-full overflow-hidden">
@@ -167,6 +213,7 @@ const Navbar = () => {
                         </div>
                         <AnimatePresence>
                             {dropdown && <motion.div
+                                ref={dropdownRef}
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
@@ -174,6 +221,17 @@ const Navbar = () => {
                                 className={`absolute top-16 bg-white rounded-lg right-0 w-[130%] overflow-hidden shadow-2xl dark:bg-[#002864]`}>
                                 <button onClick={() => navigate('/profile')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear text-start dark:text-white dark:hover:bg-opacity-20">Profile</button>
                                 <p onClick={() => navigate('/settings')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Settings</p>
+                                <div className="flex gap-2 items-center hover:bg-slate-200 dark:hover:bg-opacity-20 px-3">
+                                    <button onClick={toggle} className='h-[2.35rem] w-full flex justify-between items-center gap-2 rounded-[8px]'>
+                                        <p className="dark:text-white">{!darkModeEnabled ? 'Dark Mode' : 'Light Mode'}</p>
+                                        {
+                                            !darkModeEnabled ?
+                                                <BsMoon color="black" size={18} /> :
+                                                <BsSunFill color="white" size={18} />
+                                        }
+                                    </button>
+                                    {/* <SimpleSwitch enabled={darkModeEnabled} onClick={toggle} /> */}
+                                </div>
                                 <p className="w-full p-3 dark:font-semibold hover:bg-red-500 hover:text-white transition-opacity duration-100 ease-linear dark:text-white">Log out</p>
                             </motion.div>}
                         </AnimatePresence>

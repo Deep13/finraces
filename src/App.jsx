@@ -13,6 +13,7 @@ import ErrorPage from './Pages/ErrorPage'
 import Fallback from './Components/Fallback'
 import DarkModeProvider from './Contexts/DarkModeProvider'
 import Settings from './Pages/Settings'
+import IndiUserProfile from './Pages/IndiUserProfile'
 // import Lenis from 'lenis'
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                 <Route path="race/:race_id" element={<RacePage />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/userprofile" element={<IndiUserProfile />} />
               </Route>
               <Route path="/auth" element={<Auth />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
