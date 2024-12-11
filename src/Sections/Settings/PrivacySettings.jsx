@@ -20,11 +20,11 @@ const PrivacySettings = () => {
                     <Switch
                         checked={enabled}
                         onChange={setEnabled}
-                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1 data-[checked]:bg-green-700"
+                        className="group relative data-[checked]:bg-green-600 flex h-4 w-10 cursor-pointer rounded-full dark:bg-[#000924] dark:data-[checked]:bg-green-600 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white border border-black dark:border-none top-1"
                     >
                         <span
                             aria-hidden="true"
-                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled ? 'bg-white' : 'bg-[#001A50]'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
+                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled ? 'bg-white' : 'dark:bg-[#001A50] bg-slate-300'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
                         />
                     </Switch>
                 </div>
@@ -39,11 +39,11 @@ const PrivacySettings = () => {
                     <Switch
                         checked={enabled1}
                         onChange={setEnabled1}
-                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1 data-[checked]:bg-green-700"
+                        className="group relative data-[checked]:bg-green-600 flex h-4 w-10 cursor-pointer rounded-full dark:bg-[#000924] dark:data-[checked]:bg-green-600 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white border border-black dark:border-none top-1"
                     >
                         <span
                             aria-hidden="true"
-                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled1 ? 'bg-white' : 'bg-[#001A50]'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
+                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled1 ? 'bg-white' : 'dark:bg-[#001A50] bg-slate-300'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
                         />
                     </Switch>
                 </div>
@@ -58,11 +58,11 @@ const PrivacySettings = () => {
                     <Switch
                         checked={enabled2}
                         onChange={setEnabled2}
-                        className="group relative flex h-4 w-10 cursor-pointer rounded-full bg-[#000924] p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white top-1 data-[checked]:bg-green-700"
+                        className="group relative data-[checked]:bg-green-600 flex h-4 w-10 cursor-pointer rounded-full dark:bg-[#000924] dark:data-[checked]:bg-green-600 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white border border-black dark:border-none top-1"
                     >
                         <span
                             aria-hidden="true"
-                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled2 ? 'bg-white' : 'bg-[#001A50]'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
+                            className={`pointer-events-none inline-block size-5 -translate-x-1 rounded-full ${enabled2 ? 'bg-white' : 'dark:bg-[#001A50] bg-slate-300'} ring-0 shadow-lg transition duration-200 ease-in-out group-data-[checked]:translate-x-5 relative -top-[0.4rem]`}
                         />
                     </Switch>
                 </div>

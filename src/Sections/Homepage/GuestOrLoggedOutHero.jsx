@@ -25,9 +25,10 @@ const GuestOrLoggedOutHero = () => {
                 </div>
             </div>
 
-            <div className='max-w-[1400px] px-[4rem] h-[9.3rem] rounded-lg  mb-[3.3rem] flex gap-[2.8rem] justify-center'>
+
+            <div className='max-w-[1400px] rounded-lg  mb-[3.3rem] flex gap-[2.8rem] justify-center flex-wrap'>
                 <div className='rounded-xl overflow-hidden w-[10rem]'>
-                    <img src={Person} alt="" />
+                    <img className='w-full h-full object-cover' src={Person} alt="" />
                 </div>
 
                 <div className='bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-transparent dark:border dark:border-[#00387E] justify-center'>
@@ -76,6 +77,7 @@ const GuestOrLoggedOutHero = () => {
                 </div>
             </div>
 
+
             <div className='mb-[3.3rem] max-w-[1400px]'>
                 <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Your Watchlist</h2>
                 <div className='w-full flex gap-[10px] justify-center flex-wrap'>
@@ -91,3 +93,5 @@ const GuestOrLoggedOutHero = () => {
 }
 
 export default GuestOrLoggedOutHero
+
+

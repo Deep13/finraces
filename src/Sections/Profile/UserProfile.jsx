@@ -95,7 +95,7 @@ const UserProfile = () => {
 
 
             {/* table is remaining  */}
-            <div className='w-full p-4 bg-[#001B51] dark:border dark:border-[#00387E] rounded-[20px]'>
+            <div className='w-full p-4 bg-white dark:bg-[#001b51] dark:border dark:border-[#00387E] rounded-[20px]'>
                 <table className="table border-separate border-spacing-0 w-full text-left dark:text-white">
                     {/* head */}
                     <thead>

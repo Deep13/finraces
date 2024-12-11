@@ -1,9 +1,11 @@
 import { BsTelephone } from "react-icons/bs";
 import { FiMessageSquare } from "react-icons/fi";
 import { CgChevronRight, CgChevronDown } from "react-icons/cg";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { DarkModeContext } from "../../Contexts/DarkModeProvider";
 
 const HelpAndSupport = () => {
+    const { darkModeEnabled } = useContext(DarkModeContext)
     const [openAccordion, setOpenAccordion] = useState(null); // Track the open accordion
 
     // Toggle a specific accordion
@@ -28,7 +30,7 @@ const HelpAndSupport = () => {
 
                 {/* Loop through FAQ items */}
                 {faqs.map((faq, index) => (
-                    <div key={index} className="w-full dark:border dark:border-[#00387E] rounded-[15px]">
+                    <div key={index} className="w-full dark:border dark:border-[#00387E] rounded-[15px] border border-black">
                         <div
                             onClick={() => toggleAccordion(index)}
                             className="w-full px-6 py-4 justify-between flex cursor-pointer"
@@ -37,13 +39,13 @@ const HelpAndSupport = () => {
                                 <p className="text-[0.9rem] font-semibold">{faq}</p>
                             </div>
                             {openAccordion === index ? (
-                                <CgChevronDown size={24} color="white" />
+                                <CgChevronDown size={24} color={darkModeEnabled ? 'white' : 'black'} />
                             ) : (
-                                <CgChevronRight size={24} color="white" />
+                                <CgChevronRight size={24} color={darkModeEnabled ? 'white' : 'black'} />
                             )}
                         </div>
                         {openAccordion === index && (
-                            <p className="px-6 pb-4 text-[#CDCDCD]">
+                            <p className="px-6 pb-4 dark:text-[#CDCDCD]">
                                 Vivamus sit amet interdum elit. Proin lacinia erat ac velit
                                 tempus auctor.
                             </p>

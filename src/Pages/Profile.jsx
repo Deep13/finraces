@@ -1,14 +1,4 @@
 import React, { useLayoutEffect, useState } from 'react'
-import compass from '../assets/icons/sidebar/compass.svg'
-import finance_idea from '../assets/icons/sidebar/finance_idea.svg'
-import stats from '../assets/icons/sidebar/stats.svg'
-import live_streaming from '../assets/icons/sidebar/live_streaming.svg'
-import forward from '../assets/icons/sidebar/forward.svg'
-import eth from '../assets/icons/sidebar/eth.svg'
-import recent from '../assets/icons/sidebar/recent.svg'
-import Person from '../assets/images/person2.png'
-import golden_frame from '../assets/images/silver_frame.png'
-import growthIndicator from '../assets/images/growthIndicator.png'
 import coin from '../assets/images/coin2.png'
 import { getUserDetails } from "../Utils/api";
 import PicUploadPopUpd from "../Components/PicUploadPopUpd";

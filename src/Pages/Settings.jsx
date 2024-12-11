@@ -41,7 +41,7 @@ const Settings = () => {
         duration: 0.4,
         ease: 'easeInOut'
       }}
-      className='w-full relative h-auto flex py-8 dark:bg-[#000924]'>
+      className='w-full relative h-auto flex py-8 dark:bg-[#000924] overflow-auto'>
       {/* Ensure sidebar is inside a container with sufficient height */}
       <Sidebar />
 
