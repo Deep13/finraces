@@ -1,16 +1,18 @@
 import { RxCross1 } from "react-icons/rx";
 import { BsUpload } from "react-icons/bs";
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { uploadProfilePicture, updatePhoto } from "../Utils/api";
+import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 const PicUploadPopUpd = ({
     exit,
     setImageUrl,
-    setImageIsLoading
+    setImageIsLoading = () => {}
 }) => {
 
 
     const [selectedFile, setSelectedFile] = useState(null);
+    const { darkModeEnabled } = useContext(DarkModeContext)
 
     const handleFileChange = (event) => {
         const files = event.target.files;
@@ -29,11 +31,11 @@ const PicUploadPopUpd = ({
 
     return (
         <div className='fixed w-full h-screen top-0 left-0 z-[100] bg-black bg-opacity-50 grid place-items-center'>
-            <div className='py-8 px-12 rounded-lg bg-white shadow-xl relative h-[15rem] grid place-items-center w-[20rem]'>
+            <div className='py-8 px-12 rounded-lg bg-white shadow-xl relative h-[15rem] grid place-items-center w-[20rem] dark:bg-[#002763]'>
                 <button onClick={() => {
                     exit(false)
                 }} className="absolute top-4 right-4">
-                    <RxCross1 size={20} color="black" />
+                    <RxCross1 size={20} color={darkModeEnabled ? 'white' : 'black'} />
                 </button>
                 {
                     selectedFile &&
@@ -59,7 +61,7 @@ const PicUploadPopUpd = ({
                             document.getElementById('fileInput')?.click()
                         }
                     }}
-                    className="flex gap-4 border-2 p-3 font-semibold items-center rounded-lg border-black">
+                    className="flex gap-4 border-2 p-3 font-semibold items-center rounded-lg border-black dark:border dark:border-white">
                     <input
                         id="fileInput"
                         type="file"
@@ -67,7 +69,7 @@ const PicUploadPopUpd = ({
                         style={{ display: 'none' }} // Hide the input field
                         onChange={handleFileChange}
                     />
-                    <BsUpload size={30} color="black" />
+                    <BsUpload size={30} color={darkModeEnabled ? 'white' : 'black'} />
                     uplod Image
                 </button>
             </div>

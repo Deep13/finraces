@@ -34,14 +34,14 @@ const Profile = () => {
 
   return (
     <>
-      {
+      {/* {
         uploadPopup &&
         <PicUploadPopUpd
           setImageUrl={setImageUrl}
           setImageIsLoading={setImageIsLoading}
           exit={setUploadPopup}
         />
-      }
+      } */}
       <div className='w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]'>
         {/* Ensure sidebar is inside a container with sufficient height */}
         <Sidebar />
@@ -52,7 +52,7 @@ const Profile = () => {
             <div className='flex gap-4 flex-wrap'>
               <div className=' overflow-hidden'>
                 <div className="relative w-[200px] overflow-hidden h-[15rem] rounded-lg group">
-                  <div className="absolute bg-black bg-opacity-30 place-items-center hidden group-hover:grid top-0 left-0 w-full h-full transition-all ease-in-out duration-200">
+                  {/* <div className="absolute bg-black bg-opacity-30 place-items-center hidden group-hover:grid top-0 left-0 w-full h-full transition-all ease-in-out duration-200">
                     <button
                       onClick={() => {
                         // upload or change profile pic
@@ -61,8 +61,8 @@ const Profile = () => {
                       className=" rounded-full text-sm font-bold px-2 py-1 text-white border-2 border-white">
                       Edit Profile Pic
                     </button>
-                  </div>
-                  {imageIsLoading && <div className="absolute bg-black bg-opacity-30 place-items-center grid top-0 left-0 w-full h-full transition-all ease-in-out duration-200">
+                  </div> */}
+                  {/* {imageIsLoading && <div className="absolute bg-black bg-opacity-30 place-items-center grid top-0 left-0 w-full h-full transition-all ease-in-out duration-200">
                     <Oval
                       visible={true}
                       height="35"
@@ -72,7 +72,7 @@ const Profile = () => {
                       wrapperStyle={{}}
                       wrapperClass=""
                     />
-                  </div>}
+                  </div>} */}
                   <img loading="lazy" className="w-full h-full object-cover" src={imageUrl} alt="" />
                   {/* <img className="z-[5]" src={golden_frame} alt="" /> */}
                 </div>
@@ -92,10 +92,10 @@ const Profile = () => {
                       <p className="font-semibold text-[0.9rem]">250 XP</p>
                     </div>
                   </div>
-                  <div className="flex gap-2 items-center">
+                  {/* <div className="flex gap-2 items-center">
                     <div className="rounded-full bg-green-700 w-2 h-2 dark:bg-green-500" />
                     <p className="font-bold text-[1rem] text-green-700 dark:text-green-500">Currently Online</p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className='flex flex-col gap-3'>
