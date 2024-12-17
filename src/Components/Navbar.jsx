@@ -22,10 +22,10 @@ import SimpleSwitch from "./Switch";
 
 const Navbar = () => {
 
-    const { darkModeEnabled, toggle } = useContext(DarkModeContext)
-    const [createRaceState, setCreateRaceState] = useState(false)
+    const { darkModeEnabled, toggle, createRace, setCreateRace } = useContext(DarkModeContext)
+    // const [createRaceState, setCreateRaceState] = useState(false)
     const [showForm, setShowForm] = useState(false)
-    const [darkMode, setDarkMode] = useState(darkModeEnabled)
+    // const [darkMode, setDarkMode] = useState(darkModeEnabled)
     // const { setCreateRaceState } = useContext(GlobalContext)
     const [dropdown, setDropdown] = useState(false)
     const [notificationToggle, setNotificationToggle] = useState(false)
@@ -33,7 +33,7 @@ const Navbar = () => {
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
     const userDetails = localStorage.getItem('userDetails')
-    const [userDetailsObject, setUserDetailsObject] = useState({})
+    const [userDetailsObject, setUserDetailsObject] = useState(null)
     const dropdownRef = useRef(null)
     const notificationRef = useRef(null)
     const thisLocation = useLocation()
@@ -88,7 +88,7 @@ const Navbar = () => {
 
     return (
         <>
-            {createRaceState && <CreateRace setCreateRace={setCreateRaceState} />}
+            {createRace && <CreateRace setCreateRace={setCreateRace} />}
             {showForm && <PopupForm closePopup={setShowForm} />}
             <AnimatePresence>
                 {search && <PopupSearch setPopupSearch={setSearch} />}
@@ -126,7 +126,7 @@ const Navbar = () => {
                                 // navigate('/auth')
                                 setShowForm(true)
                             }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
-                                Log in / Sign up
+                                Log in
                             </button> :
                             <>
                                 <button onClick={() => {
@@ -146,7 +146,7 @@ const Navbar = () => {
                             // navigate('/auth')
                             return
                         }
-                        setCreateRaceState(true)
+                        setCreateRace(true)
                     }} className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
                         Create Race
                         <IoIosAdd size={20} />
@@ -202,40 +202,42 @@ const Navbar = () => {
                     }} className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={globe} alt="Search" />
                     </div>
-                    <div onClick={() => {
-                        // set dropdown
-                        setDropdown(prev => !prev)
-                        setNotificationToggle(false)
-                    }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
-                        <p className="dark:text-white">{userDetailsObject.userName}</p>
-                        <div className="bg-white w-9 h-9 rounded-full overflow-hidden">
-                            <img className="w-full h-full object-cover" src={userDetailsObject?.photo?.path} alt="" />
+                    {
+                        userDetailsObject && <div onClick={() => {
+                            // set dropdown
+                            setDropdown(prev => !prev)
+                            setNotificationToggle(false)
+                        }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
+                            <p className="dark:text-white">{userDetailsObject.userName}</p>
+                            <div className="bg-white w-9 h-9 rounded-full overflow-hidden">
+                                <img className="w-full h-full object-cover" src={userDetailsObject?.photo?.path} alt="" />
+                            </div>
+                            <AnimatePresence>
+                                {dropdown && <motion.div
+                                    ref={dropdownRef}
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                                    className={`absolute top-16 bg-white rounded-lg right-0 w-[130%] overflow-hidden shadow-2xl dark:bg-[#002864]`}>
+                                    <button onClick={() => navigate('/profile')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear text-start dark:text-white dark:hover:bg-opacity-20">Profile</button>
+                                    <p onClick={() => navigate('/settings')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Settings</p>
+                                    <div className="flex gap-2 items-center hover:bg-slate-200 dark:hover:bg-opacity-20 px-3">
+                                        <button onClick={toggle} className='h-[2.35rem] w-full flex justify-between items-center gap-2 rounded-[8px]'>
+                                            <p className="dark:text-white">{!darkModeEnabled ? 'Dark Mode' : 'Light Mode'}</p>
+                                            {
+                                                !darkModeEnabled ?
+                                                    <BsMoon color="black" size={18} /> :
+                                                    <BsSunFill color="white" size={18} />
+                                            }
+                                        </button>
+                                        {/* <SimpleSwitch enabled={darkModeEnabled} onClick={toggle} /> */}
+                                    </div>
+                                    <p className="w-full p-3 dark:font-semibold hover:bg-red-500 hover:text-white transition-opacity duration-100 ease-linear dark:text-white">Log out</p>
+                                </motion.div>}
+                            </AnimatePresence>
                         </div>
-                        <AnimatePresence>
-                            {dropdown && <motion.div
-                                ref={dropdownRef}
-                                initial={{ opacity: 0, y: -10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                transition={{ duration: 0.2, ease: "easeInOut" }}
-                                className={`absolute top-16 bg-white rounded-lg right-0 w-[130%] overflow-hidden shadow-2xl dark:bg-[#002864]`}>
-                                <button onClick={() => navigate('/profile')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear text-start dark:text-white dark:hover:bg-opacity-20">Profile</button>
-                                <p onClick={() => navigate('/settings')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Settings</p>
-                                <div className="flex gap-2 items-center hover:bg-slate-200 dark:hover:bg-opacity-20 px-3">
-                                    <button onClick={toggle} className='h-[2.35rem] w-full flex justify-between items-center gap-2 rounded-[8px]'>
-                                        <p className="dark:text-white">{!darkModeEnabled ? 'Dark Mode' : 'Light Mode'}</p>
-                                        {
-                                            !darkModeEnabled ?
-                                                <BsMoon color="black" size={18} /> :
-                                                <BsSunFill color="white" size={18} />
-                                        }
-                                    </button>
-                                    {/* <SimpleSwitch enabled={darkModeEnabled} onClick={toggle} /> */}
-                                </div>
-                                <p className="w-full p-3 dark:font-semibold hover:bg-red-500 hover:text-white transition-opacity duration-100 ease-linear dark:text-white">Log out</p>
-                            </motion.div>}
-                        </AnimatePresence>
-                    </div>
+                    }
                 </div>
             </nav>
         </>

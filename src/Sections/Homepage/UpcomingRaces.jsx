@@ -32,7 +32,7 @@ const UpcomingRaces = () => {
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Upcoming Races</h2>
 
       {/* Tab layout */}
-      <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem]'>
+      {/* <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem]'>
         {["Tech Stocks", "Healthcare", "Energy", "Pharmaceuticals", "Automotive"].map((tab) => (
           <button
             key={tab}
@@ -43,7 +43,7 @@ const UpcomingRaces = () => {
             {tab}
           </button>
         ))}
-      </div>
+      </div> */}
 
       {/* Upcoming race cards */}
       <div className='gap-[1.76rem] grid grid-cols-1 md:grid-cols-2 w-full'>

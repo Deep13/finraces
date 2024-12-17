@@ -7,9 +7,9 @@ import { BiChevronRight } from "react-icons/bi";
 const KeyFeatures = () => {
   return (
     <div className='max-h-[1400px] relative mb-[5rem] md:mb-[3.29rem]'>
-      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
+      {/* <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
         See All <BiChevronRight size={18} />
-      </a>
+      </a> */}
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Key Features</h2>
       {/* info section  */}
       <div className="w-full gap-[22px] mb-[3.5rem]">

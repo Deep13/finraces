@@ -5,10 +5,12 @@ import cofeeman from '../../assets/images/cofeeman.png'
 import baggybro from '../../assets/images/baggybro.png'
 import gillbates2 from '../../assets/images/gillbates2.png'
 import kirayoshikage from '../../assets/images/kirayoshikage.png'
+import { useNavigate } from 'react-router-dom';
 
 
 const Leaderboard = () => {
 
+  const navigate = useNavigate()
 
   const leaderboardData = {
     "Tech Stocks": [
@@ -113,7 +115,7 @@ const Leaderboard = () => {
 
   return (
     <div className='max-w-[1400px] relative mb-[3.29rem]'>
-      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
+      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center cursor-pointer' onClick={() => navigate('/leaderboard')}>
         See All <BiChevronRight size={18} />
       </a>
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>LeaderBoard</h2>

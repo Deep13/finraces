@@ -178,7 +178,7 @@ const RacePage = () => {
             })
         }, 4000)
 
-        fetchParticipantData(race_id)
+        fetchParticipantData(race_id) // this is local
 
 
         fetchRaceData(race_id, (res) => {

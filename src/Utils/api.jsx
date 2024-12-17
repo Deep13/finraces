@@ -175,7 +175,7 @@ export const getRaceList = async (
 
     const responseData = await response.json()
     const data = await responseData.data
-    // console.log('racelist', data)
+    console.log('racelist', data)
     onSuccess(data)
 
   } catch (error) {

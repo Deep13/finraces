@@ -48,6 +48,10 @@ const UpcomingRaceCardHomepage = ({
         })
     };
 
+    let date = new Date(startDate)
+    let StartDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+
+
 
 
     return (
@@ -77,7 +81,7 @@ const UpcomingRaceCardHomepage = ({
                             hour: '2-digit',
                             minute: '2-digit'
                         })}</p>
-                        <p className='text-[12px] dark:text-white'>{new Date(startDate).toLocaleDateString()}</p>
+                        <p className='text-[12px] dark:text-white'>{StartDate}</p>
                     </div>
                 </div>
                 <div className='flex flex-col gap-[5px] mb-[14px]'>
