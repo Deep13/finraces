@@ -23,16 +23,16 @@ const usersData = [
 ];
 
 const racesData = [
-    { id: 1, raceId: "Race 101", stocks: "10 stocks", image: facebook },
-    { id: 2, raceId: "Race 102", stocks: "5 stocks", image: facebook },
-    { id: 3, raceId: "Race 103", stocks: "8 stocks", image: facebook },
-    { id: 4, raceId: "Race 104", stocks: "15 stocks", image: facebook },
-    { id: 5, raceId: "Race 105", stocks: "20 stocks", image: facebook },
-    { id: 6, raceId: "Race 106", stocks: "12 stocks", image: facebook },
-    { id: 7, raceId: "Race 107", stocks: "7 stocks", image: facebook },
-    { id: 8, raceId: "Race 108", stocks: "25 stocks", image: facebook },
-    { id: 9, raceId: "Race 109", stocks: "18 stocks", image: facebook },
-    { id: 10, raceId: "Race 110", stocks: "30 stocks", image: facebook },
+    { id: 1, name: "Race 101", stocks: "10 stocks", image: facebook },
+    { id: 2, name: "Race 102", stocks: "5 stocks", image: facebook },
+    { id: 3, name: "Race 103", stocks: "8 stocks", image: facebook },
+    { id: 4, name: "Race 104", stocks: "15 stocks", image: facebook },
+    { id: 5, name: "Race 105", stocks: "20 stocks", image: facebook },
+    { id: 6, name: "Race 106", stocks: "12 stocks", image: facebook },
+    { id: 7, name: "Race 107", stocks: "7 stocks", image: facebook },
+    { id: 8, name: "Race 108", stocks: "25 stocks", image: facebook },
+    { id: 9, name: "Race 109", stocks: "18 stocks", image: facebook },
+    { id: 10, name: "Race 110", stocks: "30 stocks", image: facebook },
 ];
 
 

@@ -1,35 +1,35 @@
-  // Data for each FAQ item
-  export const accordionData = [
+// Data for each FAQ item
+export const accordionData = [
     {
-        title: "Aliquam erat volutpat. Vestibulum efficitur risus?",
-        content: "Aliquam sit amet nisl volutpat, sollicitudin orci nec, sagittis risus."
+        title: "What is the purpose of this platform?",
+        content: "This platform is designed to recognize individuals with strong stock market knowledge and prediction skills. It helps build a community of traders who can showcase their expertise and compete in stock performance races."
     },
     {
-        title: "Aliquam erat volutpat. Vestibulum efficitur risus?",
-        content: "Aliquam sit amet nisl volutpat, sollicitudin orci nec, sagittis risus."
+        title: "How does the stock race work?",
+        content: "Participants predict the price of selected stocks. The stock performance is tracked, and users who make the most accurate predictions are ranked as top performers."
     },
     {
-        title: "Aliquam erat volutpat. Vestibulum efficitur risus?",
-        content: "Aliquam sit amet nisl volutpat, sollicitudin orci nec, sagittis risus."
+        title: "Who can participate in the stock race?",
+        content: "Anyone interested in the stock market can participate, whether they are beginners or experienced traders."
     },
     {
-        title: "Suspendisse potenti. Etiam venenatis metus?",
-        content: "Donec convallis lacus in libero finibus, ut interdum sapien lobortis."
+        title: "How is the winner determined?",
+        content: "Winners are determined based on the accuracy of their stock price predictions compared to the actual stock performance."
     },
     {
-        title: "Quisque ut nibh nec nulla viverra?",
-        content: "Pellentesque commodo ex nec dolor eleifend, id cursus erat convallis."
+        title: "Is the platform free to use?",
+        content: "Yes, the platform is free to join and participate in stock races."
     },
     {
-        title: "Quisque ut nibh nec nulla viverra?",
-        content: "Pellentesque commodo ex nec dolor eleifend, id cursus erat convallis."
+        title: "What benefits do top rankers get?",
+        content: "Top rankers gain recognition in the trading community for their stock market knowledge and prediction accuracy. This could help them build credibility as skilled traders."
     },
     {
-        title: "Quisque ut nibh nec nulla viverra?",
-        content: "Pellentesque commodo ex nec dolor eleifend, id cursus erat convallis."
+        title: "How often are the stock races held?",
+        content: "Stock races are held regularly. Participants can join new races as soon as they are announced on the platform."
     },
     {
-        title: "Quisque ut nibh nec nulla viverra?",
-        content: "Pellentesque commodo ex nec dolor eleifend, id cursus erat convallis."
-    },
+        title: "Can I track my progress over time?",
+        content: "Yes, the platform allows you to track your prediction performance and compare it with other participants."
+    }
 ];

@@ -9,6 +9,8 @@ import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 
 const GuestOrLoggedOutHero = () => {
     const { setCreateRace } = useContext(DarkModeContext)
+    const imageUrl = JSON.parse(atob(localStorage.getItem('userDetails')))
+    console.log("imageUrl", imageUrl)
     return (
         <>
             <div className='max-w-[1400px] dark:bg-gradient-to-l dark:from-[rgba(0,0,0,0.25)] dark:to-[#0a0d2b] h-auto py-[2.2rem] px-[2.52rem] hero-gradient mb-[3.3rem] grid md:grid-cols-2 gird-cols-1 rounded-lg dark:border dark:border-[#00387E]'>
@@ -30,11 +32,11 @@ const GuestOrLoggedOutHero = () => {
 
             <div className='max-w-[1400px] rounded-lg  mb-[3.3rem] flex gap-[2.8rem] justify-center flex-wrap'>
                 <div className='rounded-xl overflow-hidden w-[10rem]'>
-                    <img className='w-full h-full object-cover' src={Person} alt="" />
+                    <img className='w-full h-full object-cover' src={imageUrl.photo.path} alt="" />
                 </div>
 
                 <div className='bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-transparent dark:border dark:border-[#00387E] justify-center'>
-                    <p className="font-semibold text-[2rem] dark:text-white">Brut Macklin</p>
+                    <p className="font-semibold text-[2rem] dark:text-white">{imageUrl.userName}</p>
                     <div className="self-start flex gap-4">
                         {/* XP card here  */}
                         <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">

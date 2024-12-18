@@ -2,7 +2,39 @@ import React from 'react'
 import cardImage from '../../assets/images/card_video_image.png'
 import news_icon from '../../assets/images/news_icon.svg'
 import KeyFeaturesCard from '../../Components/KeyFeaturesCard'
-import { BiChevronRight } from "react-icons/bi";
+import stock1 from '../../assets/images/stock11.jpg'
+import stock1111 from '../../assets/images/stock1111.jpg'
+import crypto from '../../assets/images/crypto.jpg'
+
+const keyFeaturesData = [
+  {
+    id: 1,
+    cardImage: cardImage,
+    title: 'Simplified Workflows',
+    description: 'Discover how our system simplifies workflows with a step-by-step process designed for efficiency.'
+  },
+  {
+    id: 2,
+    cardImage: crypto,
+    title: 'Benefits of Automation',
+    description: 'Learn the key benefits of automation to save time and reduce errors in daily operations.'
+  },
+  {
+    id: 3,
+    cardImage: stock1,
+    title: 'Real-Time Monitoring',
+    description: 'Explore the advanced tools available for real-time monitoring and analytics.'
+  },
+  {
+    id: 4,
+    cardImage: stock1111,
+    title: 'Seamless Integration',
+    description: 'Gain insights on how to integrate our platform seamlessly into your existing systems.'
+  },
+];
+
+
+
 
 const KeyFeatures = () => {
   return (
@@ -59,10 +91,16 @@ const KeyFeatures = () => {
         <div className='grid grid-cols-2 md:grid-cols-4 gap-[36px] pb-[48px]'>
           {/* here will be the cards */}
           {/* card */}
-          <KeyFeaturesCard />
-          <KeyFeaturesCard />
-          <KeyFeaturesCard />
-          <KeyFeaturesCard />
+          {
+            keyFeaturesData.map(curr => (
+              <KeyFeaturesCard
+                key={curr.id}
+                title={curr.title}
+                cardImage={curr.cardImage}
+                description={curr.description}
+              />)
+            )
+          }
         </div>
       </div>
 
