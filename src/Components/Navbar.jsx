@@ -49,6 +49,9 @@ const Navbar = () => {
 
     useEffect(() => {
         const handleOutsideClick = (event) => {
+            if (event.target.id === 'profileButton' || event.target.id === 'profileButtonP' || event.target.id === 'profileButtonD' || event.target.id === 'profileButtonI') {
+                return
+            }
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setDropdown(false);
             }
@@ -66,24 +69,8 @@ const Navbar = () => {
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
-    }, [dropdown, notificationToggle]); useEffect(() => {
-        const handleOutsideClick = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setDropdown(false);
-            }
-            if (notificationRef.current && !notificationRef.current.contains(event.target)) {
-                setNotificationToggle(false);
-            }
-        };
-
-        if (dropdown || notificationToggle) {
-            document.addEventListener('mousedown', handleOutsideClick);
-        }
-
-        return () => {
-            document.removeEventListener('mousedown', handleOutsideClick);
-        };
     }, [dropdown, notificationToggle]);
+      
 
 
     return (
@@ -203,14 +190,16 @@ const Navbar = () => {
                         <img src={globe} alt="Search" />
                     </div>
                     {
-                        userDetailsObject && <div onClick={() => {
+                        userDetailsObject && <div id="profileButton" onClick={(e) => {
                             // set dropdown
+                            e.stopPropagation();
+                            // console.log(e.target.id)
                             setDropdown(prev => !prev)
                             setNotificationToggle(false)
                         }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
-                            <p className="dark:text-white">{userDetailsObject.userName}</p>
-                            <div className="bg-white w-9 h-9 rounded-full overflow-hidden">
-                                <img className="w-full h-full object-cover" src={userDetailsObject?.photo?.path} alt="" />
+                            <p id="profileButtonP" className="dark:text-white">{userDetailsObject.userName}</p>
+                            <div id="profileButtonD" className="bg-white w-9 h-9 rounded-full overflow-hidden">
+                                <img id="profileButtonI" className="w-full h-full object-cover" src={userDetailsObject?.photo?.path} alt="" />
                             </div>
                             <AnimatePresence>
                                 {dropdown && <motion.div
