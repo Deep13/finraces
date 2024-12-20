@@ -11,7 +11,9 @@ const YourBetsCard = ({
         if (!userDetails) {
             userDetails = localStorage.getItem('guest_details')
             if (!userDetails) {
-                throw new Error('There was nothing like userDetails here');
+                // throw new Error('There was nothing like userDetails here');
+                console.log('There was nothing like userDetails here');
+                return
             }
         }
         // console.log(JSON.parse(atob(userDetails)))
@@ -25,14 +27,14 @@ const YourBetsCard = ({
     //     findUserRank()
     // }, [])
     return (
-        <div className='p-4 dark:bg-[#002763] dark:border dark:border-[#00387E] rounded-[8px] flex justify-between gap-5'>
+        <div className='p-4 dark:bg-[#002763] dark:border dark:border-[#00387E] rounded-[8px] flex justify-between gap-5 '>
             <div className='flex flex-1 gap-2'>
                 <div className='rounded-full bg-white'>
                     {!imageUrl && <div className='w-12 h-12 bg-gradient-to-l rounded-full from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center'>{stockName.substring(0, 2)}</div>}
                     {imageUrl && <img className='w-12 h-12 bg-white object-cover rounded-full' src={imageUrl} alt="" />}
                 </div>
-                <div className='flex flex-col justify-center items-start'>
-                    <p className='text-[0.8rem] font-semibold dark:text-white line-clamp-2'>{stockName}</p>
+                <div className='flex flex-col justify-center items-start line-clamp-3 w-[50%]'>
+                    <p className='text-[0.7rem] font-semibold dark:text-white line-clamp-2'>{stockName}</p>
                 </div>
             </div>
             <div className='flex flex-col items-center'>

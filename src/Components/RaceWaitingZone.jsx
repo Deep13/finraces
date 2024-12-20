@@ -48,7 +48,7 @@ const RaceWaitingZone = ({
                     exit={{
                         opacity: 0
                     }}
-                    className='fixed top-0 left-0 w-full h-screen py-[3%] backdrop-blur-md z-[25] grid place-items-center'>
+                    className='fixed top-0 left-0 w-full h-screen py-[3%] backdrop-blur-md z-[100] grid place-items-center'>
                     <motion.div
                         initial={{
                             y: 120,
@@ -62,7 +62,7 @@ const RaceWaitingZone = ({
                             duration: 0.4,
                             ease: 'easeInOut'
                         }}
-                        className='bg-white rounded-md h-full py-[2rem] flex flex-col items-center px-[5rem] z-[30] shadow-lg relative'>
+                        className='bg-white rounded-md h-full py-[2rem] flex flex-col items-center px-[5rem] w-[25rem] shadow-lg relative'>
                         {isTimerFinished && <button onClick={closeCard} className="absolute top-8 right-8"><RxCross2 size={25} /></button>}
                         <h2 className='font-semibold text-[1.5rem] mb-[0.5rem]'>Race Name</h2>
                         <p className='font-medium text-[1rem] text-[#919191] mb-[1rem]'>{status}</p>

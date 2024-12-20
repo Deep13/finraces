@@ -362,8 +362,8 @@ const CreateRace = ({
           <p className="font-semibold mt-12 mb-4 dark:text-white">Add Stocks <span className="text-[#838386]">(upto 10)</span></p>
           <div className="flex mb-8 w-full justify-between items-end">
             <div className="flex flex-col flex-1 gap-[10px] items-baseline">
-              <label className="mb-[10px] dark:text-white" htmlFor="percentage_toogle">Value type </label>
-              <SegmentedControl
+              {/* <label className="mb-[10px] dark:text-white" htmlFor="percentage_toogle">Value type </label> */}
+              {/* <SegmentedControl
                 name="group-2"
                 callback={(val) => setpercentValue(val)}
                 controlRef={useRef()}
@@ -379,7 +379,7 @@ const CreateRace = ({
                     ref: useRef()
                   }
                 ]}
-              />
+              /> */}
             </div>
           </div>
 

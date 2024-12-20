@@ -161,11 +161,11 @@ export const getRaceList = async (
 
   let token = localStorage.getItem('token')
   try {
-    const response = await fetch(`https://www.missionatal.com/api/v1/races?limit=10&statuses=${status}`, {
+    const response = await fetch(`https://www.missionatal.com/api/v1/public/races?limit=10&statuses=${status}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        // 'Authorization': `Bearer ${token}`,
       },
     });
 

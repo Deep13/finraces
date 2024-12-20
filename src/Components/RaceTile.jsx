@@ -60,7 +60,7 @@ const RaceTile = ({
                     :
                     sortedStockRankList?.map((curr, index) => {
                         // console.log(`This is ${index} color: ${colors[index]}`)
-                        let imageUrl = stocksData[Object.keys(stocksData).find(element => element === curr.stock_id)]?.icon_url
+                        let imageUrl = stocksData ? stocksData[Object.keys(stocksData)?.find(element => element === curr.stock_id)]?.icon_url : null
                         // console.log(imageUrl)
                         return (
                             <div

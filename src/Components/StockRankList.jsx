@@ -19,30 +19,35 @@ const StockRankList = ({
         <Carousel
             opts={{
                 align: "start",
+                slidesToShow: 3, // Ensure 3 items per slide
+                infinite: true,
+                autoplay: true,
+                autoplaySpeed: 3000,
             }}
             className="w-full">
-            <CarouselContent className='ml-2'>
+            <CarouselContent className=''>
                 {
                     stockRankList ?
                         stockRankList?.map((curr, index) => {
-                            let stock = stocksData[Object.keys(stocksData).find(element => element === curr.stock_id)]
-                            let imageUrl = stock.icon_url
-                            let name = stock.name
+                            let stock = stocksData ? stocksData[Object.keys(stocksData).find(element => element === curr.stock_id)] : null
+                            let imageUrl = stock?.icon_url
+                            let name = stock?.name
                             // console.log(stock)
                             return (
-                                <CarouselItem
+                                // <CarouselItem
+                                //     key={curr.stock_id}
+                                // >
+                                <StockPriceCard
                                     key={curr.stock_id}
-                                >
-                                    <StockPriceCard
-                                        stockName={name}
-                                        tickerName={curr.stock_name}
-                                        rank={index + 1}
-                                        percentChange={curr.percent_change}
-                                        stockId={curr.stock_id}
-                                        stockLastRate={curr.stock_last_rate}
-                                        imageUrl={imageUrl}
-                                    />
-                                </CarouselItem>
+                                    stockName={name}
+                                    tickerName={curr.stock_name}
+                                    rank={index + 1}
+                                    percentChange={curr.percent_change}
+                                    stockId={curr.stock_id}
+                                    stockLastRate={curr.stock_last_rate}
+                                    imageUrl={imageUrl}
+                                />
+                                // </CarouselItem>
                             )
                         }) :
                         <ColorRing

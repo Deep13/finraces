@@ -161,13 +161,79 @@ input[type='password'] {
   left: 0;
   z-index: 0;
 }
+.segment {
+  /* width: 100%; uncomment for each segment to have matching width */
+  min-width: 120px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+  background-color: transparent;
+  border-color: #00387E;
+}
+
+.segment label {
+  cursor: pointer;
+  display: block;
+  /* font-weight: 700; */
+  padding: 10px;
+  font-size: 16px;
+  transition: color 0.5s ease;
+}
+
+.segment.active label {
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.controls::before {
+  content: "";
+  background: #e4eaf0;
+  border-radius: 8px;
+  width: var(--highlight-width);
+  transform: translateX(var(--highlight-x-pos));
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  z-index: 0;
+}
+.segment-dark {
+  /* width: 100%; uncomment for each segment to have matching width */
+  min-width: 120px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+  background-color: transparent;
+  border-color: #00387E;
+}
+
+.segment-dark label {
+  cursor: pointer;
+  display: block;
+  /* font-weight: 700; */
+  padding: 10px;
+  font-size: 16px;
+  transition: color 0.5s ease;
+}
+
+.segment-.dark.active label {
+  /* color: ; */
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+
+
+
+
+
 
 /* Only allow transitions once component is ready */
 .controls.ready::before {
   transition: transform 0.3s ease, width 0.3s ease;
 }
 
-.cont input {}
 
 
 .custom-scrollbar {

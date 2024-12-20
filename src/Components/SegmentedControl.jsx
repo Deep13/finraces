@@ -1,11 +1,9 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import { DarkModeContext } from "../Contexts/DarkModeProvider";
 // import "./styles.css";
-import useDarkMode from "../Utils/DarkMode";
 
-/*
- * Read the blog post here:
- * https://letsbuildui.dev/articles/building-a-segmented-control-component
- */
+
+
 const SegmentedControl = ({
   name,
   segments,
@@ -15,7 +13,7 @@ const SegmentedControl = ({
 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex);
   const componentReady = useRef();
-  const { darkModeEnabled } = useDarkMode()
+  const { darkModeEnabled } = useContext(DarkModeContext)
 
   // Determine when the component is "ready"
   useEffect(() => {
@@ -38,11 +36,11 @@ const SegmentedControl = ({
 
   return (
     <div ref={controlRef}>
-      <div className={`controls ${componentReady.current ? "ready" : "idle"}`}>
+      <div className={`controls dakrk:controls-dark ${componentReady.current ? "ready" : "idle"}`}>
         {segments?.map((item, i) => (
           <div
             key={item.value}
-            className={`segment ${i === activeIndex ? "active" : "inactive"}`}
+            className={`segment dark:dark-segment ${i === activeIndex ? "active" : "inactive"}`}
             ref={item.ref}
           >
             <input
