@@ -297,9 +297,9 @@ const CreateRace = ({
                 value={raceDetails.end_date}
                 onChange={e => handleRaceDetails('end_date', e.target.value)}
                 className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date"
-                min={today}
+                min={raceDetails.start_date || today}
               />
-              {!validation.end_date && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Start Date should be less than End Date</p>}
+              {!validation.end_date && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>End Date must be greater than or equal to Start Date</p>}
             </div>
             <div className="flex flex-col flex-1">
               <label className="mb-[10px] dark:text-white" htmlFor="race-end-time">End Time</label>

@@ -2,18 +2,22 @@ import { HiOutlineChevronDown } from "react-icons/hi";
 import React, { useContext } from 'react'
 import Person from '../assets/images/person2.png'
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
+import { useNavigate } from "react-router-dom";
 
 const FriendCard = ({
     name,
-    id,
+    id = 87451,
     role,
     image
 }) => {
 
     const { darkModeEnabled } = useContext(DarkModeContext)
+    const navigate = useNavigate()
 
     return (
-        <div className='p-[10px] rounded-[20px] h-[4.2rem] justify-between w-[17rem] bg-slate-200 dark:bg-[#002763] flex shadow-lg dark:shadow-none items-center gap-[20px]'>
+        <div onClick={() => {
+            navigate(`/userprofile/${id}`)
+        }} className='p-[10px] cursor-pointer rounded-[20px] h-[4.2rem] justify-between w-[17rem] bg-slate-200 dark:bg-[#002763] flex shadow-lg dark:shadow-none items-center gap-[20px]'>
             <div className="flex gap-3">
                 <div className='h-full w-12 rounded-xl overflow-hidden'>
                     <img className='w-full h-full object-cover' src={image} alt="" />
@@ -23,7 +27,7 @@ const FriendCard = ({
                     <p className='text-[0.9rem] font-semibold dark:text-white'>{role}</p>
                 </div>
             </div>
-            <HiOutlineChevronDown size={24} color={darkModeEnabled ? 'white' : 'black'} />
+            {/* <HiOutlineChevronDown size={24} color={darkModeEnabled ? 'white' : 'black'} /> */}
         </div>
     )
 }

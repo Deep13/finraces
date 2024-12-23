@@ -161,7 +161,7 @@ export const getRaceList = async (
 
   let token = localStorage.getItem('token')
   try {
-    const response = await fetch(`https://www.missionatal.com/api/v1/public/races?limit=10&statuses=${status}`, {
+    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/detailed?limit=10&statuses=${status}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -194,11 +194,11 @@ export const fetchRaceData = async ( // change this to the updated api
     const token = localStorage.getItem('token')
     if (!token) throw new Error('Authentication token is missing. Please log in.');
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/races/${raceId}`, {
+    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/${raceId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        // 'Authorization': `Bearer ${token}`
       }
     })
     const thisData = await response.json()
@@ -222,14 +222,14 @@ export const fetchParticipantsData = async (
   onError = () => { },
 ) => {
   try {
-    const token = localStorage.getItem('token')
-    if (!token) throw new Error('Authentication token is missing. Please log in.');
+    // const token = localStorage.getItem('token')
+    // if (!token) throw new Error('Authentication token is missing. Please log in.');
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/races/${raceId}/details`, {
+    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/${raceId}/details`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        // 'Authorization': `Bearer ${token}`
       }
     })
     const thisData = await response.json()
@@ -465,11 +465,11 @@ export const getRaceResults = async (race_id, onSuccess, onError) => {
       throw new Error("Authorization token not found in localStorage");
     }
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/race-result-data/race/${race_id}`, {
+    const response = await fetch(`https://www.missionatal.com/api/v1/public/race-result-data/race/${race_id}`, {
       method: "GET", // Adjust the method if needed (e.g., POST, PUT, DELETE)
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
       },
     });
 

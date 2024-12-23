@@ -5,7 +5,7 @@ import JoinRace from './JoinRace'
 import { motion } from 'motion/react'
 
 const UpcomingRaceCardHomepage = ({
-    raceName,
+    raceName = "An Arbitrary Race",
     participants = 4,
     raceId,
     startDate,
@@ -15,6 +15,8 @@ const UpcomingRaceCardHomepage = ({
 
     const navigate = useNavigate()
     const [joinRaceFormVisible, setJoinRaceFormVisible] = useState(false)
+    const userDetails = localStorage.getItem('userDetails')
+    const guestDetails = localStorage.getItem('guest_details')
 
     function calculateDuration(start_date, end_date) {
         // Parse the start and end dates
@@ -93,13 +95,17 @@ const UpcomingRaceCardHomepage = ({
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
             </p> */}
             <div className='flex gap-[20px] justify-self-end'>
-                <button
+                {(userDetails || guestDetails) && <button
                     // onClick={() => navigate(`/race/${raceId}`)} 
                     onClick={() => setJoinRaceFormVisible(true)}
-                    className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>Join</button>
-                {/* <button className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black'>View Details</button> */}
+                    className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>
+                    Join
+                </button>}
+                {/* <button
+                    onClick={() => navigate(`/race/${raceId}`)}
+                    className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>Watch Race</button> */}
             </div>
-        </motion.div>
+        </motion.div >
     )
 }
 

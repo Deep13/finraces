@@ -36,7 +36,7 @@ const SegmentedControl = ({
 
   return (
     <div ref={controlRef}>
-      <div className={`controls dakrk:controls-dark ${componentReady.current ? "ready" : "idle"}`}>
+      <div className={`controls ${componentReady.current ? "ready" : "idle"}`}>
         {segments?.map((item, i) => (
           <div
             key={item.value}

@@ -6,9 +6,11 @@ import diamond from '../../assets/images/diamondIcon.svg'
 import { FiArrowUpRight } from 'react-icons/fi'
 import StockWatchlistCard from '../../Components/StockWatchlistCard'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
+import { useNavigate } from 'react-router-dom'
 
 const GuestOrLoggedOutHero = () => {
     const { setCreateRace } = useContext(DarkModeContext)
+    const navigate = useNavigate()
     const imageUrl = JSON.parse(atob(localStorage.getItem('userDetails')))
     console.log("imageUrl", imageUrl)
     return (
@@ -20,7 +22,7 @@ const GuestOrLoggedOutHero = () => {
                     {/* <p className='text-[0.94rem] mb-[1.6rem] pr-[8rem] dark:text-white'>We provide you with the best prices, the highest quality most reliable supors.</p> */}
                     <div className='flex gap-4'>
                         <button onClick={() => setCreateRace(true)} className='w-[8.9rem] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-black bg-[#e5f4ff] rounded-[33px]'>Create Race</button>
-                        <button className='w-[8.9rem] bg-transparent dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-[#00387E] bg-[#e5f4ff] rounded-[33px]'>Join Race</button>
+                        <button onClick={() => navigate('/allraces', { state: "Upcoming Races" })} className='w-[8.9rem] bg-transparent dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-[#00387E] bg-[#e5f4ff] rounded-[33px]'>Join Race</button>
                     </div>
                 </div>
 
@@ -30,8 +32,8 @@ const GuestOrLoggedOutHero = () => {
             </div>
 
 
-            <div className='max-w-[1400px] rounded-lg  mb-[3.3rem] flex gap-[2.8rem] justify-center flex-wrap'>
-                <div className='rounded-xl overflow-hidden w-[10rem]'>
+            <div className='max-w-[1400px] rounded-lg  mb-[3.3rem] flex gap-[2.8rem] justify-start flex-wrap items-center'>
+                <div className='rounded-xl overflow-hidden h-[10rem] w-[10rem]'>
                     <img className='w-full h-full object-cover' src={imageUrl.photo.path} alt="" />
                 </div>
 
@@ -56,7 +58,7 @@ const GuestOrLoggedOutHero = () => {
                     {/* <div className='h-full'>
                         <img src={diamond} alt="" />
                     </div> */}
-                    <div className='flex flex-col gap-[8px] py-4'>
+                    <div className='flex flex-col gap-[8px]'>
                         <p className='text-[1rem] dark:text-[#D1D1D1]'>Last Race</p>
                         <p className='text-[1.5rem] dark:text-white font-bold'>1st google</p>
                         <div className='flex font-semibold gap-2 rounded-full bg-[#6BEBA4] bg-opacity-20  justify-start self-start items-center px-2 py-1'>
@@ -66,7 +68,7 @@ const GuestOrLoggedOutHero = () => {
                     </div>
                 </div>
 
-                <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center">
+                <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start">
                     <div className='h-full'>
                         <img src={diamond} alt="" />
                     </div>
@@ -84,7 +86,7 @@ const GuestOrLoggedOutHero = () => {
 
             <div className='mb-[3.3rem] max-w-[1400px]'>
                 <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Your Watchlist</h2>
-                <div className='w-full flex gap-[10px] justify-center flex-wrap'>
+                <div className='w-full flex gap-[10px] justify-start flex-wrap'>
                     <StockWatchlistCard />
                     <StockWatchlistCard />
                     <StockWatchlistCard />

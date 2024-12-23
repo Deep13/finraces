@@ -8,6 +8,7 @@ import UserProfile from '../Sections/Profile/UserProfile'
 import Friends from '../Sections/Profile/Friends'
 import EditProfile from '../Sections/Profile/EditProfile'
 import { useNavigate } from 'react-router-dom';
+import graphrate from '../../src/assets/images/graphrate.svg'
 
 const superTabsStrings = {
   Profile: 'Profile',
@@ -34,6 +35,7 @@ const Profile = () => {
       setImageUrl(data?.photo?.path)
       setTimeout(() => setImageIsLoading(false), 4000)
     })
+    window.scrollTo(0, 0);
   }, [])
 
   return (
@@ -55,7 +57,7 @@ const Profile = () => {
             {/* profile picture and buttons  */}
             <div className='flex gap-4 flex-wrap'>
               <div className=' overflow-hidden'>
-                <div className="relative w-[200px] overflow-hidden h-[15rem] rounded-lg group">
+                <div className="relative overflow-hidden h-[14rem] w-[14rem] rounded-lg group aspect-square">
                   {/* <div className="absolute bg-black bg-opacity-30 place-items-center hidden group-hover:grid top-0 left-0 w-full h-full transition-all ease-in-out duration-200">
                     <button
                       onClick={() => {
@@ -104,7 +106,7 @@ const Profile = () => {
               </div>
               <div className='flex flex-col gap-3'>
                 <button onClick={() => setSuperTabs(superTabsStrings.Profile)} className={superTabs === superTabsStrings.Profile ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Profile</button>
-                <button onClick={() => setSuperTabs(superTabsStrings.Friends)} className={superTabs === superTabsStrings.Friends ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Firends</button>
+                <button onClick={() => setSuperTabs(superTabsStrings.Friends)} className={superTabs === superTabsStrings.Friends ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Friends</button>
                 <button onClick={() => navigate('/settings')} className={superTabs === superTabsStrings.EditProfile ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'}>Edit Profile</button>
                 <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'>Log out</button>
               </div>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Hero from '../Sections/Homepage/Hero'
 import OngoingRaces from '../Sections/Homepage/OngoingRaces'
 import Leaderboard from '../Sections/Homepage/Leaderboard'
@@ -14,6 +14,7 @@ const Home = () => {
 
 
   const userDetails = localStorage.getItem('userDetails')
+
 
   return (
     <motion.div

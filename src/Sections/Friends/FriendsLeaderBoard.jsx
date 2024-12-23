@@ -2,8 +2,13 @@ import React from 'react';
 import Person from '../../assets/images/person2.png';
 import person2 from '../../assets/images/kirayoshikage.png';
 import person3 from '../../assets/images/person3.png';
+import { useNavigate } from 'react-router-dom';
+import Pagination from '../../Components/Pagination';
 
 const FriendsLeaderBoard = () => {
+
+  const navigate = useNavigate()
+
   return (
     <div className="dark:text-white w-full h-full">
       <div className="w-full flex justify-between items-center mb-3">
@@ -26,7 +31,7 @@ const FriendsLeaderBoard = () => {
               <tr className="odd:bg-transparent even:bg-[#00276]">
                 <th className="text-[1.5rem] py-3">1</th>
                 <td className="py-3">
-                  <div className="w-full flex gap-3 justify-start items-center">
+                  <div onClick={() => navigate(`/userprofile/1`)} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                     {/* image */}
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                       <img className="w-full h-full object-cover" src={Person} alt="" />
@@ -46,7 +51,7 @@ const FriendsLeaderBoard = () => {
               <tr className="odd:bg-transparent even:bg-[#00276]">
                 <th className="text-[1.5rem] py-3">2</th>
                 <td className="py-3">
-                  <div className="w-full flex gap-3 justify-start items-center">
+                  <div onClick={() => navigate(`/userprofile/1`)} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                     {/* image */}
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                       <img className="w-full h-full object-cover" src={person2} alt="" />
@@ -66,7 +71,7 @@ const FriendsLeaderBoard = () => {
               <tr className="odd:bg-transparent even:bg-[#00276]">
                 <th className="text-[1.5rem] py-3">3</th>
                 <td className="py-3">
-                  <div className="w-full flex gap-3 justify-start items-center">
+                  <div onClick={() => navigate(`/userprofile/1`)} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                     {/* image */}
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                       <img className="w-full h-full object-cover" src={person3} alt="" />
@@ -83,6 +88,7 @@ const FriendsLeaderBoard = () => {
               </tr>
             </tbody>
           </table>
+          <Pagination currentPage={2} totalPages={10} onPageChange={() => { }} />
         </div>
       </div>
     </div>

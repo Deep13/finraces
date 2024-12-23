@@ -9,6 +9,7 @@ import { getUserDetails } from '../../Utils/api'
 const AccountManagement = () => {
 
     const [imageUrl, setImageUrl] = useState('')
+    const [userName, setUserName] = useState('')
     const [uploadPopup, setUploadPopup] = useState(false)
     const [imageIsLoading, setImageIsLoading] = useState(false)
 
@@ -16,6 +17,7 @@ const AccountManagement = () => {
         setImageIsLoading(true)
         getUserDetails((data) => {
             setImageUrl(data?.photo?.path)
+            setUserName(data?.firstName + " " + data?.lastName)
             setTimeout(() => setImageIsLoading(false), 3000)
         })
 
@@ -64,7 +66,8 @@ const AccountManagement = () => {
                         <h4 className='dark:text-white font-bold text-[1.1rem] mb-4'>General</h4>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="username" className='dark:text-white'>User Name</label>
-                            <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' />
+                            {/* <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' /> */}
+                            <p className='font-semibold text-lg'>{userName}</p>
                         </div>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="profilename" className='dark:text-white'>Profile Name</label>
@@ -106,12 +109,13 @@ const AccountManagement = () => {
                         </div>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="profilename" className='dark:text-white'>Password</label>
-                            <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' />
+                            <button className="bg-[#e4eaf0] self-start dark:bg-transparent border border-black dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">Change Password</button>
+                            {/* <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' /> */}
                         </div>
                     </div>
                 </div>
 
-                <div className='dark:bg-[#002763] bg-slate-200 rounded-[12px] py-[10px] px-[20px] flex-1'>
+                {/* <div className='dark:bg-[#002763] bg-slate-200 rounded-[12px] py-[10px] px-[20px] flex-1'>
                     <h4 className='dark:text-white font-bold text-[1.1rem] mb-4'>Accounts</h4>
                     <div className='flex gap-[4rem]'>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
@@ -123,7 +127,7 @@ const AccountManagement = () => {
                             <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' />
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
         </>
     )

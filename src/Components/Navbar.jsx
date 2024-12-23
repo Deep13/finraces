@@ -55,9 +55,6 @@ const Navbar = () => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
                 setDropdown(false);
             }
-            if (notificationToggle && !notificationRef.current.contains(event.target)) {
-                setNotificationToggle(false);
-            }
         };
 
         if (dropdown) {
@@ -69,8 +66,27 @@ const Navbar = () => {
         return () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
-    }, [dropdown, notificationToggle]);
-      
+    }, [dropdown]);
+
+    useEffect(() => {
+        const handleOutsideClick = (event) => {
+            event.stopPropagation()
+            if (notificationToggle && !notificationRef.current.contains(event.target)) {
+                setNotificationToggle(false);
+            }
+        };
+
+        if (notificationToggle) {
+            document.addEventListener('mousedown', handleOutsideClick);
+        } else {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleOutsideClick);
+        };
+    }, [notificationToggle])
+
 
 
     return (
@@ -121,7 +137,7 @@ const Navbar = () => {
                                     localStorage.removeItem('refreshToken')
                                     localStorage.removeItem('userDetails')
                                     navigate('/auth')
-                                }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
+                                }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[0.5rem] md:px-[1.5rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
                                     Log out
                                 </button>
                             </>
@@ -134,7 +150,7 @@ const Navbar = () => {
                             return
                         }
                         setCreateRace(true)
-                    }} className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
+                    }} className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
                         Create Race
                         <IoIosAdd size={20} />
                     </button>
@@ -143,7 +159,7 @@ const Navbar = () => {
                     </button>
                     <div onClick={() => {
                         setNotificationToggle(prev => !prev)
-                        setDropdown(false)
+                        // setDropdown(false)
                     }} role="button" className={`aspect-square ${notificationToggle && 'dark:bg-opacity-25'} dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px] relative cursor-pointer`}>
                         <FaRegBell color={darkModeEnabled ? 'white' : 'black'} size={18} />
                         <AnimatePresence>
@@ -178,7 +194,7 @@ const Navbar = () => {
                             </motion.div>}
                         </AnimatePresence>
                     </div>
-                    <div onClick={() => {
+                    {/* <div onClick={() => {
                         let userDetails = localStorage.getItem('userDetails')
                         if (!userDetails) {
                             // alert('first create a profile')
@@ -188,7 +204,7 @@ const Navbar = () => {
                         navigate('/profile')
                     }} className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={globe} alt="Search" />
-                    </div>
+                    </div> */}
                     {
                         userDetailsObject && <div id="profileButton" onClick={(e) => {
                             // set dropdown

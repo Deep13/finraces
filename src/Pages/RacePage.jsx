@@ -83,6 +83,7 @@ const RacePage = () => {
         fetchParticipantsData(id, (data) => {
             // console.log("Race Participants data", data)
             // setRaceUsersData(data.participants)
+            setisLoading(false)
             let obj = {}
             let arr = []
             console.log(window.location.origin)
@@ -222,6 +223,7 @@ const RacePage = () => {
 
         // console.log('animation box width', box.current ? box.current.offsetWidth : 'no width is displayed')
 
+        window.scrollTo(0, 0);
         return () => {
             clearInterval(interval)
         }
@@ -401,7 +403,7 @@ const RacePage = () => {
                                     />}
                                 </div>
                                 <div className='h-full flex flex-col justify-between items-end'>
-                                    <h3 className='text-[1.05rem] font-bold dark:text-white'>{participantsCount} Participants </h3>
+                                    <h3 className='text-[1.05rem] font-bold dark:text-white flex gap-1'>{participantsCount} <span>{participantsCount === 1 ? 'Participant' : "Participants"}</span> </h3>
                                     {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
                                 </div>
                             </div>
@@ -409,7 +411,7 @@ const RacePage = () => {
                             {/* top 3 users  */}
                             <div className="flex-1 flex justify-center items-center gap-[2rem] mb-[20px]">
                                 <div className="flex justify-center flex-col items-center">
-                                    <div>
+                                    <div className="z-[10]">
                                         <img src={silver_king_crown} alt="" />
                                         <div className="flex justify-center items-center">
                                             <img src={Polygon7} alt="" />
@@ -448,7 +450,7 @@ const RacePage = () => {
                                 </div>
 
                                 <div className="flex justify-center flex-col items-center">
-                                    <div>
+                                    <div className="z-[10]">
                                         <img src={bronze_king_crown} alt="" />
                                         <div className="flex justify-center items-center">
                                             <img src={Polygon7} alt="" />
@@ -469,21 +471,21 @@ const RacePage = () => {
 
                             <div className="flex-1 flex justify-center items-end gap-[2rem]">
 
-                                <div className={`w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
+                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>
                                     </div>
                                     <p className="font-medium text-4">WR: -</p>
                                 </div>
-                                <div className={`w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
+                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[3rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>
                                     </div>
                                     <p className="font-medium text-4">WR: -</p>
                                 </div>
-                                <div className={`w-[10rem] flex flex-col pt-[8px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
+                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                     <div className="gap-[4px] flex mb-[0.7rem]">
                                         <img src={diamond} alt="" />
                                         <p className="text-[12px] font-medium">1500</p>

@@ -3,6 +3,15 @@ import badges from '../../assets/images/badges.png'
 import diamond from '../../assets/images/diamondIcon.svg'
 import { FiArrowUpRight } from "react-icons/fi";
 import Person from '../../assets/images/person2.png'
+import redbadge from '../../assets/images/redbadge.png'
+import goldbadge from '../../assets/images/goldbadge.png'
+import badgegiftpurple from '../../assets/images/badgegiftpurple.png'
+import badgegiftred from '../../assets/images/badgegiftred.png'
+import badgegiftsilver from '../../assets/images/badgegiftsilver.png'
+import badgemountain from '../../assets/images/badgemountain.png'
+import graphrate_second from '../../assets/images/graph.png'
+
+
 
 
 const UserProfile = () => {
@@ -10,30 +19,30 @@ const UserProfile = () => {
     const dummyData = [
         {
             "race_id": "R001",
-            "image": Person,
-            "product_name": "Running Shoes",
-            "price": 79.99,
-            "total_sales": 1500,
-            "stock": 35,
-            "status": "In Stock"
+            // "image": Person,
+            "race_name": "Bulls Run",
+            "total_points": 79.99,
+            "total_stocks": 1500,
+            "your_ranking": 35,
+            "status": "upcoming"
         },
         {
             "race_id": "R002",
-            "image": Person,
-            "product_name": "Fitness Tracker",
-            "price": 59.99,
-            "total_sales": 1200,
-            "stock": 10,
-            "status": "Out of Stock"
+            // "image": Person,
+            "race_name": "Market Fit",
+            "total_points": 59.99,
+            "total_stocks": 1200,
+            "your_ranking": 10,
+            "status": "running"
         },
         {
             "race_id": "R003",
-            "image": Person,
-            "product_name": "Wireless Earbuds",
-            "price": 49.99,
-            "total_sales": 800,
-            "stock": 25,
-            "status": "In Stock"
+            // "image": Person,
+            "race_name": "Nasdaq kings",
+            "total_points": 49.99,
+            "total_stocks": 800,
+            "your_ranking": 25,
+            "status": "finished"
         }
     ]
 
@@ -65,8 +74,8 @@ const UserProfile = () => {
                                 <p className="text-green-600">1.8%</p>
                             </div>
                         </div>
-                        <div className='h-full'>
-                            <img src={diamond} alt="" />
+                        <div className='h-full z-10'>
+                            <img src={graphrate_second} alt="" />
                         </div>
                     </div>
 
@@ -87,8 +96,25 @@ const UserProfile = () => {
                 </div>
                 <div className='col-span-2 bg-white rounded-lg p-[1.5rem] flex justify-center items-center flex-col dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white'>
                     <p className="mb-[8px] text-[1rem] self-start">Achievements</p>
-                    <div>
-                        <img src={badges} alt="" />
+                    <div className='w-full h-full flex justify-between flex-wrap'>
+                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                            <img className='w-full h-full object-cover' src={redbadge} alt="" />
+                        </div>
+                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                            <img className='w-full h-full object-cover' src={goldbadge} alt="" />
+                        </div>
+                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                            <img className='w-full h-full object-cover' src={badgemountain} alt="" />
+                        </div>
+                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                            <img className='w-full h-full object-cover' src={badgegiftpurple} alt="" />
+                        </div>
+                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                            <img className='w-full h-full object-cover' src={badgegiftred} alt="" />
+                        </div>
+                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                            <img className='w-full h-full object-cover' src={badgegiftsilver} alt="" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -101,12 +127,12 @@ const UserProfile = () => {
                     <thead>
                         <tr>
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Race ID</th>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Image</th>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Product </th>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Price</th>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Total Sales</th>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Stock</th>
+                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Race Name</th>
+                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Total Points</th>
+                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Total Stocks</th>
+                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Your Ranking</th>
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th>
+                            {/* <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th> */}
                         </tr>
                     </thead>
                     <tbody>
@@ -117,18 +143,35 @@ const UserProfile = () => {
                                 return (
                                     <tr key={index} className="odd:bg-transparent even:bg-[#00276] pb-2 dark:border-b">
                                         <th className="py-3">{curr.race_id}</th>
-                                        <td className="py-3">
+                                        {/* <td className="py-3">
                                             <div className='w-14 h-14 rounded-xl overflow-hidden'>
                                                 <img className='w-full h-full object-cover' src={Person} alt="" />
                                             </div>
-                                        </td>
-                                        <td className="text-[1.1rem] py-3">{curr.product_name}</td>
-                                        <td className="text-[1.1rem] py-3">{curr.price}</td>
-                                        <td className="text-[1.1rem] py-3">{curr.total_sales}</td>
-                                        <td className="text-[1.1rem] py-3">{curr.stock}</td>
-                                        <td className="text-[1.1rem] py-3 flex justify-start items-center">
-                                            <div className='text-green-600 bg-opacity-25 font-medium self-start bg-green-600 border-green-700 border px-2 rounded-full'>
-                                                WIN
+                                        </td> */}
+                                        <td className="text-[1.1rem] py-3">{curr.race_name}</td>
+                                        <td className="text-[1.1rem] py-3">{curr.total_points}</td>
+                                        <td className="text-[1.1rem] py-3">{curr.total_stocks}</td>
+                                        <td className="text-[1.1rem] py-3">{curr.status}</td>
+                                        <td className="text-[1.1rem]">
+                                            <div className='py-3 flex justify-start'>
+                                                {
+                                                    curr.status === 'upcoming' &&
+                                                    <div className='text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-2 rounded-full'>
+                                                        {curr.status}
+                                                    </div>
+                                                }
+                                                {
+                                                    curr.status === 'running' &&
+                                                    <div className='text-green-600 bg-opacity-25 text-center font-medium  bg-green-600 border-green-700 border px-2 rounded-full'>
+                                                        {curr.status}
+                                                    </div>
+                                                }
+                                                {
+                                                    curr.status === 'finished' &&
+                                                    <div className='text-red-600 bg-opacity-25 text-center font-medium  bg-red-600 border-red-700 border px-2 rounded-full'>
+                                                        {curr.status}
+                                                    </div>
+                                                }
                                             </div>
                                         </td>
                                     </tr>

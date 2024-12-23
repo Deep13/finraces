@@ -1,8 +1,11 @@
 import { Table } from 'antd'
 import React from 'react'
 import person from '../assets/images/person2.png'
+import { useNavigate } from 'react-router-dom'
 
 const LeaderTable = () => {
+
+    const navigate = useNavigate()
 
 
     const thisData = [
@@ -10,7 +13,7 @@ const LeaderTable = () => {
             "rank": 1,
             "player": "John Doe",
             "most_races_won": 15,
-            "total_points": 3200
+            "total_points": 3200,
         },
         {
             "rank": 2,
@@ -60,7 +63,9 @@ const LeaderTable = () => {
                                 <tr key={index} className="odd:bg-transparent even:bg-[#002760]">
                                     <td className="text-[1.5rem] py-3 px-4 text-center">{curr.rank}</td>
                                     <td className="py-3">
-                                        <div className="w-full flex gap-3 justify-start items-center">
+                                        <div onClick={() => {
+                                            navigate(`/userprofile/${curr.rank}`)
+                                        }} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                                             {/* image */}
                                             <div className="w-12 h-12 rounded-full overflow-hidden">
                                                 <img className="w-full h-full object-cover" src={person} alt="" />

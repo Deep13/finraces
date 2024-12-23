@@ -3,6 +3,7 @@ import avatar from '../assets/images/avatar.png'
 import person2 from '../assets/images/person2.png'
 import dollar from '../assets/images/dollar.png'
 import { motion } from 'motion/react'
+import { useNavigate } from 'react-router-dom'
 
 const ProfileCardHomepage = ({
     isFirst = false,
@@ -11,8 +12,10 @@ const ProfileCardHomepage = ({
     fullName = 'Duke Wriothesley',
     rank = 1,
     points = 42500,
-    index
+    index,
+    id = 123564
 }) => {
+    const navigate = useNavigate()
 
     const cardAnimation = { // this is a variant
         hidden: { scale: 0, opacity: 0 },
@@ -38,24 +41,24 @@ const ProfileCardHomepage = ({
 
             {/* div for profile username and avatar */}
             <div className='w-full flex gap-[8px] justify-start items-center mb-[10px]'>
-                <div className='w-[31px] h-[31px]'>
+                {/* <div className='w-[31px] h-[31px]'>
                     <img className='w-full h-full object-cover' src={avatar} alt="avatar image" />
-                </div>
-                <p className='dark:text-white font-semibold'>@{userName}</p>
+                </div> */}
+                <p className='dark:text-white font-semibold flex gap-2'> <span className='text-[1rem] font-bold'>#{rank}</span> {fullName}</p>
             </div>
             <div className='w-full flex-1 overflow-hidden rounded-[10px] mb-[4px]'>
                 <img className='w-full h-full object-cover' src={image} alt="a seedha saadha person" />
             </div>
-            <div className='w-full flex justify-between'>
+            <div className='w-full flex justify-between py-2'>
                 <div className='flex-1 h-full'>
-                    <p className={`${isFirst ? 'text-[#ff0000]' : 'text-black'} text-[12px] font-normal dark:text-white`}>{fullName} <span className='text-[15px] font-bold'>#{rank}</span></p>
+                    {/* <p className={`${isFirst ? 'text-[#ff0000]' : 'text-black'} text-[12px] font-normal dark:text-white`}>{fullName}</p> */}
                     <div className='flex justify-start items-center'>
                         <img src={dollar} alt="dollar icon" />
                         <p className='text-[16px] font-bold text-[#bdbdbd]'>{points}</p>
                     </div>
                 </div>
                 <div className='flex-1 h-full flex justify-center items-center'>
-                    <button className={`${isFirst ? 'text-[#ff0000]' : 'text-white'} rounded-[33px] w-[96px] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
+                    <button onClick={() => navigate(`/userprofile/${id}`)} className={`${isFirst ? 'text-[#ff0000]' : 'text-white'} rounded-[33px] w-[96px] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
                 </div>
             </div>
         </motion.div>

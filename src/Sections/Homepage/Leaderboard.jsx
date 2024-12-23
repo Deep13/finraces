@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProfileCardHomepage from '../../Components/ProfileCardHomepage';
 import { BiChevronRight } from "react-icons/bi";
 import cofeeman from '../../assets/images/cofeeman.png'
@@ -6,6 +6,7 @@ import baggybro from '../../assets/images/baggybro.png'
 import gillbates2 from '../../assets/images/gillbates2.png'
 import kirayoshikage from '../../assets/images/kirayoshikage.png'
 import { useNavigate } from 'react-router-dom';
+
 
 
 const Leaderboard = () => {
@@ -113,6 +114,7 @@ const Leaderboard = () => {
     setActiveTab(tabName);
   };
 
+
   return (
     <div className='max-w-[1400px] relative mb-[3.29rem]'>
       <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center cursor-pointer' onClick={() => navigate('/leaderboard')}>
@@ -127,7 +129,7 @@ const Leaderboard = () => {
             <button
               key={tab}
               onClick={() => handleTabClick(tab)}
-              className={`flex dark:text-white justify-center items-center w-[5rem] md:w-[9rem] px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
+              className={`flex dark:text-white justify-center items-center px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
               ${activeTab === tab ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]' : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'}`}
             >
               {tab}

@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import cardImage from '../../assets/images/card_video_image.png'
 import news_icon from '../../assets/images/news_icon.svg'
+import newsdark from '../../assets/images/newsdark.svg'
 import KeyFeaturesCard from '../../Components/KeyFeaturesCard'
 import stock1 from '../../assets/images/stock11.jpg'
 import stock1111 from '../../assets/images/stock1111.jpg'
 import crypto from '../../assets/images/crypto.jpg'
+import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 
 const keyFeaturesData = [
   {
@@ -37,8 +39,10 @@ const keyFeaturesData = [
 
 
 const KeyFeatures = () => {
+
+  const { darkModeEnabled } = React.useContext(DarkModeContext)
   return (
-    <div className='max-h-[1400px] relative mb-[5rem] md:mb-[3.29rem]'>
+    <div className='max-w-[1400px] relative mb-[5rem] md:mb-[3.29rem]'>
       {/* <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
         See All <BiChevronRight size={18} />
       </a> */}
@@ -85,8 +89,8 @@ const KeyFeatures = () => {
 
       <div className='w-full rounded-[10px] bg-[#e5f4ff] px-[1.56rem] pt-[1.18rem] mb-[3rem] dark:bg-transparent dark:border dark:border-white'>
         <div className='flex gap-[10px] mb-[2.1rem]'>
-          <img src={news_icon} alt="video to show How does it work" />
-          <h3 className='text-[1.25rem] font-medium dark:text-white'>How does it work ?</h3>
+          <img src={darkModeEnabled ? newsdark : news_icon} alt="video to show How does it work" />
+          <h3 className='text-[2rem] font-semibold dark:text-white'>How does it work ?</h3>
         </div>
         <div className='grid grid-cols-2 md:grid-cols-4 gap-[36px] pb-[48px]'>
           {/* here will be the cards */}

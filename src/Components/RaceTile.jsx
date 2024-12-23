@@ -54,7 +54,7 @@ const RaceTile = ({
 
             {
                 raceStatus === 'finished' ?
-                    <div className='rounded-lg bg-white shadow-xl italic px-8 py-4 w-[50%] z-20 grid place-items-center text-3xl font-bold self-center'>
+                    <div className='rounded-lg bg-white shadow-xl italic px-8 py-4 w-[50%] z-20 grid place-items-center text-3xl font-bold self-center text-center'>
                         Race Finished
                     </div>
                     :

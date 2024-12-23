@@ -108,6 +108,19 @@ input[type='password'] {
   padding: 5px;
   margin: auto;
   overflow: hidden;
+  @apply bg-white dark:bg-[#010b2c];
+  position: relative;
+}
+.controls_dark {
+  display: inline-flex;
+  justify-content: space-between;
+  background: #010b2c;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  max-width: 500px;
+  padding: 5px;
+  margin: auto;
+  overflow: hidden;
   position: relative;
 }
 
@@ -122,6 +135,19 @@ input[type='password'] {
   width: 100%;
   cursor: pointer;
   height: 100%;
+}
+.controls_dark input {
+  opacity: 0;
+  margin: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  cursor: pointer;
+  height: 100%;
+  background-color: #010b2c;
 }
 
 .segment {
@@ -141,17 +167,34 @@ input[type='password'] {
   padding: 10px;
   font-size: 16px;
   transition: color 0.5s ease;
+  @apply text-black dark:text-white;
 }
+
 
 .segment.active label {
   color: #000;
   font-size: 1rem;
+  @apply text-black dark:text-white;
   font-weight: bold;
 }
 
 .controls::before {
   content: "";
-  background: #e4eaf0;
+  @apply dark:text-white dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF] dark:bg-[#e4eaf0];
+  /* background: #e4eaf0; */
+  border-radius: 8px;
+  width: var(--highlight-width);
+  transform: translateX(var(--highlight-x-pos));
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  z-index: 0;
+}
+.controls_dark::before {
+  content: "";
+  /* background: #e4eaf0; */
+  @apply dark:text-white dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF];
   border-radius: 8px;
   width: var(--highlight-width);
   transform: translateX(var(--highlight-x-pos));
@@ -217,8 +260,8 @@ input[type='password'] {
   transition: color 0.5s ease;
 }
 
-.segment-.dark.active label {
-  /* color: ; */
+.segment-dark.active label {
+  color: white;
   font-size: 1rem;
   font-weight: bold;
 }
@@ -231,6 +274,9 @@ input[type='password'] {
 
 /* Only allow transitions once component is ready */
 .controls.ready::before {
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+.controls_dark.ready::before {
   transition: transform 0.3s ease, width 0.3s ease;
 }
 
@@ -300,4 +346,10 @@ input[type='password'] {
 	border-left: 25px solid transparent;
 	border-right: 25px solid transparent;
 	border-bottom: 50px solid #555;
+}
+
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
 }

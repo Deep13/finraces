@@ -43,7 +43,7 @@ const Security = () => {
             <div className="dark:bg-[#002763] rounded-[15px] dark:border w-full dark:border-[#00387E] dark:text-white flex gap-3 py-4 px-6 flex-col">
                 <div className="flex justify-between items-center w-full mb-3">
                     <p className="text-4 font-medium w-[12rem]">Login History</p>
-                    <CgChevronDown size={24} color="white" />
+                    {/* <CgChevronDown size={24} color="white" /> */}
                 </div>
                 <div className="w-full dark:border dark:border-[#00387E] rounded-[15px] px-6 py-4 justify-between flex">
                     <p className="text-[0.9rem]">Logged in from <span className="font-medium">Windows 10</span></p>
@@ -62,7 +62,7 @@ const Security = () => {
             <div className="dark:bg-[#002763] rounded-[15px] dark:border w-full dark:border-[#00387E] dark:text-white flex gap-3 py-4 px-6 flex-col">
                 <div className="flex justify-between items-center w-full mb-3">
                     <p className="text-4 font-medium w-[12rem]">Logged In Devices </p>
-                    <CgChevronDown size={24} color="white" />
+                    {/* <CgChevronDown size={24} color="white" /> */}
                 </div>
                 <div className="w-full dark:border dark:border-[#00387E] rounded-[15px] px-6 py-4 justify-between flex">
                     <p className="text-[0.9rem]">Desktop X102Dr52</p>

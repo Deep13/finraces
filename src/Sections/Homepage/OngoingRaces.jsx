@@ -2,9 +2,11 @@ import { BiChevronRight } from "react-icons/bi";
 import React, { useEffect, useState } from 'react'
 import RaceCardHomepage from '../../Components/RaceCardHomepage'
 import { getRaceList } from "../../Utils/api";
+import { useNavigate } from "react-router-dom";
 
 const OngoingRaces = () => {
   const [raceList, setRaceList] = useState([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     getRaceList('running', (data) => {
@@ -18,7 +20,7 @@ const OngoingRaces = () => {
 
   return (
     <div className='max-w-[1400px] relative mb-[3.3rem]'>
-      <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
+      <a onClick={() => navigate('/allraces', { state: 'Ongoing Races' })} className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
         See All <BiChevronRight size={18} />
       </a>
       <h2 className='text-[2.14rem] text-start font-bold mb-[1.4rem] dark:text-white'>Ongoing Races</h2>

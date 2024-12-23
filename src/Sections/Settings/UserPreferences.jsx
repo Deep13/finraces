@@ -34,7 +34,7 @@ const UserPreferences = () => {
         'Race Alerts',
         'Achievement Alerts',
         'Community Alerts',
-        'Theme',
+        // 'Theme',
     ];
 
     return (
