@@ -20,28 +20,32 @@ const Leaderboard = () => {
         image: baggybro, // Replace with actual paths or imports
         fullName: 'Duke Wriothesley',
         rank: 1,
-        points: 52000
+        points: 52000,
+        email: 'duke.wriothesley@gmail.com'
       },
       {
         userName: 'Alysees',
         image: kirayoshikage,
         fullName: 'Alysees Smith',
         rank: 2,
-        points: 48000
+        points: 48000,
+        email: 'alysees.smith@yahoo.com'
       },
       {
         userName: 'LunaStar',
         image: gillbates2,
         fullName: 'Luna Starling',
         rank: 3,
-        points: 45000
+        points: 45000,
+        email: 'luna.starling@outlook.com'
       },
       {
         userName: 'AceHunter',
         image: cofeeman,
         fullName: 'Ace Hunter',
         rank: 4,
-        points: 42000
+        points: 42000,
+        email: 'ace.hunter@protonmail.com'
       }
     ],
     "Crypto": [
@@ -50,28 +54,32 @@ const Leaderboard = () => {
         image: cofeeman,
         fullName: 'Satoshi Nakamoto',
         rank: 1,
-        points: 90000
+        points: 90000,
+        email: 'satoshi.nakamoto@bitcoin.org'
       },
       {
         userName: 'BlockQueen',
         image: kirayoshikage,
         fullName: 'Vitalik Buterin',
         rank: 2,
-        points: 85000
+        points: 85000,
+        email: 'vitalik.buterin@ethereum.org'
       },
       {
         userName: 'BitGuru',
         image: baggybro,
         fullName: 'Charlie Lee',
         rank: 3,
-        points: 80000
+        points: 80000,
+        email: 'charlie.lee@litecoin.org'
       },
       {
         userName: 'AltFanatic',
         image: gillbates2,
         fullName: 'Gavin Wood',
         rank: 4,
-        points: 75000
+        points: 75000,
+        email: 'gavin.wood@polkadot.network'
       }
     ],
     "Pharmaceuticals": [
@@ -80,28 +88,32 @@ const Leaderboard = () => {
         image: gillbates2,
         fullName: 'Dr. John Doe',
         rank: 1,
-        points: 30000
+        points: 30000,
+        email: 'dr.john.doe@healthcare.net'
       },
       {
         userName: 'PharmaGuru',
         image: baggybro,
         fullName: 'Dr. Jane Smith',
         rank: 2,
-        points: 28000
+        points: 28000,
+        email: 'dr.jane.smith@pharma.org'
       },
       {
         userName: 'HealthHacker',
         image: kirayoshikage,
         fullName: 'Dr. Emily Blake',
         rank: 3,
-        points: 26000
+        points: 26000,
+        email: 'dr.emily.blake@wellness.co'
       },
       {
         userName: 'CoffeeHunter',
         image: cofeeman,
         fullName: 'Dr. Liam White',
         rank: 4,
-        points: 24000
+        points: 24000,
+        email: 'dr.liam.white@medicare.com'
       }
     ]
   };
@@ -113,6 +125,8 @@ const Leaderboard = () => {
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
+
+
 
 
   return (
@@ -152,6 +166,7 @@ const Leaderboard = () => {
                 image={curr.image}
                 points={curr.points}
                 index={index}
+                email={curr.email}
               />
             )
           })

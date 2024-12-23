@@ -13,7 +13,8 @@ const ProfileCardHomepage = ({
     rank = 1,
     points = 42500,
     index,
-    id = 123564
+    id = 123564,
+    email = "duke@email.com"
 }) => {
     const navigate = useNavigate()
 
@@ -58,7 +59,18 @@ const ProfileCardHomepage = ({
                     </div>
                 </div>
                 <div className='flex-1 h-full flex justify-center items-center'>
-                    <button onClick={() => navigate(`/userprofile/${id}`)} className={`${isFirst ? 'text-[#ff0000]' : 'text-white'} rounded-[33px] w-[96px] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
+                    <button onClick={() => navigate(`/userprofile/${id}`, {
+                        state: {
+                            isFirst,
+                            userName,
+                            image,
+                            fullName,
+                            rank,
+                            points,
+                            id,
+                            email,
+                        }
+                    })} className={`${isFirst ? 'text-[#ff0000]' : 'text-white'} rounded-[33px] w-[96px] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
                 </div>
             </div>
         </motion.div>

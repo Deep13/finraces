@@ -5,10 +5,11 @@ import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import { useNavigate } from "react-router-dom";
 
 const FriendCard = ({
-    name,
+    name = 'Burt Macklin',
     id = 87451,
     role,
-    image
+    image = Person,
+    email = 'burt.macklin@gmail.com'
 }) => {
 
     const { darkModeEnabled } = useContext(DarkModeContext)
@@ -16,7 +17,13 @@ const FriendCard = ({
 
     return (
         <div onClick={() => {
-            navigate(`/userprofile/${id}`)
+            navigate(`/userprofile/${id}`, {
+                state: {
+                    userName: name,
+                    email,
+                    image
+                }
+            })
         }} className='p-[10px] cursor-pointer rounded-[20px] h-[4.2rem] justify-between w-[17rem] bg-slate-200 dark:bg-[#002763] flex shadow-lg dark:shadow-none items-center gap-[20px]'>
             <div className="flex gap-3">
                 <div className='h-full w-12 rounded-xl overflow-hidden'>

@@ -14,30 +14,40 @@ const LeaderTable = () => {
             "player": "John Doe",
             "most_races_won": 15,
             "total_points": 3200,
+            "email": "john.doe@gmail.com",
+            "image": person,
         },
         {
             "rank": 2,
             "player": "Jane Smith",
             "most_races_won": 12,
-            "total_points": 2950
+            "total_points": 2950,
+            "email": "jane.Smith@gmail.com",
+            "image": person
         },
         {
             "rank": 3,
             "player": "Mike Johnson",
             "most_races_won": 10,
-            "total_points": 2700
+            "total_points": 2700,
+            "email": "mike.johnson@gmail.com",
+            "image": person
         },
         {
             "rank": 4,
             "player": "Emily Davis",
             "most_races_won": 8,
-            "total_points": 2500
+            "total_points": 2500,
+            "email": "emily.davis@gmail.com",
+            "image": person
         },
         {
             "rank": 5,
             "player": "Chris Lee",
             "most_races_won": 7,
-            "total_points": 2300
+            "total_points": 2300,
+            "email": "chris.lee@gmail.com",
+            "image": person
         }
     ]
 
@@ -64,7 +74,13 @@ const LeaderTable = () => {
                                     <td className="text-[1.5rem] py-3 px-4 text-center">{curr.rank}</td>
                                     <td className="py-3">
                                         <div onClick={() => {
-                                            navigate(`/userprofile/${curr.rank}`)
+                                            navigate(`/userprofile/${curr.rank}`, {
+                                                state: {
+                                                    userName: curr.player,
+                                                    email: curr.email,
+                                                    image: curr.image,
+                                                }
+                                            })
                                         }} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                                             {/* image */}
                                             <div className="w-12 h-12 rounded-full overflow-hidden">

@@ -268,7 +268,8 @@ const CreateRace = ({
                 placeholder="Race Starting Date"
                 value={raceDetails.start_date}
                 onChange={e => handleRaceDetails('start_date', e.target.value)}
-                className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="date"
+                className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner"
+                type="date"
                 min={today}
               />
               {!validation.start_date && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Start Date should be less than or equal to End Date</p>}

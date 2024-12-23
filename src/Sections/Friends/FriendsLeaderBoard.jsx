@@ -31,7 +31,13 @@ const FriendsLeaderBoard = () => {
               <tr className="odd:bg-transparent even:bg-[#00276]">
                 <th className="text-[1.5rem] py-3">1</th>
                 <td className="py-3">
-                  <div onClick={() => navigate(`/userprofile/1`)} className="w-full flex gap-3 justify-start items-center cursor-pointer">
+                  <div onClick={() => navigate(`/userprofile/1`, {
+                    state: {
+                      userName: 'Burt Macklin',
+                      email: 'burt.macklin@gmail.com',
+                      image: Person
+                    }
+                  })} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                     {/* image */}
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                       <img className="w-full h-full object-cover" src={Person} alt="" />
@@ -51,7 +57,13 @@ const FriendsLeaderBoard = () => {
               <tr className="odd:bg-transparent even:bg-[#00276]">
                 <th className="text-[1.5rem] py-3">2</th>
                 <td className="py-3">
-                  <div onClick={() => navigate(`/userprofile/1`)} className="w-full flex gap-3 justify-start items-center cursor-pointer">
+                  <div onClick={() => navigate(`/userprofile/1`, {
+                    state: {
+                      userName: 'Burt Macklin',
+                      email: 'burt.macklin@gmail.com',
+                      image: person2
+                    }
+                  })} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                     {/* image */}
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                       <img className="w-full h-full object-cover" src={person2} alt="" />
@@ -71,7 +83,13 @@ const FriendsLeaderBoard = () => {
               <tr className="odd:bg-transparent even:bg-[#00276]">
                 <th className="text-[1.5rem] py-3">3</th>
                 <td className="py-3">
-                  <div onClick={() => navigate(`/userprofile/1`)} className="w-full flex gap-3 justify-start items-center cursor-pointer">
+                  <div onClick={() => navigate(`/userprofile/1`, {
+                    state: {
+                      userName: 'Burt Macklin',
+                      email: 'burt.macklin@gmail.com',
+                      image: person3
+                    }
+                  })} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                     {/* image */}
                     <div className="w-12 h-12 rounded-full overflow-hidden">
                       <img className="w-full h-full object-cover" src={person3} alt="" />

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const useDarkMode = () => {
     // Initialize state based on localStorage or default to false
-    const storedMode = localStorage.getItem('darkMode') === 'true'; // Convert stored value to boolean
+    const storedMode = localStorage.getItem('darkMode') != 'ture'; // Convert stored value to boolean
     const [darkModeEnabled, setDarkModeEnabled] = useState(storedMode);
 
     // Ensure the body class always matches the state during initialization

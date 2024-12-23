@@ -187,7 +187,17 @@ const RacePage = () => {
             // console.log('racedata:', res);
             setRaceDetails(res)
             const { hours, minutes } = calculateDuration(res.start_date, res.end_date)
-            setDuration(hours + " Hours " + minutes + " Minutes")
+            // setDuration((hours && (hours + " Hours ")) + (minutes && (minutes + " Minutes")))
+            setDuration(() => {
+                let str;
+                if (hours !== 0) {
+                    str = hours + " Hours ";
+                }
+                if (minutes !== 0) {
+                    str = str + minutes + " Minutes"
+                }
+                return str
+            }) // brilliant logic
             if (res.status === 'running') {
                 setIsRaceStarted(true)
             } else {

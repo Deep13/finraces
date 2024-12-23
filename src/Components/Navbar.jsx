@@ -111,15 +111,15 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="flex gap-[12px] justify-start items-center">
-                    {/* <div className="flex gap-2 items-center">
-                        <button onClick={toggle} className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
+                    <div className="flex gap-2 items-center">
+                        <button title="Toggle Dark Mode" onClick={toggle} className='aspect-square h-[2.35rem] grid place-items-center rounded-[8px]'>
                             {
-                                darkModeEnabled ?
-                                    <BsMoon color="white" size={18} /> :
-                                    <BsSunFill size={18} />
+                                !darkModeEnabled ?
+                                    <BsMoon color="black" size={18} /> :
+                                    <BsSunFill color="white" size={18} />
                             }
                         </button>
-                    </div> */}
+                    </div>
                     <button onClick={() => setSearch(prev => !prev)} className='aspect-square h-[2.35rem] dark:bg-[#001a50] grid place-items-center rounded-[8px]'>
                         <img src={searchIcon} alt="Search" />
                     </button>
@@ -227,18 +227,23 @@ const Navbar = () => {
                                     className={`absolute top-16 bg-white rounded-lg right-0 w-[130%] overflow-hidden shadow-2xl dark:bg-[#002864]`}>
                                     <button onClick={() => navigate('/profile')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear text-start dark:text-white dark:hover:bg-opacity-20">Profile</button>
                                     <p onClick={() => navigate('/settings')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Settings</p>
-                                    <div className="flex gap-2 items-center hover:bg-slate-200 dark:hover:bg-opacity-20 px-3">
-                                        <button onClick={toggle} className='h-[2.35rem] w-full flex justify-between items-center gap-2 rounded-[8px]'>
+                                    {/* <div className="flex gap-2 items-center hover:bg-slate-200 dark:hover:bg-opacity-20 px-3"> */}
+                                    {/* <button onClick={toggle} className='h-[2.35rem] w-full flex justify-between items-center gap-2 rounded-[8px]'>
                                             <p className="dark:text-white">{!darkModeEnabled ? 'Dark Mode' : 'Light Mode'}</p>
                                             {
                                                 !darkModeEnabled ?
                                                     <BsMoon color="black" size={18} /> :
                                                     <BsSunFill color="white" size={18} />
                                             }
-                                        </button>
-                                        {/* <SimpleSwitch enabled={darkModeEnabled} onClick={toggle} /> */}
-                                    </div>
-                                    <p className="w-full p-3 dark:font-semibold hover:bg-red-500 hover:text-white transition-opacity duration-100 ease-linear dark:text-white">Log out</p>
+                                        </button> */}
+                                    {/* <SimpleSwitch enabled={darkModeEnabled} onClick={toggle} /> */}
+                                    {/* </div> */}
+                                    <p title="Log out button" onClick={() => {
+                                        localStorage.removeItem('token')
+                                        localStorage.removeItem('refreshToken')
+                                        localStorage.removeItem('userDetails')
+                                        navigate('/auth')
+                                    }} className="w-full p-3 dark:font-semibold hover:bg-red-500 hover:text-white transition-opacity duration-100 ease-linear dark:text-white">Log out</p>
                                 </motion.div>}
                             </AnimatePresence>
                         </div>

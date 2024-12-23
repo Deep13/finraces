@@ -24,7 +24,7 @@ const UserProfile = () => {
             "total_points": 79.99,
             "total_stocks": 1500,
             "your_ranking": 35,
-            "status": "upcoming"
+            "status": "Upcoming"
         },
         {
             "race_id": "R002",
@@ -33,7 +33,7 @@ const UserProfile = () => {
             "total_points": 59.99,
             "total_stocks": 1200,
             "your_ranking": 10,
-            "status": "running"
+            "status": "Running"
         },
         {
             "race_id": "R003",
@@ -42,7 +42,7 @@ const UserProfile = () => {
             "total_points": 49.99,
             "total_stocks": 800,
             "your_ranking": 25,
-            "status": "finished"
+            "status": "Finished"
         }
     ]
 
@@ -155,19 +155,19 @@ const UserProfile = () => {
                                         <td className="text-[1.1rem]">
                                             <div className='py-3 flex justify-start'>
                                                 {
-                                                    curr.status === 'upcoming' &&
+                                                    curr.status === 'Upcoming' &&
                                                     <div className='text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-2 rounded-full'>
                                                         {curr.status}
                                                     </div>
                                                 }
                                                 {
-                                                    curr.status === 'running' &&
+                                                    curr.status === 'Running' &&
                                                     <div className='text-green-600 bg-opacity-25 text-center font-medium  bg-green-600 border-green-700 border px-2 rounded-full'>
                                                         {curr.status}
                                                     </div>
                                                 }
                                                 {
-                                                    curr.status === 'finished' &&
+                                                    curr.status === 'Finished' &&
                                                     <div className='text-red-600 bg-opacity-25 text-center font-medium  bg-red-600 border-red-700 border px-2 rounded-full'>
                                                         {curr.status}
                                                     </div>

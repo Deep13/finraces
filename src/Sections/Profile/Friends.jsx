@@ -9,7 +9,7 @@ const tabs = {
     AllFriends: "All Friends",
     FreindsLeaderboard: 'Friends Leaderboard',
     AddFried: 'Add a Friend',
-    Challenges: 'Challenges'
+    // Challenges: 'Challenges'
 }
 
 const Friends = () => {
@@ -35,7 +35,7 @@ const Friends = () => {
             <div className="flex-1 bg-white rounded-xl dark:bg-[#001B51] border dark:border-[#00387E] dark:text-white py-4 px-6">
                 {activeTab === tabs.AddFried && <AddFriend />}
                 {activeTab === tabs.AllFriends && <AllFirends />}
-                {activeTab === tabs.Challenges && <Challanges />}
+                {/* {activeTab === tabs.Challenges && <Challanges />} */}
                 {activeTab === tabs.FreindsLeaderboard && <FriendsLeaderBoard />}
             </div>
         </div>
