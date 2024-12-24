@@ -124,23 +124,13 @@ const Navbar = () => {
                         <img src={searchIcon} alt="Search" />
                     </button>
                     {
-                        !userDetails ?
-                            <button onClick={() => {
-                                // navigate('/auth')
-                                setShowForm(true)
-                            }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
-                                Log in
-                            </button> :
-                            <>
-                                <button onClick={() => {
-                                    localStorage.removeItem('token')
-                                    localStorage.removeItem('refreshToken')
-                                    localStorage.removeItem('userDetails')
-                                    navigate('/auth')
-                                }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[0.5rem] md:px-[1.5rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
-                                    Log out
-                                </button>
-                            </>
+                        !userDetails &&
+                        <button onClick={() => {
+                            // navigate('/auth')
+                            setShowForm(true)
+                        }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
+                            Log in
+                        </button>
                     }
                     <button onClick={() => {
                         // create Race
@@ -170,7 +160,7 @@ const Navbar = () => {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                                 transition={{ duration: 0.2, ease: "easeInOut" }}
-                                className={`absolute top-14 -right-8 p-3 dark:bg-[#164286] shalxl dark:shadow-none bg-white w-[23.3rem] rounded-xl flex flex-col gap-3 items-center`}>
+                                className={`absolute top-14 -right-4 p-3 dark:bg-[#164286] shalxl dark:shadow-none bg-white w-[23.3rem] rounded-xl flex flex-col gap-3 items-center`}>
                                 {/* place notifications here  */}
                                 <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
                                     <p className="text-[1rem] font-medium dark:text-white">🎊 Congratulations 🏆</p>

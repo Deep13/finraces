@@ -31,7 +31,7 @@ const PrivacySettings = () => {
             </div>
 
             <div className="dark:bg-[#002763] rounded-[15px] dark:border w-full dark:border-[#00387E] dark:text-white flex gap-[4rem] py-4 px-6">
-                <p className="text-4 font-medium w-[12rem]">Freind Requests</p>
+                <p className="text-4 font-medium w-[12rem]">Friend Requests</p>
                 <div className='flex gap-2'>
                     <p>
                         {enabled1 ? 'On' : 'Off'}

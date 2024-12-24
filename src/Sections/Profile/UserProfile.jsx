@@ -85,12 +85,16 @@ const UserProfile = () => {
                             <p className="text-[1.5rem] font-semibold">450</p>
                         </div>
                         <div className="flex-1 rounded-lg">
-                            <p className="text-[1rem]">Best Stock</p>
-                            <p className="text-[1.5rem] font-semibold">Apple</p>
+                            <p className="text-[1rem]">Races with 1st place</p>
+                            <p className="text-[1.5rem] font-semibold">30</p>
                         </div>
                         <div className="flex-1 rounded-lg">
-                            <p className="text-[1rem]">Best Prediction</p>
-                            <p className="text-[1.5rem] font-semibold">Google</p>
+                            <p className="text-[1rem]">Races with 2nd place</p>
+                            <p className="text-[1.5rem] font-semibold">20</p>
+                        </div>
+                        <div className="flex-1 rounded-lg">
+                            <p className="text-[1rem]">Races with 3rd placd</p>
+                            <p className="text-[1.5rem] font-semibold">120</p>
                         </div>
                     </div>
                 </div>
