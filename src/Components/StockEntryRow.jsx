@@ -101,7 +101,7 @@ const StockEntryRow = ({
           </div>
         </div>
         <div className='flex flex-col flex-1'>
-          <label className="mb-[10px] dark:text-white" htmlFor="race_name">Value Tupe %</label>
+          <label className="mb-[10px] dark:text-white" htmlFor="race_name">Value Type %</label>
           <Switch
             checked={enabled}
             onChange={setEnabled}
