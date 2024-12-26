@@ -119,7 +119,7 @@ const Profile = () => {
 
             {/* bento layout for some stats  */}
             {
-              superTabs === superTabsStrings.Profile && <UserProfile />
+              superTabs === superTabsStrings.Profile && <UserProfile userId={data?.id} />
             }
             {
               superTabs === superTabsStrings.Friends && <Friends />

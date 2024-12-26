@@ -5,6 +5,7 @@ import { countries } from '../../Utils/Countries'
 import PicUploadPopUpd from '../../Components/PicUploadPopUpd'
 import { Oval } from 'react-loader-spinner'
 import { getUserDetails } from '../../Utils/api'
+import ChangePasswordPopup from '../../Components/ChangePasswordPopup'
 
 const AccountManagement = () => {
 
@@ -12,6 +13,7 @@ const AccountManagement = () => {
     const [userName, setUserName] = useState('')
     const [uploadPopup, setUploadPopup] = useState(false)
     const [imageIsLoading, setImageIsLoading] = useState(false)
+    const [changePasswordPopup, setChangePasswordPopup] = useState(false)
 
     useEffect(() => {
         setImageIsLoading(true)
@@ -31,6 +33,12 @@ const AccountManagement = () => {
                     setImageUrl={setImageUrl}
                     setImageIsLoading={setImageIsLoading}
                     exit={setUploadPopup}
+                />
+            }
+            {
+                changePasswordPopup &&
+                <ChangePasswordPopup
+                    exit={setChangePasswordPopup}
                 />
             }
             <div className='h-full w-full flex flex-col gap-[12px]'>
@@ -109,7 +117,7 @@ const AccountManagement = () => {
                         </div>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="profilename" className='dark:text-white'>Password</label>
-                            <button className="bg-[#e4eaf0] self-start dark:bg-transparent border border-black dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">Change Password</button>
+                            <button onClick={() => setChangePasswordPopup(true)} className="bg-[#e4eaf0] self-start dark:bg-transparent border border-black dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">Change Password</button>
                             {/* <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' /> */}
                         </div>
                     </div>

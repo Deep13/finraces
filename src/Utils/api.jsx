@@ -456,7 +456,7 @@ export const getStocksDataForRace = async (race_id, onSuccess, onError) => {
 };
 
 
-export const getRaceResults = async (race_id, onSuccess, onError) => {
+export const getRaceResults = async (race_id, onSuccess, onError,) => {
   try {
     // Retrieve the token from localStorage
     const token = localStorage.getItem("token");
@@ -656,5 +656,175 @@ export const searchStock = async (prefix) => {
     // Handle errors
     console.error('Something went wrong:', error.message);
     // onError(error)
+  }
+};
+
+
+export const reportBug = async (
+  reportData,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+  try {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('User is not authenticated. Token is missing.');
+    }
+
+    // Define the API endpoint
+    const url = 'https://www.missionatal.com/api/v1/issues'
+
+    // Create the payload
+    const payload = {
+      title: reportData.title,
+      description: reportData.description,
+      priority: reportData.priority,
+      area: 'string',
+      status: 'string',
+    };
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // Handle non-OK responses
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${errorData.message}`);
+    }
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Bug reported successfully:', data);
+    onSuccess(data)
+    // return data;
+  } catch (error) {
+    // Handle errors
+    console.error('Error reporting bug:', error.message);
+    // return null; // Or handle the error further as needed
+    onError(error)
+  }
+};
+
+export const racesDataByUser = async (
+  userId,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+
+  if (!userId) return
+
+  let token = localStorage.getItem('token')
+  try {
+    const response = await fetch(`https://www.missionatal.com/api/v1/races/detailed?participatedBy=${userId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json()
+    const data = await responseData.data
+    // console.log('racelist', data)
+    onSuccess(data)
+    return data
+
+  } catch (error) {
+    console.error('Fetch request failed:', error);
+    onError(error)
+  }
+};
+
+export const lastRaceDataByUser = async (
+  userId,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+
+  if (!userId) return
+
+  let token = localStorage.getItem('token')
+  try {
+    const response = await fetch(`https://www.missionatal.com/api/v1/races/detailed?participatedBy=${userId}&limit=1`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json()
+    const data = await responseData.data
+    // console.log('racelist', data)
+    onSuccess(data)
+    return data
+
+  } catch (error) {
+    console.error('Fetch request failed:', error);
+    onError(error)
+  }
+};
+
+
+
+export const updatePassword = async (oldPassword, newPassword, onSuccess, onError) => {
+  try {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('User is not authenticated. Token is missing.');
+    }
+
+    // Define the API endpoint
+    const url = 'https://www.missionatal.com/api/v1/auth/me'
+
+    // Create the payload
+    const payload = {
+      password: newPassword,
+      oldPassword: oldPassword
+    };
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // Handle non-OK responses
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${errorData.message}`);
+    }
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Photo updated successfully:', data);
+    onSuccess(data)
+    // return data;
+  } catch (error) {
+    // Handle errors
+    console.error('Error updating photo:', error.message);
+    // return null; // Or handle the error further as needed
+    onError(error)
   }
 };

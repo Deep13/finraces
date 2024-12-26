@@ -1,18 +1,35 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import stonks2 from '../../assets/images/stonks2.png'
-import Person from '../../assets/images/person2.png'
+// import Person from '../../assets/images/person2.png'
 import coin2 from '../../assets/images/coin2.png'
 import diamond from '../../assets/images/diamondIcon.svg'
-import { FiArrowUpRight } from 'react-icons/fi'
+// import { FiArrowUpRight } from 'react-icons/fi'
 import StockWatchlistCard from '../../Components/StockWatchlistCard'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
+import { lastRaceDataByUser } from '../../Utils/api'
 
 const GuestOrLoggedOutHero = () => {
     const { setCreateRace } = useContext(DarkModeContext)
     const navigate = useNavigate()
+    const [lastRaceStatus, setLastRaceStatus] = useState("")
+    const [lastRaceId, setLastRaceId] = useState("")
     const imageUrl = JSON.parse(atob(localStorage.getItem('userDetails')))
+    const userId = JSON.parse(atob(localStorage.getItem('userDetails'))).userId
+    const userName = JSON.parse(atob(localStorage.getItem('userDetails'))).userName
     console.log("imageUrl", imageUrl)
+
+    function capitalize(s) {
+        return String(s[0]).toUpperCase() + String(s).slice(1);
+    }
+
+    useEffect(() => {
+        lastRaceDataByUser(userId, (data) => {
+            console.log("racesDataByUser", data)
+            setLastRaceStatus(data[0].status)
+            setLastRaceId(data[0].id)
+        })
+    }, [])
     return (
         <>
             <div className='max-w-[1400px] dark:bg-gradient-to-l dark:from-[rgba(0,0,0,0.25)] dark:to-[#0a0d2b] h-auto py-[2.2rem] px-[2.52rem] hero-gradient mb-[3.3rem] grid md:grid-cols-2 gird-cols-1 rounded-lg dark:border dark:border-[#00387E]'>
@@ -32,7 +49,7 @@ const GuestOrLoggedOutHero = () => {
             </div>
 
 
-            <div className='max-w-[1400px] rounded-lg  mb-[3.3rem] flex gap-[2.8rem] justify-start flex-wrap items-center'>
+            <div className='max-w-[1400px] rounded-lg  mb-[3.3rem] flex gap-[2.8rem] justify-start flex-wrap items-start'>
                 <div className='rounded-xl overflow-hidden h-[10rem] w-[10rem]'>
                     <img className='w-full h-full object-cover' src={imageUrl.photo.path} alt="" />
                 </div>
@@ -58,13 +75,13 @@ const GuestOrLoggedOutHero = () => {
                     {/* <div className='h-full'>
                         <img src={diamond} alt="" />
                     </div> */}
-                    <div className='flex flex-col gap-[8px]'>
+                    <div onClick={() => navigate(`/race/${lastRaceId}`)} title='Visit your last race by clicking on this card' className='flex flex-col gap-[8px] cursor-pointer'>
                         <p className='text-[1rem] dark:text-[#D1D1D1]'>Last Race</p>
-                        <p className='text-[1.5rem] dark:text-white font-bold'>1st google</p>
-                        <div className='flex font-semibold gap-2 rounded-full bg-[#6BEBA4] bg-opacity-20  justify-start self-start items-center px-2 py-1'>
+                        <p className='text-[1.5rem] dark:text-white font-bold'>{lastRaceStatus && capitalize(lastRaceStatus)}</p>
+                        {/* <div className='flex font-semibold gap-2 rounded-full bg-[#6BEBA4] bg-opacity-20  justify-start self-start items-center px-2 py-1'>
                             <FiArrowUpRight color="green" size={15} />
                             <p className="text-[#6BEBA4]">4.8%</p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
 
@@ -75,10 +92,10 @@ const GuestOrLoggedOutHero = () => {
                     <div className='flex flex-col gap-[8px]'>
                         <p className='text-[1rem] dark:text-white'>Total Points</p>
                         <p className='text-[1.5rem] dark:text-white'>15,000,000</p>
-                        <div className='flex font-semibold gap-2 rounded-full bg-opacity-20 bg-[#6BEBA4] justify-start self-start items-center px-2 py-1'>
+                        {/* <div className='flex font-semibold gap-2 rounded-full bg-opacity-20 bg-[#6BEBA4] justify-start self-start items-center px-2 py-1'>
                             <FiArrowUpRight color="green" size={15} />
                             <p className="text-[#6BEBA4]">4.8%</p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>

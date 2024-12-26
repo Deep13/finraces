@@ -337,6 +337,9 @@ const RacePage = () => {
         };
     }, [race_id])
 
+    const findImageUrlForStock = (id) => stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === id)].icon_url
+
+
 
     return (
         <>
@@ -482,25 +485,51 @@ const RacePage = () => {
                             <div className="flex-1 flex justify-center items-end gap-[2rem]">
 
                                 <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
-                                    <div className="gap-[4px] flex mb-[0.7rem]">
-                                        <img src={diamond} alt="" />
-                                        <p className="text-[12px] font-medium">1500</p>
-                                    </div>
-                                    <p className="font-medium text-4">WR: -</p>
+                                    {
+                                        stockRankList &&
+                                        <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
+                                            {/* <p className="text-[12px] font-medium">1500</p> */}
+                                            {findImageUrlForStock(stockRankList['1'].stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['1'].stock_id)} alt="" />}
+                                            {!findImageUrlForStock(stockRankList['1'].stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['1'].stock_id)} alt="" >{stockRankList['1'].stock_name.substring(0, 2)}</div>}
+                                        </div>
+                                    }
+                                    <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
+                                        {
+                                            stockRankList && stockRankList['1'].stock_name
+                                        }
+                                    </p>
                                 </div>
-                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[3rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
-                                    <div className="gap-[4px] flex mb-[0.7rem]">
-                                        <img src={diamond} alt="" />
-                                        <p className="text-[12px] font-medium">1500</p>
-                                    </div>
-                                    <p className="font-medium text-4">WR: -</p>
+                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
+                                    {
+                                        stockRankList &&
+                                        <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
+                                            {/* <p className="text-[12px] font-medium">1500</p> */}
+                                            {findImageUrlForStock(stockRankList['0'].stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['0'].stock_id)} alt="" />}
+                                            {!findImageUrlForStock(stockRankList['0'].stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['0'].stock_id)} alt="" >{stockRankList['1'].stock_name.substring(0, 2)}</div>}
+                                        </div>
+                                    }
+                                    {/* <p className="font-medium text-4">WR: -</p> */}
+                                    <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
+                                        {
+                                            stockRankList && stockRankList['0'].stock_name
+                                        }
+                                    </p>
                                 </div>
-                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
-                                    <div className="gap-[4px] flex mb-[0.7rem]">
-                                        <img src={diamond} alt="" />
-                                        <p className="text-[12px] font-medium">1500</p>
-                                    </div>
-                                    <p className="font-medium text-4">WR: -</p>
+                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
+                                    {
+                                        stockRankList &&
+                                        <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
+                                            {/* <p className="text-[12px] font-medium">1500</p> */}
+                                            {findImageUrlForStock(stockRankList['2'].stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['2'].stock_id)} alt="" />}
+                                            {!findImageUrlForStock(stockRankList['2'].stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['2'].stock_id)} alt="" >{stockRankList['1'].stock_name.substring(0, 2)}</div>}
+                                        </div>
+                                    }
+                                    {/* <p className="font-medium text-4">WR: -</p> */}
+                                    <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
+                                        {
+                                            stockRankList && stockRankList['2'].stock_name
+                                        }
+                                    </p>
                                 </div>
                             </div>
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import badges from '../../assets/images/badges.png'
 import diamond from '../../assets/images/diamondIcon.svg'
 import { FiArrowUpRight } from "react-icons/fi";
@@ -10,11 +10,18 @@ import badgegiftred from '../../assets/images/badgegiftred.png'
 import badgegiftsilver from '../../assets/images/badgegiftsilver.png'
 import badgemountain from '../../assets/images/badgemountain.png'
 import graphrate_second from '../../assets/images/graph.png'
+import { racesDataByUser } from '../../Utils/api';
+import { useNavigate } from 'react-router-dom';
 
 
 
 
-const UserProfile = () => {
+const UserProfile = ({
+    userId
+}) => {
+    const [total, setTotal] = useState(0)
+    const [races, setRaces] = useState([])
+    const navigate = useNavigate()
 
     const dummyData = [
         {
@@ -46,6 +53,22 @@ const UserProfile = () => {
         }
     ]
 
+    function capitalize(s) {
+        return String(s[0]).toUpperCase() + String(s).slice(1);
+    }
+
+    useEffect(() => {
+        console.log('userId', userId)
+        if (userId) {
+            racesDataByUser(userId, (data) => {
+                console.log('data', data)
+                setRaces(data)
+                setTotal(data.length)
+            }, (error) => {
+                console.log('error', error)
+            })
+        }
+    }, [userId])
 
     return (
         <>
@@ -58,10 +81,10 @@ const UserProfile = () => {
                         <div className='flex flex-col gap-[8px]'>
                             <p className='text-[1rem]'>Total Points</p>
                             <p className='text-[1.5rem]'>15,000,000</p>
-                            <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
+                            {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
                                 <FiArrowUpRight color="green" size={15} />
                                 <p className="text-green-600">4.8%</p>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -69,12 +92,12 @@ const UserProfile = () => {
                         <div className='flex flex-col gap-[8px]'>
                             <p className='text-[1rem]'>Win Rate</p>
                             <p className='text-[1.5rem] font-bold'>7590</p>
-                            <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
+                            {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
                                 <FiArrowUpRight color="green" size={15} />
                                 <p className="text-green-600">1.8%</p>
-                            </div>
+                            </div> */}
                         </div>
-                        <div className='h-full z-10'>
+                        <div className='h-full z-10 w-[10rem]'>
                             <img src={graphrate_second} alt="" />
                         </div>
                     </div>
@@ -82,7 +105,7 @@ const UserProfile = () => {
                     <div className="col-span-2 row-span-1 rounded-lg flex justify-between gap-4 bg-white p-[1.5rem] dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
                         <div className="flex-1 rounded-lg">
                             <p className="text-[1rem]">Race Participated</p>
-                            <p className="text-[1.5rem] font-semibold">450</p>
+                            <p className="text-[1.5rem] font-semibold">{total}</p>
                         </div>
                         <div className="flex-1 rounded-lg">
                             <p className="text-[1rem]">Races with 1st place</p>
@@ -130,11 +153,11 @@ const UserProfile = () => {
                     {/* head */}
                     <thead>
                         <tr>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Race ID</th>
+                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Serial No.</th>
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Race Name</th>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Total Points</th>
+                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Total Participants</th>
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Total Stocks</th>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Your Ranking</th>
+                            {/* <th className="py-4 dark:text-[#898989] text-[0.9rem]">Your Ranking</th> */}
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th>
                             {/* <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th> */}
                         </tr>
@@ -142,38 +165,35 @@ const UserProfile = () => {
                     <tbody>
                         {/* row 1 */}
                         {
-                            dummyData?.map((curr, index) => {
+                            races?.map((curr, index) => {
 
                                 return (
-                                    <tr key={index} className="odd:bg-transparent even:bg-[#00276] pb-2 dark:border-b">
-                                        <th className="py-3">{curr.race_id}</th>
-                                        {/* <td className="py-3">
-                                            <div className='w-14 h-14 rounded-xl overflow-hidden'>
-                                                <img className='w-full h-full object-cover' src={Person} alt="" />
-                                            </div>
-                                        </td> */}
-                                        <td className="text-[1.1rem] py-3">{curr.race_name}</td>
-                                        <td className="text-[1.1rem] py-3">{curr.total_points}</td>
-                                        <td className="text-[1.1rem] py-3">{curr.total_stocks}</td>
-                                        <td className="text-[1.1rem] py-3">{curr.status}</td>
+                                    <tr onClick={(e) => {
+                                        e.stopPropagation()
+                                        navigate(`/race/${curr.id}`)
+                                    }} key={index} className="odd:bg-transparent even:bg-[#00276] pb-2 dark:border-b cursor-pointer">
+                                        <th className="py-3 overflow-hidden text-ellipsis whitespace-nowrap">{index + 1}</th>
+                                        <td className="text-[1.1rem] py-3">{curr.name}</td>
+                                        <td className="text-[1.1rem] py-3">{curr.participants.length}</td>
+                                        <td className="text-[1.1rem] py-3">{curr.stocks.length}</td>
                                         <td className="text-[1.1rem]">
                                             <div className='py-3 flex justify-start'>
                                                 {
-                                                    curr.status === 'Upcoming' &&
-                                                    <div className='text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-2 rounded-full'>
-                                                        {curr.status}
+                                                    curr.status === 'upcoming' &&
+                                                    <div className='text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-3 rounded-full'>
+                                                        {capitalize(curr.status)}
                                                     </div>
                                                 }
                                                 {
-                                                    curr.status === 'Running' &&
-                                                    <div className='text-green-600 bg-opacity-25 text-center font-medium  bg-green-600 border-green-700 border px-2 rounded-full'>
-                                                        {curr.status}
+                                                    curr.status === 'running' &&
+                                                    <div className='text-green-300 bg-opacity-25 text-center font-medium  bg-green-600 border-green-700 border px-3 rounded-full'>
+                                                        {capitalize(curr.status)}
                                                     </div>
                                                 }
                                                 {
-                                                    curr.status === 'Finished' &&
-                                                    <div className='text-red-600 bg-opacity-25 text-center font-medium  bg-red-600 border-red-700 border px-2 rounded-full'>
-                                                        {curr.status}
+                                                    curr.status === 'finished' &&
+                                                    <div className='text-red-300 bg-opacity-25 text-center font-medium  bg-red-600 border-red-700 border px-3 rounded-full'>
+                                                        {capitalize(curr.status)}
                                                     </div>
                                                 }
                                             </div>
