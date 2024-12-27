@@ -39,7 +39,7 @@ const ChangePasswordPopup = ({
 
         updatePassword(values.password, values.newPassword, (data) => {
             // alert('Password changed successfully')
-            console.log('Password changed successfully', data);
+            console.log('')
         }, () => {
             alert('Failed to change password')
         })

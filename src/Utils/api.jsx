@@ -680,7 +680,7 @@ export const reportBug = async (
       title: reportData.title,
       description: reportData.description,
       priority: reportData.priority,
-      area: 'string',
+      area: 'User Ticket',
       status: 'string',
     };
 
@@ -828,3 +828,312 @@ export const updatePassword = async (oldPassword, newPassword, onSuccess, onErro
     onError(error)
   }
 };
+
+
+
+export const updateProfile = async (payload, onSuccess, onError) => {
+  try {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('User is not authenticated. Token is missing.');
+    }
+
+    // Define the API endpoint
+    const url = 'https://www.missionatal.com/api/v1/auth/me'
+
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // Handle non-OK responses
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${errorData.message}`);
+    }
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Photo updated successfully:', data);
+    onSuccess(data)
+    // return data;
+  } catch (error) {
+    // Handle errors
+    console.error('Error updating photo:', error.message);
+    // return null; // Or handle the error further as needed
+    onError(error)
+  }
+};
+
+
+export const getTop4 = async (
+  startDate,
+  endDate,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  // let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/public/race-results/stats?limit=4`, {
+      headers: {
+        // 'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+
+export const getTopRankers = async (
+  startDate,
+  endDate,
+  limit,
+  page,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/race-results/stats?limit=${limit}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+
+export const getUser = async (
+  id,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+  try {
+    const response = await axios.get(`https://www.missionatal.com/api/v1/public/users/${id}`)
+    const result = await response.data
+    onSuccess(result)
+    return result
+  } catch (error) {
+    console.error('User fetch error:', error.response?.data?.message || error.message)
+    onError(error)
+    throw error
+  }
+}
+
+export const getTotalPointsUser = async (
+  id,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+  try {
+    const response = await axios.get(`https://www.missionatal.com/api/v1/public/race-results/count?userId=${id}`)
+    const result = await response.data
+    onSuccess(result)
+    return result
+  } catch (error) {
+    console.error('User fetch error:', error.response?.data?.message || error.message)
+    onError(error)
+    throw error
+  }
+}
+
+export const getWinningRate = async (
+  id,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+  try {
+    const response = await axios.get(`https://www.missionatal.com/api/v1/public/race-results/users/${id}/winning-rate`)
+    const result = await response.data
+    onSuccess(result)
+    return result
+  } catch (error) {
+    console.error('User fetch error:', error.response?.data?.message || error.message)
+    onError(error)
+    throw error
+  }
+}
+
+
+export const sendFriendRequest = async (recieverId, onSuccess, onError) => {
+  const UPLOAD_URL = 'https://www.missionatal.com/api/v1/friends'; // Replace with your upload endpoint
+  const token = localStorage.getItem('token');
+
+  try {
+    // Make the fetch request with Authorization header
+    const response = await fetch(UPLOAD_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        receiver: Number(recieverId), // Ensure recieverId is converted to a number
+      }),
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the Bearer token
+        'Content-Type': 'application/json', // Correctly placed Content-Type header
+      },
+    });
+
+    // Check if the response is OK (status in the range 200 - 299)
+    if (!response.ok) {
+      throw new Error(`Failed to send request: ${response.status} ${response.statusText}`);
+    }
+
+    // Parse response JSON
+    const data = await response.json();
+    console.log('Request sent successfully:', data);
+    onSuccess(data);
+  } catch (error) {
+    console.error('Request failed:', error.message || error);
+    onError(error);
+  }
+};
+
+export const getRacesCountByRank = async (
+  id,
+  rank,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+  try {
+    const response = await axios.get(`https://www.missionatal.com/api/v1/public/race-results/count?userId=${id}&rank=${rank}`)
+    const result = await response.data
+    onSuccess(result)
+    return result
+  } catch (error) {
+    console.error('User fetch error:', error.response?.data?.message || error.message)
+    onError(error)
+    throw error
+  }
+}
+
+
+export const getAllBadges = async (
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/badges`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+
+export const fuzzySearch = async (prefix) => {
+
+
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      throw new Error('User is not authenticated. Token is missing.');
+    }
+
+    const url = `https://www.missionatal.com/api/v1/public/search/race-users?nameContains=${prefix}`
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Handle non-OK responses
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${errorData.message}`);
+    }
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Searched Stock with prefix', data);
+    // onSuccess(transformedList(data))
+    // return transformedList(data)
+    return data
+  } catch (error) {
+    // Handle errors
+    console.error('Something went wrong:', error.message);
+    // onError(error)
+  }
+};
+
+
+export const searchUsers = async (prefix) => {
+
+
+  try {
+
+
+    const url = `https://www.missionatal.com/api/v1/public/search/users?nameContains=${prefix}`
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Handle non-OK responses
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} - ${errorData.message}`);
+    }
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Searched Users with prefix', data);
+    // onSuccess(transformedList(data))
+    // return transformedList(data)
+    return data
+  } catch (error) {
+    // Handle errors
+    console.error('Something went wrong:', error.message);
+    // onError(error)
+  }
+};
+
+
+
+
+
+

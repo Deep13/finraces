@@ -8,11 +8,13 @@ import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 
 export default function SelectDropdownStatic({
-    data
+    data,
+    value = data[1],
+    setUserData
 }) {
     const { darkModeEnabled } = useContext(DarkModeContext)
     const [query, setQuery] = useState('')
-    const [selected, setSelected] = useState(data[1])
+    // const [selected, setSelected] = useState(data[1])
 
     const filteredPeople =
         query === ''
@@ -22,7 +24,7 @@ export default function SelectDropdownStatic({
             })
 
     return (
-        <Combobox value={selected} onChange={(value) => setSelected(value)} onClose={() => setQuery('')} >
+        <Combobox value={value} onChange={(value) => setUserData(prev => ({ ...prev, country: value?.name }))} onClose={() => setQuery('')} >
             <div className="relative">
                 <ComboboxInput
                     className={clsx(

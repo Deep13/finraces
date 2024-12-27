@@ -18,7 +18,7 @@ const tabs = {
   "User Preferences": { title: "User Preferences", icon: filters },
   "Account Management": { title: "Account Management", icon: users },
   "Privacy Settings": { title: "Privacy Settings", icon: shield_off },
-  "Security": { title: "Security", icon: shield },
+  // "Security": { title: "Security", icon: shield },
   "Help and Support": { title: "Help and Support", icon: phone },
 };
 
@@ -50,7 +50,9 @@ const Settings = () => {
 
           <div className='dark:text-white w-full h-full'>
             <div className='w-full flex flex-col gap-4 justify-start mb-4'>
-              <p className='font-semibold text-[1.4rem] py-4 px-6 flex items-center gap-3'><span className="-scale-100"><BiChevronRight color={darkModeEnabled ? 'white' : 'black'} size={24} /></span> Settings</p>
+              <p className='font-semibold text-[1.4rem] py-4 px-6 flex items-center gap-3'><span className="-scale-100">
+                {/* <BiChevronRight color={darkModeEnabled ? 'white' : 'black'} size={24} /> */}
+              </span> Settings</p>
             </div>
             {/* actual settings  */}
             <div className='w-full flex-1 flex justify-center items-center gap-[1.5rem] flex-wrap px-4'>
@@ -73,7 +75,7 @@ const Settings = () => {
                 {/* active tab  */}
                 <div className="flex-1 bg-white rounded-xl dark:bg-[#001B51] border dark:border-[#00387E] dark:text-white py-4 px-6 h-full">
                   {activeTab === tabs["User Preferences"].title && <UserPreferences />}
-                  {activeTab === tabs["Security"].title && <Security />}
+                  {/* {activeTab === tabs["Security"].title && <Security />} */}
                   {activeTab === tabs["Help and Support"].title && <HelpAndSupport />}
                   {activeTab === tabs["Privacy Settings"].title && <PrivacySettings />}
                   {activeTab === tabs["Account Management"].title && <AccountManagement />}

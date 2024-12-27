@@ -11,7 +11,7 @@ import { useLocation } from 'react-router-dom';
 const tabs = {
     'Ongoing Races': 'Ongoing Races',
     'Upcoming Races': 'Upcoming Races',
-    // 'Finished Races': 'Finished Races',
+    'Finished Races': 'Finished Races',
 };
 
 const AllRaces = () => {

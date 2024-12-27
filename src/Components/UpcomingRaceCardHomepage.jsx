@@ -10,7 +10,14 @@ const UpcomingRaceCardHomepage = ({
     raceId,
     startDate,
     endDate,
-    index
+    index,
+    stock1,
+    stock2,
+    stock3,
+    stock1Name,
+    stock2Name,
+    stock3Name,
+    totalStocksCount
 }) => {
 
     const navigate = useNavigate()
@@ -72,9 +79,53 @@ const UpcomingRaceCardHomepage = ({
             <div className='flex flex-col'>
                 <div className='w-full flex justify-between items-center'>
                     <p className='mb-[0.4rem] font-bold text-[2rem] dark:text-white max-w-[75%]'>{raceName}</p>
-                    <div className='flex gap-[6px] items-center  self-start'>
-                        <img className='w-18 h-18' src={stocks} alt="stocks images" />
-                        <p className='font-semibold text-[16px] text-[#b5b5b5]'>+10</p>
+                    <div className='flex gap-[6px] items-center self-start flex-wrap'>
+                        <div className="flex items-center space-x-[-15px]">
+                            {/* Stock 1 - Biggest */}
+                            {stock1 ? (
+                                <img
+                                    className="rounded-full w-12 h-12 border-[4px] border-[#002763] z-[10]"
+                                    src={stock1}
+                                    alt=""
+                                />
+                            ) : (
+                                <div className="rounded-full w-12 h-12 border-[4px] border-[#002763] z-[10] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
+                                    {stock1Name?.substring(0, 2)}
+                                </div>
+                            )}
+
+                            {/* Stock 2 - Medium */}
+                            {stock2 ? (
+                                <img
+                                    className="rounded-full w-10 h-10 border-[4px] border-[#002763] z-[9]"
+                                    src={stock2}
+                                    alt=""
+                                />
+                            ) : (
+                                stock2Name && (
+                                    <div className="rounded-full w-10 h-10 border-[4px] border-[#002763] z-[9] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
+                                        {stock2Name?.substring(0, 2)}
+                                    </div>
+                                )
+                            )}
+
+                            {/* Stock 3 - Smallest */}
+                            {stock3 ? (
+                                <img
+                                    className="rounded-full w-8 h-8 border-[4px] border-[#002763] z-[8]"
+                                    src={stock3}
+                                    alt=""
+                                />
+                            ) : (
+                                stock3Name && (
+                                    <div className="rounded-full w-8 h-8 border-[4px] border-[#002763] z-[8] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
+                                        {stock3Name?.substring(0, 2)}
+                                    </div>
+                                )
+                            )}
+                        </div>
+
+                        <p className='font-semibold text-[16px] text-[#b5b5b5]'>{totalStocksCount > 3 ? `+${totalStocksCount - 3}` : ''}</p>
                     </div>
                 </div>
                 <div className='w-full flex justify-between items-center mb-[5px]'>
@@ -87,7 +138,7 @@ const UpcomingRaceCardHomepage = ({
                     </div>
                 </div>
                 <div className='flex flex-col gap-[5px] mb-[14px]'>
-                    <p className='text-[12px] font-bold dark:text-white'>1.2k Participants</p>
+                    <p className='text-[12px] font-bold dark:text-white'>{participants}{participants > 1 ? ' Participants' : ' Participant'}</p>
                     <p className='text-[12px] dark:text-white'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
                 </div>
             </div>

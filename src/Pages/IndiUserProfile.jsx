@@ -3,26 +3,39 @@ import coin from '../assets/images/coin2.png'
 import Sidebar from '../Components/Sidebar'
 import UserProfile from '../Sections/Profile/UserProfile';
 import Person from '../assets/images/person2.png'
-import { useLocation } from 'react-router-dom';
-
+import { useLocation, useParams } from 'react-router-dom';
+import { getUser, sendFriendRequest } from '../Utils/api';
 
 
 const IndiUserProfile = () => {
 
     const [requestSent, setRequestSent] = useState(false)
     const thisLocation = useLocation()
+    const { user_id } = useParams()
     const [details, setDetails] = useState({
         userName: 'Burt Macklin',
         email: 'person.trader@email.com',
         image: Person
     })
+    const [userDetails, setUserDetails] = useState({})
+
+    const requestFriend = () => {
+        user_id && sendFriendRequest(user_id, (data) => {
+            console.log("Request Sent", data)
+        })
+    }
 
 
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
-        if (Object.keys(thisLocation.state).length > 0) {
-            setDetails(thisLocation.state)
-        }
+        console.log(user_id)
+        // if (Object.keys(thisLocation.state).length > 0) {
+        //     // setDetails(thisLocation.state)
+        // }
+        getUser(user_id, (data) => {
+            console.log(data)
+            setUserDetails(data)
+        })
     }, [])
 
     return (
@@ -37,22 +50,22 @@ const IndiUserProfile = () => {
                         <div className='flex gap-4 flex-wrap'>
                             <div className=' overflow-hidden'>
                                 <div className="relative w-[200px] overflow-hidden h-[15rem] rounded-lg group">
-                                    <img loading="lazy" className="w-full h-full object-cover" src={details.image} alt="" />
+                                    <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path} alt="" />
                                 </div>
                             </div>
                             <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>
-                                <p className="font-semibold text-[2rem] dark:text-white">{details.userName}</p>
-                                <p className="font-semibold text-[1rem] -mt-4 text-slate-500 dark:text-white">{details.email}</p>
-                                <p className="font-semibold text-[1rem] dark:text-white">AKA Samuel <span className="ml-3">L.A, Calirfonia</span></p>
+                                {userDetails?.firstName && <p className="font-semibold text-[2rem] dark:text-white">{userDetails?.firstName + " " + userDetails?.lastName}</p>}
+                                {userDetails?.email && <p className="font-semibold text-[1rem] -mt-4 text-slate-500 dark:text-white">{userDetails?.email}</p>}
+                                {/* <p className="font-semibold text-[1rem] dark:text-white">AKA Samuel <span className="ml-3">L.A, Calirfonia</span></p> */}
                                 <div className="self-start flex gap-4">
                                     {/* XP card here  */}
                                     <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">
-                                        <div>
+                                        {/* <div>
                                             <img src={coin} alt="" />
-                                        </div>
+                                        </div> */}
                                         <div className="font-semibold text-[0.9rem] flex flex-col">
-                                            <p className="font-semibold text-[0.9rem]">Community Ambassador</p>
-                                            <p className="font-semibold text-[0.9rem]">250 XP</p>
+                                            <p className="font-semibold text-[0.9rem]">Explorer</p>
+                                            {/* <p className="font-semibold text-[0.9rem]">250 XP</p> */}
                                         </div>
                                     </div>
                                     {/* <div className="flex gap-2 items-center">
@@ -64,9 +77,12 @@ const IndiUserProfile = () => {
                             <div className='flex flex-col gap-3 justify-end'>
                                 {
                                     requestSent ?
-                                        <button onClick={() => setRequestSent(false)} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Sent</button>
+                                        <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Sent</button>
                                         :
-                                        <button onClick={() => setRequestSent(true)} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>
+                                        <button onClick={() => {
+                                            requestFriend()
+                                            setRequestSent(true)
+                                        }} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>
                                 }
                                 <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Message</button>
                                 {/* <button onClick={() => setSuperTabs(superTabsStrings.Friends)} className={superTabs === superTabsStrings.Friends ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Firends</button> */}
@@ -74,7 +90,7 @@ const IndiUserProfile = () => {
                                 {/* <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'>Log out</button> */}
                             </div>
                         </div>
-                        <UserProfile />
+                        <UserProfile userId={user_id} />
                     </div>
                 </div>
             </div>

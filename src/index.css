@@ -351,8 +351,17 @@ input[type='password'] {
 	border-bottom: 50px solid #555;
 }
 
-input[type="date"]::-webkit-inner-spin-button,
+/* input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
+} */
+ /* this thing war removing the calendar icon  */
+
+ select option {
+  margin: 40px;
+  /* background: rgba(0, 0, 0, 0.3); */
+  color: #fff;
+  /* text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4); */
+  @apply placeholder-[#b3bfbc] rounded-[14px] dark:bg-[#010B2C] dark:text-white bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32] border-none;
 }

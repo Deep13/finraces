@@ -30,7 +30,7 @@ const UserRankingCard = ({
             </div>
             <div className='flex items-center justify-between gap-[8px]'>
                 {userRank !== '-' && <div>
-                    <img src={rank} alt="" />
+                    {userRank <= 3 && <img src={rank} alt="" />}
                 </div>}
                 <p className='text-[1rem] font-medium dark:text-white'>{!(userRank === '-') ? `#${userRank}` : userRank}</p>
             </div>

@@ -4,7 +4,7 @@ import fb from '../assets/images/fb.svg'
 
 const StockWatchlistCard = () => {
     return (
-        <div className='w-[13.2rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between'>
+        <div className='w-[13.2rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between mr-3'>
             {/* name with icons and up down */}
             <div className='flex justify-between items-center w-full'>
                 <div className='flex gap-2 items-center'>

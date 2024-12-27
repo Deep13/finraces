@@ -8,10 +8,12 @@ import cofeeman from '../assets/images/cofeeman.png'
 import baggybro from '../assets/images/baggybro.png'
 import kirayoshikage from '../assets/images/kirayoshikage.png'
 import gillbates2 from '../assets/images/gillbates2.png'
+import { getTopRankers } from '../Utils/api'
+import Pagination from '../Components/Pagination'
 
 const Leaderboard = () => {
   const leaderboardData = {
-    "Tech Stocks": [
+    "Today": [
       {
         userName: 'ChampionDuke',
         image: baggybro, // Replace with actual paths or imports
@@ -45,7 +47,7 @@ const Leaderboard = () => {
         email: 'ace.hunter@protonmail.com'
       }
     ],
-    "Crypto": [
+    "This Week": [
       {
         userName: 'CryptoKing',
         image: cofeeman,
@@ -79,7 +81,7 @@ const Leaderboard = () => {
         email: 'gavin.wood@polkadot.network'
       }
     ],
-    "Pharmaceuticals": [
+    "This Month": [
       {
         userName: 'MedExpert',
         image: gillbates2,
@@ -117,7 +119,9 @@ const Leaderboard = () => {
 
 
 
-  const [activeTab, setActiveTab] = useState("Tech Stocks");
+  const [activeTab, setActiveTab] = useState("Today");
+  const [leaderboard, setLeaderboard] = useState([])
+  const [hasNextPage, setHasNextPage] = useState(false)
 
 
   const handleTabClick = (tabName) => {
@@ -127,6 +131,29 @@ const Leaderboard = () => {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  useEffect(() => {
+    let today = new Date()
+    let sevenDaysAgo = new Date()
+    let monthAgo = new Date()
+    sevenDaysAgo.setDate(today.getDate() - 7)
+    monthAgo.setDate(today.getMonth() - 1)
+    let startDate = ''
+    if (activeTab === 'Today') {
+      startDate = today
+    }
+    if (activeTab === 'This Week') {
+      startDate = sevenDaysAgo
+    }
+    if (activeTab === 'This Month') {
+      startDate = monthAgo
+    }
+    getTopRankers(startDate, today, 20, 1, (data) => {
+      console.log('Top 4 fetched', data)
+      setLeaderboard(data.data.data)
+      setHasNextPage(data.data.hasNextPage)
+    })
+  }, [activeTab])
 
   return (
     <>
@@ -152,30 +179,34 @@ const Leaderboard = () => {
             </div>
             <div className='w-full rounded-[20px] grid lg:grid-cols-4 md:grid-cols-2 gap-[1.3rem] md:px-[1.3rem] px-[0.7rem] py-[1.11rem]'>
               {
-                leaderboardData[activeTab]?.map((curr, index) => {
+                leaderboard &&
+                leaderboard?.slice(0, 4).map((curr, index) => {
                   return (
                     <ProfileCardHomepage
                       key={curr.userName}
-                      userName={curr.userName}
-                      fullName={curr.fullName}
-                      rank={curr.rank}
-                      image={curr.image}
-                      points={curr.points}
+                      // userName={curr.user.firstname + curr.user.lastname}
+                      fullName={curr.user.firstName + " " + curr.user.lastName}
+                      rank={index + 1}
+                      image={curr?.user?.photo?.path}
+                      points={curr?.total_points == null ? 0 : curr.total_points}
                       index={index}
+                      id={curr.user.id}
                       email={curr.email}
+                      activeTab={activeTab}
                     />
                   )
                 })
               }
             </div>
-            <LeaderTable />
+            <LeaderTable data={leaderboard.slice(4)} />
+            {hasNextPage && <Pagination />}
 
             <br /><br /><br />
 
-            <h1 className='text-[2.2rem] font-bold text-black text-center mb-4 dark:text-white'>NASDAQ Leaderboard</h1>
+            {/* <h1 className='text-[2.2rem] font-bold text-black text-center mb-4 dark:text-white'>NASDAQ Leaderboard</h1>
             <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem] mb-6'>
-            </div>
-            <div className='w-full rounded-[20px] grid lg:grid-cols-4 md:grid-cols-2 gap-[1.3rem] md:px-[1.3rem] px-[0.7rem] py-[1.11rem]'>
+            </div> */}
+            {/* <div className='w-full rounded-[20px] grid lg:grid-cols-4 md:grid-cols-2 gap-[1.3rem] md:px-[1.3rem] px-[0.7rem] py-[1.11rem]'>
               {
                 leaderboardData['Pharmaceuticals']?.map((curr, index) => {
                   return (
@@ -192,8 +223,8 @@ const Leaderboard = () => {
                   )
                 })
               }
-            </div>
-            <LeaderTable />
+            </div> */}
+            {/* <LeaderTable /> */}
           </div>
         </div>
       </div>

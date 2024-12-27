@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import coin from '../assets/images/coin2.png'
 import { getUserDetails } from "../Utils/api";
 import PicUploadPopUpd from "../Components/PicUploadPopUpd";
@@ -9,6 +9,7 @@ import Friends from '../Sections/Profile/Friends'
 import EditProfile from '../Sections/Profile/EditProfile'
 import { useNavigate } from 'react-router-dom';
 import graphrate from '../../src/assets/images/graphrate.svg'
+import { getRacesCountByRank } from '../Utils/api';
 
 const superTabsStrings = {
   Profile: 'Profile',
@@ -33,10 +34,12 @@ const Profile = () => {
     getUserDetails((data) => {
       setData(data)
       setImageUrl(data?.photo?.path)
+      // if specific to user then get all badges here
       setTimeout(() => setImageIsLoading(false), 4000)
     })
     window.scrollTo(0, 0);
   }, [])
+
 
   return (
     <>
@@ -86,16 +89,16 @@ const Profile = () => {
               <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>
                 <p className="font-semibold text-[2rem] dark:text-white">{data && data.firstName + " " + data.lastName}</p>
                 <p className="font-semibold text-[1rem] -mt-4 text-slate-500 dark:text-white">{data?.email}</p>
-                <p className="font-semibold text-[1rem] dark:text-white">AKA Samuel <span className="ml-3">L.A, Calirfonia</span></p>
+                {/* <p className="font-semibold text-[1rem] dark:text-white">AKA Samuel <span className="ml-3">L.A, Calirfonia</span></p> */}
                 <div className="self-start flex gap-4">
                   {/* XP card here  */}
                   <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">
-                    <div>
+                    {/* <div>
                       <img src={coin} alt="" />
-                    </div>
+                    </div> */}
                     <div className="font-semibold text-[0.9rem] flex flex-col">
-                      <p className="font-semibold text-[0.9rem]">Community Ambassador</p>
-                      <p className="font-semibold text-[0.9rem]">250 XP</p>
+                      <p className="font-semibold text-[0.9rem]">Explorer</p>
+                      {/* <p className="font-semibold text-[0.9rem]">250 XP</p> */}
                     </div>
                   </div>
                   {/* <div className="flex gap-2 items-center">

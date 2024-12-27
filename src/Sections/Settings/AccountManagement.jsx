@@ -4,8 +4,9 @@ import SelectDropdownStatic from '../../Components/Combobox'
 import { countries } from '../../Utils/Countries'
 import PicUploadPopUpd from '../../Components/PicUploadPopUpd'
 import { Oval } from 'react-loader-spinner'
-import { getUserDetails } from '../../Utils/api'
+import { getUserDetails, updateProfile } from '../../Utils/api'
 import ChangePasswordPopup from '../../Components/ChangePasswordPopup'
+import DeleteAccountPopup from '../../Components/DeleteAccountPopup'
 
 const AccountManagement = () => {
 
@@ -14,19 +15,41 @@ const AccountManagement = () => {
     const [uploadPopup, setUploadPopup] = useState(false)
     const [imageIsLoading, setImageIsLoading] = useState(false)
     const [changePasswordPopup, setChangePasswordPopup] = useState(false)
+    const [deleteAccountPopup, setDeleteAccountPopup] = useState(false)
+    const [userData, setUserData] = useState({})
 
     useEffect(() => {
         setImageIsLoading(true)
         getUserDetails((data) => {
             setImageUrl(data?.photo?.path)
             setUserName(data?.firstName + " " + data?.lastName)
+            setUserData(data)
             setTimeout(() => setImageIsLoading(false), 3000)
         })
 
     }, [])
 
+    const handleSaveInfo = () => {
+        updateProfile(userData, () => {
+            console.log('Profile Updated')
+        }, () => {
+            console.log('Error Updating Profile')
+        })
+    }
+
+    function findCountryIndex(countryName) {
+        return countries.findIndex(country => country.name === countryName);
+    }
+
+
     return (
         <>
+            {
+                deleteAccountPopup &&
+                <DeleteAccountPopup
+                    exit={setDeleteAccountPopup}
+                />
+            }
             {
                 uploadPopup &&
                 <PicUploadPopUpd
@@ -67,7 +90,7 @@ const AccountManagement = () => {
                                     setUploadPopup(true)
                                 }}
                                 className="bg-[#e4eaf0] dark:bg-transparent border w-[10rem] border-black dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">Change Image</button>
-                            <button className="bg-[#e4eaf0] w-[10rem] dark:bg-transparent border border-black dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">Delete</button>
+                            <button onClick={() => setDeleteAccountPopup(true)} className="w-[10rem] bg-red-500 text-white px-[1.5rem] h-[2.35rem] text-[0.7rem] rounded-[8px] grid place-items-center font-semibold">Delete Your Account</button>
                         </div>
                     </div>
                     <div className='dark:bg-[#002763] bg-slate-200 rounded-[12px] py-[10px] px-[20px] flex-1 flex flex-col'>
@@ -75,11 +98,19 @@ const AccountManagement = () => {
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="username" className='dark:text-white'>User Name</label>
                             {/* <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' /> */}
-                            <p className='font-semibold text-lg'>{userName}</p>
+                            <p className='font-semibold text-lg'>{userData.id}</p>
                         </div>
-                        <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
-                            <label htmlFor="profilename" className='dark:text-white'>Profile Name</label>
-                            <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' />
+                        <div className='w-full flex justify-between'>
+                            <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
+                                <label htmlFor="profilename" className='dark:text-white'>First Name</label>
+                                {/* <input value={userData.firstName} onChange={e => setUserData(prev => ({ ...prev, firstName: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' /> */}
+                                <p className='font-semibold dark:text-white'>{userData.firstName}</p>
+                            </div>
+                            <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
+                                <label htmlFor="profilename" className='dark:text-white'>Last Name</label>
+                                {/* <input value={userData.lastName} onChange={e => setUserData(prev => ({ ...prev, lastName: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' /> */}
+                                <p className='font-semibold dark:text-white'>{userData.firstName}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -89,21 +120,21 @@ const AccountManagement = () => {
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="username" className='dark:text-white'>Country</label>
                             {/* <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' /> */}
-                            <SelectDropdownStatic data={countries} />
+                            <SelectDropdownStatic value={countries[findCountryIndex(userData.country)]} setUserData={setUserData} data={countries} />
                         </div>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="profilename" className='dark:text-white'>State</label>
-                            <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' />
+                            <input value={userData.address} onChange={e => setUserData(prev => ({ ...prev, address: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' />
                         </div>
                     </div>
                     <div className='flex gap-[4rem] flex-1'>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="username" className='dark:text-white'>City</label>
-                            <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' />
+                            <input value={userData.city} onChange={e => setUserData(prev => ({ ...prev, city: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' />
                         </div>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="profilename" className='dark:text-white'>Zip</label>
-                            <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' />
+                            <input value={userData.zipcode} onChange={e => setUserData(prev => ({ ...prev, zipcode: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' />
                         </div>
                     </div>
                 </div>
@@ -113,7 +144,8 @@ const AccountManagement = () => {
                     <div className='flex gap-[4rem]'>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="username" className='dark:text-white'>Email</label>
-                            <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' />
+                            {/* <input value={userData.email} onChange={e => setUserData(prev => ({ ...prev, email: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' /> */}
+                            <p className='font-semibold dark:text-white'>{userData.email}</p>
                         </div>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="profilename" className='dark:text-white'>Password</label>
@@ -136,6 +168,9 @@ const AccountManagement = () => {
                         </div>
                     </div>
                 </div> */}
+                <button onClick={handleSaveInfo} className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-[1rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold self-start">
+                    Save
+                </button>
             </div>
         </>
     )

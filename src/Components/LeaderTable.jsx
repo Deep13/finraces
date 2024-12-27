@@ -1,55 +1,24 @@
 import { Table } from 'antd'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import person from '../assets/images/person2.png'
 import { useNavigate } from 'react-router-dom'
+import { getUserDetails } from '../Utils/api'
 
-const LeaderTable = () => {
+const LeaderTable = ({
+    data
+}) => {
 
     const navigate = useNavigate()
+    const [YourDetails, setYourDetails] = useState(null)
 
 
-    const thisData = [
-        {
-            "rank": 1,
-            "player": "John Doe",
-            "most_races_won": 15,
-            "total_points": 3200,
-            "email": "john.doe@gmail.com",
-            "image": person,
-        },
-        {
-            "rank": 2,
-            "player": "Jane Smith",
-            "most_races_won": 12,
-            "total_points": 2950,
-            "email": "jane.Smith@gmail.com",
-            "image": person
-        },
-        {
-            "rank": 3,
-            "player": "Mike Johnson",
-            "most_races_won": 10,
-            "total_points": 2700,
-            "email": "mike.johnson@gmail.com",
-            "image": person
-        },
-        {
-            "rank": 4,
-            "player": "Emily Davis",
-            "most_races_won": 8,
-            "total_points": 2500,
-            "email": "emily.davis@gmail.com",
-            "image": person
-        },
-        {
-            "rank": 5,
-            "player": "Chris Lee",
-            "most_races_won": 7,
-            "total_points": 2300,
-            "email": "chris.lee@gmail.com",
-            "image": person
-        }
-    ]
+    useEffect(() => { console.log(data) }, [data])
+
+    useEffect(() => {
+        getUserDetails((data) => {
+            setYourDetails(data)
+        })
+    }, [])
 
 
 
@@ -68,33 +37,37 @@ const LeaderTable = () => {
                 <tbody>
                     {/* row 1 */}
                     {
-                        thisData?.map((curr, index) => {
+                        data?.map((curr, index) => {
                             return (
-                                <tr key={index} className="odd:bg-transparent even:bg-[#002760]">
-                                    <td className="text-[1.5rem] py-3 px-4 text-center">{curr.rank}</td>
+                                <tr style={{
+                                    // background: `${userId === curr?.user?.id ? 'yellow' : 'transparent'}`
+                                }} key={index} className="odd:bg-transparent dark:even:bg-[#002760] even:bg-slate-200 group">
+                                    <td className="text-[1.5rem] py-3 px-4 text-center group-hover:underline">{index + 5}</td>
                                     <td className="py-3">
                                         <div onClick={() => {
-                                            navigate(`/userprofile/${curr.rank}`, {
+                                            navigate(`/userprofile/${curr?.user?.id}`, {
                                                 state: {
-                                                    userName: curr.player,
-                                                    email: curr.email,
-                                                    image: curr.image,
+                                                    id: curr.user.id, // this is mandatory
+                                                    email: curr.user.email,
+                                                    image: curr.user.photo.path,
+                                                    userName: curr.user.firstName + " " + curr.user.lastName,
                                                 }
                                             })
                                         }} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                                             {/* image */}
                                             <div className="w-12 h-12 rounded-full overflow-hidden">
-                                                <img className="w-full h-full object-cover" src={person} alt="" />
+                                                <img className="w-full h-full object-cover" src={curr?.user?.photo?.path ? curr?.user?.photo?.path : person} alt="" />
                                             </div>
                                             {/* name and badge */}
                                             <div className="flex flex-col justify-between gap-1">
-                                                <p className="text-4 font-medium">{curr.player}</p>
-                                                <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p>
+                                                {YourDetails?.id !== curr?.user?.id && <p className="text-4 font-medium group-hover:underline">{curr.user.firstName + " " + curr.user.lastName}</p>}
+                                                {YourDetails?.id === curr?.user?.id && <p className="text-xl font-bold underline text-yellow-400 group-hover:underline">You</p>}
+                                                {/* <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p> */}
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="text-[1.1rem] py-3">{curr.most_races_won}</td>
-                                    <td className="text-[1.1rem] py-3">{curr.total_points}</td>
+                                    <td className="text-[1.1rem] py-3 group-hover:underline">{curr.num_races_won}</td>
+                                    <td className="text-[1.1rem] py-3 group-hover:underline">{!curr?.total_points ? 0 : curr.total_points}</td>
                                 </tr>
                             )
                         })

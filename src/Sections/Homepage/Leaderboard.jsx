@@ -6,15 +6,17 @@ import baggybro from '../../assets/images/baggybro.png'
 import gillbates2 from '../../assets/images/gillbates2.png'
 import kirayoshikage from '../../assets/images/kirayoshikage.png'
 import { useNavigate } from 'react-router-dom';
+import { getTop4 } from '../../Utils/api';
 
 
 
 const Leaderboard = () => {
+  const [leaderboard, setLeaderboard] = useState(null)
 
   const navigate = useNavigate()
 
   const leaderboardData = {
-    "Tech Stocks": [
+    "Today": [
       {
         userName: 'ChampionDuke',
         image: baggybro, // Replace with actual paths or imports
@@ -48,7 +50,7 @@ const Leaderboard = () => {
         email: 'ace.hunter@protonmail.com'
       }
     ],
-    "Crypto": [
+    "This Week": [
       {
         userName: 'CryptoKing',
         image: cofeeman,
@@ -82,7 +84,7 @@ const Leaderboard = () => {
         email: 'gavin.wood@polkadot.network'
       }
     ],
-    "Pharmaceuticals": [
+    "This Month": [
       {
         userName: 'MedExpert',
         image: gillbates2,
@@ -127,6 +129,28 @@ const Leaderboard = () => {
   };
 
 
+  useEffect(() => {
+    let today = new Date()
+    let sevenDaysAgo = new Date()
+    let monthAgo = new Date()
+    sevenDaysAgo.setDate(today.getDate() - 7)
+    monthAgo.setDate(today.getMonth() - 1)
+    let startDate = ''
+    if (activeTab === 'Today') {
+      startDate = today
+    }
+    if (activeTab === 'This Week') {
+      startDate = sevenDaysAgo
+    }
+    if (activeTab === 'This Month') {
+      startDate = monthAgo
+    }
+    getTop4(startDate, today, (data) => {
+      console.log('Top 4 fetched', startDate, data.data)
+      setLeaderboard(data.data)
+    })
+  }, [activeTab])
+
 
 
   return (
@@ -156,17 +180,20 @@ const Leaderboard = () => {
       <div
         className='bg-[#e5f4ff] w-full rounded-[20px] grid lg:grid-cols-4 md:grid-cols-2 gap-[1.3rem] md:px-[1.3rem] px-[0.7rem] py-[1.11rem] dark:bg-transparent'>
         {
-          leaderboardData[activeTab]?.map((curr, index) => {
+          leaderboard &&
+          leaderboard?.map((curr, index) => {
             return (
               <ProfileCardHomepage
                 key={curr.userName}
-                userName={curr.userName}
-                fullName={curr.fullName}
-                rank={curr.rank}
-                image={curr.image}
-                points={curr.points}
+                // userName={curr.user.firstname + curr.user.lastname}
+                fullName={curr.user.firstName + " " + curr.user.lastName}
+                rank={index + 1}
+                image={curr?.user?.photo?.path}
+                points={curr?.total_points == null ? 0 : curr.total_points}
                 index={index}
-                email={curr.email}
+                id={curr.user.id} // this is mandatory
+                activeTab={activeTab}
+              // email={curr.user.email}
               />
             )
           })

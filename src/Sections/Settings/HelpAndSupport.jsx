@@ -1,7 +1,7 @@
 // import { BsTelephone } from "react-icons/bs";
 // import { FiMessageSquare } from "react-icons/fi";
 import { CgChevronRight, CgChevronDown } from "react-icons/cg";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { DarkModeContext } from "../../Contexts/DarkModeProvider";
 import { accordionData } from "../../Utils/Data";
 // import { transform } from "lodash";
@@ -13,7 +13,7 @@ const HelpAndSupport = () => {
     const [report, setReport] = useState(false)
     const [reportData, setReportData] = useState({
         title: "",
-        priority: "",
+        priority: "Low",
         description: ""
     })
 
@@ -31,6 +31,11 @@ const HelpAndSupport = () => {
             description: ""
         }) // clear all inputs
     }
+
+    useEffect(() => {
+        console.log(reportData);
+
+    }, [reportData])
 
 
     return (
@@ -83,7 +88,14 @@ const HelpAndSupport = () => {
                             </div>
                             <div className="flex flex-col gap-2 flex-1">
                                 <label htmlFor="priority">Priority</label>
-                                <input value={reportData.priority} onChange={e => setReportData(prev => ({ ...prev, priority: e.target.value }))} type="text" />
+                                <div className="placeholder-[#b3bfbc] rounded-[14px] dark:bg-[#010B2C] dark:text-white bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32] focus:outline-none">
+
+                                    <select className="w-full bg-transparent focus:outline-none" onChange={e => setReportData(prev => ({ ...prev, priority: e.target.value }))} type="text" >
+                                        <option value="Low">Low</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div className="w-full flex justify-between gap-3 mb-4">
@@ -92,7 +104,7 @@ const HelpAndSupport = () => {
                                 <textarea value={reportData.description} onChange={e => setReportData(prev => ({ ...prev, description: e.target.value }))} type="text" />
                             </div>
                         </div>
-                        <button onClick={submitBugReport} className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-[0.8rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">Report</button>
+                        <button onClick={submitBugReport} className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-[1rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">Submit</button>
                     </div>
                 }
             </div>

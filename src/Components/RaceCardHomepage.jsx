@@ -150,7 +150,7 @@ const RaceCardHomepage = ({
     const getParticipantsWithRanks = (raceResult, participantsWithNoRank) => {
         // console.log(raceResult, participantsWithNoRank)
         var result = [];
-        result = [raceResult[1].participants.length > 0 ? raceResult[1].participants[0] : { user_name: "-", user_photo: "" }, raceResult[2].participants.length > 0 ? raceResult[2].participants[0] : { user_name: "-", user_photo: "" }, raceResult[3].participants.length > 0 ? raceResult[3].participants[0] : { user_name: "-", user_photo: "" }]
+        result = [raceResult[1]?.participants?.length > 0 ? raceResult[1]?.participants[0] : { user_name: "-", user_photo: "" }, raceResult[2]?.participants?.length > 0 ? raceResult[2]?.participants[0] : { user_name: "-", user_photo: "" }, raceResult[3]?.participants?.length > 0 ? raceResult[3]?.participants[0] : { user_name: "-", user_photo: "" }]
         return result;
     }
 
@@ -202,8 +202,8 @@ const RaceCardHomepage = ({
                     </CountdownCircleTimer>
                 </div>
                 <div className='h-full flex flex-col justify-start items-end flex-1'>
-                    <h3 className='text-[1.05rem] font-bold dark:text-white'>Tech Stocks</h3>
-                    <p className='text-[0.7rem] dark:text-white'>{`${participants.length} participants`}</p>
+                    <h3 className='text-[1.05rem] font-bold dark:text-white'>{`${participants?.length} participants`}</h3>
+                    {/* <p className='text-[0.7rem] dark:text-white'>{`${participants?.length} participants`}</p> */}
                 </div>
             </div>
 

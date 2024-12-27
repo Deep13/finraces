@@ -28,7 +28,7 @@ const UpcomingRaces = () => {
 
   return (
     <div className='max-w-[1400px] relative mb-[3.29rem]'>
-      <a onClick={() => navigate('/allraces', {state: 'Upcoming Races'})} className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
+      <a onClick={() => navigate('/allraces', { state: 'Upcoming Races' })} className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
         See All <BiChevronRight size={18} />
       </a>
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Upcoming Races</h2>
@@ -59,6 +59,14 @@ const UpcomingRaces = () => {
                 raceName={curr.name}
                 raceId={curr.id}
                 index={index}
+                totalStocksCount={curr.stocks.length}
+                stock1={curr?.stocks['0']?.icon_url}
+                stock2={curr?.stocks['1']?.icon_url}
+                stock3={curr?.stocks['2']?.icon_url}
+                stock1Name={curr?.stocks['0']?.name}
+                stock2Name={curr?.stocks['1']?.name}
+                stock3Name={curr?.stocks['2']?.name}
+                participants={curr.participants.length}
               />
             );
           })

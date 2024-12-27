@@ -184,7 +184,7 @@ const RacePage = () => {
 
 
         fetchRaceData(race_id, (res) => {
-            // console.log('racedata:', res);
+            console.log('racedata:', res);
             setRaceDetails(res)
             const { hours, minutes } = calculateDuration(res.start_date, res.end_date)
             // setDuration((hours && (hours + " Hours ")) + (minutes && (minutes + " Minutes")))
@@ -337,7 +337,7 @@ const RacePage = () => {
         };
     }, [race_id])
 
-    const findImageUrlForStock = (id) => stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === id)].icon_url
+    const findImageUrlForStock = (id) => stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === id)]?.icon_url
 
 
 
@@ -361,6 +361,7 @@ const RacePage = () => {
                         start_date={raceDetails?.start_date}
                         raceStarted={isRaceStarted}
                         joinedUsersList={joinedUsers}
+                        raceName={raceDetails?.name}
                         liveUsers={liveUsers}
                         race_id={race_id}
                         status={raceDetails?.status}
@@ -489,13 +490,13 @@ const RacePage = () => {
                                         stockRankList &&
                                         <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
                                             {/* <p className="text-[12px] font-medium">1500</p> */}
-                                            {findImageUrlForStock(stockRankList['1'].stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['1'].stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['1'].stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['1'].stock_id)} alt="" >{stockRankList['1'].stock_name.substring(0, 2)}</div>}
+                                            {findImageUrlForStock(stockRankList['1']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['1']?.stock_id)} alt="" />}
+                                            {!findImageUrlForStock(stockRankList['1']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['1']?.stock_id)} alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
                                         </div>
                                     }
                                     <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
                                         {
-                                            stockRankList && stockRankList['1'].stock_name
+                                            stockRankList && stockRankList['1']?.stock_name
                                         }
                                     </p>
                                 </div>
@@ -504,14 +505,14 @@ const RacePage = () => {
                                         stockRankList &&
                                         <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
                                             {/* <p className="text-[12px] font-medium">1500</p> */}
-                                            {findImageUrlForStock(stockRankList['0'].stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['0'].stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['0'].stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['0'].stock_id)} alt="" >{stockRankList['1'].stock_name.substring(0, 2)}</div>}
+                                            {findImageUrlForStock(stockRankList['0']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['0']?.stock_id)} alt="" />}
+                                            {!findImageUrlForStock(stockRankList['0']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['0']?.stock_id)} alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
                                         </div>
                                     }
                                     {/* <p className="font-medium text-4">WR: -</p> */}
                                     <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
                                         {
-                                            stockRankList && stockRankList['0'].stock_name
+                                            stockRankList && stockRankList['0']?.stock_name
                                         }
                                     </p>
                                 </div>
@@ -520,14 +521,14 @@ const RacePage = () => {
                                         stockRankList &&
                                         <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
                                             {/* <p className="text-[12px] font-medium">1500</p> */}
-                                            {findImageUrlForStock(stockRankList['2'].stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['2'].stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['2'].stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['2'].stock_id)} alt="" >{stockRankList['1'].stock_name.substring(0, 2)}</div>}
+                                            {findImageUrlForStock(stockRankList['2']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['2']?.stock_id)} alt="" />}
+                                            {!findImageUrlForStock(stockRankList['2']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['2']?.stock_id)} alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
                                         </div>
                                     }
                                     {/* <p className="font-medium text-4">WR: -</p> */}
                                     <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
                                         {
-                                            stockRankList && stockRankList['2'].stock_name
+                                            stockRankList && stockRankList['2']?.stock_name
                                         }
                                     </p>
                                 </div>
@@ -626,15 +627,15 @@ const RacePage = () => {
                                                 stockRankList ?
                                                     stockRankList?.map((curr, index) => {
                                                         let stock = stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === curr.stock_id)]
-                                                        let imageUrl = stock.icon_url
+                                                        let imageUrl = stock?.icon_url
                                                         console.log(curr)
                                                         return (
                                                             <YourBetsCard
-                                                                key={curr.stock_id}
+                                                                key={curr?.stock_id}
                                                                 stocksDataForRace={stocksDataForRace}
-                                                                stockName={curr.stock_name}
+                                                                stockName={curr?.stock_name}
                                                                 imageUrl={imageUrl}
-                                                                participants={curr.participants}
+                                                                participants={curr?.participants}
                                                             />
                                                         )
                                                     }) :
