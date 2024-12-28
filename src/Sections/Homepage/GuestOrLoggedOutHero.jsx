@@ -87,7 +87,7 @@ const GuestOrLoggedOutHero = () => {
 
                 {lastRaceId && (
                     <div
-                        className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center group hover:dark:border-white hover:border-black"
+                        className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center group hover:border-black"
                         onClick={() => navigate(`/race/${lastRaceId}`)}
                         title='Visit your last race by clicking on this card'>
                         <div className='flex flex-col gap-[8px] cursor-pointer'>
