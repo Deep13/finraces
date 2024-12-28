@@ -18,7 +18,7 @@ import Person2 from '../assets/images/person23.png'
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
 import { useParams } from "react-router-dom";
-import { fetchRaceData, fetchAlreadyJoinedUsers, getRaceResults, fetchParticipantsData } from "../Utils/api";
+import { fetchRaceData, fetchAlreadyJoinedUsers, getRaceResults, fetchParticipantsData, fetchRaceDataDetailed } from "../Utils/api";
 import io from 'socket.io-client'
 import Countdown from "react-countdown";
 import { ColorRing } from "react-loader-spinner";
@@ -78,6 +78,7 @@ const RacePage = () => {
     const [duration, setDuration] = useState('')
     const flag = useRef(0)
     const userDetails = localStorage.getItem('userDetails')
+    const stockChart = useRef()
 
     const fetchParticipantData = (id) => {
         fetchParticipantsData(id, (data) => {
@@ -85,12 +86,12 @@ const RacePage = () => {
             // setRaceUsersData(data.participants)
             setisLoading(false)
             let obj = {}
-            let arr = []
+            let arr = [Placeholder]
             console.log(window.location.origin)
             data?.participants?.map((val, index) => {
                 obj[val.id] = {
                     image: val?.photo?.path,
-                    position: index
+                    position: index + 1
                 }
                 arr.push(val?.photo?.path)
             })
@@ -117,7 +118,29 @@ const RacePage = () => {
         return { hours, minutes };
     }
 
+    function calculateDurationInSeconds(start_date, end_date) {
+        // Parse the start and end dates
+        const startDate = new Date(start_date);
+        const endDate = new Date(end_date);
 
+        // Calculate the difference in milliseconds
+        const differenceInMs = endDate - startDate;
+
+        // Convert milliseconds to seconds
+        const totalSeconds = Math.floor(differenceInMs / 1000);
+
+        return totalSeconds;
+    }
+
+
+
+
+    const sortAlphabetically = (stockRankList) => stockRankList?.slice().sort((a, b) =>
+        a.localeCompare(b)
+    )
+    const sortAlphabetically2 = (stockRankList) => stockRankList?.slice().sort((a, b) =>
+        a.stock_ticker.localeCompare(b.stock_ticker)
+    )
 
 
 
@@ -170,6 +193,10 @@ const RacePage = () => {
         setCurrentImage(1)
     }
 
+    // const sortedStockRankList = (stockRankList) => stockRankList?.slice().sort((a, b) =>
+    //     a.stock_name.localeCompare(b.name)
+    // )
+
 
     useEffect(() => {
         let interval = setInterval(() => {
@@ -184,7 +211,7 @@ const RacePage = () => {
 
 
         fetchRaceData(race_id, (res) => {
-            console.log('racedata:', res);
+            // console.log('racedata :', res);
             setRaceDetails(res)
             const { hours, minutes } = calculateDuration(res.start_date, res.end_date)
             // setDuration((hours && (hours + " Hours ")) + (minutes && (minutes + " Minutes")))
@@ -219,6 +246,101 @@ const RacePage = () => {
                 }
             }
             setisLoading(false)
+        })
+
+        //fetch all races data
+        fetchRaceDataDetailed(race_id, (res) => {
+            console.log('racedata detailed:', res);
+            const barColors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
+
+            // Initialize Chart.js
+            const ctx = document.getElementById('stockChart').getContext('2d');
+            let stocks = (res.stocks) // this will be the natural position of stocks at first
+            let stockNames = stocks.map(curr => (curr.ticker))
+            let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
+            let positionsOfStocks = stocks?.map((stock, index) => {
+                const relativePosition = ((stocks.length - index) / stocks.length) + elapsedTime;    // here 5 is total no. of stocks  *10 is not required here
+                return relativePosition;
+            })
+            console.log('stocks populated names', stockNames)
+            let totalSeconds = calculateDurationInSeconds(res.start_date, res.end_date)
+            const data = {
+                labels: sortAlphabetically(stockNames), // stocks from api extract Name from the response array
+                datasets: [
+                    {
+                        label: 'Relative Positions Over Time',
+                        data: [], // Initial data (will be updated dynamically)
+                        backgroundColor: barColors, // Assign different colors to each bar
+                        borderColor: 'rgba(0, 0, 0, 1)',
+                        borderWidth: 1,
+                        barThickness: 10, // Reduce the width of the bars
+                    },
+                ],
+            }
+            const imagePlugin = {
+                id: 'barEndImage',
+                beforeDraw: (chart) => {
+                    const { ctx, data } = chart;
+                    const image = new Image();
+                    image.src = 'https://via.placeholder.com/20'; // Replace with your image URL
+
+                    chart.data.datasets.forEach((dataset, datasetIndex) => {
+                        const meta = chart.getDatasetMeta(datasetIndex);
+                        meta.data.forEach((bar, index) => {
+                            const barX = bar.x; // End of the bar on the x-axisconst barY = bar.y; // Center of the bar on the y-axis// Draw image at the end of each bar
+                            const barY = bar.y;
+                            image.onload = () => {
+                                ctx.drawImage(image, barX + 5, barY - 10, 20, 20); // Adjust positioning and size
+                            };
+                        });
+                    });
+                },
+            };
+            stockChart.current = new Chart(ctx, {
+                type: 'bar', // Use 'bar' type and set orientation in options
+                data: data,
+                plugins: [imagePlugin],
+                options: {
+                    indexAxis: 'y', // Change orientation to horizontal
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                display: false
+                            },
+                            grid: {
+                                drawTicks: false
+                            },
+                            beginAtZero: true,
+                            min: 0,
+                            max: totalSeconds, // Set fixed length of x-axis to 2 minutes
+                            title: {
+                                display: false,
+                                text: 'Time (seconds)',
+                            },
+                        },
+                        y: {
+                            ticks: {
+                                display: false,
+                                // padding: 5
+                            },
+                            grid: {
+                                drawTicks: false
+                            },
+                            beginAtZero: true,
+                            title: {
+                                display: false,
+                                text: 'Stocks',
+                            },
+                        },
+                    },
+                },
+            });
         })
         fetchAlreadyJoinedUsers(race_id, (result) => {
             // console.log(result)
@@ -320,6 +442,16 @@ const RacePage = () => {
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
                 flag.current += 1
+                // console.log('this Race data', data)
+                let elapsedTime = calculateDurationInSeconds(data.data.start_date, new Date().toISOString())
+                let newPosArr = []
+                sortAlphabetically2(data.data['stocks'])?.forEach((stock) => {
+                    const relativePosition = ((((data.data['stocks'].length - stock.rank) * 10) / data.data['stocks'].length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
+                    newPosArr.push(relativePosition)
+                })
+                console.log('New Positions Array', newPosArr)
+                stockChart.current.data.datasets[0].data = newPosArr; // newPositon is new Array
+                stockChart.current.update(); // will be written in in socket
             }
         });
 
@@ -339,7 +471,9 @@ const RacePage = () => {
 
     const findImageUrlForStock = (id) => stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === id)]?.icon_url
 
+    useEffect(() => {
 
+    }, [])
 
     return (
         <>
@@ -534,7 +668,7 @@ const RacePage = () => {
                                 </div>
                             </div>
 
-                            <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md dark:bg-[#002763] dark:border dark:border-[#00387E]">
+                            {/* <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md dark:bg-[#002763] dark:border dark:border-[#00387E]">
                                 <div className="flex justify-between w-full items-center mb-[18px] dark:text-white">
                                     <p className="font-medium text-[0.9rem]">Race created by- {(raceDetails?.created_by?.firstName ? raceResults?.created_by?.firstName : '') + " " + (raceDetails?.created_by?.lastName ? raceResults?.created_by?.firstName : '')}</p>
                                     <div className="font-medium text-[0.9rem] flex gap-2 items-center">
@@ -551,30 +685,31 @@ const RacePage = () => {
                                             }
                                         </div>
                                     </div>
-                                </div>
+                                </div> */}
 
-                                {/* race tile  */}
-                                <div className="w-full h-auto flex justify-between border-dashed dark:border-white border-black border py-[3rem] relative items-center">
+                            {/* race tile  */}
+                            {/* <div className="w-full h-auto flex justify-between border-dashed dark:border-white border-black border py-[3rem] relative items-center">
                                     <div className="bg-[#f5f5f5] relative right-2 z-10 dark:bg-[#002763]">
                                         <img src={darkModeEnabled ? startdark : start} alt="" />
-                                    </div>
-                                    {/* here happens the magic  */}
-                                    {/* each time socket fires data you extract stocks from that data and
+                                    </div> */}
+                            {/* here happens the magic  */}
+                            {/* each time socket fires data you extract stocks from that data and
                                     assign rank  */}
-                                    {/* logic here will be like I will be extracging all the stocks 
+                            {/* logic here will be like I will be extracging all the stocks 
                                     and then assign rank each time data is upadated to each of them.
                                     make sure the list of stocks you are bringing here is in sorted
                                      order   only the rank field is changing for them*/}
-                                    {/* we should supply here only the array of stocks with rank field  */}
-                                    {/* it is coming from the stocksList  */}
-                                    <RaceTile
+                            {/* we should supply here only the array of stocks with rank field  */}
+                            {/* it is coming from the stocksList  */}
+                            {/* <RaceTile
                                         raceStatus={raceStatus}
                                         ranks={ranks} // these are arbitrary ranks
                                         stocksData={stocksDataForRace}
-                                        stockRankList={stockRankList} />
+                                        stockRankList={stockRankList} /> */}
 
-                                    {/* absolute elements  */}
-                                    <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" />
+
+                            {/* absolute elements  */}
+                            {/* <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" />
                                     <div className="absolute top-0 left-0 w-full h-full">
                                         <div className="border-r border-solid w-1/4"></div>
                                     </div>
@@ -584,7 +719,8 @@ const RacePage = () => {
                                         <img src={darkModeEnabled ? finishdark : finish} alt="" />
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
+                            <canvas id="stockChart" width="600" height="300"></canvas>
 
                             {/* other stocks rally  */}
                             <div className="flex-1 rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
