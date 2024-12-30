@@ -14,7 +14,8 @@ const HelpAndSupport = () => {
     const [reportData, setReportData] = useState({
         title: "",
         priority: "Low",
-        description: ""
+        description: "",
+        area: "Bug"
     })
 
     // Toggle a specific accordion
@@ -81,7 +82,7 @@ const HelpAndSupport = () => {
                 {
                     report &&
                     <div className="px-6 w-full py-4">
-                        <div className="w-full flex justify-between gap-3">
+                        <div className="w-full flex justify-between gap-3 mb-3">
                             <div className="flex flex-col gap-2 flex-1">
                                 <label htmlFor="title">Title</label>
                                 <input value={reportData.title} onChange={e => setReportData(prev => ({ ...prev, title: e.target.value }))} type="text" />
@@ -96,6 +97,21 @@ const HelpAndSupport = () => {
                                         <option value="High">High</option>
                                     </select>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="w-full flex justify-between gap-3 mb-3">
+                            <div className="flex flex-col gap-2 flex-1">
+                                <label htmlFor="area">Area</label>
+                                <div className="placeholder-[#b3bfbc] rounded-[14px] dark:bg-[#010B2C] dark:text-white bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32] focus:outline-none">
+
+                                    <select className="w-full bg-transparent focus:outline-none" onChange={e => setReportData(prev => ({ ...prev, area: e.target.value }))} type="text" >
+                                        <option value="Low">Bug</option>
+                                        <option value="Medium">Account Not Accessible</option>
+                                        <option value="High">Ranking is Not showing</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex flex-col gap-2 flex-1">
                             </div>
                         </div>
                         <div className="w-full flex justify-between gap-3 mb-4">

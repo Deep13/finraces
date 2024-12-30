@@ -22,9 +22,9 @@ const StockPriceCard = ({
       </div>
       <p className='font-semibold text-[0.7rem] line-clamp-2 dark:text-white'>{stockName}</p>
       {/* url of company is needed  */}
-      <p className='text-[1.3rem] font-medium dark:text-white'>${parseFloat(stockLastRate).toFixed(3)}</p>
+      <p className='text-[1.3rem] font-medium dark:text-white font-poppins'>${parseFloat(stockLastRate).toFixed(3)}</p>
       {/* last price  */}
-      <p className={`font-semibold text-[0.9rem] ${percentChange > 0 ? 'text-[#15af4d] dark:text-[#80e2a4]' : 'text-[#ff0000] dark:text-[#bc4a4a]'}`}>{parseFloat(percentChange).toFixed(3)}%</p>
+      <p className={`font-semibold text-[0.9rem] ${percentChange > 0 ? 'text-[#15af4d] dark:text-[#80e2a4]' : 'text-[#ff0000] dark:text-[#bc4a4a]'} font-poppins`}>{parseFloat(percentChange).toFixed(3)}%</p>
       {/* percent change  */}
     </div>
   )

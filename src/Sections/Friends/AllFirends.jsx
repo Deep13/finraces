@@ -1,9 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { DarkModeContext } from '../../Contexts/DarkModeProvider';
 import FriendCard from '../../Components/FriendCard';
 import Person from '../../assets/images/person2.png';
 import { friendsList } from '../../Utils/dummyFirends';
+import { fetchFriendsLeaderboard } from '../../Utils/api';
+
+
 
 const AllFriends = () => {
   const { darkModeEnabled } = useContext(DarkModeContext);
@@ -18,6 +21,13 @@ const AllFriends = () => {
     );
     setFriends(filteredFriends);
   };
+  let userId = JSON.parse(atob(localStorage.getItem('userDetails'))).userId
+
+  useEffect(() => {
+    userId && fetchFriendsLeaderboard(userId, (data) => {
+      setFriends(data.data.data)
+    })
+  }, [])
 
   return (
     <div className="dark:text-white w-full h-full">
@@ -42,15 +52,16 @@ const AllFriends = () => {
         </div>
       </div>
       <div className="w-full flex justify-start items-center gap-[1.5rem] flex-wrap">
-        {friends.length > 0 ? (
-          friends.map((friend, index) => (
-            <FriendCard
-              key={index}
-              name={friend.name}
-              role={friend.role}
-              image={Person}
-            />
-          ))
+        {friends?.length > 0 && friends?.some(friend => friend?.user?.id !== userId) ? (
+          friends
+            .filter(friend => friend?.use?.id !== userId)?.map((friend, index) => (
+              <FriendCard
+                key={index}
+                name={friend.name}
+                role={friend.role}
+                image={Person}
+              />
+            ))
         ) : (
           <p className="text-gray-500 dark:text-gray-400">No friends found.</p>
         )}

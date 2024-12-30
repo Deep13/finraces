@@ -88,7 +88,7 @@ const Profile = () => {
               </div>
               <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>
                 <p className="font-semibold text-[2rem] dark:text-white">{data && data.firstName + " " + data.lastName}</p>
-                <p className="font-semibold text-[1rem] -mt-4 text-slate-500 dark:text-white">{data?.email}</p>
+                <p className="font-semibold text-[1rem] -mt-4 text-slate-500 dark:text-white font-poppins">{data?.email}</p>
                 {/* <p className="font-semibold text-[1rem] dark:text-white">AKA Samuel <span className="ml-3">L.A, Calirfonia</span></p> */}
                 <div className="self-start flex gap-4">
                   {/* XP card here  */}

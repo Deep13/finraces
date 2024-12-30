@@ -41,7 +41,7 @@ const FinishedRaceCard = ({
                 <div className='flex gap-[0.76rem] flex-1'>
                     <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
                     <div className='h-full'>
-                        <h3 className='text-[1.05rem] font-bold dark:text-white'>{raceName}</h3>
+                        <h3 className='text-[1.05rem] font-bold dark:text-white line-clamp-3'>{raceName}</h3>
                         {/* <p className='text-[0.7rem]'>XYZ</p> */}
                     </div>
                 </div>
@@ -104,9 +104,37 @@ const FinishedRaceCard = ({
                 </div>
             </div>
 
-            <h3 className='text-[1.05rem] font-bold dark:text-white text-center'>Stocks</h3>
-            <div className='w-full flex-1 mt-3 relative  border-black  bg-[#edf7ff] flex justify-center items-center py-[1rem] dark:bg-[#002864] gap-6'>
-                {
+            <h3 className='text-[1rem] font-bold dark:text-white text-center'>Stocks</h3>
+            <div className='w-full flex-1 mt-3 relative  border-black  bg-[#edf7ff] flex justify-center items-center pb-[1rem] dark:bg-[#002864] gap-6'>
+
+                <div className='relative aspect-square p-[10px] scale-100 z-[5] flex justify-center item-center flex-col'>
+                    <div className='relative flex justify-center items-center'>
+                        {raceData?.stocks[1]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[1]?.icon_url} />}
+                        {!raceData?.stocks[1]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
+                        <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
+                    </div>
+                    {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{raceData?.stocks[0]?.name}</p> */}
+                </div>
+
+                <div className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
+                    <div className='relative flex justify-center items-center'>
+                        {raceData?.stocks[0]?.icon_url && <img className='absolute scale-125 z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[0]?.icon_url} />}
+                        {!raceData?.stocks[0]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
+                        <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
+                    </div>
+                    {/* <p className='relative text-center font-semibold text-[12px] dark:text-white w-[8rem] line-clamp-3'>{raceData?.stocks[0]?.name}</p> */}
+                </div>
+
+                <div className='relative aspect-square p-[10px] scale-100 z-[5] flex justify-center item-center flex-col'>
+                    <div className='relative flex justify-center items-center'>
+                        {raceData?.stocks[2]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[2]?.icon_url} />}
+                        {!raceData?.stocks[2]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
+                        <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
+                    </div>
+                    {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{raceData?.stocks[2]?.name}</p> */}
+                </div>
+
+                {/* {
                     raceData?.stocks?.slice(0, 3).map((curr, index) => {
                         return (
                             <div key={curr.id} className='flex flex-col gap-3 items-center'>
@@ -118,7 +146,7 @@ const FinishedRaceCard = ({
                             </div>
                         )
                     })
-                }
+                } */}
             </div>
         </div>
     )

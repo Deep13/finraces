@@ -15,7 +15,8 @@ export default {
 			colors: {}
 		},
 		fontFamily: {
-			sans: ['Raleway', 'sans-serif']
+			sans: ['Raleway', 'sans-serif'],
+			poppins: ['Poppins', 'sans-serif']
 		}
 	},
 	plugins: [

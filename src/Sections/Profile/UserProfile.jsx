@@ -88,7 +88,7 @@ const UserProfile = ({
                         </div>
                         <div className='flex flex-col gap-[8px]'>
                             <p className='text-[1rem]'>Total Points</p>
-                            <p className='text-[1.5rem]'>{totalPoints}</p>
+                            <p className='text-[1.5rem] font-poppins'>{totalPoints}</p>
                             {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
                                 <FiArrowUpRight color="green" size={15} />
                                 <p className="text-green-600">4.8%</p>
@@ -99,7 +99,7 @@ const UserProfile = ({
                     <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
                         <div className='flex flex-col gap-[8px]'>
                             <p className='text-[1rem]'>Win Rate</p>
-                            <p className='text-[1.5rem] font-bold'>{winningRate}</p>
+                            <p className='text-[1.5rem] font-bold font-poppins'>{winningRate}</p>
                             {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
                                 <FiArrowUpRight color="green" size={15} />
                                 <p className="text-green-600">1.8%</p>
@@ -113,19 +113,19 @@ const UserProfile = ({
                     <div className="col-span-2 row-span-1 rounded-lg flex justify-between gap-4 bg-white p-[1.5rem] dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
                         <div className="flex-1 rounded-lg">
                             <p className="text-[1rem]">Race Participated</p>
-                            <p className="text-[1.5rem] font-semibold">{total}</p>
+                            <p className="text-[1.5rem] font-semibold font-poppins">{total}</p>
                         </div>
                         <div className="flex-1 rounded-lg">
                             <p className="text-[1rem]">Races with 1st place</p>
-                            <p className="text-[1.5rem] font-semibold">{raceCounts[1]}</p>
+                            <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[1]}</p>
                         </div>
                         <div className="flex-1 rounded-lg">
                             <p className="text-[1rem]">Races with 2nd place</p>
-                            <p className="text-[1.5rem] font-semibold">{raceCounts[2]}</p>
+                            <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[2]}</p>
                         </div>
                         <div className="flex-1 rounded-lg">
                             <p className="text-[1rem]">Races with 3rd placd</p>
-                            <p className="text-[1.5rem] font-semibold">{raceCounts[3]}</p>
+                            <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[3]}</p>
                         </div>
                     </div>
                 </div>
@@ -187,20 +187,20 @@ const UserProfile = ({
                                         navigate(`/race/${curr.id}`)
                                     }} key={index} className="odd:bg-transparent even:bg-[#00276] pb-2 dark:border-b cursor-pointer group">
                                         <th className="py-3 overflow-hidden text-ellipsis whitespace-nowrap group-hover:underline">{index + 1}</th>
-                                        <td className="text-[1.1rem] py-3 group-hover:underline">{curr.name}</td>
-                                        <td className="text-[1.1rem] py-3 group-hover:underline">{curr.participants.length}</td>
-                                        <td className="text-[1.1rem] py-3 group-hover:underline">{curr.stocks.length}</td>
+                                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.name}</td>
+                                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.participants.length}</td>
+                                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.stocks.length}</td>
                                         <td className="text-[1.1rem]">
                                             <div className='py-3 flex justify-start'>
                                                 {
                                                     curr.status === 'scheduled' &&
-                                                    <div className='text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-3 rounded-full'>
+                                                    <div className='text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-3 rounded-full font-poppins'>
                                                         {capitalize(curr.status)}
                                                     </div>
                                                 }
                                                 {
                                                     curr.status === 'running' &&
-                                                    <div className='text-green-300 bg-opacity-25 text-center font-medium  bg-green-600 border-green-700 border px-3 rounded-full'>
+                                                    <div className=' font-poppins'>
                                                         {capitalize(curr.status)}
                                                     </div>
                                                 }

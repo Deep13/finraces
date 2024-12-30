@@ -9,6 +9,7 @@ import person from '../assets/images/person2.png'
 import facebook from '../assets/images/facebook.svg'
 import { debounce, filter } from "lodash";
 import { fuzzySearch } from "../Utils/api";
+import { useNavigate } from "react-router-dom";
 
 
 const usersData = [
@@ -44,6 +45,7 @@ const PopupSearch = ({ setPopupSearch }) => {
     const [filteredResults, setFilteredResults] = useState(null)
     const [users, setUsers] = useState([])
     const [races, setRaces] = useState([])
+    const navigate = useNavigate()
 
     const updateFilteredResults = useCallback(
         debounce(async (newQuery) => { // direcy callback instead of defining it ouside
@@ -65,19 +67,19 @@ const PopupSearch = ({ setPopupSearch }) => {
 
     const handleSearchChange = (query) => {
         setSearchQuery(query);
-        if (query === "") {
-            setRaces([])
-            setUsers([])
-            return
-        }
-        const filteredRaces = racesData.filter(race =>
-            race.name.toLowerCase().includes(query.toLowerCase())
-        );
-        const filteredUsers = usersData.filter(race =>
-            race.name.toLowerCase().includes(query.toLowerCase())
-        );
-        setRaces(filteredRaces)
-        setUsers(filteredUsers)
+        // if (query === "") {
+        //     setRaces([])
+        //     setUsers([])
+        //     return
+        // }
+        // const filteredRaces = racesData.filter(race =>
+        //     race.name.toLowerCase().includes(query.toLowerCase())
+        // );
+        // const filteredUsers = usersData.filter(race =>
+        //     race.name.toLowerCase().includes(query.toLowerCase())
+        // );
+        // setRaces(filteredRaces)
+        // setUsers(filteredUsers)
 
     };
 
@@ -144,11 +146,12 @@ const PopupSearch = ({ setPopupSearch }) => {
                             <p className="text-white">No users found</p>
                         )}
                     </div>
+                    {users.length > 6 && <button className="px-4 py-3 font-bold text-sm dark:text-white dark:bg-[#001B51] rounded-lg">Show All</button>}
                 </div>
 
                 {/* Search results for races */}
                 <div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
-                    <div className="max-w-[40rem] min-w-[10rem] max-h-[12rem] overflow-auto py-8 rounded-xl bg-[#001B51] p-4 flex justify flex-wrap gap-4">
+                    <div className="max-w-[40rem] min-w-[10rem] max-h-[11.5rem] rounded-xl bg-[#001B51] p-4 flex justify flex-wrap gap-4 overflow-hidden">
                         {races?.length > 0 ? (
                             races?.map((race) => (
                                 <SearchRaceCard
@@ -163,6 +166,10 @@ const PopupSearch = ({ setPopupSearch }) => {
                             <p className="text-white">No races found</p>
                         )}
                     </div>
+                    {races.length > 6 && <button onClick={() => {
+                        navigate('/allraces', { state: 'Finished Races' })
+                        setPopupSearch(false)
+                    }} className="px-4 py-3 font-bold text-sm dark:text-white dark:bg-[#001B51] rounded-lg">Show All</button>}
                 </div>
             </div>
         </motion.div>

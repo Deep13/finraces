@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Person from '../../assets/images/person2.png';
 import person2 from '../../assets/images/kirayoshikage.png';
 import person3 from '../../assets/images/person3.png';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../Components/Pagination';
+import { fetchFriendsLeaderboard } from '../../Utils/api';
 
 const FriendsLeaderBoard = () => {
 
   const navigate = useNavigate()
+  const [leaderboardData, setLeaderboardData] = useState(null)
+  let userId = JSON.parse(atob(localStorage.getItem('userDetails'))).userId
+
+  useEffect(() => {
+    // console.log(userId)
+    userId && fetchFriendsLeaderboard(userId, (data) => {
+      console.log(data)
+      setLeaderboardData(data)
+    })
+  }, [])
 
   return (
     <div className="dark:text-white w-full h-full">
@@ -28,85 +39,40 @@ const FriendsLeaderBoard = () => {
             </thead>
             <tbody>
               {/* row 1 */}
-              <tr className="odd:bg-transparent even:bg-[#00276]">
-                <th className="text-[1.5rem] py-3">1</th>
-                <td className="py-3">
-                  <div onClick={() => navigate(`/userprofile/1`, {
-                    state: {
-                      userName: 'Burt Macklin',
-                      email: 'burt.macklin@gmail.com',
-                      image: Person
-                    }
-                  })} className="w-full flex gap-3 justify-start items-center cursor-pointer">
-                    {/* image */}
-                    <div className="w-12 h-12 rounded-full overflow-hidden">
-                      <img className="w-full h-full object-cover" src={Person} alt="" />
-                    </div>
-                    {/* name and badge */}
-                    <div className="flex flex-col justify-between gap-1">
-                      <p className="text-4 font-medium">Burt Macklin</p>
-                      <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="text-[1.1rem] py-3">152</td>
-                <td className="text-[1.1rem] py-3">Blue</td>
-              </tr>
-
-              {/* row 2 */}
-              <tr className="odd:bg-transparent even:bg-[#00276]">
-                <th className="text-[1.5rem] py-3">2</th>
-                <td className="py-3">
-                  <div onClick={() => navigate(`/userprofile/1`, {
-                    state: {
-                      userName: 'Burt Macklin',
-                      email: 'burt.macklin@gmail.com',
-                      image: person2
-                    }
-                  })} className="w-full flex gap-3 justify-start items-center cursor-pointer">
-                    {/* image */}
-                    <div className="w-12 h-12 rounded-full overflow-hidden">
-                      <img className="w-full h-full object-cover" src={person2} alt="" />
-                    </div>
-                    {/* name and badge */}
-                    <div className="flex flex-col justify-between gap-1">
-                      <p className="text-[1.3rem] font-bold">You</p>
-                      <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="text-[1.1rem] py-3">152</td>
-                <td className="text-[1.1rem] py-3">Blue</td>
-              </tr>
-
-              {/* row 3 */}
-              <tr className="odd:bg-transparent even:bg-[#00276]">
-                <th className="text-[1.5rem] py-3">3</th>
-                <td className="py-3">
-                  <div onClick={() => navigate(`/userprofile/1`, {
-                    state: {
-                      userName: 'Burt Macklin',
-                      email: 'burt.macklin@gmail.com',
-                      image: person3
-                    }
-                  })} className="w-full flex gap-3 justify-start items-center cursor-pointer">
-                    {/* image */}
-                    <div className="w-12 h-12 rounded-full overflow-hidden">
-                      <img className="w-full h-full object-cover" src={person3} alt="" />
-                    </div>
-                    {/* name and badge */}
-                    <div className="flex flex-col justify-between gap-1">
-                      <p className="text-4 font-medium">Burt Macklin</p>
-                      <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p>
-                    </div>
-                  </div>
-                </td>
-                <td className="text-[1.1rem] py-3">152</td>
-                <td className="text-[1.1rem] py-3">Blue</td>
-              </tr>
+              {
+                leaderboardData?.data?.data?.map((curr, index) => {
+                  return (
+                    <tr key={curr.user.id} className="odd:bg-transparent even:bg-[#00276]">
+                      <th className="text-[1.5rem] py-3 font-poppins">1</th>
+                      <td className="py-3">
+                        <div onClick={() => navigate(`/userprofile/${curr.user.id}`, {
+                          state: {
+                            userName: curr.user.firstName + " " + curr.user.lastName,
+                            // email: 'burt.macklin@gmail.com',
+                            image: curr.user.photo.path
+                          }
+                        })} className="w-full flex gap-3 justify-start items-center cursor-pointer">
+                          {/* image */}
+                          <div className="w-12 h-12 rounded-full overflow-hidden">
+                            <img className="w-full h-full object-cover" src={curr.user.photo.path} alt="" />
+                          </div>
+                          {/* name and badge */}
+                          <div className="flex flex-col justify-between gap-1">
+                            {userId === curr.user.id && <p className="text-xl text-yellow-400 font-poppins font-bold">You</p>}
+                            {userId !== curr.user.id && <p className="text-4 font-medium font-poppins">{curr.user.firstName + " " + curr.user.lastName}</p>}
+                            {/* <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p> */}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="text-[1.1rem] py-3 font-poppins">{curr.num_races_won}</td>
+                      <td className="text-[1.1rem] py-3 font-poppins">{curr.total_points}</td>
+                    </tr>
+                  )
+                })
+              }
             </tbody>
           </table>
-          <Pagination currentPage={2} totalPages={10} onPageChange={() => { }} />
+          {leaderboardData?.data?.data?.length > 30 && <Pagination currentPage={2} totalPages={10} onPageChange={() => { }} />}
         </div>
       </div>
     </div>

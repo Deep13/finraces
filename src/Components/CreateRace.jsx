@@ -361,47 +361,28 @@ const CreateRace = ({
 
           {/* stocks with prices and values  */}
           <p className="font-semibold mt-12 mb-4 dark:text-white">Add Stocks <span className="text-[#838386]">(upto 10)</span></p>
-          <div className="flex mb-8 w-full justify-between items-end">
-            <div className="flex flex-col flex-1 gap-[10px] items-baseline">
-              {/* <label className="mb-[10px] dark:text-white" htmlFor="percentage_toogle">Value type </label> */}
-              {/* <SegmentedControl
-                name="group-2"
-                callback={(val) => setpercentValue(val)}
-                controlRef={useRef()}
-                segments={[
-                  {
-                    label: "Price",
-                    value: "price",
-                    ref: useRef()
-                  },
-                  {
-                    label: "Percentage",
-                    value: "percentage",
-                    ref: useRef()
-                  }
-                ]}
-              /> */}
-            </div>
+          {/* <div className="flex mb-8 w-full justify-between items-end">
+          </div> */}
+
+          <div className="w-full flex flex-col">
+            {
+              racePredictions[0] ? racePredictions?.map((curr, index) => {
+                return (
+                  <StockEntryRow
+                    key={index + 1}
+                    prediction_price={curr.prediction_price}
+                    prediction_rank={curr.prediction_rank}
+                    removeStock={removeStock}
+                    index={index}
+                    stockList={stockList}
+                    percentageTrue={percentValue}
+                    transformedData={transformedData}
+                    handleRacePredictionsChange={handleRacePredictionsChange}
+                  />
+                )
+              }) : <div className="w-full text-center text-slate-500 dark:text-white">Add some Stocks</div>
+            }
           </div>
-
-
-          {
-            racePredictions[0] ? racePredictions?.map((curr, index) => {
-              return (
-                <StockEntryRow
-                  key={index + 1}
-                  prediction_price={curr.prediction_price}
-                  prediction_rank={curr.prediction_rank}
-                  removeStock={removeStock}
-                  index={index}
-                  stockList={stockList}
-                  percentageTrue={percentValue}
-                  transformedData={transformedData}
-                  handleRacePredictionsChange={handleRacePredictionsChange}
-                />
-              )
-            }) : <div className="w-full text-center text-slate-500 dark:text-white">Add some Stocks</div>
-          }
           <div className="w-full flex justify-center items-center mt-4">
             <button title="Click to add more stocks entries" onClick={addStock} className="pl-[1.5rem] pr-[0.7rem] py-[8px] font-semibold flex gap-2 rounded-[8px] active:scale-95 border border-slate-500 dark:text-white">Add Stocks <IoIosAdd size={24} /></button>
           </div>

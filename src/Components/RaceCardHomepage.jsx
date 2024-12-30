@@ -174,12 +174,12 @@ const RaceCardHomepage = ({
                 <div className='flex gap-[0.76rem] flex-1'>
                     <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
                     <div className='h-full'>
-                        <h3 className='text-[1.05rem] font-bold dark:text-white'>{raceName}</h3>
+                        <h3 className='text-[0.85rem] line-clamp-3 font-bold dark:text-white'>{raceName}</h3>
                         {/* <p className='text-[0.7rem]'>XYZ</p> */}
                     </div>
-                    <div className=''>
+                    {/* <div className=''>
                         <img className='w-[10px] h-[10px]' src={info} alt="info icon" />
-                    </div>
+                    </div> */}
                 </div>
                 <div className='flex-1 flex justify-center'>
                     <CountdownCircleTimer

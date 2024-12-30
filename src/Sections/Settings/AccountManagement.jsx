@@ -96,20 +96,21 @@ const AccountManagement = () => {
                     <div className='dark:bg-[#002763] bg-slate-200 rounded-[12px] py-[10px] px-[20px] flex-1 flex flex-col'>
                         <h4 className='dark:text-white font-bold text-[1.1rem] mb-4'>General</h4>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
-                            <label htmlFor="username" className='dark:text-white'>User Name</label>
+                            <label htmlFor="username" className='dark:text-white'>User ID</label>
                             {/* <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' /> */}
-                            <p className='font-semibold text-lg'>{userData.id}</p>
+                            <p className='font-semibold text-lg font-poppins'>{userData.id}</p>
                         </div>
                         <div className='w-full flex justify-between'>
-                            <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
+                            {/* <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                                 <label htmlFor="profilename" className='dark:text-white'>First Name</label>
-                                {/* <input value={userData.firstName} onChange={e => setUserData(prev => ({ ...prev, firstName: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' /> */}
-                                <p className='font-semibold dark:text-white'>{userData.firstName}</p>
-                            </div>
+                                <input value={userData.firstName} onChange={e => setUserData(prev => ({ ...prev, firstName: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' />
+                                <p className='font-semibold dark:text-white font-poppins'>{userData.firstName}</p>
+                            </div> */}
                             <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
-                                <label htmlFor="profilename" className='dark:text-white'>Last Name</label>
+                                <label htmlFor="profilename" className='dark:text-white'>Full Name</label>
                                 {/* <input value={userData.lastName} onChange={e => setUserData(prev => ({ ...prev, lastName: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' /> */}
-                                <p className='font-semibold dark:text-white'>{userData.firstName}</p>
+                                <p className='font-semibold dark:text-white'>{userData.firstName + " " + userData.lastName}</p>
+                                {/* <p className='font-semibold dark:text-white'>{userData.lastN}</p> */}
                             </div>
                         </div>
                     </div>
@@ -145,7 +146,7 @@ const AccountManagement = () => {
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="username" className='dark:text-white'>Email</label>
                             {/* <input value={userData.email} onChange={e => setUserData(prev => ({ ...prev, email: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' /> */}
-                            <p className='font-semibold dark:text-white'>{userData.email}</p>
+                            <p className='font-semibold dark:text-white font-poppins'>{userData.email}</p>
                         </div>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="profilename" className='dark:text-white'>Password</label>

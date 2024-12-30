@@ -79,6 +79,8 @@ const RacePage = () => {
     const flag = useRef(0)
     const userDetails = localStorage.getItem('userDetails')
     const stockChart = useRef()
+    const [chartData, setChartData] = useState([]);
+
 
     const fetchParticipantData = (id) => {
         fetchParticipantsData(id, (data) => {
@@ -210,6 +212,7 @@ const RacePage = () => {
         fetchParticipantData(race_id) // this is local
 
 
+
         fetchRaceData(race_id, (res) => {
             // console.log('racedata :', res);
             setRaceDetails(res)
@@ -250,11 +253,11 @@ const RacePage = () => {
 
         //fetch all races data
         fetchRaceDataDetailed(race_id, (res) => {
-            console.log('racedata detailed:', res);
+            //     console.log('racedata detailed:', res);
             const barColors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
 
-            // Initialize Chart.js
-            const ctx = document.getElementById('stockChart').getContext('2d');
+            //     // Initialize Chart.js
+            //     const ctx = document.getElementById('stockChart').getContext('2d');
             let stocks = (res.stocks) // this will be the natural position of stocks at first
             let stockNames = stocks.map(curr => (curr.ticker))
             let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
@@ -262,86 +265,133 @@ const RacePage = () => {
                 const relativePosition = ((stocks.length - index) / stocks.length) + elapsedTime;    // here 5 is total no. of stocks  *10 is not required here
                 return relativePosition;
             })
-            console.log('stocks populated names', stockNames)
+            //     console.log('stocks populated names', stockNames)
             let totalSeconds = calculateDurationInSeconds(res.start_date, res.end_date)
-            const data = {
-                labels: sortAlphabetically(stockNames), // stocks from api extract Name from the response array
-                datasets: [
+            //     const data = {
+            //         labels: sortAlphabetically(stockNames), // stocks from api extract Name from the response array
+            //         datasets: [
+            //             {
+            //                 label: 'Relative Positions Over Time',
+            //                 data: [], // Initial data (will be updated dynamically)
+            //                 backgroundColor: barColors, // Assign different colors to each bar
+            //                 borderColor: 'rgba(0, 0, 0, 1)',
+            //                 borderWidth: 1,
+            //                 barThickness: 10, // Reduce the width of the bars
+            //             },
+            //         ],
+            //     }
+            //     const imagePlugin = {
+            //         id: 'barEndImage',
+            //         beforeDraw: (chart) => {
+            //             const { ctx, data } = chart;
+            //             const image = new Image();
+            //             image.src = 'https://via.placeholder.com/20'; // Replace with your image URL
+
+            //             chart.data.datasets.forEach((dataset, datasetIndex) => {
+            //                 const meta = chart.getDatasetMeta(datasetIndex);
+            //                 meta.data.forEach((bar, index) => {
+            //                     const barX = bar.x; // End of the bar on the x-axisconst barY = bar.y; // Center of the bar on the y-axis// Draw image at the end of each bar
+            //                     const barY = bar.y;
+            //                     image.onload = () => {
+            //                         ctx.drawImage(image, barX + 5, barY - 10, 20, 20); // Adjust positioning and size
+            //                     };
+            //                 });
+            //             });
+            //         },
+            //     };
+            //     stockChart.current = new Chart(ctx, {
+            //         type: 'bar', // Use 'bar' type and set orientation in options
+            //         data: data,
+            //         plugins: [imagePlugin],
+            //         options: {
+            //             indexAxis: 'y', // Change orientation to horizontal
+            //             responsive: true,
+            //             plugins: {
+            //                 legend: {
+            //                     display: false,
+            //                 }
+            //             },
+            //             scales: {
+            //                 x: {
+            //                     ticks: {
+            //                         display: false
+            //                     },
+            //                     grid: {
+            //                         drawTicks: false
+            //                     },
+            //                     beginAtZero: true,
+            //                     min: 0,
+            //                     max: totalSeconds, // Set fixed length of x-axis to 2 minutes
+            //                     title: {
+            //                         display: false,
+            //                         text: 'Time (seconds)',
+            //                     },
+            //                 },
+            //                 y: {
+            //                     ticks: {
+            //                         display: false,
+            //                         // padding: 5
+            //                     },
+            //                     grid: {
+            //                         drawTicks: false
+            //                     },
+            //                     beginAtZero: true,
+            //                     title: {
+            //                         display: false,
+            //                         text: 'Stocks',
+            //                     },
+            //                 },
+            //             },
+            //         },
+            //     });
+
+            const chartOptions = {
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: true,
+                        dataLabels: {
+                            position: 'top',
+                        },
+                    },
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: (val) => val,
+                },
+                xaxis: {
+                    categories: sortAlphabetically(stockNames),
+                },
+                series: [
                     {
-                        label: 'Relative Positions Over Time',
-                        data: [], // Initial data (will be updated dynamically)
-                        backgroundColor: barColors, // Assign different colors to each bar
-                        borderColor: 'rgba(0, 0, 0, 1)',
-                        borderWidth: 1,
-                        barThickness: 10, // Reduce the width of the bars
+                        data: chartData.map((data) => data.value),
                     },
                 ],
-            }
-            const imagePlugin = {
-                id: 'barEndImage',
-                beforeDraw: (chart) => {
-                    const { ctx, data } = chart;
-                    const image = new Image();
-                    image.src = 'https://via.placeholder.com/20'; // Replace with your image URL
-
-                    chart.data.datasets.forEach((dataset, datasetIndex) => {
-                        const meta = chart.getDatasetMeta(datasetIndex);
-                        meta.data.forEach((bar, index) => {
-                            const barX = bar.x; // End of the bar on the x-axisconst barY = bar.y; // Center of the bar on the y-axis// Draw image at the end of each bar
-                            const barY = bar.y;
-                            image.onload = () => {
-                                ctx.drawImage(image, barX + 5, barY - 10, 20, 20); // Adjust positioning and size
-                            };
-                        });
-                    });
+                annotations: {
+                    points: chartData.map((data, index) => ({
+                        x: data.value,
+                        y: sortAlphabetically(stockNames)[index],
+                        marker: {
+                            size: 20,
+                            image: {
+                                path: data.image,
+                            },
+                        },
+                    })),
                 },
             };
-            stockChart.current = new Chart(ctx, {
-                type: 'bar', // Use 'bar' type and set orientation in options
-                data: data,
-                plugins: [imagePlugin],
-                options: {
-                    indexAxis: 'y', // Change orientation to horizontal
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false,
-                        }
-                    },
-                    scales: {
-                        x: {
-                            ticks: {
-                                display: false
-                            },
-                            grid: {
-                                drawTicks: false
-                            },
-                            beginAtZero: true,
-                            min: 0,
-                            max: totalSeconds, // Set fixed length of x-axis to 2 minutes
-                            title: {
-                                display: false,
-                                text: 'Time (seconds)',
-                            },
-                        },
-                        y: {
-                            ticks: {
-                                display: false,
-                                // padding: 5
-                            },
-                            grid: {
-                                drawTicks: false
-                            },
-                            beginAtZero: true,
-                            title: {
-                                display: false,
-                                text: 'Stocks',
-                            },
-                        },
-                    },
-                },
-            });
+
+            document.getElementById('race_chart').innerHTML = ""
+            stockChart.current = new ApexCharts(document.querySelector('#race_chart'), chartOptions);
+            stockChart.current.render();
         })
+
+
+
+
         fetchAlreadyJoinedUsers(race_id, (result) => {
             // console.log(result)
             setParticipantsCount(result.length)
@@ -447,11 +497,35 @@ const RacePage = () => {
                 let newPosArr = []
                 sortAlphabetically2(data.data['stocks'])?.forEach((stock) => {
                     const relativePosition = ((((data.data['stocks'].length - stock.rank) * 10) / data.data['stocks'].length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
-                    newPosArr.push(relativePosition)
+                    newPosArr.push({
+                        value: relativePosition,
+                        image: Person2
+                    })
                 })
                 console.log('New Positions Array', newPosArr)
-                stockChart.current.data.datasets[0].data = newPosArr; // newPositon is new Array
-                stockChart.current.update(); // will be written in in socket
+                // stockChart.current.data.datasets[0].data = newPosArr; // newPositon is new Array
+                // stockChart.current.update(); // will be written in in socket
+                let stocks = data.data['stocks'] // this will be the natural position of stocks at first
+                let stockNames = stocks.map(curr => (curr.stock_ticker))
+                stockChart.current.updateOptions({
+                    series: [
+                        {
+                            data: newPosArr.map((data) => data.value),
+                        },
+                    ],
+                    annotations: {
+                        points: newPosArr.map((data, index) => ({
+                            x: data.value,
+                            y: sortAlphabetically(stockNames)[index],
+                            marker: {
+                                size: 20,
+                                image: {
+                                    path: data.image,
+                                },
+                            },
+                        })),
+                    },
+                });
             }
         });
 
@@ -531,10 +605,10 @@ const RacePage = () => {
                                 <div className='flex gap-[0.76rem]'>
                                     <div></div>
                                     <div className='h-full'>
-                                        <h3 className='text-[1.05rem] font-bold dark:text-white'>{raceDetails?.name}</h3>
+                                        <h3 className='text-[1.05rem] font-bold dark:text-white font-poppins'>{raceDetails?.name}</h3>
                                         <p className='text-[0.7rem] dark:text-white'>
                                             Race Duration
-                                            <span className="font-semibold ml-2">
+                                            <span className="font-semibold ml-2 font-poppins">
                                                 {duration}
                                             </span>
                                         </p>
@@ -551,7 +625,7 @@ const RacePage = () => {
                                     />}
                                 </div>
                                 <div className='h-full flex flex-col justify-between items-end'>
-                                    <h3 className='text-[1.05rem] font-bold dark:text-white flex gap-1'>{participantsCount} <span>{participantsCount === 1 ? 'Participant' : "Participants"}</span> </h3>
+                                    <h3 className='text-[1.05rem] font-bold dark:text-white flex gap-1 font-poppins'>{participantsCount} <span className="font-sans">{participantsCount === 1 ? 'Participant' : "Participants"}</span> </h3>
                                     {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
                                 </div>
                             </div>
@@ -720,7 +794,11 @@ const RacePage = () => {
                                     </div>
                                 </div>
                             </div> */}
-                            <canvas id="stockChart" width="600" height="300"></canvas>
+                            {/* <canvas id="stockChart" width="600" height="300"></canvas> */}
+                            <div id="race_chart">
+
+                            </div>
+
 
                             {/* other stocks rally  */}
                             <div className="flex-1 rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">

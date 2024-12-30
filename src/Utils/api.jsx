@@ -677,10 +677,7 @@ export const reportBug = async (
 
     // Create the payload
     const payload = {
-      title: reportData.title,
-      description: reportData.description,
-      priority: reportData.priority,
-      area: 'User Ticket',
+      ...reportData,
       status: 'string',
     };
 
@@ -1163,6 +1160,75 @@ export const fetchRaceDataDetailed = async ( // change this to the updated api
   }
 }
 
+export const fetchFriendsLeaderboard = async (
+  friendOfUserId,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
 
+  const token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/race-results/stats?friendOfUserId=${Number(friendOfUserId)}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+
+export const checkFriendRequestStatus = async ( // change this to the updated api
+  userId,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  const token = localStorage.getItem('token')
+  try {
+    const response = await fetch(`https://www.missionatal.com/api/v1/friends/${userId}/request`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    const thisData = await response.json()
+    onSuccess(thisData)
+  } catch (e) {
+    console.error(e)
+    onError(e)
+  }
+}
+
+
+export const settings = async ( // change this to the updated api
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  const token = localStorage.getItem('token')
+  try {
+    const response = await fetch(`https://www.missionatal.com/api/v1/settings`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+    const thisData = await response.json()
+    onSuccess(thisData)
+  } catch (e) {
+    console.error(e)
+    onError(e)
+  }
+}
 
 

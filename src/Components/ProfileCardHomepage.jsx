@@ -59,7 +59,7 @@ const ProfileCardHomepage = ({
                 {YourDetails?.id === id && <p className='dark:text-yellow-400 font-bold text-xl flex gap-2'> <span className='text-[1.2rem] dark:text-yellow-400 font-bold'>#{rank}</span>You</p>}
             </div>
             <div className='w-full flex-1 overflow-hidden rounded-[10px] mb-[4px]'>
-                <img className='w-full h-full object-cover' src={image} alt="a seedha saadha person" />
+                <img className='w-full h-full object-cover' src={image} alt={fullName} />
             </div>
             <div className='w-full flex justify-between py-2'>
                 <div className='flex-1 h-full'>

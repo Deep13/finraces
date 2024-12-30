@@ -5,6 +5,7 @@ import UserProfile from '../Sections/Profile/UserProfile';
 import Person from '../assets/images/person2.png'
 import { useLocation, useParams } from 'react-router-dom';
 import { getUser, sendFriendRequest } from '../Utils/api';
+import { checkFriendRequestStatus } from '../Utils/api';
 
 
 const IndiUserProfile = () => {
@@ -35,6 +36,10 @@ const IndiUserProfile = () => {
         getUser(user_id, (data) => {
             console.log(data)
             setUserDetails(data)
+        })
+        checkFriendRequestStatus(user_id, (data) => {
+            console.log("Request Status", data.status)
+            setRequestSent(data.status === 'pending')
         })
     }, [])
 

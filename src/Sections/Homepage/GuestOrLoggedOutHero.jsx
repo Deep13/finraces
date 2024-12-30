@@ -92,7 +92,7 @@ const GuestOrLoggedOutHero = () => {
                         title='Visit your last race by clicking on this card'>
                         <div className='flex flex-col gap-[8px] cursor-pointer'>
                             <p className='text-[1rem] dark:text-[#D1D1D1]'>{capitalize(lastRaceStatus)} Race</p>
-                            <p className='text-[1rem] line-clamp-2 max-w-[15rem] dark:text-white font-semibold group-hover:underline'>{lastRaceName}</p>
+                            <p className='text-[1rem] line-clamp-2 max-w-[15rem] dark:text-white font-semibold group-hover:underline font-poppins'>{lastRaceName}</p>
                         </div>
                     </div>
                 )}
@@ -103,7 +103,7 @@ const GuestOrLoggedOutHero = () => {
                     </div>
                     <div className='flex flex-col gap-[8px]'>
                         <p className='text-[1rem] dark:text-white'>Total Points</p>
-                        <p className='text-[1.5rem] dark:text-white'>{totalPoints}</p>
+                        <p className='text-[1.5rem] dark:text-white font-poppins'>{totalPoints}</p>
                     </div>
                 </div>
             </div>
