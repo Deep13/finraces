@@ -1232,3 +1232,65 @@ export const settings = async ( // change this to the updated api
 }
 
 
+export const getSettings = async (
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/settings`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+
+export const changeSettings = async (payload, onSuccess = () => { }, onError = () => { }) => {
+  const UPLOAD_URL = 'https://www.missionatal.com/api/v1/settings'; // Replace with your upload endpoint
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('Authorization token is missing');
+    onError(new Error('Authorization token is missing'));
+    return;
+  }
+
+  try {
+    // Make the fetch request with Authorization header
+    const response = await fetch(UPLOAD_URL, {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+      headers: {
+        'Content-Type': 'application/json', // Specify JSON payload
+        Authorization: `Bearer ${token}`, // Add the Bearer token
+      },
+    });
+
+    // Check if the response is OK (status in the range 200 - 299)
+    if (!response.ok) {
+      const errorText = await response.text(); // Extract error message from server if any
+      console.error('Server error:', errorText);
+      throw new Error(errorText || 'Failed to update');
+    }
+
+    // Parse response JSON
+    const data = await response.json();
+    onSuccess(data); // Invoke success callback with data
+  } catch (error) {
+    // Catch network or other unexpected errors
+    console.error('Upload failed:', error.message || error);
+    onError(error); // Invoke error callback with the error object
+  }
+};
