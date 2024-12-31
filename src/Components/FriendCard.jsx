@@ -14,9 +14,15 @@ const FriendCard = ({
 
     const { darkModeEnabled } = useContext(DarkModeContext)
     const navigate = useNavigate()
+    let userId = JSON.parse(atob(localStorage.getItem('userDetails'))).userId
 
     return (
         <div onClick={() => {
+            if (id === userId) {
+                navigate(`/profile`)
+                return
+            }
+
             navigate(`/userprofile/${id}`, {
                 state: {
                     userName: name,

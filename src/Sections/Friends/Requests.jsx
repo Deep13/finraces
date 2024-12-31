@@ -19,17 +19,18 @@ const Requests = () => {
             </div>
             <div className='w-full flex flex-wrap justify-start'>
                 {
-                    requests?.length > 0 &&
-                    requests?.map((curr, index) => {
-                        return (
-                            <RequestCard
-                                id={curr.sender.id}
-                                key={curr.sender.id}
-                                image={curr.sender.photo.path}
-                                name={curr.sender.firstName + " " + curr.sender.lastName}
-                            />
-                        )
-                    })
+                    requests?.length > 0 ?
+                        requests?.map((curr, index) => {
+                            return (
+                                <RequestCard
+                                    id={curr.id}
+                                    key={curr.id}
+                                    image={curr.sender.photo.path}
+                                    name={curr.sender.firstName + " " + curr.sender.lastName}
+                                />
+                            )
+                        }) :
+                        <p>No Pending Requests</p>
                 }
             </div>
         </div>

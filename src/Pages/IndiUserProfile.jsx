@@ -12,6 +12,7 @@ const IndiUserProfile = () => {
 
     const [requestSent, setRequestSent] = useState(false)
     const [buttonsVisiblity, setButtonsVisiblity] = useState(true)
+    const [requestStatus, setRequestStatus] = useState('')
     const thisLocation = useLocation()
     const { user_id } = useParams()
     const [details, setDetails] = useState({
@@ -20,10 +21,12 @@ const IndiUserProfile = () => {
         image: Person
     })
     const [userDetails, setUserDetails] = useState({})
+    const [reqSent, setReqSent] = useState(false)
 
     const requestFriend = () => {
         user_id && sendFriendRequest(user_id, (data) => {
-            console.log("Request Sent", data)
+            // console.log("Request Sent", data)
+            setRequestStatus(data.status)
         })
     }
 
@@ -35,20 +38,21 @@ const IndiUserProfile = () => {
         //     // setDetails(thisLocation.state)
         // }
         getUser(user_id, (data) => {
-            console.log(data)
+            // console.log(data)
             setUserDetails(data)
         })
         checkFriendRequestStatus(user_id, (data) => {
             console.log("Request Status", data.status)
             setRequestSent(data.status === 'pending')
+            setRequestStatus(data.status)
         }, () => {
             setButtonsVisiblity(false)
         })
     }, [])
 
-    useEffect(() => {
-        console.log(details)
-    }, [details])
+    // useEffect(() => {
+    //     console.log(details)
+    // }, [details])
 
     return (
         <>
@@ -86,26 +90,20 @@ const IndiUserProfile = () => {
                                     </div> */}
                                 </div>
                             </div>
-                            {buttonsVisiblity && <div className='flex flex-col gap-3 justify-end'>
-                                {
-                                    requestSent ?
-                                        <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Sent</button>
-                                        :
-                                        <button onClick={() => {
-                                            requestFriend()
-                                            setRequestSent(true)
-                                        }} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>
-                                }
+                            <div className='flex flex-col gap-3 justify-end'>
+                                {requestStatus !== 'accepted' && requestStatus !== 'pending' && <button onClick={() => {
+                                    requestFriend()
+                                    setRequestSent(true)
+                                }} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>}
+                                {requestStatus === 'accepted' && <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Accepted</button>}
+                                {requestStatus === 'pending' && <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Sent</button>}
                                 <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Message</button>
-                                {/* <button onClick={() => setSuperTabs(superTabsStrings.Friends)} className={superTabs === superTabsStrings.Friends ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Firends</button> */}
-                                {/* <button onClick={() => setSuperTabs(superTabsStrings.EditProfile)} className={superTabs === superTabsStrings.EditProfile ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'}>Edit Profile</button> */}
-                                {/* <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'>Log out</button> */}
-                            </div>}
+                            </div>
                         </div>
                         <UserProfile userId={user_id} />
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

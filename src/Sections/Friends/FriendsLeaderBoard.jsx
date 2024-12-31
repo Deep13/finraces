@@ -45,13 +45,21 @@ const FriendsLeaderBoard = () => {
                     <tr key={curr.user.id} className="odd:bg-transparent even:bg-[#00276] group">
                       <th className="text-[1.5rem] py-3 font-poppins group-hover:underline">1</th>
                       <td className="py-3">
-                        <div onClick={() => navigate(`/userprofile/${curr.user.id}`, {
-                          state: {
-                            userName: curr.user.firstName + " " + curr.user.lastName,
-                            // email: 'burt.macklin@gmail.com',
-                            image: curr.user.photo.path
+                        <div onClick={() => {
+                          if (curr.user.id === userId) {
+                            navigate(`/profile`)
+                            location.reload()
+                            return
                           }
-                        })} className="w-full flex gap-3 justify-start items-center cursor-pointer">
+
+                          navigate(`/userprofile/${curr.user.id}`, {
+                            state: {
+                              userName: curr.user.firstName + " " + curr.user.lastName,
+                              // email: 'burt.macklin@gmail.com',
+                              image: curr.user.photo.path
+                            }
+                          })
+                        }} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                           {/* image */}
                           <div className="w-12 h-12 rounded-full overflow-hidden">
                             <img className="w-full h-full object-cover" src={curr.user.photo.path} alt="" />

@@ -1364,7 +1364,8 @@ export const approveRequest = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.patch(`https://www.missionatal.com/api/v1/friends/${id}/approve`, {
+    let response = fetch(`https://www.missionatal.com/api/v1/friends/${id}/approve`, {
+      method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1389,7 +1390,8 @@ export const rejectRequest = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.patch(`https://www.missionatal.com/api/v1/friends/${id}/reject`, {
+    let response = await fetch(`https://www.missionatal.com/api/v1/friends/${id}/reject`, {
+      method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }

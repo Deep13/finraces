@@ -44,28 +44,28 @@ const UserProfile = ({
     }
 
     useEffect(() => {
-        console.log('userId', userId)
+        // console.log('userId', userId)
         if (userId) {
             racesDataByUser(userId, (data) => {
-                console.log('data', data)
+                // console.log('data', data)
                 setRaces(data)
                 setTotal(data.length)
             }, (error) => {
                 console.log('error', error)
             })
             getWinningRate(userId, (data) => {
-                console.log('winning rate', data)
+                // console.log('winning rate', data)
                 setWinnigRate(data.rate)
             })
             getTotalPointsUser(userId, (data) => {
-                console.log('Race Participated', data)
+                // console.log('Race Participated', data)
                 setTotalPoints(data)
             })
 
             let obj = {};
             [1, 2, 3].forEach(element => {
                 getRacesCountByRank(userId, element, (data) => {
-                    console.log(`with rank ${element}`, data)
+                    // console.log(`with rank ${element}`, data)
                     obj[element] = data
                 })
             })

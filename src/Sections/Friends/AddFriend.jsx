@@ -51,17 +51,17 @@ const AddFriend = () => {
       </div>
       <div className='w-full flex justify-start items-center gap-[1.5rem] flex-wrap'>
         {
-          filterdResults?.data?.length > 0 &&
-          filterdResults?.data?.map(curr => {
-            return (
-              <AddFriendCard
-                key={curr.id}
-                userName={curr?.firstName + " " + curr?.lastName}
-                image={curr?.photo?.path}
-                id={curr?.id}
-              />
-            )
-          })
+          filterdResults?.data?.length > 0 ?
+            filterdResults?.data?.map(curr => {
+              return (
+                <AddFriendCard
+                  key={curr.id}
+                  userName={curr?.firstName + " " + curr?.lastName}
+                  image={curr?.photo?.path}
+                  id={curr?.id}
+                />
+              )
+            }) : <p>Search Friends</p>
         }
         {/* <AddFriendCard />
         <AddFriendCard />
