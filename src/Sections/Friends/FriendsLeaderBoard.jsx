@@ -42,8 +42,8 @@ const FriendsLeaderBoard = () => {
               {
                 leaderboardData?.data?.data?.map((curr, index) => {
                   return (
-                    <tr key={curr.user.id} className="odd:bg-transparent even:bg-[#00276]">
-                      <th className="text-[1.5rem] py-3 font-poppins">1</th>
+                    <tr key={curr.user.id} className="odd:bg-transparent even:bg-[#00276] group">
+                      <th className="text-[1.5rem] py-3 font-poppins group-hover:underline">1</th>
                       <td className="py-3">
                         <div onClick={() => navigate(`/userprofile/${curr.user.id}`, {
                           state: {
@@ -58,14 +58,14 @@ const FriendsLeaderBoard = () => {
                           </div>
                           {/* name and badge */}
                           <div className="flex flex-col justify-between gap-1">
-                            {userId === curr.user.id && <p className="text-xl text-yellow-400 font-poppins font-bold">You</p>}
-                            {userId !== curr.user.id && <p className="text-4 font-medium font-poppins">{curr.user.firstName + " " + curr.user.lastName}</p>}
+                            {userId === curr.user.id && <p className="text-xl text-yellow-400 font-poppins font-bold group-hover:underline">You</p>}
+                            {userId !== curr.user.id && <p className="text-4 font-medium font-poppins group-hover:underline">{curr.user.firstName + " " + curr.user.lastName}</p>}
                             {/* <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p> */}
                           </div>
                         </div>
                       </td>
-                      <td className="text-[1.1rem] py-3 font-poppins">{curr.num_races_won}</td>
-                      <td className="text-[1.1rem] py-3 font-poppins">{curr.total_points}</td>
+                      <td className="text-[1.1rem] py-3 font-poppins group-hover:underline">{curr.num_races_won}</td>
+                      <td className="text-[1.1rem] py-3 font-poppins group-hover:underline">{curr.total_points}</td>
                     </tr>
                   )
                 })

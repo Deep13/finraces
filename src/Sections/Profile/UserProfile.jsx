@@ -111,20 +111,20 @@ const UserProfile = ({
                     </div>
 
                     <div className="col-span-2 row-span-1 rounded-lg flex justify-between gap-4 bg-white p-[1.5rem] dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
-                        <div className="flex-1 rounded-lg">
+                        <div className="flex-1 rounded-lg flex flex-col justify-between">
                             <p className="text-[1rem]">Race Participated</p>
                             <p className="text-[1.5rem] font-semibold font-poppins">{total}</p>
                         </div>
-                        <div className="flex-1 rounded-lg">
+                        <div className="flex-1 rounded-lg flex flex-col justify-between">
                             <p className="text-[1rem]">Races with 1st place</p>
                             <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[1]}</p>
                         </div>
-                        <div className="flex-1 rounded-lg">
+                        <div className="flex-1 rounded-lg flex flex-col justify-between">
                             <p className="text-[1rem]">Races with 2nd place</p>
                             <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[2]}</p>
                         </div>
-                        <div className="flex-1 rounded-lg">
-                            <p className="text-[1rem]">Races with 3rd placd</p>
+                        <div className="flex-1 rounded-lg flex flex-col justify-between">
+                            <p className="text-[1rem]">Races with 3rd place</p>
                             <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[3]}</p>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ const UserProfile = ({
                 <div className='col-span-2 bg-white rounded-lg p-[1.5rem] flex justify-center items-center flex-col dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white'>
                     <p className="mb-[8px] text-[1rem] self-start">Achievements</p>
                     <div className='w-full h-full flex justify-start flex-wrap gap-[30px]'>
-                        {
+                        {badges.length > 0 &&
                             badges?.map(curr => {
                                 return (
                                     <div key={curr.id} className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
@@ -200,7 +200,7 @@ const UserProfile = ({
                                                 }
                                                 {
                                                     curr.status === 'running' &&
-                                                    <div className=' font-poppins'>
+                                                    <div className='text-green-500 bg-opacity-25 text-center font-medium  bg-green-500 border-green-500 border px-3 rounded-full font-poppins'>
                                                         {capitalize(curr.status)}
                                                     </div>
                                                 }

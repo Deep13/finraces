@@ -11,7 +11,7 @@ import { fetchFriendsLeaderboard } from '../../Utils/api';
 const AllFriends = () => {
   const { darkModeEnabled } = useContext(DarkModeContext);
   const [searchQuery, setSearchQuery] = useState('');
-  const [friends, setFriends] = useState(friendsList);
+  const [friends, setFriends] = useState([]);
 
   // Update the friends list as the search query changes
   const handleSearchChange = (query) => {
@@ -33,7 +33,7 @@ const AllFriends = () => {
     <div className="dark:text-white w-full h-full">
       <div className="w-full flex justify-between items-center mb-3">
         <p className="font-semibold text-[1.2rem]">
-          All Friends ({friends.length})
+          All Friends ({friends.length - 1})
         </p>
         <div className="w-[30rem] bg-slate-200 dark:bg-[#000A2D] self-start rounded-full px-3 py-2 flex gap-3">
           <AiOutlineSearch

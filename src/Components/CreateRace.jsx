@@ -85,7 +85,9 @@ const CreateRace = ({
     {
       "prediction_price": 0,
       "prediction_rank": 1,
-      "stock_id": ""
+      "stock_id": "",
+      "value_type_percent": false,
+      "current_price": 0
     }
   ])
   const [raceDetails, setRaceDetails] = useState({
@@ -428,7 +430,26 @@ const CreateRace = ({
               return
             }
 
-            createRaceAndJoinUser(raceDetails, racePredictions, (res) => {
+            let actualRacePredictions = racePredictions.map(curr => {
+
+              if (curr.value_type_percent) {
+                return {
+                  "prediction_price": (curr.prediction_price) * (curr.current_price / 100),
+                  "prediction_rank": curr.prediction_rank,
+                  "stock_id": curr.stock_id,
+                }
+              } else {
+                return {
+                  "prediction_price": curr.prediction_price,
+                  "prediction_rank": curr.prediction_rank,
+                  "stock_id": curr.stock_id,
+                }
+              }
+            })
+
+            console.log(actualRacePredictions)
+
+            createRaceAndJoinUser(raceDetails, actualRacePredictions, (res) => {
               setRaceDetails({
                 "isSimulation": false,
                 "end_date": "2024-11-07T02:04:00.570Z",
@@ -441,6 +462,7 @@ const CreateRace = ({
               setCreateRace(false)
               res.id && navigate(`/race/${res.id}`)
             })
+
           }} className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95 dark:text-white dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]">
             Submit
           </button>

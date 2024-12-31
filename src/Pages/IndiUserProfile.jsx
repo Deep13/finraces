@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import coin from '../assets/images/coin2.png'
 import Sidebar from '../Components/Sidebar'
 import UserProfile from '../Sections/Profile/UserProfile';
@@ -11,6 +11,7 @@ import { checkFriendRequestStatus } from '../Utils/api';
 const IndiUserProfile = () => {
 
     const [requestSent, setRequestSent] = useState(false)
+    const [buttonsVisiblity, setButtonsVisiblity] = useState(true)
     const thisLocation = useLocation()
     const { user_id } = useParams()
     const [details, setDetails] = useState({
@@ -40,8 +41,14 @@ const IndiUserProfile = () => {
         checkFriendRequestStatus(user_id, (data) => {
             console.log("Request Status", data.status)
             setRequestSent(data.status === 'pending')
+        }, () => {
+            setButtonsVisiblity(false)
         })
     }, [])
+
+    useEffect(() => {
+        console.log(details)
+    }, [details])
 
     return (
         <>
@@ -55,7 +62,7 @@ const IndiUserProfile = () => {
                         <div className='flex gap-4 flex-wrap'>
                             <div className=' overflow-hidden'>
                                 <div className="relative w-[200px] overflow-hidden h-[15rem] rounded-lg group">
-                                    <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path} alt="" />
+                                    {userDetails?.photo?.path && <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path} alt="" />}
                                 </div>
                             </div>
                             <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>
@@ -79,7 +86,7 @@ const IndiUserProfile = () => {
                                     </div> */}
                                 </div>
                             </div>
-                            <div className='flex flex-col gap-3 justify-end'>
+                            {buttonsVisiblity && <div className='flex flex-col gap-3 justify-end'>
                                 {
                                     requestSent ?
                                         <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Sent</button>
@@ -93,7 +100,7 @@ const IndiUserProfile = () => {
                                 {/* <button onClick={() => setSuperTabs(superTabsStrings.Friends)} className={superTabs === superTabsStrings.Friends ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Firends</button> */}
                                 {/* <button onClick={() => setSuperTabs(superTabsStrings.EditProfile)} className={superTabs === superTabsStrings.EditProfile ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'}>Edit Profile</button> */}
                                 {/* <button className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'>Log out</button> */}
-                            </div>
+                            </div>}
                         </div>
                         <UserProfile userId={user_id} />
                     </div>

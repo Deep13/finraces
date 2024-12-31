@@ -720,7 +720,7 @@ export const racesDataByUser = async (
 
   let token = localStorage.getItem('token')
   try {
-    const response = await fetch(`https://www.missionatal.com/api/v1/races/detailed?participatedBy=${userId}`, {
+    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/detailed?participatedBy=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -1294,3 +1294,115 @@ export const changeSettings = async (payload, onSuccess = () => { }, onError = (
     onError(error); // Invoke error callback with the error object
   }
 };
+
+
+export const deleteAccount = async (payload, onSuccess, onError) => {
+  try {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No token found in localStorage');
+    }
+
+    // Make the GET request with the authorization header
+    const response = await fetch('https://www.missionatal.com/api/v1/auth/me', {
+      method: 'PATCH',
+      body: JSON.stringify(payload),
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json', // Optional, adjust if needed
+      },
+    });
+
+    // Check if the response is OK
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
+    }
+
+    // Parse and return the JSON data
+    const data = await response.json();
+    console.log("user", data)
+    onSuccess(data)
+  } catch (error) {
+    // Handle and log errors
+    console.error('Error fetching data:', error.message);
+    // throw error; // Re-throw to allow further handling if needed
+    onError(error)
+  }
+};
+
+
+export const getAllPendingRequests = async (
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/friends/pending-requests`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+export const approveRequest = async (
+  id,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.patch(`https://www.missionatal.com/api/v1/friends/${id}/approve`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+export const rejectRequest = async (
+  id,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.patch(`https://www.missionatal.com/api/v1/friends/${id}/reject`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
