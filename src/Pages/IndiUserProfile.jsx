@@ -91,7 +91,7 @@ const IndiUserProfile = () => {
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3 justify-end'>
-                                {requestStatus !== 'accepted' && requestStatus !== 'pending' && <button onClick={() => {
+                                {requestStatus && requestStatus !== 'accepted' && requestStatus !== 'pending' && <button onClick={() => {
                                     requestFriend()
                                     setRequestSent(true)
                                 }} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>}

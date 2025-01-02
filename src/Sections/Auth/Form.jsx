@@ -247,14 +247,14 @@ const Form = ({
                 Login as Guest User
               </a>
             }
-            <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
+            {/* <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
               <FcGoogle size={24} />
               Sign in with Google
             </a>
             <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
               <img className="w-[24px] h-[24px]" src={facebook_icon} alt="facebook_icon" />
               Sign in with Facebook
-            </a>
+            </a> */}
           </div>
         </div>}
     </>

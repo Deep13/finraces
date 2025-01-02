@@ -74,7 +74,9 @@ const GuestOrLoggedOutHero = () => {
                     <img className='w-full h-full object-cover' src={imageUrl?.photo?.path || ''} alt="User Profile" />
                 </div>
 
-                <div className='bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-transparent dark:border dark:border-[#00387E] justify-center'>
+                <div onClick={() => {
+                    navigate('/profile')
+                }} className='bg-white cursor-pointer rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-transparent dark:border dark:border-[#00387E] justify-center'>
                     <p className="font-semibold text-[2rem] dark:text-white">{userName}</p>
                     <div className="self-start flex gap-4">
                         <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">

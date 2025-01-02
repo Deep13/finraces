@@ -35,7 +35,7 @@ const AllFriends = () => {
     <div className="dark:text-white w-full h-full">
       <div className="w-full flex justify-between items-center mb-3">
         <p className="font-semibold text-[1.2rem]">
-          All Friends ({filteredFriends.length - 1})
+          All Friends ({filteredFriends.length === 0 ? 0 : filteredFriends.length - 1})
         </p>
         <div className="w-[30rem] bg-slate-200 dark:bg-[#000A2D] self-start rounded-full px-3 py-2 flex gap-3">
           <AiOutlineSearch

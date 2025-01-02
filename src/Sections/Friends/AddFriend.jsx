@@ -46,22 +46,22 @@ const AddFriend = () => {
         <p className='font-semibold text-[1.2rem]'>Add A Friend</p>
         <div className='w-[30rem] bg-slate-200 dark:bg-[#000A2D] self-start rounded-full px-3 py-2 flex gap-3'>
           <AiOutlineSearch color={darkModeEnabled ? 'white' : 'black'} size={24} />
-          <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus style={{ backgroundColor: 'transparent' }} placeholder="Search..." className="flex-1 p-0 focus:outline-none" type="text" />
+          <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoFocus style={{ backgroundColor: 'transparent' }} placeholder="Search User..." className="flex-1 p-0 focus:outline-none" type="text" />
         </div>
       </div>
       <div className='w-full flex justify-start items-center gap-[1.5rem] flex-wrap'>
         {
-          filterdResults?.data?.length > 0 ?
-            filterdResults?.data?.map(curr => {
-              return (
-                <AddFriendCard
-                  key={curr.id}
-                  userName={curr?.firstName + " " + curr?.lastName}
-                  image={curr?.photo?.path}
-                  id={curr?.id}
-                />
-              )
-            }) : <p>Search Friends</p>
+          filterdResults?.data?.length > 0 &&
+          filterdResults?.data?.map(curr => {
+            return (
+              <AddFriendCard
+                key={curr.id}
+                userName={curr?.firstName + " " + curr?.lastName}
+                image={curr?.photo?.path}
+                id={curr?.id}
+              />
+            )
+          })
         }
         {/* <AddFriendCard />
         <AddFriendCard />
