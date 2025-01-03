@@ -426,7 +426,8 @@ export const RefreshToken = async (
   }
 };
 
-export const getStocksDataForRace = async (race_id, onSuccess, onError) => {
+export const getStocksDataForRace = async (race_id, onSuccess = () => { },
+  onError = () => { }) => {
   try {
     // Retrieve the token from localStorage
     const token = localStorage.getItem("token");

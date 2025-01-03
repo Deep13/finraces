@@ -93,26 +93,29 @@ const RacePage = () => {
     const flag = useRef(0)
     const userDetails = localStorage.getItem('userDetails')
     const stockChart = useRef()
-    const [chartData, setChartData] = useState({
-        labels: [],
+
+
+    // Code by Deepak Start /////
+    const [data, setData] = useState({
+        labels: [], // Initial labels
         datasets: [
             {
-                label: "",
-                data: [0, 0, 0, 0], // Initial data
-                backgroundColor: ["#4285F4", "#4267B2", "#A2AAAD", "#6001D2", ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)']], // Colors for each bar
+                label: "Company Growth",
+                data: [], // Initial data
+                backgroundColor: [], // Colors for bars
                 barThickness: 30,
             },
         ],
     });
 
-    const [logos, setLogos] = useState({})
-
-    const [chartOptions, setChartOptions] = useState({
-        indexAxis: "y", // Horizontal bar chart
+    const [logos, setLogos] = useState({});
+    const [maxValue, setMaxValue] = useState(120);
+    const options = {
+        indexAxis: "y",
         responsive: true,
         plugins: {
             legend: {
-                display: false, // Hide the legend
+                display: false,
             },
             tooltip: {
                 enabled: true,
@@ -120,27 +123,48 @@ const RacePage = () => {
         },
         scales: {
             x: {
-                max: 120, // Set max x-axis value to 120
+                max: maxValue,
                 ticks: {
-                    display: true, // Hide x-axis labels
+                    display: false,
                 },
                 grid: {
-                    display: true, // Hide x-axis gridlines
+                    display: false,
                 },
             },
             y: {
                 ticks: {
-                    display: true, // Hide x-axis labels
+                    display: true,
                 },
                 grid: {
-                    display: true, // Hide x-axis gridlines
+                    display: true,
                 },
             },
         },
-    })
+    };
 
-    const [customPlugin, setCustomPlugin] = useState({})
+    const customPlugin = {
+        id: "endIcons",
+        afterDatasetsDraw(chart) {
+            const {
+                ctx,
+                scales: { x, y },
+            } = chart;
 
+            chart.data.datasets[0].data.forEach((value, index) => {
+                const yPosition = y.getPixelForValue(index) - 15;
+                const xPosition = x.getPixelForValue(value) - 10;
+
+                const label = chart.data.labels[index];
+                const icon = logos[label];
+
+                if (icon) {
+                    ctx.drawImage(icon, xPosition, yPosition, 30, 30);
+                }
+            });
+        },
+    };
+
+    // Code by Deepak end /////
 
 
 
@@ -318,99 +342,6 @@ const RacePage = () => {
             setisLoading(false)
         })
 
-        //fetch all races data
-        // fetchRaceDataDetailed(race_id, (res) => {
-        //     console.log('racedata detailed:', res);
-        //     const barColors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
-
-        //     //     // Initialize Chart.js
-        //     let stocks = (res.stocks) // this will be the natural position of stocks at first
-        //     let stockNames = stocks.map(curr => (curr.ticker))
-        //     let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
-        //     let positionsOfStocks = stocks?.map((stock, index) => {
-        //         const relativePosition = ((stocks.length - index) / stocks.length) + elapsedTime;    // here 5 is total no. of stocks  *10 is not required here
-        //         return ({
-        //             value: relativePosition,
-        //             image: stock.icon_url
-        //         })
-        //     })
-        //     let newLogoAray = {}
-        //     sortAlphabetically3(stocks).map(stock => {
-        //         newLogoAray[stock.ticker] = new Image();
-        //         newLogoAray[stock.ticker].src = stock.icon_url
-        //     })
-        //     setLogos(newLogoAray)
-        //     console.log('newLogoAray', newLogoAray)
-        //     console.log('stockPositions', sortAlphabetically(stockNames))
-        //     setCustomPlugin({
-        //         id: "endIcons",
-        //         afterDatasetsDraw(chart) {
-        //             const {
-        //                 ctx,
-        //                 chartArea: { left, right },
-        //                 scales: { x, y },
-        //             } = chart;
-
-        //             chart.data.datasets[0].data.forEach((value, index) => {
-        //                 const yPosition =
-        //                     y.getPixelForValue(index) - 15; // Align icon with the center of the bar
-        //                 const xPosition = x.getPixelForValue(value) - 10; // Position icon at the end of the bar
-
-        //                 const label = chart.data.labels[index];
-        //                 const icon = newLogoAray[label];
-
-        //                 // Draw the preloaded icon
-        //                 ctx.drawImage(icon, xPosition, yPosition, 30, 30);
-        //             });
-        //         },
-        //     })
-        //     setChartData(prev => {
-        //         return ({
-        //             ...prev,
-        //             labels: sortAlphabetically(stockNames),
-        //         })
-        //     })
-        //     setChartOptions(prev => {
-        //         return ({
-        //             ...prev,
-        //             scales: {
-        //                 ...prev.scales,
-        //                 x: {
-        //                     ...prev.scales.x,
-        //                     max: calculateDurationInSeconds(res.start_date, res.end_date)
-        //                 }
-        //             }
-        //         })
-        //     })
-        //     console.log('stocks populated names', stockNames)
-        //     console.log('stocks positions', positionsOfStocks)
-
-        //     // setChartOptions(prev => {
-        //     //     return ({
-        //     //         ...prev,
-        //     //         xaxis: {
-        //     //             categories: sortAlphabetically(stockNames),
-        //     //         },
-        //     //         annotations: {
-        //     //             points: positionsOfStocks.map((data, index) => ({
-        //     //                 x: data.value - 250,
-        //     //                 y: sortAlphabetically(stockNames)[index],
-        //     //                 marker: {
-        //     //                     size: 15,
-        //     //                     image: {
-        //     //                         path: data.image,
-        //     //                     },
-        //     //                 },
-        //     //             })),
-        //     //         },
-        //     //     })
-        //     // })
-        //     // setChartData(positionsOfStocks.map(data => data.value))
-        // })
-
-
-
-
         fetchAlreadyJoinedUsers(race_id, (result) => {
             // console.log(result)
             setParticipantsCount(result.length)
@@ -423,7 +354,52 @@ const RacePage = () => {
         })
 
         // console.log('animation box width', box.current ? box.current.offsetWidth : 'no width is displayed')
+        //fetch all races data
+        fetchRaceDataDetailed(race_id, (res) => {
+            console.log('racedata detailed:', res);
+            const barColors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
 
+            //     // Initialize Chart.js
+            let stocks = (res.stocks) // this will be the natural position of stocks at first
+            let stockNames = stocks.map(curr => (curr.ticker))
+
+
+            // Code by Deepak Start /////
+            let totalTime = calculateDurationInSeconds(res.start_date, res.end_date)
+
+            let newLogoAray = {}
+            sortAlphabetically3(stocks).map(stock => {
+                newLogoAray[stock.ticker] = new Image();
+                newLogoAray[stock.ticker].src = stock.icon_url
+            })
+
+            console.log('newLogoAray', newLogoAray)
+            console.log('stockPositions', sortAlphabetically(stockNames))
+            const newLabels = sortAlphabetically(stockNames);
+            const newColors = barColors;
+            const newLogos = {};
+
+            sortAlphabetically3(stocks).forEach((item) => {
+                const image = new Image();
+                image.src = item.icon_url ? item.icon_url : Person;
+                newLogos[item.ticker] = image;
+            });
+            setLogos(newLogos);
+            setData({
+                labels: newLabels,
+                datasets: [
+                    {
+                        label: "Company Growth",
+                        data: Array(newLabels.length).fill(0), // Initialize with zeros
+                        backgroundColor: newColors,
+                        barThickness: 30,
+                    },
+                ],
+            });
+            setMaxValue(totalTime + (newLabels.length * 10))
+
+            // Code by Deepak End /////
+        })
         window.scrollTo(0, 0);
         return () => {
             clearInterval(interval)
@@ -512,35 +488,30 @@ const RacePage = () => {
                 setStockRankList(data.data['stocks'])
                 flag.current += 1
                 // console.log('this Race data', data)
-                // let elapsedTime = calculateDurationInSeconds(data.data.start_date, new Date().toISOString())
-                // let newPosArr = []
-                // sortAlphabetically2(data.data['stocks'])?.forEach((stock) => {
-                //     const relativePosition = ((((data.data['stocks'].length - stock.rank) * 100) / data.data['stocks'].length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
-                //     newPosArr.push({
-                //         value: relativePosition,
-                //         image: Person2
-                //     })
-                // })
-                // console.log('New Positions Array', newPosArr)
-                // stockChart.current.data.datasets[0].data = newPosArr; // newPositon is new Array
-                // stockChart.current.update(); // will be written in in socket
-                // let stocks = data.data['stocks'] // this will be the natural position of stocks at first
 
-                // setChartData(newPosArr.map(data => data.value))
-                // setChartData((prevData) => {
-                //     // Generate new values (increment only)
-                //     const newData = newPosArr.map(data => data.value)
 
-                //     return {
-                //         ...prevData,
-                //         datasets: [
-                //             {
-                //                 ...prevData.datasets[0],
-                //                 data: newData,
-                //             },
-                //         ],
-                //     };
-                // });
+                // Code by Deepak Start /////
+                let elapsedTime = calculateDurationInSeconds(data.data.start_date, new Date().toISOString())
+                let newPosArr = []
+                sortAlphabetically2(data.data['stocks'])?.forEach((stock) => {
+                    const relativePosition = ((((data.data['stocks'].length - stock.rank)) * (data.data['stocks'].length * 10) / data.data['stocks'].length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
+                    newPosArr.push(relativePosition)
+                })
+                console.log('New Positions Array', newPosArr);
+                setData((prevData) => {
+                    const newData = newPosArr;
+
+                    return {
+                        ...prevData,
+                        datasets: [
+                            {
+                                ...prevData.datasets[0],
+                                data: newData,
+                            },
+                        ],
+                    };
+                });
+                // Code by Deepak End /////
 
             }
         });
@@ -778,19 +749,10 @@ const RacePage = () => {
                                 </div>
 
                                 {/* race tile  */}
-                                <div className="w-full h-auto flex justify-between border-dashed dark:border-white border-black border py-[3rem] relative items-center">
+                                {/* <div className="w-full h-auto flex justify-between border-dashed dark:border-white border-black border py-[3rem] relative items-center">
                                     <div className="bg-[#f5f5f5] relative right-2 z-10 dark:bg-[#002763]">
                                         <img src={darkModeEnabled ? startdark : start} alt="" />
                                     </div>
-                                    {/* here happens the magic  */}
-                                    {/* each time socket fires data you extract stocks from that data and
-                                    assign rank  */}
-                                    {/* logic here will be like I will be extracging all the stocks 
-                                    and then assign rank each time data is upadated to each of them.
-                                    make sure the list of stocks you are bringing here is in sorted
-                                     order   only the rank field is changing for them*/}
-                                    {/* we should supply here only the array of stocks with rank field  */}
-                                    {/* it is coming from the stocksList  */}
                                     <div className="w-full">
                                         <RaceTile
                                             raceStatus={raceStatus}
@@ -799,10 +761,8 @@ const RacePage = () => {
                                             stockRankList={stockRankList}
                                         />
                                     </div>
-                                    {/* </div> */}
 
 
-                                    {/* absolute elements  */}
                                     <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" />
                                     <div className="absolute top-0 left-0 w-full h-full">
                                         <div className="border-r border-solid w-1/4"></div>
@@ -812,25 +772,18 @@ const RacePage = () => {
                                     <div className="bg-[#f5f5f5] relative left-2 dark:bg-[#002763]">
                                         <img src={darkModeEnabled ? finishdark : finish} alt="" />
                                     </div>
-                                </div>
-                            </div>
-                            {/* <canvas id="stockChart" width="600" height="300"></canvas> */}
-                            {/* <div id="race_chart">
-                            </div> */}
-                            {/* {
-                                chartOptions &&
-                                chartData &&
-                                <Bar data={chartData}
-                                    options={chartOptions}
-                                    plugins={[customPlugin]}
-                                />
-                                // <ReactApexChart
-                                //     options={chartOptions}
-                                //     series={[{ data: chartData }]}
-                                //     type="bar"
-                                //     height={350} />
-                            } */}
+                                </div> */}
 
+
+
+                                {/* // Code by Deepak Start ///// */}
+                                {data.labels.length > 0 ? (
+                                    <Bar data={data} options={options} plugins={[customPlugin]} />
+                                ) : (
+                                    <p>Loading chart...</p>
+                                )}
+                                {/* // Code by Deepak Start ///// */}
+                            </div>
 
                             {/* other stocks rally  */}
                             <div className="flex-1 rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
