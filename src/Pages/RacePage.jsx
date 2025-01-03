@@ -791,12 +791,14 @@ const RacePage = () => {
                                      order   only the rank field is changing for them*/}
                                     {/* we should supply here only the array of stocks with rank field  */}
                                     {/* it is coming from the stocksList  */}
-                                    <RaceTile
-                                        raceStatus={raceStatus}
-                                        ranks={ranks} // these are arbitrary ranks
-                                        stocksData={stocksDataForRace}
-                                        stockRankList={stockRankList}
-                                    />
+                                    <div className="w-full">
+                                        <RaceTile
+                                            raceStatus={raceStatus}
+                                            ranks={ranks} // these are arbitrary ranks
+                                            stocksData={stocksDataForRace}
+                                            stockRankList={stockRankList}
+                                        />
+                                    </div>
                                     {/* </div> */}
 
 
