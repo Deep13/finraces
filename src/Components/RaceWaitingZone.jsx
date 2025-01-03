@@ -24,6 +24,7 @@ const RaceWaitingZone = ({
         if (status === 'finished' || status === 'running') {
             closeCard(true)
         }
+        
     }, [])
 
     useEffect(() => {

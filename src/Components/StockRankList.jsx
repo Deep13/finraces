@@ -41,6 +41,7 @@ const StockRankList = ({
                                     key={curr.stock_id}
                                     stockName={name}
                                     tickerName={curr.stock_name}
+                                    ticker={curr.stock_ticker}
                                     rank={index + 1}
                                     percentChange={curr.percent_change}
                                     stockId={curr.stock_id}

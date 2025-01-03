@@ -8,7 +8,8 @@ const StockPriceCard = ({
   stockId = 'asfdsfalkfl',
   stockLastRate = '445',
   imageUrl,
-  tickerName
+  tickerName,
+  ticker
 }) => {
   return (
     <div className='h-auto w-[16rem] rounded-[10px] py-[0.9rem] px-[0.8rem] border border-solid border-[#e1e4e5] flex flex-col gap-[0.7rem] flex-shrink-0 bg-[#f5f5f5] dark:border-[#00387E] dark:border dark:bg-[#002763] ml-3'>
@@ -20,7 +21,7 @@ const StockPriceCard = ({
           {/* image is needed  */}
         </div>
       </div>
-      <p className='font-semibold text-[0.7rem] line-clamp-2 dark:text-white'>{stockName}</p>
+      <p className='font-semibold text-[0.7rem] line-clamp-2 dark:text-white'>{ticker}</p>
       {/* url of company is needed  */}
       <p className='text-[1.3rem] font-medium dark:text-white font-poppins'>${parseFloat(stockLastRate).toFixed(3)}</p>
       {/* last price  */}
