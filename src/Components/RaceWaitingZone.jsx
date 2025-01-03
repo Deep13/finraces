@@ -27,7 +27,7 @@ const RaceWaitingZone = ({
     }, [])
 
     useEffect(() => {
-        if (isTimerFinished) {
+        if (isTimerFinished && status !== 'scheduled') {
             closeCard(true)
         }
     }, [isTimerFinished])
@@ -64,7 +64,7 @@ const RaceWaitingZone = ({
                             ease: 'easeInOut'
                         }}
                         className='bg-white rounded-md h-full py-[2rem] flex flex-col items-center px-[5rem] w-[25rem] shadow-lg relative'>
-                        {isTimerFinished && <button onClick={closeCard} className="absolute top-8 right-8"><RxCross2 size={25} /></button>}
+                        {isTimerFinished && status !== 'scheduled' && <button onClick={closeCard} className="absolute top-8 right-8"><RxCross2 size={25} /></button>}
                         <h2 className='font-semibold text-[1.5rem] text-center mb-3 font-poppins'>{raceName}</h2>
                         {/* <p className='font-medium text-[1rem] text-[#919191] mb-[1rem]'>{status}</p> */}
                         <div>

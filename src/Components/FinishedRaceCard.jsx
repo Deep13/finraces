@@ -64,7 +64,14 @@ const FinishedRaceCard = ({
                     <p >Nik</p>
                 </div> */}
 
-                    <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            if (!raceData?.stocks[1]?.participants[0]?.user) return
+                            navigate(`/userprofile/${raceData?.stocks[1]?.participants[0]?.user?.id}`)
+                        }}
+                        title={raceData?.stocks[1]?.participants[0]?.user && (raceData?.stocks[1]?.participants[0]?.user.firstName + " " + raceData?.stocks[1]?.participants[0]?.user.lastName)}
+                        className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
                             {raceData?.stocks[1]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[1]?.participants[0]?.user?.photo?.path} />}
                             {!raceData?.stocks[1]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
@@ -73,7 +80,14 @@ const FinishedRaceCard = ({
                         {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[0].user_name}</p> */}
                     </div>
 
-                    <div className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            if (!raceData?.stocks[0]?.participants[0]?.user) return
+                            navigate(`/userprofile/${raceData?.stocks[0]?.participants[0]?.user?.id}`)
+                        }}
+                        title={raceData?.stocks[0]?.participants[0]?.user && (raceData?.stocks[0]?.participants[0]?.user.firstName + " " + raceData?.stocks[0]?.participants[0]?.user.lastName)}
+                        className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
                             {raceData?.stocks[0]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[0]?.participants[0]?.user?.photo?.path} />}
                             {!raceData?.stocks[0]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
@@ -82,7 +96,14 @@ const FinishedRaceCard = ({
                         {/* <p className='relative text-center font-semibold text-[12px] dark:text-white'>{rankList[1].user_name}</p> */}
                     </div>
 
-                    <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            if (!raceData?.stocks[2]?.participants[0]?.user) return
+                            navigate(`/userprofile/${raceData?.stocks[2]?.participants[0]?.user?.id}`)
+                        }}
+                        title={raceData?.stocks[2]?.participants[0]?.user && (raceData?.stocks[2]?.participants[0]?.user.firstName + " " + raceData?.stocks[2]?.participants[0]?.user.lastName)}
+                        className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
                             {raceData?.stocks[2]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[2]?.participants[0]?.user?.photo?.path} />}
                             {!raceData?.stocks[2]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
@@ -104,7 +125,7 @@ const FinishedRaceCard = ({
                 </div>
             </div>
 
-            <h3 className='text-[1rem] font-bold dark:text-white text-center'>Stocks</h3>
+            {/* <h3 className='text-[1rem] font-bold dark:text-white text-center'>Stocks</h3> */}
             <div className='w-full flex-1 mt-3 relative  border-black  bg-[#edf7ff] flex justify-center items-center pb-[1rem] dark:bg-[#002864] gap-6'>
 
                 <div className='relative aspect-square p-[10px] scale-100 z-[5] flex justify-center item-center flex-col'>

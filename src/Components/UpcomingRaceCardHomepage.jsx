@@ -66,10 +66,13 @@ const UpcomingRaceCardHomepage = ({
     return (
         <motion.div
             custom={index}
+            onClick={() => {
+                navigate(`/race/${raceId}`)
+            }}
             initial="hidden"
             animate="visible"
             variants={cardAnimation}
-            className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem] flex flex-col justify-between'>
+            className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem] flex flex-col justify-between cursor-pointer'>
             {
                 joinRaceFormVisible && <JoinRace
                     raceName={raceName}
@@ -148,7 +151,10 @@ const UpcomingRaceCardHomepage = ({
             <div className='flex gap-[20px] justify-self-end'>
                 {(userDetails || guestDetails) && <button
                     // onClick={() => navigate(`/race/${raceId}`)} 
-                    onClick={() => setJoinRaceFormVisible(true)}
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        setJoinRaceFormVisible(true)
+                    }}
                     className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>
                     Join
                 </button>}
