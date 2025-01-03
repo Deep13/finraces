@@ -53,7 +53,7 @@ const GuestOrLoggedOutHero = () => {
                     <div className='flex gap-4'>
                         <button
                             onClick={() => setCreateRace(true)}
-                            className='w-[8.9rem] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-black bg-[#e5f4ff] rounded-[33px]'>
+                            className='w-auto dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-black bg-[#e5f4ff] rounded-[33px]'>
                             Create Race
                         </button>
                         <button
@@ -76,7 +76,7 @@ const GuestOrLoggedOutHero = () => {
 
                 <div onClick={() => {
                     navigate('/profile')
-                }} className='bg-white cursor-pointer rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-transparent dark:border dark:border-[#00387E] justify-center'>
+                }} className='bg-white cursor-pointer rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-transparent dark:border dark:border-[#00387E] justify-center h-[10rem]'>
                     <p className="font-semibold text-[2rem] dark:text-white">{userName}</p>
                     <div className="self-start flex gap-4">
                         <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">
@@ -89,7 +89,7 @@ const GuestOrLoggedOutHero = () => {
 
                 {lastRaceId && (
                     <div
-                        className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center group hover:border-black"
+                        className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center group hover:border-black h-[10rem]"
                         onClick={() => navigate(`/race/${lastRaceId}`)}
                         title='Visit your last race by clicking on this card'>
                         <div className='flex flex-col gap-[8px] cursor-pointer'>
@@ -99,7 +99,7 @@ const GuestOrLoggedOutHero = () => {
                     </div>
                 )}
 
-                <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start">
+                <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
                     <div className='h-full'>
                         <img src={diamond} alt="Diamond Icon" />
                     </div>

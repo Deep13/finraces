@@ -17,7 +17,7 @@ import Placeholder from '../assets/images/placeholder.png'
 import Person2 from '../assets/images/person23.png'
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchRaceData, fetchAlreadyJoinedUsers, getRaceResults, fetchParticipantsData, fetchRaceDataDetailed } from "../Utils/api";
 import io from 'socket.io-client'
 import Countdown from "react-countdown";
@@ -92,6 +92,7 @@ const RacePage = () => {
     const [duration, setDuration] = useState('')
     const flag = useRef(0)
     const userDetails = localStorage.getItem('userDetails')
+    const navigate = useNavigate()
     const stockChart = useRef()
 
 
@@ -118,7 +119,7 @@ const RacePage = () => {
                 display: false,
             },
             tooltip: {
-                enabled: true,
+                enabled: false,
             },
         },
         scales: {
@@ -573,8 +574,8 @@ const RacePage = () => {
     const findImageUrlForStock = (id) => stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === id)]?.icon_url
 
     useEffect(() => {
-
-    }, [])
+        console.log('raceResults', raceResults)
+    }, [raceResults])
 
     return (
         <>
@@ -675,7 +676,11 @@ const RacePage = () => {
                                             />
                                         </div>
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result['2']?.participants?.[0]?.user_name}</p>
+                                    <p onClick={() => {
+                                        if (raceResults?.race_result['2']?.participants[0]?.user_id) {
+                                            navigate(`/userprofile/${raceResults?.race_result[2]?.participants[0]?.user_name}`)
+                                        }
+                                    }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result[2]?.participants[0]?.user_name}</p>
                                 </div>
 
                                 <div className="flex justify-center flex-col items-center relative bottom-8">
@@ -695,7 +700,11 @@ const RacePage = () => {
                                             />
                                         </div>
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result[1]?.participants?.[0]?.user_name}</p>
+                                    <p onClick={() => {
+                                        if (raceResults?.race_result['1']?.participants[0]?.user_id) {
+                                            navigate(`/userprofile/${raceResults?.race_result[1]?.participants[0]?.user_id}`)
+                                        }
+                                    }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result[1]?.participants[0]?.user_name}</p>
                                 </div>
 
                                 <div className="flex justify-center flex-col items-center">
@@ -710,11 +719,15 @@ const RacePage = () => {
                                         <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[12px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
                                             <ImageSlider
                                                 data={imageData}
-                                                currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[3]?.participants?.[0]?.user_id]?.position : 0}
+                                                currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[3]?.participants[0]?.user_id]?.position : 0}
                                             />
                                         </div>
                                     </div>
-                                    <p className="font-medium text-3 mt-[10px] dark:text-white">{raceResults?.race_result[3]?.participants?.[0]?.user_name}</p>
+                                    <p onClick={() => {
+                                        if (raceResults?.race_result['3']?.participants[0]?.user_id) {
+                                            navigate(`/userprofile/${raceResults?.race_result[3]?.participants[0]?.user_id}`)
+                                        }
+                                    }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result[3]?.participants[0]?.user_name}</p>
                                 </div>
                             </div>
 
@@ -839,16 +852,24 @@ const RacePage = () => {
                                 {/* <canvas id="stockChart" width="600" height="300"></canvas> */}
                                 {/* <div id="race_chart">
                             </div> */}
-                                {data.labels.length > 0 ? (
+                                {data.labels.length > 0 && raceStatus !== 'finished' && (
                                     <Bar data={data} options={options} plugins={[customPlugin]} />
-                                ) : (
+                                )}
+                                {!(data.labels.length > 0) && raceStatus !== 'finished' && (
                                     <p>Loading chart...</p>
                                 )}
+                                {
+                                    raceStatus === 'finished' && <div className="w-full h-full flex justify-center items-center">
+                                        <div className='rounded-lg bg-white shadow-xl italic px-8 py-4 w-[50%] z-20 grid place-items-center text-3xl font-bold self-center text-center'>
+                                            Race Finished
+                                        </div>
+                                    </div>
+                                }
                             </div>
 
 
                             {/* other stocks rally  */}
-                            <div className="flex-1 rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
+                            <div className="w-full rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
                                 <div className="flex justify-between w-full items-center mb-[18px]">
                                     <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
                                     {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}

@@ -25,10 +25,10 @@ const StockWatchlistCard = () => {
             </div>
             {/* price previous and current  */}
             <div className="flex gap-2">
-                <p className="dark:text-white text-[0.9rem]">$221</p>
-                <p className="dark:text-white text-[0.9rem] font-semibold">$221</p>
+                <p className="dark:text-white text-[0.9rem] font-poppins">$221</p>
+                <p className="dark:text-white text-[0.9rem] font-poppins font-semibold">$221</p>
             </div>
-            <p className="text-green">50%</p>
+            <p className="text-green font-poppins">50%</p>
 
         </div>
     )

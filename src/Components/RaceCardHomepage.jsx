@@ -195,8 +195,8 @@ const RaceCardHomepage = ({
                             const minutes = Math.floor((remainingTime % 3600) / 60)
                             const seconds = remainingTime % 60
 
-                            return <div className='text-[0.7rem] font-semibold dark:text-white'>
-                                {hours}:{minutes}:{seconds}`
+                            return <div className='text-[0.63rem] font-semibold dark:text-white font-poppins'>
+                                {hours}:{minutes}:{seconds}
                             </div>
                         }}
                     </CountdownCircleTimer>

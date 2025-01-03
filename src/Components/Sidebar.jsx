@@ -14,13 +14,15 @@ import ethdark from '../assets/icons/sidebar/ethdark.svg'
 import recent from '../assets/icons/sidebar/recent.svg'
 import recentdark from '../assets/icons/sidebar/recentdark.svg'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
+import { useNavigate } from 'react-router-dom'
 
 const Sidebar = () => {
     const { darkModeEnabled } = useContext(DarkModeContext)
+    const navigate = useNavigate()
     return (
         <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
             <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
-                <button className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
+                <button onClick={() => navigate('/')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
                     <img src={darkModeEnabled ? compassdark : compass} alt="discover" />
                     Discover
                 </button>
@@ -32,15 +34,15 @@ const Sidebar = () => {
                     <img src={darkModeEnabled ? ethdark : eth} alt="crypto" />
                     Crypto
                 </button>
-                <button className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
+                <button onClick={() => navigate('/allraces', { state: 'Ongoing Races' })} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
                     <img src={darkModeEnabled ? livestreamingdark : live_streaming} alt="live races" />
                     Live Races
                 </button>
-                <button className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
+                <button onClick={() => navigate('/allraces', { state: 'Upcoming Races' })} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
                     <img src={darkModeEnabled ? recentdark : recent} alt="upcoming races" />
                     Upcoming Races
                 </button>
-                <button className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
+                <button onClick={() => navigate('/profile')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
                     <img src={darkModeEnabled ? finance_ideadark : finance_idea} alt="my races" />
                     My Races
                 </button>

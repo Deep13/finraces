@@ -24,8 +24,8 @@ const StockRankList = ({
                 autoplay: true,
                 autoplaySpeed: 3000,
             }}
-            className="w-full">
-            <CarouselContent className='ml-1'>
+            className="">
+            <CarouselContent className='ml-1 w-full'>
                 {
                     stockRankList ?
                         stockRankList?.map((curr, index) => {
