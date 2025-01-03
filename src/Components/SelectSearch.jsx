@@ -55,6 +55,7 @@ export default function SelectSearch({
         <Combobox value={selected} onChange={(value) => setSelected(value)} onClose={() => setQuery('')}>
             <div className="relative">
                 <ComboboxInput
+                    autoComplete="off"
                     className={clsx(
                         'w-full rounded-lg border-none bg-white/5 py-3 px-[1.1rem] text-sm/6 text-white',
                         'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'

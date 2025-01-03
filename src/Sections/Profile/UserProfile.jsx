@@ -136,7 +136,7 @@ const UserProfile = ({
                             badges?.map(curr => {
                                 return (
                                     <div key={curr.id} className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
-                                        <img className='w-full h-full object-fit' src={curr.image} alt="" />
+                                        <img className='w-full h-full object-fit' src={curr.badge.image} alt="" />
                                     </div>
                                 )
                             })

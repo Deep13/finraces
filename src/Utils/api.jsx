@@ -102,7 +102,7 @@ export const createRaceAndJoinUser = async (
   onError = () => { },
 ) => {
   try {
-    const { start_date, start_time, end_date, end_time, name } = raceDetails;
+    const { start_date, start_time, end_date, end_time, name, privacy } = raceDetails;
 
     let stocksArray = racePredictions.map(curr => curr.stock_id);
 
@@ -125,6 +125,7 @@ export const createRaceAndJoinUser = async (
 
     let raceData = {
       race: {
+        privacy,
         isSimulation: true,
         end_date: endDateTime,
         start_date: startDateTime,
@@ -1033,11 +1034,11 @@ export const getAllBadges = async (
   onSuccess = () => { },
   onError = () => { },
 ) => {
-  let token = localStorage.getItem('token')
+  // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/badges`, {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/public/user-badges`, {
       headers: {
-        'Authorization': `Bearer ${token}`, // Example for passing a token
+        // 'Authorization': `Bearer ${token}`, // Example for passing a token
       }
     })
     let result = await response.data

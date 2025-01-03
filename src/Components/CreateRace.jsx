@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import StockEntryRow from "./StockEntryRow";
 import SegmentedControl from '../Components/SegmentedControl'
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
+import { set } from "lodash";
 
 const CreateRace = ({
   setCreateRace = () => { },
@@ -74,7 +75,7 @@ const CreateRace = ({
   };
 
   // const [closed, setClosed] = useState(false) // race type will be open initially
-  const [OpenCloseRaceValue, setOpenCloseRaceValue] = useState("close")
+  const [OpenCloseRaceValue, setOpenCloseRaceValue] = useState("private")
   const [percentValue, setpercentValue] = useState('price')
   const [percentage, setPercentage] = useState(false)
   const [Inputs, setInputs] = useState([
@@ -92,6 +93,7 @@ const CreateRace = ({
   ])
   const [raceDetails, setRaceDetails] = useState({
     "isSimulation": false,
+    "privacy": OpenCloseRaceValue,
     "end_date": "",
     "start_date": "",
     "start_time": "",
@@ -229,6 +231,10 @@ const CreateRace = ({
 
   }, [raceDetails])
 
+  useEffect(() => {
+    console.log(raceDetails)
+  }, [raceDetails])
+
   return (
     <div className='w-screen h-screen fixed top-0 left-0 z-50 grid place-items-center backdrop-blur-lg bg-transparent py-[3%] overflow-auto'>
       <div className='rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem] dark:bg-[#002763]'>
@@ -332,17 +338,20 @@ const CreateRace = ({
             <div className="">
               <SegmentedControl
                 name="group-1"
-                callback={(val) => setOpenCloseRaceValue(val)}
+                callback={(val) => {
+                  setOpenCloseRaceValue(val)
+                  setRaceDetails(prev => ({ ...prev, privacy: val }))
+                }}
                 controlRef={useRef()}
                 segments={[
                   {
                     label: "Close",
-                    value: "close",
+                    value: "private",
                     ref: useRef()
                   },
                   {
                     label: "Open",
-                    value: "open",
+                    value: "public",
                     ref: useRef()
                   }
                 ]}
