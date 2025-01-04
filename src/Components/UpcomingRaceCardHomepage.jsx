@@ -66,9 +66,9 @@ const UpcomingRaceCardHomepage = ({
     return (
         <motion.div
             custom={index}
-            onClick={() => {
-                navigate(`/race/${raceId}`)
-            }}
+            // onClick={() => {
+            //     navigate(`/race/${raceId}`)
+            // }}
             initial="hidden"
             animate="visible"
             variants={cardAnimation}
