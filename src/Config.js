@@ -1,0 +1,1 @@
+export const globalUrl = 'https://www.missionatal.com'

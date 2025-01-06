@@ -7,7 +7,7 @@ import {
     CarouselItem,
     CarouselNext,
     CarouselPrevious,
-} from "@/components/ui/carousel"
+} from "../Components/ui/carousel"
 
 const StockRankList = ({
     stockRankList, // this is coming from socket connection

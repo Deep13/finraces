@@ -1,6 +1,8 @@
 import { data } from "autoprefixer";
 import axios from "axios";
-let URL = 'https://www.missionatal.com'
+import { globalUrl } from "../Config";
+
+let  GlobalURL = globalUrl
 
 
 export const RegisterUser = async (
@@ -22,7 +24,7 @@ export const RegisterUser = async (
 
   try {
     // console.log('Registration payload', payload);
-    const response = await axios.post(`https://www.missionatal.com/api/v1/auth/email/register`, payload);
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/register`, payload);
     const data = await response.data
     console.log('Registration successful', data);
     onSuccess()
@@ -48,7 +50,7 @@ export const Login = async (
   try {
     console.log('login payload', payload);
 
-    const response = await axios.post('https://www.missionatal.com/api/v1/auth/email/login', payload);
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/login`, payload);
 
     console.log('response', response.data);
 
@@ -77,7 +79,7 @@ export const getStocks = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/stocks`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/stocks`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -140,7 +142,7 @@ export const createRaceAndJoinUser = async (
     console.log('Race Payload', JSON.stringify(raceData));
 
     const response = await axios.post(
-      `https://www.missionatal.com/api/v1/race-users/race`,
+      `${GlobalURL}/api/v1/race-users/race`,
       raceData,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -163,7 +165,7 @@ export const getRaceList = async (
 
   let token = localStorage.getItem('token')
   try {
-    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/detailed?limit=10&statuses=${status}`, {
+    const response = await fetch(`${GlobalURL}/api/v1/public/races/detailed?limit=10&statuses=${status}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -196,7 +198,7 @@ export const fetchRaceData = async ( // change this to the updated api
     // const token = localStorage.getItem('token')
     // if (!token) throw new Error('Authentication token is missing. Please log in.');
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/${raceId}`, {
+    const response = await fetch(`${GlobalURL}/api/v1/public/races/${raceId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -227,7 +229,7 @@ export const fetchParticipantsData = async (
     // const token = localStorage.getItem('token')
     // if (!token) throw new Error('Authentication token is missing. Please log in.');
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/${raceId}/details`, {
+    const response = await fetch(`${GlobalURL}/api/v1/public/races/${raceId}/details`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -260,7 +262,7 @@ export const fetchAlreadyJoinedUsers = async (
     // if (!token) throw new Error('No token found in localStorage');
 
     const response = await fetch(
-      `https://www.missionatal.com/api/v1/public/race-users/search/?race_id=${race_id}`,
+      `${GlobalURL}/api/v1/public/race-users/search/?race_id=${race_id}`,
       {
         method: 'GET',
         headers: {
@@ -293,7 +295,7 @@ export const joinAsGuest = async (
   try {
     // console.log('Registration payload', payload);
 
-    const response = await axios.post('https://www.missionatal.com/api/v1/auth/email/guest')
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`)
     const data = await response.data
     console.log('Registration successful', data);
     // localStorage.setItem('guest_email', data.email)
@@ -329,7 +331,7 @@ export const fetchStocks = async (
     if (!token) throw new Error('No token found in localStorage');
 
     const response = await fetch(
-      `https://www.missionatal.com/api/v1/race-stocks/search?race_id=${race_id}`,
+      `${GlobalURL}/api/v1/race-stocks/search?race_id=${race_id}`,
       {
         method: 'GET',
         headers: {
@@ -379,7 +381,7 @@ export const joinUserToRace = async (
     if (!token) throw new Error('Authentication token is missing. Please log in.');
 
     const response = await axios.post(
-      'https://www.missionatal.com/api/v1/race-users',
+      `${GlobalURL}/api/v1/race-users`,
       data,
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -413,7 +415,7 @@ export const RefreshToken = async (
   };
 
   try {
-    const response = await axios.post('https://www.missionatal.com/api/v1/auth/refresh', {}, { headers });
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/refresh`, {}, { headers });
 
     // console.log('response', response.data);
 
@@ -436,7 +438,7 @@ export const getStocksDataForRace = async (race_id, onSuccess, onError) => {
     //   throw new Error("Authorization token not found in localStorage");
     // }
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/public/stocks/race/${race_id}`, {
+    const response = await fetch(`${GlobalURL}/api/v1/public/stocks/race/${race_id}`, {
       method: "GET", // Adjust the method if needed (e.g., POST, PUT, DELETE)
       headers: {
         "Content-Type": "application/json",
@@ -467,7 +469,7 @@ export const getRaceResults = async (race_id, onSuccess, onError,) => {
     //   throw new Error("Authorization token not found in localStorage");
     // }
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/public/race-result-data/race/${race_id}`, {
+    const response = await fetch(`${GlobalURL}/api/v1/public/race-result-data/race/${race_id}`, {
       method: "GET", // Adjust the method if needed (e.g., POST, PUT, DELETE)
       headers: {
         "Content-Type": "application/json",
@@ -500,7 +502,7 @@ export const getUserDetails = async (onSuccess, onError) => {
     }
 
     // Make the GET request with the authorization header
-    const response = await fetch('https://www.missionatal.com/api/v1/auth/me', {
+    const response = await fetch(`${GlobalURL}/api/v1/auth/me`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`,
@@ -526,7 +528,7 @@ export const getUserDetails = async (onSuccess, onError) => {
 };
 
 export const uploadProfilePicture = async (file, onSuccess, onError) => {
-  const UPLOAD_URL = 'https://www.missionatal.com/api/v1/files/upload'; // Replace with your upload endpoint
+  const UPLOAD_URL = `${GlobalURL}/api/v1/files/upload`; // Replace with your upload endpoint
   const token = localStorage.getItem('token')
   let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
   // console.log(JSON.parse(atob(userDetails)))
@@ -578,7 +580,7 @@ export const updatePhoto = async (photoId, onSuccess, onError) => {
     }
 
     // Define the API endpoint
-    const url = 'https://www.missionatal.com/api/v1/auth/me'
+    const url = `${GlobalURL}/api/v1/auth/me`
 
     // Create the payload
     const payload = {
@@ -631,7 +633,7 @@ export const searchStock = async (prefix) => {
       throw new Error('User is not authenticated. Token is missing.');
     }
 
-    const url = `https://www.missionatal.com/api/v1/stocks/search?prefix=${prefix}`
+    const url = `${GlobalURL}/api/v1/stocks/search?prefix=${prefix}`
 
     // Make the PATCH request
     const response = await fetch(url, {
@@ -675,7 +677,7 @@ export const reportBug = async (
     }
 
     // Define the API endpoint
-    const url = 'https://www.missionatal.com/api/v1/issues'
+    const url = `${GlobalURL}/api/v1/issues`
 
     // Create the payload
     const payload = {
@@ -722,7 +724,7 @@ export const racesDataByUser = async (
 
   let token = localStorage.getItem('token')
   try {
-    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/detailed?participatedBy=${userId}`, {
+    const response = await fetch(`${GlobalURL}/api/v1/public/races/detailed?participatedBy=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -756,7 +758,7 @@ export const lastRaceDataByUser = async (
 
   let token = localStorage.getItem('token')
   try {
-    const response = await fetch(`https://www.missionatal.com/api/v1/races/detailed?participatedBy=${userId}&limit=1`, {
+    const response = await fetch(`${GlobalURL}/api/v1/races/detailed?participatedBy=${userId}&limit=1`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -791,7 +793,7 @@ export const updatePassword = async (oldPassword, newPassword, onSuccess, onErro
     }
 
     // Define the API endpoint
-    const url = 'https://www.missionatal.com/api/v1/auth/me'
+    const url = `${GlobalURL}/api/v1/auth/me`
 
     // Create the payload
     const payload = {
@@ -839,7 +841,7 @@ export const updateProfile = async (payload, onSuccess, onError) => {
     }
 
     // Define the API endpoint
-    const url = 'https://www.missionatal.com/api/v1/auth/me'
+    const url = `${GlobalURL}/api/v1/auth/me`
 
 
     // Make the PATCH request
@@ -880,7 +882,7 @@ export const getTop4 = async (
 ) => {
   // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/public/race-results/stats?limit=4`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/public/race-results/stats?limit=4`, {
       headers: {
         // 'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -909,7 +911,7 @@ export const getTopRankers = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/race-results/stats?limit=${limit}`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/race-results/stats?limit=${limit}`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -934,7 +936,7 @@ export const getUser = async (
   onError = () => { }
 ) => {
   try {
-    const response = await axios.get(`https://www.missionatal.com/api/v1/public/users/${id}`)
+    const response = await axios.get(`${GlobalURL}/api/v1/public/users/${id}`)
     const result = await response.data
     onSuccess(result)
     return result
@@ -951,7 +953,7 @@ export const getTotalPointsUser = async (
   onError = () => { }
 ) => {
   try {
-    const response = await axios.get(`https://www.missionatal.com/api/v1/public/race-results/count?userId=${id}`)
+    const response = await axios.get(`${GlobalURL}/api/v1/public/race-results/count?userId=${id}`)
     const result = await response.data
     onSuccess(result)
     return result
@@ -968,7 +970,7 @@ export const getWinningRate = async (
   onError = () => { }
 ) => {
   try {
-    const response = await axios.get(`https://www.missionatal.com/api/v1/public/race-results/users/${id}/winning-rate`)
+    const response = await axios.get(`${GlobalURL}/api/v1/public/race-results/users/${id}/winning-rate`)
     const result = await response.data
     onSuccess(result)
     return result
@@ -981,7 +983,7 @@ export const getWinningRate = async (
 
 
 export const sendFriendRequest = async (recieverId, onSuccess, onError) => {
-  const UPLOAD_URL = 'https://www.missionatal.com/api/v1/friends'; // Replace with your upload endpoint
+  const UPLOAD_URL = `${GlobalURL}/api/v1/friends`; // Replace with your upload endpoint
   const token = localStorage.getItem('token');
 
   try {
@@ -1019,7 +1021,7 @@ export const getRacesCountByRank = async (
   onError = () => { }
 ) => {
   try {
-    const response = await axios.get(`https://www.missionatal.com/api/v1/public/race-results/count?userId=${id}&rank=${rank}`)
+    const response = await axios.get(`${GlobalURL}/api/v1/public/race-results/count?userId=${id}&rank=${rank}`)
     const result = await response.data
     onSuccess(result)
     return result
@@ -1037,7 +1039,7 @@ export const getAllBadges = async (
 ) => {
   // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/public/user-badges`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/public/user-badges`, {
       headers: {
         // 'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1065,7 +1067,7 @@ export const fuzzySearch = async (prefix) => {
       throw new Error('User is not authenticated. Token is missing.');
     }
 
-    const url = `https://www.missionatal.com/api/v1/public/search/race-users?nameContains=${prefix}`
+    const url = `${GlobalURL}/api/v1/public/search/race-users?nameContains=${prefix}`
 
     // Make the PATCH request
     const response = await fetch(url, {
@@ -1102,7 +1104,7 @@ export const searchUsers = async (prefix) => {
   try {
 
 
-    const url = `https://www.missionatal.com/api/v1/public/search/users?nameContains=${prefix}`
+    const url = `${GlobalURL}/api/v1/public/search/users?nameContains=${prefix}`
 
     // Make the PATCH request
     const response = await fetch(url, {
@@ -1140,7 +1142,7 @@ export const fetchRaceDataDetailed = async ( // change this to the updated api
     // const token = localStorage.getItem('token')
     // if (!token) throw new Error('Authentication token is missing. Please log in.');
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/public/races/${raceId}/details`, {
+    const response = await fetch(`${GlobalURL}/api/v1/public/races/${raceId}/details`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -1170,7 +1172,7 @@ export const fetchFriendsLeaderboard = async (
 
   const token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/race-results/stats?friendOfUserId=${Number(friendOfUserId)}`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/race-results/stats?friendOfUserId=${Number(friendOfUserId)}`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1196,7 +1198,7 @@ export const checkFriendRequestStatus = async ( // change this to the updated ap
 ) => {
   const token = localStorage.getItem('token')
   try {
-    const response = await fetch(`https://www.missionatal.com/api/v1/friends/${userId}/request`, {
+    const response = await fetch(`${GlobalURL}/api/v1/friends/${userId}/request`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -1220,7 +1222,7 @@ export const settings = async ( // change this to the updated api
 ) => {
   const token = localStorage.getItem('token')
   try {
-    const response = await fetch(`https://www.missionatal.com/api/v1/settings`, {
+    const response = await fetch(`${GlobalURL}/api/v1/settings`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -1242,7 +1244,7 @@ export const getSettings = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/settings`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/settings`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1262,7 +1264,7 @@ export const getSettings = async (
 
 
 export const changeSettings = async (payload, onSuccess = () => { }, onError = () => { }) => {
-  const UPLOAD_URL = 'https://www.missionatal.com/api/v1/settings'; // Replace with your upload endpoint
+  const UPLOAD_URL = `${GlobalURL}/api/v1/settings`; // Replace with your upload endpoint
   const token = localStorage.getItem('token');
 
   if (!token) {
@@ -1310,7 +1312,7 @@ export const deleteAccount = async (payload, onSuccess, onError) => {
     }
 
     // Make the GET request with the authorization header
-    const response = await fetch('https://www.missionatal.com/api/v1/auth/me', {
+    const response = await fetch(`${GlobalURL}/api/v1/auth/me`, {
       method: 'PATCH',
       body: JSON.stringify(payload),
       headers: {
@@ -1343,7 +1345,7 @@ export const getAllPendingRequests = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/friends/pending-requests`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/friends/pending-requests`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1368,7 +1370,7 @@ export const approveRequest = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = fetch(`https://www.missionatal.com/api/v1/friends/${id}/approve`, {
+    let response = fetch(`${GlobalURL}/api/v1/friends/${id}/approve`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
@@ -1394,7 +1396,7 @@ export const rejectRequest = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await fetch(`https://www.missionatal.com/api/v1/friends/${id}/reject`, {
+    let response = await fetch(`${GlobalURL}/api/v1/friends/${id}/reject`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
@@ -1420,7 +1422,7 @@ export const unfriend = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await fetch(`https://www.missionatal.com/api/v1/friends/${userId}/unfriend`, {
+    let response = await fetch(`${GlobalURL}/api/v1/friends/${userId}/unfriend`, {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
@@ -1441,7 +1443,7 @@ export const unfriend = async (
 
 
 export const blockUser = async (userToBlockId, onSuccess, onError) => {
-  const UPLOAD_URL = `https://www.missionatal.com/api/v1/block-users`; // Replace with your upload endpoint
+  const UPLOAD_URL = `${GlobalURL}/api/v1/block-users`; // Replace with your upload endpoint
   const token = localStorage.getItem('token');
 
   try {
@@ -1479,7 +1481,7 @@ export const getAllblockedUsers = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/block-users`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/block-users`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1505,7 +1507,7 @@ export const getUsersBlockStatus = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`https://www.missionatal.com/api/v1/block-users/${userId}/request`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/block-users/${userId}/request`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1524,7 +1526,7 @@ export const getUsersBlockStatus = async (
 }
 
 export const unblockUser = async (userToUnblockId, onSuccess, onError) => {
-  const UPLOAD_URL = `https://www.missionatal.com/api/v1/block-users/${userToUnblockId}`; // Replace with your upload endpoint
+  const UPLOAD_URL = `${GlobalURL}/api/v1/block-users/${userToUnblockId}`; // Replace with your upload endpoint
   const token = localStorage.getItem('token');
 
   try {
