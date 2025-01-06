@@ -1,3 +1,4 @@
+import { data } from "autoprefixer";
 import axios from "axios";
 let URL = 'https://www.missionatal.com'
 
@@ -192,8 +193,8 @@ export const fetchRaceData = async ( // change this to the updated api
   onError = () => { },
 ) => {
   try {
-    const token = localStorage.getItem('token')
-    if (!token) throw new Error('Authentication token is missing. Please log in.');
+    // const token = localStorage.getItem('token')
+    // if (!token) throw new Error('Authentication token is missing. Please log in.');
 
     const response = await fetch(`https://www.missionatal.com/api/v1/public/races/${raceId}`, {
       method: 'GET',
@@ -205,8 +206,8 @@ export const fetchRaceData = async ( // change this to the updated api
     const thisData = await response.json()
     // console.log(thisData)
     // setRaceStartTime(thisData.start_date)
-    const start = new Date(thisData.start_date)
-    const end = new Date(thisData.end_date)
+    // const start = new Date(thisData.start_date)
+    // const end = new Date(thisData.end_date)
     // setStartTimeString(`${ start.getHours() } : ${ start.getMinutes() }`)
     // setEndTimeString(`${ end.getHours() } : ${ end.getMinutes() }`)
     onSuccess(thisData)
@@ -255,16 +256,16 @@ export const fetchAlreadyJoinedUsers = async (
   onError = () => { }
 ) => {
   try {
-    const token = localStorage.getItem('token');
-    if (!token) throw new Error('No token found in localStorage');
+    // const token = localStorage.getItem('token');
+    // if (!token) throw new Error('No token found in localStorage');
 
     const response = await fetch(
-      `https://www.missionatal.com/api/v1/race-users/search/?race_id=${race_id}`,
+      `https://www.missionatal.com/api/v1/public/race-users/search/?race_id=${race_id}`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
       }
     );
@@ -429,17 +430,17 @@ export const RefreshToken = async (
 export const getStocksDataForRace = async (race_id, onSuccess, onError) => {
   try {
     // Retrieve the token from localStorage
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
 
-    if (!token) {
-      throw new Error("Authorization token not found in localStorage");
-    }
+    // if (!token) {
+    //   throw new Error("Authorization token not found in localStorage");
+    // }
 
-    const response = await fetch(`https://www.missionatal.com/api/v1/stocks/race/${race_id}`, {
+    const response = await fetch(`https://www.missionatal.com/api/v1/public/stocks/race/${race_id}`, {
       method: "GET", // Adjust the method if needed (e.g., POST, PUT, DELETE)
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
       },
     });
 
@@ -460,11 +461,11 @@ export const getStocksDataForRace = async (race_id, onSuccess, onError) => {
 export const getRaceResults = async (race_id, onSuccess, onError,) => {
   try {
     // Retrieve the token from localStorage
-    const token = localStorage.getItem("token");
+    // const token = localStorage.getItem("token");
 
-    if (!token) {
-      throw new Error("Authorization token not found in localStorage");
-    }
+    // if (!token) {
+    //   throw new Error("Authorization token not found in localStorage");
+    // }
 
     const response = await fetch(`https://www.missionatal.com/api/v1/public/race-result-data/race/${race_id}`, {
       method: "GET", // Adjust the method if needed (e.g., POST, PUT, DELETE)
@@ -1136,8 +1137,8 @@ export const fetchRaceDataDetailed = async ( // change this to the updated api
   onError = () => { },
 ) => {
   try {
-    const token = localStorage.getItem('token')
-    if (!token) throw new Error('Authentication token is missing. Please log in.');
+    // const token = localStorage.getItem('token')
+    // if (!token) throw new Error('Authentication token is missing. Please log in.');
 
     const response = await fetch(`https://www.missionatal.com/api/v1/public/races/${raceId}/details`, {
       method: 'GET',
@@ -1202,7 +1203,9 @@ export const checkFriendRequestStatus = async ( // change this to the updated ap
         'Authorization': `Bearer ${token}`
       }
     })
-    const thisData = await response.json()
+    const thisData = await response?.json()
+    // console.log('status response', thisData)
+
     onSuccess(thisData)
   } catch (e) {
     console.error(e)
@@ -1409,3 +1412,143 @@ export const rejectRequest = async (
     }
   }
 }
+
+export const unfriend = async (
+  userId,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await fetch(`https://www.missionatal.com/api/v1/friends/${userId}/unfriend`, {
+      method: 'PATCH',
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+
+export const blockUser = async (userToBlockId, onSuccess, onError) => {
+  const UPLOAD_URL = `https://www.missionatal.com/api/v1/block-users`; // Replace with your upload endpoint
+  const token = localStorage.getItem('token');
+
+  try {
+    // Make the fetch request with Authorization header
+    const response = await fetch(UPLOAD_URL, {
+      method: 'POST',
+      body: JSON.stringify({
+        blocked_user: (userToBlockId).toString(), // Ensure recieverId is converted to a number
+      }),
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the Bearer token
+        'Content-Type': 'application/json', // Correctly placed Content-Type header
+      },
+    });
+
+    // Check if the response is OK (status in the range 200 - 299)
+    if (!response.ok) {
+      throw new Error(`Failed to send request: ${response.status} ${response.statusText}`);
+    }
+
+    // Parse response JSON
+    const data = await response.json();
+    console.log('Request sent successfully:', data);
+    onSuccess(data);
+  } catch (error) {
+    console.error('Request failed:', error.message || error);
+    onError(error);
+  }
+};
+
+export const getAllblockedUsers = async (
+  userId,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/block-users`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+    }
+    onError(e)
+  }
+}
+
+
+export const getUsersBlockStatus = async (
+  userId,
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`https://www.missionatal.com/api/v1/block-users/${userId}/request`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+export const unblockUser = async (userToUnblockId, onSuccess, onError) => {
+  const UPLOAD_URL = `https://www.missionatal.com/api/v1/block-users/${userToUnblockId}`; // Replace with your upload endpoint
+  const token = localStorage.getItem('token');
+
+  try {
+    // Make the fetch request with Authorization header
+    const response = await fetch(UPLOAD_URL, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`, // Add the Bearer token
+        'Content-Type': 'application/json', // Correctly placed Content-Type header
+      },
+    });
+
+    // Check if the response is OK (status in the range 200 - 299)
+    if (!response.ok) {
+      throw new Error(`Failed to send request: ${response.status} ${response.statusText}`);
+    }
+
+    // Parse response JSON
+    const data = await response.json();
+    console.log('Unblocked successfully:', data);
+    // onSuccess(data);
+  } catch (error) {
+    console.error('Request failed:', error.message || error);
+    onError(error);
+  }
+};
+

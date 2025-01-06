@@ -3,9 +3,9 @@ import coin from '../assets/images/coin2.png'
 import Sidebar from '../Components/Sidebar'
 import UserProfile from '../Sections/Profile/UserProfile';
 import Person from '../assets/images/person2.png'
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getUser, sendFriendRequest } from '../Utils/api';
-import { checkFriendRequestStatus } from '../Utils/api';
+import { checkFriendRequestStatus, unfriend, blockUser, unblockUser, getUsersBlockStatus } from '../Utils/api';
 
 
 const IndiUserProfile = () => {
@@ -13,6 +13,7 @@ const IndiUserProfile = () => {
     const [requestSent, setRequestSent] = useState(false)
     const [buttonsVisiblity, setButtonsVisiblity] = useState(true)
     const [requestStatus, setRequestStatus] = useState('')
+    const [blockStatus, setBlockStatus] = useState('')
     const thisLocation = useLocation()
     const { user_id } = useParams()
     const [details, setDetails] = useState({
@@ -22,12 +23,30 @@ const IndiUserProfile = () => {
     })
     const [userDetails, setUserDetails] = useState({})
     const [reqSent, setReqSent] = useState(false)
+    const navigate = useNavigate()
+
 
     const requestFriend = () => {
         user_id && sendFriendRequest(user_id, (data) => {
             // console.log("Request Sent", data)
             setRequestStatus(data.status)
         })
+    }
+
+    const unfriendUser = () => {
+        user_id && unfriend(user_id, (data) => {
+            console.log('Unfriend Status', data)
+            // setRequestStatus(data.status)
+        })
+    }
+
+    const blockUser1 = () => {
+        blockUser(user_id, () => {
+            console.log('Blocking the user Successful', user_id)
+        })
+    }
+    const unblockUser1 = () => {
+        unblockUser(user_id)
     }
 
 
@@ -47,6 +66,10 @@ const IndiUserProfile = () => {
             setRequestStatus(data.status)
         }, () => {
             setButtonsVisiblity(false)
+        })
+        getUsersBlockStatus(user_id, (data) => {
+            console.log('users block status', data)
+            setBlockStatus(data.status)
         })
     }, [])
 
@@ -91,11 +114,21 @@ const IndiUserProfile = () => {
                                 </div>
                             </div>
                             <div className='flex flex-col gap-3 justify-end'>
-                                {requestStatus !== 'accepted' && requestStatus !== 'pending' && <button onClick={() => {
+                                {blockStatus && blockStatus === 'unblocked' && <button onClick={() => {
+                                    blockUser1()
+                                }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Block</button>}
+                                {blockStatus && blockStatus === 'blocked' && <button onClick={() => {
+                                    unblockUser1()
+                                }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Unblock</button>}
+                                {requestStatus !== 'rejected' || requestStatus !== 'accepted' || requestStatus !== 'pending' && <button onClick={() => {
                                     requestFriend()
                                     setRequestSent(true)
+                                    // 
                                 }} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>}
-                                {requestStatus === 'accepted' && <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Accepted</button>}
+                                {requestStatus === 'accepted' && <button onClick={() => {
+                                    console.log('unfriend pressed')
+                                    unfriendUser()
+                                }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Unfriend</button>}
                                 {requestStatus === 'pending' && <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Sent</button>}
                                 <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Message</button>
                             </div>

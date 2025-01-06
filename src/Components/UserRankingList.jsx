@@ -5,6 +5,7 @@ import UserRankingCard from './UserRankingCard'
 const UserRankingList = ({
     rankList
 }) => {
+    // console.log('Ranklist item structure', rankList[0])
     return (
         <div className="w-full flex flex-col gap-[9px] items-center overflow-auto">
             {
@@ -13,6 +14,7 @@ const UserRankingList = ({
                         <UserRankingCard
                             key={index}
                             pos={index}
+                            id={curr.user_id}
                             total={rankList.length}
                             userName={curr.user_name}
                             userPhoto={curr.user_photo}

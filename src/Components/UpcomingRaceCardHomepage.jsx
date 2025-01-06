@@ -72,7 +72,7 @@ const UpcomingRaceCardHomepage = ({
             initial="hidden"
             animate="visible"
             variants={cardAnimation}
-            className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem] flex flex-col justify-between cursor-pointer'>
+            className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem] flex flex-col justify-between'>
             {
                 joinRaceFormVisible && <JoinRace
                     raceName={raceName}
@@ -81,7 +81,9 @@ const UpcomingRaceCardHomepage = ({
             }
             <div className='flex flex-col'>
                 <div className='w-full flex justify-between items-center'>
-                    <p className='mb-[0.4rem] font-bold text-[2rem] dark:text-white max-w-[75%]'>{raceName}</p>
+                    <p onClick={() => {
+                        navigate(`/race/${raceId}`)
+                    }} className='mb-[0.4rem] font-bold text-[2rem] dark:text-white max-w-[75%] hover:underline cursor-pointer'>{raceName}</p>
                     <div className='flex gap-[6px] items-center self-start flex-wrap'>
                         <div className="flex items-center space-x-[-15px]">
                             {/* Stock 1 - Biggest */}

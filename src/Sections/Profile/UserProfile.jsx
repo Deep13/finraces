@@ -43,6 +43,7 @@ const UserProfile = ({
         return String(s[0]).toUpperCase() + String(s).slice(1);
     }
 
+
     useEffect(() => {
         // console.log('userId', userId)
         if (userId) {
@@ -99,7 +100,7 @@ const UserProfile = ({
                     <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
                         <div className='flex flex-col gap-[8px]'>
                             <p className='text-[1rem]'>Win Rate</p>
-                            <p className='text-[1.5rem] font-bold font-poppins'>{winningRate}</p>
+                            <p className='text-[1.5rem] font-bold font-poppins'>{(winningRate * 100).toFixed(2)}%</p>
                             {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
                                 <FiArrowUpRight color="green" size={15} />
                                 <p className="text-green-600">1.8%</p>

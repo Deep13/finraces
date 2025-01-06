@@ -2,6 +2,7 @@ import React from 'react'
 import rank from '../assets/images/rank_badge.svg'
 import vector from '../assets/images/vector_badge.svg'
 import person2 from '../assets/images/person2.png'
+import { useNavigate } from 'react-router-dom'
 
 
 const UserRankingCard = ({
@@ -10,10 +11,21 @@ const UserRankingCard = ({
     userRank,
     total,
     userPhoto,
-    lastItem
+    lastItem,
+    id
 }) => {
+    const navigate = useNavigate()
+    const userData = localStorage.getItem('userDetails')
+    const selfId = userData && JSON.parse(atob(userData)).userId
+
     return (
-        <div className={`rounded-[10px] flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md dark:border-[#00387E] dark:bg-[#002763]`}>
+        <div onClick={() => {
+            if (userData && id === selfId) {
+                navigate('/profile')
+                return
+            }
+            navigate(`/userprofile/${id}`)
+        }} className={`rounded-[10px] cursor-pointer flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md dark:border-[#00387E] dark:bg-[#002763]`}>
             <div className='flex gap-[15px] items-center'>
                 <div className='w-[2.8rem] aspect-square'>
                     <img className='w-full h-full object-cover' src={userPhoto} alt="" />

@@ -11,7 +11,8 @@ const CountDownTimer = ({ deadline, setIsTimerFinished }) => {
             const formatTime = (time) => String(time).padStart(2, '0');
 
             return (
-                <div className='w-full flex justify-center items-center gap-[0.5rem] mb-[1.5rem]'>
+                <div className='w-full flex justify-center items-center gap-[0.5rem] mb-[1.5rem] text-[#2177cb] text-[2.1rem] font-poppins'>
+
                     <div className='text-[2.1rem] text-[#2177cb] relative font-poppins'>{formatTime(days)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Days</p></div>
                     <div className='text-[2.1rem] text-[#2177cb] relative font-poppins'>{formatTime(hours)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Hours</p></div>
                     <div className='text-[2.1rem] text-[#2177cb] relative font-poppins'>{formatTime(minutes)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Minutes</p></div>

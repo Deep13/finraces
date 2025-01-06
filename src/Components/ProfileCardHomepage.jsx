@@ -20,6 +20,8 @@ const ProfileCardHomepage = ({
 }) => {
     const navigate = useNavigate()
     const [YourDetails, setYourDetails] = useState(null)
+    let userData = localStorage.getItem('userDetails')
+    const selfId = userData ? JSON.parse(atob(userData)).userId : undefined
 
 
     const cardAnimation = { // this is a variant
@@ -38,6 +40,8 @@ const ProfileCardHomepage = ({
     useEffect(() => {
         getUserDetails((data) => {
             setYourDetails(data)
+        }, (error) => {
+            console.log(error)
         })
     }, [])
     // cards must be designed in pixels
@@ -70,18 +74,24 @@ const ProfileCardHomepage = ({
                     </div>
                 </div>
                 <div className='flex-1 h-full flex justify-end items-center'>
-                    <button onClick={() => navigate(`/userprofile/${id}`, {
-                        state: {
-                            // isFirst,
-                            // userName,
-                            image,
-                            userName: fullName,
-                            rank,
-                            points,
-                            id, // this is mandatory
-                            // email,
+                    <button onClick={() => {
+                        if (userData && id === selfId) {
+                            navigate('/profile')
+                            return
                         }
-                    })} className={`${isFirst ? 'text-[#ff0000]' : 'text-white'} rounded-[33px] w-[96px] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
+                        navigate(`/userprofile/${id}`, {
+                            state: {
+                                // isFirst,
+                                // userName,
+                                image,
+                                userName: fullName,
+                                rank,
+                                points,
+                                id, // this is mandatory
+                                // email,
+                            }
+                        })
+                    }} className={`${isFirst ? 'text-[#ff0000]' : 'text-white'} rounded-[33px] w-[96px] flex justify-center items-center text-[14px] py-[7.5px] font-medium shadow-lg profile_card_button_grad`}>View Profile</button>
                 </div>
             </div>
         </motion.div>

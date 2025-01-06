@@ -96,9 +96,9 @@ const AccountManagement = () => {
                     <div className='dark:bg-[#002763] bg-slate-200 rounded-[12px] py-[10px] px-[20px] flex-1 flex flex-col'>
                         <h4 className='dark:text-white font-bold text-[1.1rem] mb-4'>General</h4>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
-                            <label htmlFor="username" className='dark:text-white'>User ID</label>
+                            <label htmlFor="username" className='dark:text-white'>Created At</label>
                             {/* <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' /> */}
-                            <p className='font-semibold text-lg font-poppins'>{userData.id}</p>
+                            <p className='font-semibold text-lg font-poppins'>{new Date(userData.createdAt).toLocaleDateString()}</p>
                         </div>
                         <div className='w-full flex justify-between'>
                             {/* <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>

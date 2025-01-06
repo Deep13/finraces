@@ -18,7 +18,7 @@ import Person2 from '../assets/images/person23.png'
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchRaceData, fetchAlreadyJoinedUsers, getRaceResults, fetchParticipantsData, fetchRaceDataDetailed } from "../Utils/api";
+import { fetchRaceData, fetchAlreadyJoinedUsers, getRaceResults, fetchParticipantsData, fetchRaceDataDetailed, getStocksDataForRace } from "../Utils/api";
 import io from 'socket.io-client'
 import Countdown from "react-countdown";
 import { ColorRing } from "react-loader-spinner";
@@ -27,15 +27,12 @@ import google from '../assets/images/g.svg'
 import StockRankList from '../Components/StockRankList'
 import UserRankingList from "../Components/UserRankingList";
 import RaceTile from "../Components/RaceTile";
-import avatar from '../assets/images/placeholderavatar.png'
-import { getStocksDataForRace } from "../Utils/api";
 import ConfettiExplosion from 'react-confetti-explosion';
 import { motion } from "motion/react";
 import Sidebar from "../Components/Sidebar";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import ImageSlider from "../Components/ImageSlider";
 import YourBetsCard from '../Components/YourBetsCard'
-import ReactApexChart from "react-apexcharts";
 import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -72,7 +69,7 @@ const RacePage = () => {
     const [rankList, setRankList] = useState(null)
     const { race_id } = useParams()
     const joinedUsersRef = useRef([])
-    const [raceResults, setRaceResults] = useState(null)
+    const [raceResults, setRaceResults] = useState()
     const [stocksDataForRace, setStocksDataForRace] = useState(null)
     const [raceStatus, setRaceStatus] = useState('')
     const [ranks, setRanks] = useState({
@@ -104,7 +101,7 @@ const RacePage = () => {
                 label: "Company Growth",
                 data: [], // Initial data
                 backgroundColor: [], // Colors for bars
-                barThickness: 30,
+                barThickness: 10,
             },
         ],
     });
@@ -157,9 +154,24 @@ const RacePage = () => {
 
                 const label = chart.data.labels[index];
                 const icon = logos[label];
-
                 if (icon) {
+                    // Begin path to draw circular clipping area
+                    ctx.save(); // Save the current canvas state
+                    ctx.beginPath();
+                    ctx.arc(
+                        xPosition + 15, // Center X of the icon
+                        yPosition + 15, // Center Y of the icon
+                        15, // Radius of the circle
+                        0, // Start angle
+                        2 * Math.PI // End angle
+                    );
+                    ctx.clip(); // Clip to the circular region
+
+                    // Draw the image inside the clipped region
                     ctx.drawImage(icon, xPosition, yPosition, 30, 30);
+
+                    // Restore the canvas state to remove clipping
+                    ctx.restore();
                 }
             });
         },
@@ -315,7 +327,7 @@ const RacePage = () => {
             const { hours, minutes } = calculateDuration(res.start_date, res.end_date)
             // setDuration((hours && (hours + " Hours ")) + (minutes && (minutes + " Minutes")))
             setDuration(() => {
-                let str;
+                let str = '';
                 if (hours !== 0) {
                     str = hours + " Hours ";
                 }
@@ -325,6 +337,7 @@ const RacePage = () => {
                 return str
             }) // brilliant logic
             if (res.status === 'running') {
+                setRaceStatus('running')
                 setIsRaceStarted(true)
             } else {
                 setIsRaceStarted(false)
@@ -356,6 +369,8 @@ const RacePage = () => {
         getStocksDataForRace(race_id, (data) => {
             console.log("API Response ", data)
             setStocksDataForRace(data)
+        }, (error) => {
+            console.log('Stocks Error', error)
         })
 
         // console.log('animation box width', box.current ? box.current.offsetWidth : 'no width is displayed')
@@ -435,7 +450,7 @@ const RacePage = () => {
                         label: "Company Growth",
                         data: newData, // Initialize with zeros
                         backgroundColor: newColors,
-                        barThickness: 30,
+                        barThickness: 10,
                     },
                 ],
             });
@@ -526,6 +541,7 @@ const RacePage = () => {
             }
             if (data.event === 'race-data') {
                 setRaceResults(data.data)
+                console.log('race data socket', data.data)
                 setRaceStatus(data.data.status)
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
@@ -539,7 +555,7 @@ const RacePage = () => {
                     const relativePosition = ((((data.data['stocks'].length - stock.rank)) * (data.data['stocks'].length * 10) / data.data['stocks'].length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
                     newPosArr.push(relativePosition)
                 })
-                console.log('New Positions Array', newPosArr);
+                // console.log('New Positions Array', newPosArr);
                 setData((prevData) => {
                     const newData = newPosArr;
 
@@ -571,11 +587,15 @@ const RacePage = () => {
         };
     }, [race_id])
 
-    const findImageUrlForStock = (id) => stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === id)]?.icon_url
+    const findImageUrlForStock = (id) => stocksDataForRace ? stocksDataForRace[Object.keys(stocksDataForRace)?.find(element => element === id)]?.icon_url : ''
 
     useEffect(() => {
-        console.log('raceResults', raceResults)
-    }, [raceResults])
+        console.log('raceDetails', raceDetails)
+    }, [raceDetails])
+
+    useEffect(() => {
+        console.log('Race status this is pain in >>>>>>>>>>>>>', raceDetails?.status)
+    }, [raceStatus])
 
     return (
         <>
@@ -593,7 +613,7 @@ const RacePage = () => {
                         />
                     </div>
                 </div> :
-                    !isRaceStarted && raceDetails && <RaceWaitingZone
+                    !isRaceStarted && raceDetails && < RaceWaitingZone
                         start_date={raceDetails?.start_date}
                         raceStarted={isRaceStarted}
                         joinedUsersList={joinedUsers}
@@ -678,9 +698,9 @@ const RacePage = () => {
                                     </div>
                                     <p onClick={() => {
                                         if (raceResults?.race_result['2']?.participants[0]?.user_id) {
-                                            navigate(`/userprofile/${raceResults?.race_result[2]?.participants[0]?.user_name}`)
+                                            navigate(`/userprofile/${raceResults?.race_result[2]?.participants[0]?.user_id}`)
                                         }
-                                    }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result[2]?.participants[0]?.user_name}</p>
+                                    }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result[2]?.participants[0]?.user_name ? raceResults?.race_result[2]?.participants[0]?.user_name : ''}</p>
                                 </div>
 
                                 <div className="flex justify-center flex-col items-center relative bottom-8">
@@ -735,11 +755,11 @@ const RacePage = () => {
 
                                 <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                     {
-                                        stockRankList &&
+                                        stockRankList && stockRankList['1'] &&
                                         <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
                                             {/* <p className="text-[12px] font-medium">1500</p> */}
                                             {findImageUrlForStock(stockRankList['1']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['1']?.stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['1']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['1']?.stock_id)} alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
+                                            {!findImageUrlForStock(stockRankList['1']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
                                         </div>
                                     }
                                     <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
@@ -747,11 +767,11 @@ const RacePage = () => {
                                             stockRankList && stockRankList['1']?.stock_name
                                         }
                                     </p>
-                                    <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
+                                    {stockRankList && stockRankList['1'] && <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
                                         {
                                             stockRankList && `(${stockRankList['1']?.stock_ticker})`
                                         }
-                                    </p>
+                                    </p>}
                                 </div>
                                 <div className={`w-[10rem] flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
                                     {
@@ -759,7 +779,7 @@ const RacePage = () => {
                                         <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
                                             {/* <p className="text-[12px] font-medium">1500</p> */}
                                             {findImageUrlForStock(stockRankList['0']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['0']?.stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['0']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['0']?.stock_id)} alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
+                                            {!findImageUrlForStock(stockRankList['0']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' >{stockRankList['0']?.stock_name.substring(0, 2)}</div>}
                                         </div>
                                     }
                                     {/* <p className="font-medium text-4">WR: -</p> */}
@@ -776,11 +796,11 @@ const RacePage = () => {
                                 </div>
                                 <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
                                     {
-                                        stockRankList &&
+                                        stockRankList && stockRankList['2'] &&
                                         <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
                                             {/* <p className="text-[12px] font-medium">1500</p> */}
                                             {findImageUrlForStock(stockRankList['2']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['2']?.stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['2']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' src={findImageUrlForStock(stockRankList['2']?.stock_id)} alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
+                                            {!findImageUrlForStock(stockRankList['2']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' >{stockRankList['2']?.stock_name.substring(0, 2)}</div>}
                                         </div>
                                     }
                                     {/* <p className="font-medium text-4">WR: -</p> */}
@@ -789,11 +809,11 @@ const RacePage = () => {
                                             stockRankList && stockRankList['2']?.stock_name
                                         }
                                     </p>
-                                    <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
+                                    {stockRankList && stockRankList['2'] && <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
                                         {
                                             stockRankList && `(${stockRankList['2']?.stock_ticker})`
                                         }
-                                    </p>
+                                    </p>}
                                 </div>
                             </div>
 
@@ -856,7 +876,7 @@ const RacePage = () => {
                                     <Bar data={data} options={options} plugins={[customPlugin]} />
                                 )}
                                 {!(data.labels.length > 0) && raceStatus !== 'finished' && (
-                                    <p>Loading chart...</p>
+                                    <p className="dark:text-white">Loading chart...</p>
                                 )}
                                 {
                                     raceStatus === 'finished' && <div className="w-full h-full flex justify-center items-center">
@@ -891,7 +911,7 @@ const RacePage = () => {
                                     updateUser3();
                                     setTabs('leaderboard')
                                 }} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
-                                {userDetails && <button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>}
+                                {<button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>}
                             </div>
                             {<div className='w-full rounded-[8px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
                                 {

@@ -17,14 +17,14 @@ const RaceWaitingZone = ({
 
     const [isTimerFinished, setIsTimerFinished] = useState(false)
 
-    useLayoutEffect(() => { // this case useLayouteffect is really effective
+    useEffect(() => { // this case useLayouteffect is really effective
         // if(countdownComplete) {
         //     closeCard(true)
         // }
         if (status === 'finished' || status === 'running') {
             closeCard(true)
         }
-        
+
     }, [])
 
     useEffect(() => {
