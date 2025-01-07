@@ -1,1 +1,1 @@
-export const globalUrl = 'https://www.missionatal.com'
+export const globalUrl = 'https://wikifandom.org'
