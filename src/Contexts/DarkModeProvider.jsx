@@ -15,7 +15,8 @@ const DarkModeProvider = ({ children }) => {
     const [profileImage, setProfileImage] = useState('')
 
     useEffect(() => {
-        let thisUserDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
+        let thisUserData = localStorage.getItem('userDetails')
+        let thisUserDetails = thisUserData && JSON.parse(atob(thisUserData))
         thisUserDetails && getUser(thisUserDetails.userId, (data) => {
             setProfileImage(data?.photo?.path)
         })
