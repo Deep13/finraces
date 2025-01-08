@@ -10,6 +10,7 @@ import EditProfile from '../Sections/Profile/EditProfile'
 import { useNavigate } from 'react-router-dom';
 import graphrate from '../../src/assets/images/graphrate.svg'
 import { getRacesCountByRank } from '../Utils/api';
+import avatarplaceholder from '../assets/images/avatarplaceholder.png'
 
 const superTabsStrings = {
   Profile: 'Profile',
@@ -82,7 +83,7 @@ const Profile = () => {
                       wrapperClass=""
                     />
                   </div>} */}
-                  <img loading="lazy" className="w-full h-full object-cover" src={imageUrl} alt="" />
+                  <img loading="lazy" className="w-full h-full object-cover" src={imageUrl || avatarplaceholder} alt="" />
                   {/* <img className="z-[5]" src={golden_frame} alt="" /> */}
                 </div>
               </div>
