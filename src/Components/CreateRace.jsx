@@ -443,7 +443,7 @@ const CreateRace = ({
 
               if (curr.value_type_percent) {
                 return {
-                  "prediction_price": (curr.prediction_price) * (curr.current_price / 100),
+                  "prediction_price": ((curr.prediction_price) * (curr.current_price / 100) + curr.current_price),
                   "prediction_rank": curr.prediction_rank,
                   "stock_id": curr.stock_id,
                 }

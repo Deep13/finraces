@@ -68,9 +68,6 @@ const UpcomingRaceCardHomepage = ({
     return (
         <motion.div
             custom={index}
-            // onClick={() => {
-            //     navigate(`/race/${raceId}`)
-            // }}
             initial="hidden"
             animate="visible"
             variants={cardAnimation}
@@ -149,12 +146,9 @@ const UpcomingRaceCardHomepage = ({
                     <p className='text-[12px] dark:text-white'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
                 </div>
             </div>
-            {/* <p className='text-[14px] mb-[1.8rem]'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-            </p> */}
+            
             <div className='flex gap-[20px] justify-self-end'>
                 <button
-                    // onClick={() => navigate(`/race/${raceId}`)} 
                     onClick={(e) => {
                         e.stopPropagation()
                         if ((userDetails || guestDetails)) {
@@ -166,9 +160,6 @@ const UpcomingRaceCardHomepage = ({
                     className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>
                     Join
                 </button>
-                {/* <button
-                    onClick={() => navigate(`/race/${raceId}`)}
-                    className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>Watch Race</button> */}
             </div>
         </motion.div >
     )
