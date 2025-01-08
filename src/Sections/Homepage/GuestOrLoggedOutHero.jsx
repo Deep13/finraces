@@ -5,6 +5,7 @@ import coin2 from '../../assets/images/coin2.png'
 import diamond from '../../assets/images/diamondIcon.svg'
 // import { FiArrowUpRight } from 'react-icons/fi'
 import StockWatchlistCard from '../../Components/StockWatchlistCard'
+import avatarplaceholder from '../../assets/images/avatarplaceholder.png'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
 import { lastRaceDataByUser, getTotalPointsUser } from '../../Utils/api'
@@ -71,7 +72,7 @@ const GuestOrLoggedOutHero = () => {
 
             <div className='max-w-[1400px] rounded-lg mb-[3.3rem] flex gap-[2.8rem] justify-start flex-wrap items-start'>
                 <div className='rounded-xl overflow-hidden h-[10rem] w-[10rem]'>
-                    <img className='w-full h-full object-cover' src={imageUrl?.photo?.path || ''} alt="User Profile" />
+                    <img className='w-full h-full object-cover' src={imageUrl?.photo?.path || avatarplaceholder} alt="User Profile" />
                 </div>
 
                 <div onClick={() => {

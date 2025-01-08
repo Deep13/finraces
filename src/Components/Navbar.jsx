@@ -19,12 +19,13 @@ import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import PopupSearch from "./PopupSearch";
 import SimpleSwitch from "./Switch";
+import avatarplaceholder from '../assets/images/avatarplaceholder.png'
 
 const Navbar = () => {
 
-    const { darkModeEnabled, toggle, createRace, setCreateRace } = useContext(DarkModeContext)
+    const { darkModeEnabled, toggle, createRace, setCreateRace, showLoginForm, setShowLoginForm } = useContext(DarkModeContext)
     // const [createRaceState, setCreateRaceState] = useState(false)
-    const [showForm, setShowForm] = useState(false)
+    // const [showForm, setShowForm] = useState(showLoginForm)
     // const [darkMode, setDarkMode] = useState(darkModeEnabled)
     // const { setCreateRaceState } = useContext(GlobalContext)
     const [dropdown, setDropdown] = useState(false)
@@ -92,7 +93,7 @@ const Navbar = () => {
     return (
         <>
             {createRace && <CreateRace setCreateRace={setCreateRace} />}
-            {showForm && <PopupForm closePopup={setShowForm} />}
+            {showLoginForm && <PopupForm closePopup={setShowLoginForm} />}
             <AnimatePresence>
                 {search && <PopupSearch setPopupSearch={setSearch} />}
             </AnimatePresence>
@@ -127,7 +128,7 @@ const Navbar = () => {
                         !userDetails &&
                         <button onClick={() => {
                             // navigate('/auth')
-                            setShowForm(true)
+                            setShowLoginForm(true)
                         }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
                             Log in
                         </button>
@@ -135,7 +136,7 @@ const Navbar = () => {
                     <button onClick={() => {
                         // create Race
                         if (!token) {
-                            setShowForm(true)
+                            setShowLoginForm(true)
                             // navigate('/auth')
                             return
                         }
@@ -205,7 +206,7 @@ const Navbar = () => {
                         }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
                             <p id="profileButtonP" className="dark:text-white">{userDetailsObject.userName}</p>
                             <div id="profileButtonD" className="bg-white w-9 h-9 rounded-full overflow-hidden">
-                                <img id="profileButtonI" className="w-full h-full object-cover" src={userDetailsObject?.photo?.path} alt="" />
+                                <img id="profileButtonI" className="w-full h-full object-cover" src={userDetailsObject?.photo?.path || avatarplaceholder} alt="" />
                             </div>
                             <AnimatePresence>
                                 {dropdown && <motion.div
