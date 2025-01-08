@@ -60,16 +60,16 @@ const Form = ({
 
   const validateSignup = () => {
     const { fullName, email, password } = signupCreds
-    if (!fullName || !email || !password) {
-      // alert('Please fill all the fields')
-      return false
-    }
+    // if (!fullName || !email || !password) {
+    //   // alert('Please fill all the fields')
+    //   return false
+    // }
 
-    const isEmail = email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-    if (!isEmail) {
-      // alert('Incorrect Email')
-      return false
-    }
+    // const isEmail = email.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    // if (!isEmail) {
+    //   alert('Incorrect Email')
+    //   return false
+    // }
 
 
     // alert('ok your are registered')
@@ -107,12 +107,16 @@ const Form = ({
   }
 
   const Signup = () => {
-    if (!validateSignup()) {
+    // if (!validateSignup()) {
+    //   return
+    // }
+    let { email, password, fullName } = signupCreds
+    if (!email || !password || !fullName) {
+      alert('all fields are required')
       return
     }
     // here the signup function is called
     // alert('ok your are registered')
-    let { email, password, fullName } = signupCreds
     const { firstName, lastName } = splitFullName(fullName)
     RegisterUser(email, password, firstName, lastName, () => {
       alert('Something went wrong')
@@ -127,12 +131,16 @@ const Form = ({
   }
 
   const Login = () => {
-    if (!validateLogin()) {
-      // error handling
-      return
-    }
+    // if (!validateLogin()) {
+    //   // error handling
+    //   return
+    // }
     // alert('ok your are Loggedin')
     const { email, password } = loginCreds
+    if (!email || !password) {
+      alert('all fields are required')
+      return
+    }
     LoginUser(email, password, () => {
       closeForm(false)
       if (thisLocation.pathname === '/auth') {

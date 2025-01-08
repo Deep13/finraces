@@ -7,6 +7,7 @@ import { Oval } from 'react-loader-spinner'
 import { getUserDetails, updateProfile } from '../../Utils/api'
 import ChangePasswordPopup from '../../Components/ChangePasswordPopup'
 import DeleteAccountPopup from '../../Components/DeleteAccountPopup'
+import avatarplaceholder from '../../assets/images/avatarplaceholder.png'
 
 const AccountManagement = () => {
 
@@ -79,7 +80,7 @@ const AccountManagement = () => {
                                     wrapperClass=""
                                 />
                             </div>}
-                            <img className='w-full h-full object-cover' src={imageUrl} alt="" />
+                            <img className='w-full h-full object-cover' src={imageUrl || avatarplaceholder} alt="" />
                         </div>
 
                         <div className='flex flex-col gap-[12px] flex-1 justify-center items-center'>

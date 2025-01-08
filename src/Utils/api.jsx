@@ -2,7 +2,7 @@ import { data } from "autoprefixer";
 import axios from "axios";
 import { globalUrl } from "../Config";
 
-let  GlobalURL = globalUrl
+let GlobalURL = globalUrl
 
 
 export const RegisterUser = async (
@@ -55,6 +55,7 @@ export const Login = async (
     console.log('response', response.data);
 
     localStorage.setItem('token', response.data.token);
+    localStorage.removeItem('userDetails')
     localStorage.setItem('refreshToken', response.data.refreshToken);
     // localStorage.setItem('userName', response.data.user.firstName)
     // localStorage.setItem('Photo', response.data.user.photo)

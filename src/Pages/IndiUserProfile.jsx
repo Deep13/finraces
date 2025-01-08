@@ -5,6 +5,7 @@ import UserProfile from '../Sections/Profile/UserProfile';
 import Person from '../assets/images/person2.png'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getUser, sendFriendRequest } from '../Utils/api';
+import avatarplaceholder from '../assets/images/avatarplaceholder.png'
 import { checkFriendRequestStatus, unfriend, blockUser, unblockUser, getUsersBlockStatus } from '../Utils/api';
 
 
@@ -57,7 +58,7 @@ const IndiUserProfile = () => {
         //     // setDetails(thisLocation.state)
         // }
         getUser(user_id, (data) => {
-            // console.log(data)
+            console.log(data)
             setUserDetails(data)
         })
         checkFriendRequestStatus(user_id, (data) => {
@@ -89,7 +90,7 @@ const IndiUserProfile = () => {
                         <div className='flex gap-4 flex-wrap'>
                             <div className=' overflow-hidden'>
                                 <div className="relative w-[200px] overflow-hidden h-[15rem] rounded-lg group">
-                                    {userDetails?.photo?.path && <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path} alt="" />}
+                                    {userDetails?.photo?.path && <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path || avatarplaceholder} alt="" />}
                                 </div>
                             </div>
                             <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>

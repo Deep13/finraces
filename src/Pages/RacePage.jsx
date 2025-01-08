@@ -60,6 +60,7 @@ const RacePage = () => {
 
     const [isRaceStarted, setIsRaceStarted] = useState(false)
     const [raceDetails, setRaceDetails] = useState(null)
+    const [isLoadingRaceTile, setIsLoadingRaceTile] = useState(true)
     const [isLoading, setisLoading] = useState(true)
     const [participantsCount, setParticipantsCount] = useState(0)
     const [joinedUsers, setJoinedUsers] = useState([])
@@ -541,8 +542,9 @@ const RacePage = () => {
             }
             if (data.event === 'race-data') {
                 setRaceResults(data.data)
-                console.log('race data socket', data.data)
-                setRaceStatus(data.data.status)
+                // console.log('race data socket', data.data)
+                setRaceStatus(data.data.status) // somehow this is not reflecting
+                setIsLoadingRaceTile(false)
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
                 flag.current += 1
@@ -597,369 +599,390 @@ const RacePage = () => {
         console.log('Race status this is pain in >>>>>>>>>>>>>', raceDetails?.status)
     }, [raceStatus])
 
-    return (
-        <>
-            {
-                isLoading ? <div className="fixed bg-black opacity-40 w-full h-screen top-0 left-0 grid place-items-center z-[999]">
-                    <div>
-                        <ColorRing
-                            visible={true}
-                            height="80"
-                            width="80"
-                            ariaLabel="color-ring-loading"
-                            wrapperStyle={{}}
-                            wrapperClass="color-ring-wrapper"
-                            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-                        />
-                    </div>
-                </div> :
-                    !isRaceStarted && raceDetails && < RaceWaitingZone
-                        start_date={raceDetails?.start_date}
-                        raceStarted={isRaceStarted}
-                        joinedUsersList={joinedUsers}
-                        raceName={raceDetails?.name}
-                        liveUsers={liveUsers}
-                        race_id={race_id}
-                        status={raceDetails?.status}
-                        // raceEnded = {false}
-                        closeCard={setIsRaceStarted} />
-            }
-            <motion.div
-                initial={{
-                    y: 120,
-                    opacity: 0
-                }}
-                animate={{
-                    y: 0,
-                    opacity: 1
-                }}
-                transition={{
-                    duration: 0.4,
-                    ease: 'easeInOut'
-                }}
-                className='w-full relative h-auto flex pb-8 dark:bg-[#000924]'>
-                {/* Ensure sidebar is inside a container with sufficient height */}
-                <Sidebar />
 
-                {/* dashboard  */}
-                <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
-                    {/* this is full width container cuz we need the sidebar to remain at correct place */}
-                    <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-[24px] dark:bg-[#000D38] bg-[#EDF7FF]'>
+    if (isLoadingRaceTile) {
+        return (
+            <>
+                {
+                    isLoading ? <div className="fixed bg-black opacity-40 w-full h-screen top-0 left-0 grid place-items-center z-[999]">
+                        <div>
+                            {/* <ColorRing
+                                visible={true}
+                                height="80"
+                                width="80"
+                                ariaLabel="color-ring-loading"
+                                wrapperStyle={{}}
+                                wrapperClass="color-ring-wrapper"
+                                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                            /> */}
+                        </div>
+                    </div> :
+                        !isRaceStarted && raceDetails && < RaceWaitingZone
+                            start_date={raceDetails?.start_date}
+                            raceStarted={isRaceStarted}
+                            joinedUsersList={joinedUsers}
+                            raceName={raceDetails?.name}
+                            liveUsers={liveUsers}
+                            race_id={race_id}
+                            status={raceStatus}
+                            // raceEnded = {false}
+                            closeCard={setIsRaceStarted} />
+                }
+                <motion.div
+                    initial={{
+                        y: 120,
+                        opacity: 0
+                    }}
+                    animate={{
+                        y: 0,
+                        opacity: 1
+                    }}
+                    transition={{
+                        duration: 0.4,
+                        ease: 'easeInOut'
+                    }}
+                    className='w-full relative flex pb-8 gap-8 dark:bg-[#000924] justify-center items-center h-[90vh]'>
+                    <ColorRing
+                        visible={true}
+                        height="80"
+                        width="80"
+                        ariaLabel="color-ring-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="color-ring-wrapper"
+                        colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                    />
+                    <p className="text-2xl font-bold dark:text-white">Race is Loading...</p>
+                </motion.div>
+            </>
+        )
+    } else {
 
-                        {/* actual dashboard  */}
-                        <div className='flex-1 px-[22px] py-[18px]'>
+        return (
+            <>
+                {
+                    isLoading ? <div className="fixed bg-black opacity-40 w-full h-screen top-0 left-0 grid place-items-center z-[999]">
+                        <div>
+                            <ColorRing
+                                visible={true}
+                                height="80"
+                                width="80"
+                                ariaLabel="color-ring-loading"
+                                wrapperStyle={{}}
+                                wrapperClass="color-ring-wrapper"
+                                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                            />
+                        </div>
+                    </div> :
+                        !isRaceStarted && raceDetails && < RaceWaitingZone
+                            start_date={raceDetails?.start_date}
+                            raceStarted={isRaceStarted}
+                            joinedUsersList={joinedUsers}
+                            raceName={raceDetails?.name}
+                            liveUsers={liveUsers}
+                            race_id={race_id}
+                            status={raceDetails?.status}
+                            // raceEnded = {false}
+                            closeCard={setIsRaceStarted} />
+                }
+                <motion.div
+                    initial={{
+                        y: 120,
+                        opacity: 0
+                    }}
+                    animate={{
+                        y: 0,
+                        opacity: 1
+                    }}
+                    transition={{
+                        duration: 0.4,
+                        ease: 'easeInOut'
+                    }}
+                    className='w-full relative h-auto flex pb-8 dark:bg-[#000924]'>
+                    {/* Ensure sidebar is inside a container with sufficient height */}
+                    <Sidebar />
 
-                            <div className='w-full flex justify-between mb-[3.8rem]'>
-                                <div className='flex gap-[0.76rem]'>
-                                    <div></div>
-                                    <div className='h-full'>
-                                        <h3 className='text-[1.05rem] font-bold dark:text-white font-poppins'>{raceDetails?.name}</h3>
-                                        <p className='text-[0.7rem] dark:text-white'>
-                                            Race Duration
-                                            <span className="font-semibold ml-2 font-poppins">
-                                                {duration}
-                                            </span>
-                                        </p>
-                                    </div>
-                                    {/* <div className='relative top-1'>
+                    {/* dashboard  */}
+                    <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
+                        {/* this is full width container cuz we need the sidebar to remain at correct place */}
+                        <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-[24px] dark:bg-[#000D38] bg-[#EDF7FF]'>
+
+                            {/* actual dashboard  */}
+                            <div className='flex-1 px-[22px] py-[18px]'>
+
+                                <div className='w-full flex justify-between mb-[3.8rem]'>
+                                    <div className='flex gap-[0.76rem]'>
+                                        <div></div>
+                                        <div className='h-full'>
+                                            <h3 className='text-[1.05rem] font-bold dark:text-white font-poppins'>{raceDetails?.name}</h3>
+                                            <p className='text-[0.7rem] dark:text-white'>
+                                                Race Duration
+                                                <span className="font-semibold ml-2 font-poppins">
+                                                    {duration}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        {/* <div className='relative top-1'>
                                         <img src={info} alt="info icon" />
                                     </div> */}
-                                </div>
-                                <div>
-                                    {isExploding && <ConfettiExplosion
-                                        particleCount={200}
-                                        particleSize={5}
-                                        duration={2800}
-                                    />}
-                                </div>
-                                <div className='h-full flex flex-col justify-between items-end'>
-                                    <h3 className='text-[1.05rem] font-bold dark:text-white flex gap-1 font-poppins'>{participantsCount} <span className="font-sans">{participantsCount === 1 ? 'Participant' : "Participants"}</span> </h3>
-                                    {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
-                                </div>
-                            </div>
-
-                            {/* top 3 users  */}
-                            <div className="flex-1 flex justify-center items-center gap-[2rem] mb-[20px]">
-                                <div className="flex justify-center flex-col items-center">
-                                    <div className="z-[10]">
-                                        <img src={silver_king_crown} alt="" />
-                                        <div className="flex justify-center items-center">
-                                            <img src={Polygon7} alt="" />
-                                        </div>
                                     </div>
-                                    <div className="relative">
-                                        <img className="z-[5] relative w-[100%] h-[145px]" src={silver_frame} alt="" />
-                                        <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[14px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
-                                            <ImageSlider
-                                                data={imageData}
-                                                currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result['2']?.participants?.[0]?.user_id]?.position : 0}
-                                            />
-                                        </div>
+                                    <div>
+                                        {isExploding && <ConfettiExplosion
+                                            particleCount={200}
+                                            particleSize={5}
+                                            duration={2800}
+                                        />}
                                     </div>
-                                    <p onClick={() => {
-                                        if (raceResults?.race_result['2']?.participants[0]?.user_id) {
-                                            navigate(`/userprofile/${raceResults?.race_result[2]?.participants[0]?.user_id}`)
-                                        }
-                                    }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result[2]?.participants[0]?.user_name ? raceResults?.race_result[2]?.participants[0]?.user_name : ''}</p>
-                                </div>
-
-                                <div className="flex justify-center flex-col items-center relative bottom-8">
-                                    <div className="mb-[1rem]">
-                                        <img src={golden_king_corwn} alt="" />
-                                        <div className="flex justify-center items-center">
-                                            <img src={Polygon7} alt="" />
-                                        </div>
-                                    </div>
-                                    <div className="relative">
-                                        <img className="z-[5] relative w-[100%] h-[145px]" src={golden_frame} alt="" />
-                                        {/* <img className={`absolute ${darkModeEnabled && 'glow'} w-full h-full object-cover top-0 left-0 z-[4] scale-75`} src={raceResults?.race_result['1']?.participants?.[0]?.user_name ? Person : avatar} alt="" /> */}
-                                        <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[14px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
-                                            <ImageSlider
-                                                data={imageData}
-                                                currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[1]?.participants?.[0]?.user_id]?.position : 0}
-                                            />
-                                        </div>
-                                    </div>
-                                    <p onClick={() => {
-                                        if (raceResults?.race_result['1']?.participants[0]?.user_id) {
-                                            navigate(`/userprofile/${raceResults?.race_result[1]?.participants[0]?.user_id}`)
-                                        }
-                                    }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result[1]?.participants[0]?.user_name}</p>
-                                </div>
-
-                                <div className="flex justify-center flex-col items-center">
-                                    <div className="z-[10]">
-                                        <img src={bronze_king_crown} alt="" />
-                                        <div className="flex justify-center items-center">
-                                            <img src={Polygon7} alt="" />
-                                        </div>
-                                    </div>
-                                    <div className="relative w-full h-full">
-                                        <img className="z-[5] relative w-[100%] h-[145px]" src={bronze_frame} alt="" />
-                                        <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[12px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
-                                            <ImageSlider
-                                                data={imageData}
-                                                currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[3]?.participants[0]?.user_id]?.position : 0}
-                                            />
-                                        </div>
-                                    </div>
-                                    <p onClick={() => {
-                                        if (raceResults?.race_result['3']?.participants[0]?.user_id) {
-                                            navigate(`/userprofile/${raceResults?.race_result[3]?.participants[0]?.user_id}`)
-                                        }
-                                    }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result[3]?.participants[0]?.user_name}</p>
-                                </div>
-                            </div>
-
-                            <div className="flex-1 flex justify-center items-end gap-[2rem]">
-
-                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
-                                    {
-                                        stockRankList && stockRankList['1'] &&
-                                        <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
-                                            {/* <p className="text-[12px] font-medium">1500</p> */}
-                                            {findImageUrlForStock(stockRankList['1']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['1']?.stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['1']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
-                                        </div>
-                                    }
-                                    <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
-                                        {
-                                            stockRankList && stockRankList['1']?.stock_name
-                                        }
-                                    </p>
-                                    {stockRankList && stockRankList['1'] && <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
-                                        {
-                                            stockRankList && `(${stockRankList['1']?.stock_ticker})`
-                                        }
-                                    </p>}
-                                </div>
-                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
-                                    {
-                                        stockRankList &&
-                                        <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
-                                            {/* <p className="text-[12px] font-medium">1500</p> */}
-                                            {findImageUrlForStock(stockRankList['0']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['0']?.stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['0']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' >{stockRankList['0']?.stock_name.substring(0, 2)}</div>}
-                                        </div>
-                                    }
-                                    {/* <p className="font-medium text-4">WR: -</p> */}
-                                    <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
-                                        {
-                                            stockRankList && stockRankList['0']?.stock_name
-                                        }
-                                    </p>
-                                    <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
-                                        {
-                                            stockRankList && `(${stockRankList['0']?.stock_ticker})`
-                                        }
-                                    </p>
-                                </div>
-                                <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
-                                    {
-                                        stockRankList && stockRankList['2'] &&
-                                        <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
-                                            {/* <p className="text-[12px] font-medium">1500</p> */}
-                                            {findImageUrlForStock(stockRankList['2']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['2']?.stock_id)} alt="" />}
-                                            {!findImageUrlForStock(stockRankList['2']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' >{stockRankList['2']?.stock_name.substring(0, 2)}</div>}
-                                        </div>
-                                    }
-                                    {/* <p className="font-medium text-4">WR: -</p> */}
-                                    <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
-                                        {
-                                            stockRankList && stockRankList['2']?.stock_name
-                                        }
-                                    </p>
-                                    {stockRankList && stockRankList['2'] && <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
-                                        {
-                                            stockRankList && `(${stockRankList['2']?.stock_ticker})`
-                                        }
-                                    </p>}
-                                </div>
-                            </div>
-
-                            <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md dark:bg-[#002763] dark:border dark:border-[#00387E]">
-                                <div className="flex justify-between w-full items-center mb-[18px] dark:text-white">
-                                    {raceDetails?.created_by?.firstName && <p className="font-medium text-[0.9rem]">Race created by- {(raceDetails?.created_by?.firstName ? raceResults?.created_by?.firstName : '') + " " + (raceDetails?.created_by?.lastName ? raceResults?.created_by?.lastName : '')}</p>}
-                                    <div className="font-medium text-[0.9rem] flex gap-2 items-center">
-                                        <p>Remaining Time</p>
-                                        <div className="font-semibold font-poppins">
-                                            {
-                                                raceDetails && <Countdown
-                                                    date={raceDetails && raceDetails['end_date']}
-                                                    renderer={({ hours, minutes, seconds }) => {
-                                                        const formatTime = (time) => String(time).padStart(2, '0');
-                                                        return `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`
-                                                    }}
-                                                />
-                                            }
-                                        </div>
+                                    <div className='h-full flex flex-col justify-between items-end'>
+                                        <h3 className='text-[1.05rem] font-bold dark:text-white flex gap-1 font-poppins'>{participantsCount} <span className="font-sans">{participantsCount === 1 ? 'Participant' : "Participants"}</span> </h3>
+                                        {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
                                     </div>
                                 </div>
 
-                                {/* race tile  */}
-                                {/* <div className="w-full h-auto flex justify-between border-dashed dark:border-white border-black border py-[3rem] relative items-center">
-                                    <div className="bg-[#f5f5f5] relative right-2 z-10 dark:bg-[#002763]">
-                                        <img src={darkModeEnabled ? startdark : start} alt="" />
-                                    </div> */}
-                                {/* here happens the magic  */}
-                                {/* each time socket fires data you extract stocks from that data and
-                                    assign rank  */}
-                                {/* logic here will be like I will be extracging all the stocks 
-                                    and then assign rank each time data is upadated to each of them.
-                                    make sure the list of stocks you are bringing here is in sorted
-                                     order   only the rank field is changing for them*/}
-                                {/* we should supply here only the array of stocks with rank field  */}
-                                {/* it is coming from the stocksList  */}
-                                {/* <RaceTile
-                                        raceStatus={raceStatus}
-                                        ranks={ranks} // these are arbitrary ranks
-                                        stocksData={stocksDataForRace}
-                                        stockRankList={stockRankList} /> */}
-
-
-                                {/* absolute elements  */}
-                                {/* <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" />
-                                    <div className="absolute top-0 left-0 w-full h-full">
-                                        <div className="border-r border-solid w-1/4"></div>
-                                    </div>
-
-
-                                    <div className="bg-[#f5f5f5] relative left-2 dark:bg-[#002763]">
-                                        <img src={darkModeEnabled ? finishdark : finish} alt="" />
-                                    </div>
-                                </div>
-                            </div> */}
-                                {/* <canvas id="stockChart" width="600" height="300"></canvas> */}
-                                {/* <div id="race_chart">
-                            </div> */}
-                                {data.labels.length > 0 && raceStatus !== 'finished' && (
-                                    <Bar data={data} options={options} plugins={[customPlugin]} />
-                                )}
-                                {!(data.labels.length > 0) && raceStatus !== 'finished' && (
-                                    <p className="dark:text-white">Loading chart...</p>
-                                )}
-                                {
-                                    raceStatus === 'finished' && <div className="w-full h-full flex justify-center items-center">
-                                        <div className='rounded-lg bg-white shadow-xl italic px-8 py-4 w-[50%] z-20 grid place-items-center text-3xl font-bold self-center text-center'>
-                                            Race Finished
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-
-
-                            {/* other stocks rally  */}
-                            <div className="w-full rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
-                                <div className="flex justify-between w-full items-center mb-[18px]">
-                                    <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
-                                    {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
-                                </div>
-
-                                <StockRankList
-                                    stocksData={stocksDataForRace} // data from api below is data from socket
-                                    stockRankList={stockRankList} />
-                            </div>
-
-                        </div>
-
-                        {/* leaderboard  */}
-                        <div className='flex flex-col max-w-[295px]'>
-                            <div className='flex gap-[6px] mb-[11px]'>
-                                <button onClick={() => {
-                                    updateUser();
-                                    updateUser2();
-                                    updateUser3();
-                                    setTabs('leaderboard')
-                                }} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
-                                {<button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>}
-                            </div>
-                            {<div className='w-full rounded-[8px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
-                                {
-                                    tabs === 'leaderboard' ?
-                                        <>
-                                            <div className='w-full flex justify-between items-center mb-[14px]'>
-                                                <p className="font-semibold text-4 dark:text-white">View all</p>
-                                                {/* <CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /> */}
+                                {/* top 3 users  */}
+                                <div className="flex-1 flex justify-center items-center gap-[2rem] mb-[20px]">
+                                    <div className="flex justify-center flex-col items-center">
+                                        <div className="z-[10]">
+                                            <img src={silver_king_crown} alt="" />
+                                            <div className="flex justify-center items-center">
+                                                <img src={Polygon7} alt="" />
                                             </div>
-                                            <UserRankingList rankList={rankList} />
-                                        </>
-                                        :
-                                        <div className="w-full flex flex-col gap-4">
-                                            {
-                                                stockRankList ?
-                                                    stockRankList?.map((curr, index) => {
-                                                        let stock = stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === curr.stock_id)]
-                                                        let imageUrl = stock?.icon_url
-                                                        console.log(curr)
-                                                        return (
-                                                            <YourBetsCard
-                                                                key={curr?.stock_id}
-                                                                stocksDataForRace={stocksDataForRace}
-                                                                stockName={curr?.stock_name}
-                                                                imageUrl={imageUrl}
-                                                                participants={curr?.participants}
-                                                            />
-                                                        )
-                                                    }) :
-                                                    <ColorRing
-                                                        visible={true}
-                                                        height="25"
-                                                        width="25"
-                                                        ariaLabel="color-ring-loading"
-                                                        wrapperStyle={{}}
-                                                        wrapperClass="color-ring-wrapper"
-                                                        colors={['#e15b64', '#f47e60',]}
-                                                    />
-                                            }
                                         </div>
-                                }
-                            </div>}
+                                        <div className="relative">
+                                            <img className="z-[5] relative w-[100%] h-[145px]" src={silver_frame} alt="" />
+                                            <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[14px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
+                                                <ImageSlider
+                                                    data={imageData}
+                                                    currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result['2']?.participants?.[0]?.user_id]?.position : 0}
+                                                />
+                                            </div>
+                                        </div>
+                                        <p onClick={() => {
+                                            if (raceResults?.race_result['2']?.participants[0]?.user_id) {
+                                                navigate(`/userprofile/${raceResults?.race_result['2']?.participants[0]?.user_id}`)
+                                            }
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['2']?.participants[0]?.user_name ? raceResults?.race_result['2']?.participants[0]?.user_name : ''}</p>
+                                    </div>
+
+                                    <div className="flex justify-center flex-col items-center relative bottom-8">
+                                        <div className="mb-[1rem]">
+                                            <img src={golden_king_corwn} alt="" />
+                                            <div className="flex justify-center items-center">
+                                                <img src={Polygon7} alt="" />
+                                            </div>
+                                        </div>
+                                        <div className="relative">
+                                            <img className="z-[5] relative w-[100%] h-[145px]" src={golden_frame} alt="" />
+                                            {/* <img className={`absolute ${darkModeEnabled && 'glow'} w-full h-full object-cover top-0 left-0 z-[4] scale-75`} src={raceResults?.race_result['1']?.participants?.[0]?.user_name ? Person : avatar} alt="" /> */}
+                                            <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[14px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
+                                                <ImageSlider
+                                                    data={imageData}
+                                                    currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[1]?.participants?.[0]?.user_id]?.position : 0}
+                                                />
+                                            </div>
+                                        </div>
+                                        <p onClick={() => {
+                                            if (raceResults?.race_result['1']?.participants[0]?.user_id) {
+                                                navigate(`/userprofile/${raceResults?.race_result[1]?.participants[0]?.user_id}`)
+                                            }
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['1']?.participants[0]?.user_name}</p>
+                                    </div>
+
+                                    <div className="flex justify-center flex-col items-center">
+                                        <div className="z-[10]">
+                                            <img src={bronze_king_crown} alt="" />
+                                            <div className="flex justify-center items-center">
+                                                <img src={Polygon7} alt="" />
+                                            </div>
+                                        </div>
+                                        <div className="relative w-full h-full">
+                                            <img className="z-[5] relative w-[100%] h-[145px]" src={bronze_frame} alt="" />
+                                            <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[12px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
+                                                <ImageSlider
+                                                    data={imageData}
+                                                    currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[3]?.participants[0]?.user_id]?.position : 0}
+                                                />
+                                            </div>
+                                        </div>
+                                        <p onClick={() => {
+                                            if (raceResults?.race_result['3']?.participants[0]?.user_id) {
+                                                navigate(`/userprofile/${raceResults?.race_result[3]?.participants[0]?.user_id}`)
+                                            }
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['3']?.participants[0]?.user_name}</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 flex justify-center items-end gap-[2rem]">
+
+                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
+                                        {
+                                            stockRankList && stockRankList['1'] &&
+                                            <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
+                                                {/* <p className="text-[12px] font-medium">1500</p> */}
+                                                {findImageUrlForStock(stockRankList['1']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['1']?.stock_id)} alt="" />}
+                                                {!findImageUrlForStock(stockRankList['1']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
+                                            </div>
+                                        }
+                                        <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
+                                            {
+                                                stockRankList && stockRankList['1']?.stock_name
+                                            }
+                                        </p>
+                                        {stockRankList && stockRankList['1'] && <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
+                                            {
+                                                stockRankList && `(${stockRankList['1']?.stock_ticker})`
+                                            }
+                                        </p>}
+                                    </div>
+                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
+                                        {
+                                            stockRankList &&
+                                            <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
+                                                {/* <p className="text-[12px] font-medium">1500</p> */}
+                                                {findImageUrlForStock(stockRankList['0']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['0']?.stock_id)} alt="" />}
+                                                {!findImageUrlForStock(stockRankList['0']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' >{stockRankList['0']?.stock_name.substring(0, 2)}</div>}
+                                            </div>
+                                        }
+                                        {/* <p className="font-medium text-4">WR: -</p> */}
+                                        <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
+                                            {
+                                                stockRankList && stockRankList['0']?.stock_name
+                                            }
+                                        </p>
+                                        <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
+                                            {
+                                                stockRankList && `(${stockRankList['0']?.stock_ticker})`
+                                            }
+                                        </p>
+                                    </div>
+                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
+                                        {
+                                            stockRankList && stockRankList['2'] &&
+                                            <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
+                                                {/* <p className="text-[12px] font-medium">1500</p> */}
+                                                {findImageUrlForStock(stockRankList['2']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['2']?.stock_id)} alt="" />}
+                                                {!findImageUrlForStock(stockRankList['2']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' >{stockRankList['2']?.stock_name.substring(0, 2)}</div>}
+                                            </div>
+                                        }
+                                        <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
+                                            {
+                                                stockRankList && stockRankList['2']?.stock_name
+                                            }
+                                        </p>
+                                        {stockRankList && stockRankList['2'] && <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
+                                            {
+                                                stockRankList && `(${stockRankList['2']?.stock_ticker})`
+                                            }
+                                        </p>}
+                                    </div>
+                                </div>
+
+                                <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md dark:bg-[#002763] dark:border dark:border-[#00387E]">
+                                    <div className="flex justify-between w-full items-center mb-[18px] dark:text-white">
+                                        {raceDetails?.created_by?.firstName && <p className="font-medium text-[0.9rem]">Race created by- {(raceDetails?.created_by?.firstName ? raceResults?.created_by?.firstName : '') + " " + (raceDetails?.created_by?.lastName ? raceResults?.created_by?.lastName : '')}</p>}
+                                        <div className="font-medium text-[0.9rem] flex gap-2 items-center">
+                                            <p>Remaining Time</p>
+                                            <div className="font-semibold font-poppins">
+                                                {
+                                                    raceDetails && <Countdown
+                                                        date={raceDetails && raceDetails['end_date']}
+                                                        renderer={({ hours, minutes, seconds }) => {
+                                                            const formatTime = (time) => String(time).padStart(2, '0');
+                                                            return `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`
+                                                        }}
+                                                    />
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    {data.labels.length > 0 && raceStatus !== 'finished' && (
+                                        <Bar data={data} options={options} plugins={[customPlugin]} />
+                                    )}
+
+                                    {
+                                        raceStatus === 'finished' && <div className="w-full h-full flex justify-center items-center">
+                                            <div className='rounded-lg bg-white shadow-xl italic px-8 py-4 w-[50%] z-20 grid place-items-center text-3xl font-bold self-center text-center'>
+                                                Race Finished
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+
+
+                                {/* other stocks rally  */}
+                                <div className="w-full rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
+                                    <div className="flex justify-between w-full items-center mb-[18px]">
+                                        <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
+                                        {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
+                                    </div>
+
+                                    <StockRankList
+                                        stocksData={stocksDataForRace} // data from api below is data from socket
+                                        stockRankList={stockRankList} />
+                                </div>
+
+                            </div>
+
+                            {/* leaderboard  */}
+                            <div className='flex flex-col max-w-[295px]'>
+                                <div className='flex gap-[6px] mb-[11px]'>
+                                    <button onClick={() => {
+                                        updateUser();
+                                        updateUser2();
+                                        updateUser3();
+                                        setTabs('leaderboard')
+                                    }} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
+                                    {<button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>}
+                                </div>
+                                {<div className='w-full rounded-[8px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
+                                    {
+                                        tabs === 'leaderboard' ?
+                                            <>
+                                                <div className='w-full flex justify-between items-center mb-[14px]'>
+                                                    <p className="font-semibold text-4 dark:text-white">View all</p>
+                                                    {/* <CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /> */}
+                                                </div>
+                                                <UserRankingList rankList={rankList} />
+                                            </>
+                                            :
+                                            <div className="w-full flex flex-col gap-4">
+                                                {
+                                                    stockRankList ?
+                                                        stockRankList?.map((curr, index) => {
+                                                            let stock = stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === curr.stock_id)]
+                                                            let imageUrl = stock?.icon_url
+                                                            console.log(curr)
+                                                            return (
+                                                                <YourBetsCard
+                                                                    key={curr?.stock_id}
+                                                                    stocksDataForRace={stocksDataForRace}
+                                                                    stockName={curr?.stock_name}
+                                                                    imageUrl={imageUrl}
+                                                                    participants={curr?.participants}
+                                                                />
+                                                            )
+                                                        }) :
+                                                        <ColorRing
+                                                            visible={true}
+                                                            height="25"
+                                                            width="25"
+                                                            ariaLabel="color-ring-loading"
+                                                            wrapperStyle={{}}
+                                                            wrapperClass="color-ring-wrapper"
+                                                            colors={['#e15b64', '#f47e60',]}
+                                                        />
+                                                }
+                                            </div>
+                                    }
+                                </div>}
+                            </div>
                         </div>
                     </div>
-                </div>
-            </motion.div>
-        </>
-    )
+                </motion.div>
+            </>
+        )
+    }
 }
 
 export default RacePage

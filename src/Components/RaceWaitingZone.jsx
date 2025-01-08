@@ -25,7 +25,7 @@ const RaceWaitingZone = ({
             closeCard(true)
         }
 
-    }, [])
+    }, [status])
 
     useEffect(() => {
         if (isTimerFinished && status !== 'scheduled') {

@@ -7,12 +7,12 @@ import { DarkModeContext } from "../Contexts/DarkModeProvider";
 const PicUploadPopUpd = ({
     exit,
     setImageUrl,
-    setImageIsLoading = () => {}
+    setImageIsLoading = () => { }
 }) => {
 
 
     const [selectedFile, setSelectedFile] = useState(null);
-    const { darkModeEnabled } = useContext(DarkModeContext)
+    const { darkModeEnabled, setProfileImage } = useContext(DarkModeContext)
 
     const handleFileChange = (event) => {
         const files = event.target.files;
@@ -39,7 +39,7 @@ const PicUploadPopUpd = ({
                 </button>
                 {
                     selectedFile &&
-                    <p className="mt-4 text-gray-700 text-center font-semibold">Selected file: {selectedFile.name}</p>
+                    <p className="mt-4 text-gray-700 text-center font-semibold dark:text-white">Selected file: {selectedFile.name}</p>
                 }
                 <button
                     onClick={() => {
@@ -52,6 +52,10 @@ const PicUploadPopUpd = ({
                                     updatePhoto(data.file.id, (data) => {
                                         // set the pic data here
                                         setImageUrl(data?.photo?.path)
+                                        setProfileImage(data?.photo?.path)
+                                        let userData = JSON.parse(atob(localStorage.getItem('userDetails')))
+                                        userData.photo.path = data?.data?.path
+                                        localStorage.setItem('userDetails', JSON.stringify(userData))
                                     })
                                     exit(false)
                                     setTimeout(() => setImageIsLoading(false), 2500)

@@ -19,14 +19,12 @@ import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "motion/react";
 import PopupSearch from "./PopupSearch";
 import SimpleSwitch from "./Switch";
+import avatarplaceholder from '../assets/images/avatarplaceholder.png'
+import { getUser } from "../Utils/api";
 
 const Navbar = () => {
 
-    const { darkModeEnabled, toggle, createRace, setCreateRace } = useContext(DarkModeContext)
-    // const [createRaceState, setCreateRaceState] = useState(false)
-    const [showForm, setShowForm] = useState(false)
-    // const [darkMode, setDarkMode] = useState(darkModeEnabled)
-    // const { setCreateRaceState } = useContext(GlobalContext)
+    const { darkModeEnabled, toggle, createRace, setCreateRace, showLoginForm, setShowLoginForm, profileImage, setProfileImage } = useContext(DarkModeContext)
     const [dropdown, setDropdown] = useState(false)
     const [notificationToggle, setNotificationToggle] = useState(false)
     const [search, setSearch] = useState(false)
@@ -45,6 +43,7 @@ const Navbar = () => {
             console.log("user deatails", btoa(thisUserDetails))
             setUserDetailsObject(JSON.parse(atob(thisUserDetails)))
         }
+        
     }, [])
 
     useEffect(() => {
@@ -92,7 +91,7 @@ const Navbar = () => {
     return (
         <>
             {createRace && <CreateRace setCreateRace={setCreateRace} />}
-            {showForm && <PopupForm closePopup={setShowForm} />}
+            {showLoginForm && <PopupForm closePopup={setShowLoginForm} />}
             <AnimatePresence>
                 {search && <PopupSearch setPopupSearch={setSearch} />}
             </AnimatePresence>
@@ -127,7 +126,7 @@ const Navbar = () => {
                         !userDetails &&
                         <button onClick={() => {
                             // navigate('/auth')
-                            setShowForm(true)
+                            setShowLoginForm(true)
                         }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
                             Log in
                         </button>
@@ -135,7 +134,7 @@ const Navbar = () => {
                     <button onClick={() => {
                         // create Race
                         if (!token) {
-                            setShowForm(true)
+                            setShowLoginForm(true)
                             // navigate('/auth')
                             return
                         }
@@ -205,7 +204,7 @@ const Navbar = () => {
                         }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
                             <p id="profileButtonP" className="dark:text-white">{userDetailsObject.userName}</p>
                             <div id="profileButtonD" className="bg-white w-9 h-9 rounded-full overflow-hidden">
-                                <img id="profileButtonI" className="w-full h-full object-cover" src={userDetailsObject?.photo?.path} alt="" />
+                                <img id="profileButtonI" className="w-full h-full object-cover" src={profileImage || avatarplaceholder} alt="" />
                             </div>
                             <AnimatePresence>
                                 {dropdown && <motion.div
@@ -217,17 +216,6 @@ const Navbar = () => {
                                     className={`absolute top-16 bg-white rounded-lg right-0 w-[130%] overflow-hidden shadow-2xl dark:bg-[#002864]`}>
                                     <button onClick={() => navigate('/profile')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear text-start dark:text-white dark:hover:bg-opacity-20">Profile</button>
                                     <p onClick={() => navigate('/settings')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Settings</p>
-                                    {/* <div className="flex gap-2 items-center hover:bg-slate-200 dark:hover:bg-opacity-20 px-3"> */}
-                                    {/* <button onClick={toggle} className='h-[2.35rem] w-full flex justify-between items-center gap-2 rounded-[8px]'>
-                                            <p className="dark:text-white">{!darkModeEnabled ? 'Dark Mode' : 'Light Mode'}</p>
-                                            {
-                                                !darkModeEnabled ?
-                                                    <BsMoon color="black" size={18} /> :
-                                                    <BsSunFill color="white" size={18} />
-                                            }
-                                        </button> */}
-                                    {/* <SimpleSwitch enabled={darkModeEnabled} onClick={toggle} /> */}
-                                    {/* </div> */}
                                     <p title="Log out button" onClick={() => {
                                         localStorage.removeItem('token')
                                         localStorage.removeItem('refreshToken')
