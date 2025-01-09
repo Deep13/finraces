@@ -1192,29 +1192,50 @@ export const fetchFriendsLeaderboard = async (
 }
 
 
-export const checkFriendRequestStatus = async ( // change this to the updated api
+export const checkFriendRequestStatus = async (
   userId,
   onSuccess = () => { },
   onError = () => { },
 ) => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
+
   try {
     const response = await fetch(`${GlobalURL}/api/v1/friends/${userId}/request`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    })
-    const thisData = await response?.json()
-    // console.log('status response', thisData)
+        'Authorization': `Bearer ${token}`,
+      },
+    });
 
-    onSuccess(thisData)
+    console.log('status response', response);
+
+    // Check if the response has a body
+    let thisData = null;
+    if (response.ok) {
+      try {
+        const contentLength = response.headers.get('Content-Length');
+        if (contentLength && parseInt(contentLength) > 0) {
+          thisData = await response.json();
+        }
+      } catch (jsonError) {
+        console.warn('Failed to parse JSON:', jsonError);
+      }
+
+      if (!thisData) {
+        onSuccess({ status: 'not initiated' });
+      } else {
+        onSuccess(thisData);
+      }
+    } else {
+      throw new Error(`Request failed with status: ${response.status}`);
+    }
   } catch (e) {
-    console.error(e)
-    onError(e)
+    console.error(e);
+    onError(e);
   }
-}
+};
+
 
 
 export const settings = async ( // change this to the updated api

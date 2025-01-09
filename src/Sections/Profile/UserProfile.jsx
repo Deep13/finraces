@@ -18,6 +18,7 @@ import {
     getAllBadges
 } from '../../Utils/api';
 import { useNavigate } from 'react-router-dom';
+import { ColorRing } from 'react-loader-spinner'
 
 
 
@@ -27,6 +28,7 @@ const UserProfile = ({
 }) => {
     const [total, setTotal] = useState(0)
     const [races, setRaces] = useState([])
+    const [loadingRaces, setLoadingRaces] = useState(true)
     const [totalPoints, setTotalPoints] = useState(0)
     const [winningRate, setWinnigRate] = useState(0)
     const [badges, setBadges] = useState([])
@@ -50,6 +52,7 @@ const UserProfile = ({
             racesDataByUser(userId, (data) => {
                 // console.log('data', data)
                 setRaces(data)
+                setLoadingRaces(false)
                 setTotal(data.length)
             }, (error) => {
                 console.log('error', error)
@@ -180,47 +183,62 @@ const UserProfile = ({
                     <tbody>
                         {/* row 1 */}
                         {
-                            races?.map((curr, index) => {
+                            races.length > 0 ?
+                                races?.map((curr, index) => {
 
-                                return (
-                                    <tr onClick={(e) => {
-                                        e.stopPropagation()
-                                        navigate(`/race/${curr.id}`)
-                                    }} key={index} className="odd:bg-transparent even:bg-[#00276] pb-2 dark:border-b cursor-pointer group">
-                                        <th className="py-3 overflow-hidden text-ellipsis whitespace-nowrap group-hover:underline">{index + 1}</th>
-                                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.name}</td>
-                                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.participants.length}</td>
-                                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.stocks.length}</td>
-                                        <td className="text-[1.1rem]">
-                                            <div className='py-3 flex justify-start'>
-                                                {
-                                                    curr.status === 'scheduled' &&
-                                                    <div className='text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-3 rounded-full font-poppins'>
-                                                        {capitalize(curr.status)}
-                                                    </div>
-                                                }
-                                                {
-                                                    curr.status === 'running' &&
-                                                    <div className='text-green-500 bg-opacity-25 text-center font-medium  bg-green-500 border-green-500 border px-3 rounded-full font-poppins'>
-                                                        {capitalize(curr.status)}
-                                                    </div>
-                                                }
-                                                {
-                                                    curr.status === 'finished' &&
-                                                    <div className='text-red-300 bg-opacity-25 text-center font-medium  bg-red-600 border-red-700 border px-3 rounded-full'>
-                                                        {capitalize(curr.status)}
-                                                    </div>
-                                                }
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )
-                            })
+                                    return (
+                                        <tr onClick={(e) => {
+                                            e.stopPropagation()
+                                            navigate(`/race/${curr.id}`)
+                                        }} key={index} className="odd:bg-transparent even:bg-[#00276] pb-2 dark:border-b cursor-pointer group">
+                                            <th className="py-3 overflow-hidden text-ellipsis whitespace-nowrap group-hover:underline">{index + 1}</th>
+                                            <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.name}</td>
+                                            <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.participants.length}</td>
+                                            <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.stocks.length}</td>
+                                            <td className="text-[1.1rem]">
+                                                <div className='py-3 flex justify-start'>
+                                                    {
+                                                        curr.status === 'scheduled' &&
+                                                        <div className='text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-3 rounded-full font-poppins'>
+                                                            {capitalize(curr.status)}
+                                                        </div>
+                                                    }
+                                                    {
+                                                        curr.status === 'running' &&
+                                                        <div className='text-green-500 bg-opacity-25 text-center font-medium  bg-green-500 border-green-500 border px-3 rounded-full font-poppins'>
+                                                            {capitalize(curr.status)}
+                                                        </div>
+                                                    }
+                                                    {
+                                                        curr.status === 'finished' &&
+                                                        <div className='text-red-300 bg-opacity-25 text-center font-medium  bg-red-600 border-red-700 border px-3 rounded-full'>
+                                                            {capitalize(curr.status)}
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                }) :
+                                (!loadingRaces && <p>There are no recent Races</p>)
                         }
-
 
                     </tbody>
                 </table>
+                {
+                    loadingRaces &&
+                    <div className='w-full flex justify-center items-center'>
+                        <ColorRing
+                            visible={true}
+                            height="40"
+                            width="40"
+                            ariaLabel="color-ring-loading"
+                            wrapperStyle={{}}
+                            wrapperClass="color-ring-wrapper"
+                            colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                        />
+                    </div>
+                }
             </div>
         </>
     )
