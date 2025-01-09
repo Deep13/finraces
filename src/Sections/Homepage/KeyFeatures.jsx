@@ -55,7 +55,7 @@ const KeyFeatures = () => {
             <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>01</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold dark:text-white'>AI Powered:</p>
-              <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Lorem ipsum dolor sit amet consectetur. Lectus lobortis bibendum erat purus ut pharetra in massa elementum.  </p>
+              <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Transform how you work, play, and connect with our cutting-edge AI application.</p>
             </div>
           </div>
           {/* card  */}

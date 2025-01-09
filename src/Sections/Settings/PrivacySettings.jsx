@@ -4,6 +4,7 @@ import { CgChevronDown } from 'react-icons/cg'
 import Person from '../../assets/images/person2.png'
 import { getSettings, changeSettings } from '../../Utils/api'
 import { getAllblockedUsers, unblockUser } from '../../Utils/api'
+import { ColorRing } from 'react-loader-spinner'
 
 const PrivacySettings = () => {
 
@@ -17,6 +18,7 @@ const PrivacySettings = () => {
         "notification_alert": true
     })
     const [blockedUsersList, setBlockedUsersList] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         getSettings((data) => {
@@ -27,6 +29,7 @@ const PrivacySettings = () => {
         selfId && getAllblockedUsers(selfId, (data) => {
             console.log('All the blocked Users--------->', data.data)
             setBlockedUsersList(data.data)
+            setIsLoading(false)
         })
     }, [])
 
@@ -112,30 +115,51 @@ const PrivacySettings = () => {
 
                 {/* Player */}
                 {
-                    blockedUsersList &&
-                    blockedUsersList?.length > 0 &&
-                    blockedUsersList?.map((curr, index) => {
-                        console.log(curr)
-                        return (
-                            <div key={curr?.blocked_user?.id} className="w-full dark:border dark:border-[#00387E] rounded-[15px] px-6 py-4 justify-between flex items-center">
-                                <div className="text-[0.9rem] flex gap-4 items-center">
-                                    <p className='text-4 font-semibold'>{index + 1}</p>
-                                    <div className='flex gap-2'>
-                                        <div className='w-12 h-12 rounded-full overflow-hidden'>
-                                            <img src={curr?.blocked_user?.photo?.path} alt="" />
-                                        </div>
-                                        <div className='flex flex-col justify-between items-center'>
-                                            <p className='text-[1.1rem] dark:text-white'>{curr?.blocked_user?.firstName + " " + curr?.blocked_user?.lastName}</p>
-                                            {/* <p className='text-[0.8rem] dark:text-[#B5B4B4]'>Player2038</p> */}
+                    (blockedUsersList &&
+                        blockedUsersList?.length > 0) ?
+                        blockedUsersList?.map((curr, index) => {
+                            console.log(curr)
+                            return (
+                                <div key={curr?.blocked_user?.id} className="w-full dark:border dark:border-[#00387E] rounded-[15px] px-6 py-4 justify-between flex items-center">
+                                    <div className="text-[0.9rem] flex gap-4 items-center">
+                                        <p className='text-4 font-semibold'>{index + 1}</p>
+                                        <div className='flex gap-2 items-center'>
+                                            <div className='w-12 h-12 rounded-full overflow-hidden'>
+                                                <img src={curr?.blocked_user?.photo?.path} alt="" />
+                                            </div>
+                                            <div className='flex flex-col justify-between items-center'>
+                                                <p className='text-[1.1rem] dark:text-white'>{curr?.blocked_user?.firstName + " " + curr?.blocked_user?.lastName}</p>
+                                                {/* <p className='text-[0.8rem] dark:text-[#B5B4B4]'>Player2038</p> */}
+                                            </div>
                                         </div>
                                     </div>
+                                    <button
+                                        onClick={() => {
+                                            unblockUser(curr?.id, () => {
+                                                // Update the state to remove the unblocked user from the list
+                                                setBlockedUsersList((prevList) =>
+                                                    prevList.filter((user) => user.id !== curr.id)
+                                                );
+                                            });
+                                        }}
+                                        className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">
+                                        Unblock
+                                    </button>
                                 </div>
-                                <button onClick={() => {
-                                    unblockUser(curr?.blocked_user?.id)
-                                }} className="bg-[#e4eaf0] dark:bg-transparent dark:border dark:border-[#e4eaf0] dark:text-[#e4eaf0] px-[1.5rem] h-[2.35rem] text-[0.9rem] rounded-[8px] grid place-items-center text-black font-semibold">Unblock</button>
-                            </div>
-                        )
-                    })
+                            )
+                        }) :
+                        (!isLoading && <p>There are No Blocked Users</p>)
+                }
+                {isLoading &&
+                    <ColorRing
+                        visible={true}
+                        height="30"
+                        width="30"
+                        ariaLabel="color-ring-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="color-ring-wrapper"
+                        colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                    />
                 }
 
             </div>

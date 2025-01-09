@@ -15,7 +15,9 @@ const LeaderTable = ({
     useEffect(() => { console.log(data) }, [data])
 
     useEffect(() => {
-        getUserDetails((data) => {
+        const token = localStorage.getItem('token')
+
+        token && getUserDetails((data) => {
             setYourDetails(data)
         })
     }, [])
@@ -42,32 +44,30 @@ const LeaderTable = ({
                                 <tr style={{
                                     // background: `${userId === curr?.user?.id ? 'yellow' : 'transparent'}`
                                 }} key={index} className="odd:bg-transparent dark:even:bg-[#002760] even:bg-slate-200 group">
-                                    <td className="text-[1.5rem] py-3 px-4 text-center group-hover:underline">{index + 5}</td>
+                                    <td className="text-[1.5rem] py-3 px-4 text-center">{index + 5}</td>
                                     <td className="py-3">
-                                        <div onClick={() => {
-                                            navigate(`/userprofile/${curr?.user?.id}`, {
-                                                state: {
-                                                    id: curr.user.id, // this is mandatory
-                                                    email: curr.user.email,
-                                                    image: curr.user.photo.path,
-                                                    userName: curr.user.firstName + " " + curr.user.lastName,
-                                                }
-                                            })
-                                        }} className="w-full flex gap-3 justify-start items-center cursor-pointer">
+                                        <div className="w-full flex gap-3 justify-start items-center cursor-pointer">
                                             {/* image */}
                                             <div className="w-12 h-12 rounded-full overflow-hidden">
                                                 <img className="w-full h-full object-cover" src={curr?.user?.photo?.path ? curr?.user?.photo?.path : person} alt="" />
                                             </div>
                                             {/* name and badge */}
                                             <div className="flex flex-col justify-between gap-1">
-                                                {YourDetails?.id !== curr?.user?.id && <p className="text-4 font-medium group-hover:underline">{curr.user.firstName + " " + curr.user.lastName}</p>}
-                                                {YourDetails?.id === curr?.user?.id && <p className="text-xl font-bold underline text-yellow-400 group-hover:underline">You</p>}
+                                                {YourDetails?.id !== curr?.user?.id && <p onClick={() => navigate(`/userprofile/${curr?.user?.id}`, {
+                                                    state: {
+                                                        id: curr?.user?.id, // this is mandatory
+                                                        email: curr?.user?.email,
+                                                        image: curr?.user?.photo?.path,
+                                                        userName: curr?.user?.firstName + " " + curr?.user?.lastName,
+                                                    }
+                                                })} className="text-4 font-medium group-hover:underline">{curr.user.firstName + " " + curr.user.lastName}</p>}
+                                                {YourDetails?.id === curr?.user?.id && <p onClick={() => navigate('/profile')} className="text-xl font-bold underline text-yellow-400 group-hover:underline">You</p>}
                                                 {/* <p className="text-4 text-[#B5B4B4]">Skale Enjoyoor</p> */}
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="text-[1.1rem] py-3 group-hover:underline">{curr.num_races_won}</td>
-                                    <td className="text-[1.1rem] py-3 group-hover:underline">{!curr?.total_points ? 0 : curr.total_points}</td>
+                                    <td className="text-[1.1rem] py-3">{curr.num_races_won}</td>
+                                    <td className="text-[1.1rem] py-3">{!curr?.total_points ? 0 : curr.total_points}</td>
                                 </tr>
                             )
                         })

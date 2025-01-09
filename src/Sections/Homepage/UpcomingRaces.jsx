@@ -50,7 +50,8 @@ const UpcomingRaces = () => {
       {/* Upcoming race cards */}
       <div className='gap-[1.76rem] grid grid-cols-1 md:grid-cols-2 w-full'>
         {
-          raceList && raceList.slice(0, 4).map((curr, index) => {
+          raceList && raceList.length > 0
+          && raceList?.slice(0, 4).map((curr, index) => {
             return (
               <UpcomingRaceCardHomepage
                 key={`${tabChangeKey}-${index}`} // Unique key based on tabChangeKey
@@ -72,6 +73,9 @@ const UpcomingRaces = () => {
           })
         }
       </div>
+      {
+        raceList.length === 0 && <p className='dark:text-white w-full text-center'>There are no recent upcoming races.</p>
+      }
     </div>
   );
 }

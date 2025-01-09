@@ -15,9 +15,13 @@ import DarkModeProvider from './Contexts/DarkModeProvider'
 import Settings from './Pages/Settings'
 import IndiUserProfile from './Pages/IndiUserProfile'
 import AllRaces from './Pages/AllRaces'
+import Community from './Pages/Community'
+import Screener from './Pages/Screener'
+import Watchlistpage from './Pages/Watchlistpage'
 // import Lenis from 'lenis'
 
 function App() {
+
 
 
   return (
@@ -31,6 +35,9 @@ function App() {
                 <Route path="race/:race_id" element={<RacePage />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />
+                <Route path="/community" element={<Community />} />
+                <Route path="/screener" element={<Screener />} />
+                <Route path="/watchlist" element={<Watchlistpage />} />
                 <Route path="/userprofile/:user_id" element={<IndiUserProfile />} />
               </Route>
               <Route path="/auth" element={<Auth />} />

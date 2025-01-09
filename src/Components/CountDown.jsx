@@ -13,10 +13,38 @@ const CountDownTimer = ({ deadline, setIsTimerFinished }) => {
             return (
                 <div className='w-full flex justify-center items-center gap-[0.5rem] mb-[1.5rem] text-[#2177cb] text-[2.1rem] font-poppins'>
 
-                    <div className='text-[2.1rem] text-[#2177cb] relative font-poppins'>{formatTime(days)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Days</p></div>
-                    <div className='text-[2.1rem] text-[#2177cb] relative font-poppins'>{formatTime(hours)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Hours</p></div>
-                    <div className='text-[2.1rem] text-[#2177cb] relative font-poppins'>{formatTime(minutes)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Minutes</p></div>
-                    <div className='text-[2.1rem] text-[#2177cb] relative font-poppins'>{formatTime(seconds)} <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Seconds</p></div>
+                    <div className='w-full flex justify-center gap-2'>
+                        <div className='flex flex-col'>
+                            <p className='text-center text-[0.7rem] text-black'>Days</p>
+                            {formatTime(days)}
+                        </div>
+                        <div className=' flex items-end pb-[4px]'>
+                            :
+                        </div>
+                        <div className='flex flex-col'>
+                            <p className='text-center text-[0.7rem] text-black'>Hours</p>
+                            {formatTime(hours)}
+                        </div>
+                        <div className=' flex items-end pb-[4px]'>
+                            :
+                        </div>
+                        <div className='flex flex-col'>
+                            <p className='text-center text-[0.7rem] text-black'>Minutes</p>
+                            {formatTime(minutes)}
+                        </div>
+                        <div className=' flex items-end pb-[4px]'>
+                            :
+                        </div>
+                        <div className='flex flex-col'>
+                            <p className='text-center text-[0.7rem] text-black'>Seconds</p>
+                            {formatTime(seconds)}
+                        </div>
+
+                        {/* <div className='text-[2.1rem] text-[#2177cb] font-poppins'>{formatTime(days)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Days</p></div>
+                        <div className='text-[2.1rem] text-[#2177cb] font-poppins'>{formatTime(hours)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Hours</p></div>
+                        <div className='text-[2.1rem] text-[#2177cb] font-poppins'>{formatTime(minutes)} : <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Minutes</p></div>
+                        <div className='text-[2.1rem] text-[#2177cb] font-poppins'>{formatTime(seconds)} <p className='absolute -top-3 -left-2 w-full text-center text-[0.7rem] text-black'>Seconds</p></div> */}
+                    </div>
                 </div>
             );
         }

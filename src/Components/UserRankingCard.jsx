@@ -31,7 +31,7 @@ const UserRankingCard = ({
                     <img className='w-full h-full object-cover' src={userPhoto} alt="" />
                 </div>
                 <div className='flex flex-col items-center'>
-                    <p className='text-[1rem] font-semibold dark:text-white'>{userName}</p>
+                    <p className='text-[1rem] font-semibold dark:text-white hover:underline'>{userName}</p>
                     {/* <div className='flex gap-[4px] items-baseline'>
                         <div>
                             <img src={vector} alt="" />

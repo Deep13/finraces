@@ -150,8 +150,8 @@ const Leaderboard = () => {
     }
     getTopRankers(startDate, today, 20, 1, (data) => {
       console.log('Top 4 fetched', data)
-      setLeaderboard(data.data.data)
-      setHasNextPage(data.data.hasNextPage)
+      setLeaderboard(data.data)
+      setHasNextPage(data.hasNextPage)
     })
   }, [activeTab])
 
@@ -166,9 +166,9 @@ const Leaderboard = () => {
           <div className='w-full rounded-lg py-8 dark:bg-[#000D38]'>
             <h1 className='text-[2.2rem] font-bold text-black text-center mb-4 dark:text-white'>Global Leaderboard</h1>
             <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem] mb-6'>
-              {Object.keys(leaderboardData).map((tab) => (
+              {Object.keys(leaderboardData).map((tab, index) => (
                 <button
-                  key={tab}
+                  key={index}
                   onClick={() => handleTabClick(tab)}
                   className={`flex dark:text-white justify-center items-center px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
               ${activeTab === tab ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]' : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'}`}
@@ -180,11 +180,10 @@ const Leaderboard = () => {
             <div className='w-full rounded-[20px] grid lg:grid-cols-4 md:grid-cols-2 gap-[1.3rem] md:px-[1.3rem] px-[0.7rem] py-[1.11rem]'>
               {
                 leaderboard &&
-                leaderboard?.slice(0, 4).map((curr, index) => {
+                leaderboard?.slice(0, 4)?.map((curr, index) => {
                   return (
                     <ProfileCardHomepage
-                      key={curr.userName}
-                      // userName={curr.user.firstname + curr.user.lastname}
+                      key={index}
                       fullName={curr.user.firstName + " " + curr.user.lastName}
                       rank={index + 1}
                       image={curr?.user?.photo?.path}
@@ -198,7 +197,7 @@ const Leaderboard = () => {
                 })
               }
             </div>
-            <LeaderTable data={leaderboard.slice(4)} />
+            <LeaderTable data={leaderboard?.slice(4)} />
             {hasNextPage && <Pagination />}
 
             <br /><br /><br />

@@ -15,6 +15,7 @@ const IndiUserProfile = () => {
     const [buttonsVisiblity, setButtonsVisiblity] = useState(true)
     const [requestStatus, setRequestStatus] = useState('')
     const [blockStatus, setBlockStatus] = useState('')
+    const [blockId, setBlockId] = useState('')
     const thisLocation = useLocation()
     const { user_id } = useParams()
     const [details, setDetails] = useState({
@@ -47,36 +48,34 @@ const IndiUserProfile = () => {
         })
     }
     const unblockUser1 = () => {
-        unblockUser(user_id)
+        unblockUser(blockId)
     }
 
 
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
         console.log(user_id)
-        // if (Object.keys(thisLocation.state).length > 0) {
-        //     // setDetails(thisLocation.state)
-        // }
+        const token = localStorage.getItem('token')
+
+
         getUser(user_id, (data) => {
             console.log(data)
             setUserDetails(data)
         })
-        checkFriendRequestStatus(user_id, (data) => {
+        token && checkFriendRequestStatus(user_id, (data) => {
             console.log("Request Status", data.status)
             setRequestSent(data.status === 'pending')
             setRequestStatus(data.status)
         }, () => {
             setButtonsVisiblity(false)
         })
-        getUsersBlockStatus(user_id, (data) => {
+        token && getUsersBlockStatus(user_id, (data) => {
             console.log('users block status', data)
             setBlockStatus(data.status)
+            setBlockId(data.id)
         })
     }, [])
 
-    // useEffect(() => {
-    //     console.log(details)
-    // }, [details])
 
     return (
         <>
@@ -89,8 +88,8 @@ const IndiUserProfile = () => {
                         {/* profile picture and buttons  */}
                         <div className='flex gap-4 flex-wrap'>
                             <div className=' overflow-hidden'>
-                                <div className="relative w-[200px] overflow-hidden h-[15rem] rounded-lg group">
-                                    {userDetails?.photo?.path && <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path || avatarplaceholder} alt="" />}
+                                <div className="relative w-[15rem] overflow-hidden h-[15rem] rounded-lg group">
+                                    <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path || avatarplaceholder} alt="" />
                                 </div>
                             </div>
                             <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>
@@ -117,14 +116,15 @@ const IndiUserProfile = () => {
                             <div className='flex flex-col gap-3 justify-end'>
                                 {blockStatus && blockStatus === 'unblocked' && <button onClick={() => {
                                     blockUser1()
+                                    setBlockStatus('blocked') // optimistic update
                                 }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Block</button>}
                                 {blockStatus && blockStatus === 'blocked' && <button onClick={() => {
-                                    unblockUser1()
+                                    blockId.length > 0 && unblockUser1()
+                                    blockId.length > 0 && setBlockStatus('unblocked')
                                 }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Unblock</button>}
-                                {requestStatus !== 'rejected' || requestStatus !== 'accepted' || requestStatus !== 'pending' && <button onClick={() => {
+                                {(requestStatus === 'not initiated' || requestStatus === 'unfriend') && !requestSent && <button onClick={() => {
                                     requestFriend()
                                     setRequestSent(true)
-                                    // 
                                 }} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>}
                                 {requestStatus === 'accepted' && <button onClick={() => {
                                     console.log('unfriend pressed')
