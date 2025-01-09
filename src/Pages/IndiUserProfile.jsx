@@ -55,20 +55,21 @@ const IndiUserProfile = () => {
     useLayoutEffect(() => {
         window.scrollTo(0, 0);
         console.log(user_id)
+        const token = localStorage.getItem('token')
 
 
         getUser(user_id, (data) => {
             console.log(data)
             setUserDetails(data)
         })
-        checkFriendRequestStatus(user_id, (data) => {
+        token && checkFriendRequestStatus(user_id, (data) => {
             console.log("Request Status", data.status)
             setRequestSent(data.status === 'pending')
             setRequestStatus(data.status)
         }, () => {
             setButtonsVisiblity(false)
         })
-        getUsersBlockStatus(user_id, (data) => {
+        token && getUsersBlockStatus(user_id, (data) => {
             console.log('users block status', data)
             setBlockStatus(data.status)
             setBlockId(data.id)
@@ -87,8 +88,8 @@ const IndiUserProfile = () => {
                         {/* profile picture and buttons  */}
                         <div className='flex gap-4 flex-wrap'>
                             <div className=' overflow-hidden'>
-                                <div className="relative w-[200px] overflow-hidden h-[15rem] rounded-lg group">
-                                    {userDetails?.photo?.path && <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path || avatarplaceholder} alt="" />}
+                                <div className="relative w-[15rem] overflow-hidden h-[15rem] rounded-lg group">
+                                    <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path || avatarplaceholder} alt="" />
                                 </div>
                             </div>
                             <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>

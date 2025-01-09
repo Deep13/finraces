@@ -1,3 +1,5 @@
+import { AiOutlineLeft } from "react-icons/ai";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 import { RxCross2 } from "react-icons/rx";
 import React, { useEffect, useState, useLayoutEffect } from 'react';
 import image from '../assets/images/illustration.svg';
@@ -64,7 +66,8 @@ const RaceWaitingZone = ({
                             duration: 0.4,
                             ease: 'easeInOut'
                         }}
-                        className='bg-white rounded-md h-full py-[2rem] flex flex-col items-center px-[5rem] w-[25rem] shadow-lg relative'>
+                        className='bg-white rounded-md h-full py-[2rem] flex flex-col items-center px-[2rem] w-[25rem] shadow-lg relative'>
+
                         {isTimerFinished && status !== 'scheduled' && <button onClick={closeCard} className="absolute top-8 right-8"><RxCross2 size={25} /></button>}
                         <h2 className='font-semibold text-[1.5rem] text-center mb-3 font-poppins'>{raceName}</h2>
                         {/* <p className='font-medium text-[1rem] text-[#919191] mb-[1rem]'>{status}</p> */}
@@ -92,6 +95,10 @@ const RaceWaitingZone = ({
                             }
                         </div>
                     </motion.div>
+                    {/* <div
+                     className="text-blue-400 font-semibold hover:underline cursor-pointer">
+                        Back
+                    </div> */}
                 </motion.div>
             </AnimatePresence>
         </>

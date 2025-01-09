@@ -163,9 +163,9 @@ const Leaderboard = () => {
       {/* Tab layout */}
       <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem]'>
         {
-          Object.keys(leaderboardData).map((tab) => (
+          Object.keys(leaderboardData).map((tab, index) => (
             <button
-              key={tab}
+              key={index}
               onClick={() => handleTabClick(tab)}
               className={`flex dark:text-white justify-center items-center px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
               ${activeTab === tab ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]' : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'}`}
@@ -184,7 +184,7 @@ const Leaderboard = () => {
           leaderboard?.map((curr, index) => {
             return (
               <ProfileCardHomepage
-                key={curr.userName}
+                key={index}
                 // userName={curr.user.firstname + curr.user.lastname}
                 fullName={curr.user.firstName + " " + curr.user.lastName}
                 rank={index + 1}

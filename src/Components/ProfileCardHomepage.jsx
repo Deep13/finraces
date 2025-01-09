@@ -38,7 +38,8 @@ const ProfileCardHomepage = ({
 
 
     useEffect(() => {
-        getUserDetails((data) => {
+        let token = localStorage.getItem('token')
+        token && getUserDetails((data) => {
             setYourDetails(data)
         }, (error) => {
             console.log(error)

@@ -20,7 +20,7 @@ const YourBetsCard = ({
         let userId = JSON.parse(atob(userDetails)).userId
         let rank = participants.find(curr => curr.user_id === userId)?.rank
         // console.log(rank)
-        return rank && rank > 0 ? rank : '-'
+        return (rank && rank > 0) ? rank : '-'
     }
     // useEffect(() => {
     //     // console.log();
@@ -39,7 +39,7 @@ const YourBetsCard = ({
             </div>
             <div className='flex flex-col items-center'>
                 <p className='text-xs font-semibold dark:text-white'>Your Rank</p>
-                <p className='font-bold text-xl dark:text-white'>{findUserRank()}</p>
+                <p className='font-bold text-xl dark:text-white'>{findUserRank() || '-'}</p>
             </div>
         </div>
     )

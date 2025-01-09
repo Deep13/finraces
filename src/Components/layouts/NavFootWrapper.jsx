@@ -8,7 +8,8 @@ const NavFootWrapper = () => {
 
   useEffect(() => {
     // see if the token is valid now or not if not then request refresh token here
-    RefreshToken(() => {
+    let token = localStorage.getItem('token')
+    token && RefreshToken(() => {
       console.log('refreshed successfully')
     }, () => {
       console.log('refresh token was invalid');

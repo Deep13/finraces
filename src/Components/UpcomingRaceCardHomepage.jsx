@@ -82,7 +82,7 @@ const UpcomingRaceCardHomepage = ({
                 <div className='w-full flex justify-between items-center'>
                     <p onClick={() => {
                         navigate(`/race/${raceId}`)
-                    }} className='mb-[0.4rem] font-bold text-[2rem] dark:text-white max-w-[75%] hover:underline cursor-pointer'>{raceName}</p>
+                    }} className='mb-[0.4rem] font-bold text-[2rem] dark:text-white max-w-[75%] hover:underline cursor-pointer font-poppins'>{raceName}</p>
                     <div className='flex gap-[6px] items-center self-start flex-wrap'>
                         <div className="flex items-center space-x-[-15px]">
                             {/* Stock 1 - Biggest */}
@@ -134,19 +134,18 @@ const UpcomingRaceCardHomepage = ({
                 </div>
                 <div className='w-full flex justify-between items-center mb-[5px]'>
                     <div className='flex justify-between items-baseline'>
-                        <p className='font-bold text-[20px] mr-[1rem] dark:text-white'>Race will start at {new Date(startDate).toLocaleTimeString(navigator.language, {
+                        <p className='font-bold text-[20px] mr-[1rem] dark:text-white'>Race will start at <span className='font-poppins'>{new Date(startDate).toLocaleTimeString(navigator.language, {
                             hour: '2-digit',
                             minute: '2-digit'
-                        })}</p>
-                        <p className='text-[12px] dark:text-white'>{StartDate}</p>
+                        })}</span> <span className='font-poppins'>on {StartDate}</span></p>
                     </div>
                 </div>
                 <div className='flex flex-col gap-[5px] mb-[14px]'>
-                    <p className='text-[12px] font-bold dark:text-white'>{participants}{participants > 1 ? ' Participants' : ' Participant'}</p>
-                    <p className='text-[12px] dark:text-white'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
+                    <p className='text-[12px] font-bold dark:text-white'><span className='font-poppins'>{participants}</span>{participants > 1 ? ' Participants' : ' Participant'}</p>
+                    <p className='text-[12px] dark:text-white font-poppins'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
                 </div>
             </div>
-            
+
             <div className='flex gap-[20px] justify-self-end'>
                 <button
                     onClick={(e) => {

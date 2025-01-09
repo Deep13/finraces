@@ -23,6 +23,7 @@ import Watchlistpage from './Pages/Watchlistpage'
 function App() {
 
 
+
   return (
     <>
       <ErrorBoundary fallback={<Fallback />}>

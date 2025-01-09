@@ -910,11 +910,11 @@ export const getTopRankers = async (
   onSuccess = () => { },
   onError = () => { },
 ) => {
-  let token = localStorage.getItem('token')
+  // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/race-results/stats?limit=${limit}`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/public/race-results/stats?limit=${limit}`, {
       headers: {
-        'Authorization': `Bearer ${token}`, // Example for passing a token
+        // 'Authorization': `Bearer ${token}`, // Example for passing a token
       }
     })
     let result = await response.data
