@@ -600,7 +600,7 @@ const RacePage = () => {
     }, [raceStatus])
 
 
-    if (isLoadingRaceTile && isLoading) {
+    if (isLoadingRaceTile && raceStatus !== 'finished') {
         return (
             <>
                 {
