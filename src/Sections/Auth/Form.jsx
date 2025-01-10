@@ -9,6 +9,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 // import { joinAsGuest } from "../../Utils/api";
 import { BiChevronRight } from "react-icons/bi";
 import GreetPopup from "../../Components/GreetPopup";
+import AllPopup from "../../Components/AllPopup";
 
 
 
@@ -41,6 +42,8 @@ const Form = ({
   const [loginActive, setLoginActive] = useState(false)
   const [signupActive, setSignupActive] = useState(false)
   const [showGreetPopup, setShowGreetPopup] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [modalMessage, setModalMessage] = useState('')
   const gD = localStorage.getItem('guest_details')
   const guestDetails = gD && JSON.parse(atob(gD))
 
@@ -112,12 +115,12 @@ const Form = ({
   }
 
   const Signup = () => {
-    // if (!validateSignup()) {
-    //   return
-    // }
+    
     let { email, password, firstName, lastName } = signupCreds
     if (!email || !password || !firstName || !lastName) {
-      alert('all fields are required')
+      // alert('all fields are required')
+      setShowModal(true)
+      setModalMessage('All Fields are required!, Fill all the fields')
       return
     }
     // here the signup function is called
@@ -133,12 +136,17 @@ const Form = ({
           email: '',
           password: '',
         })
-      }, () => {
-        console.log('Error Updating Profile')
+      }, (error) => {
+        console.log('Error Updating Profile', error)
+        setShowModal(true)
+        setModalMessage('some error occured')
       })
       :
-      RegisterUser(email, password, firstName, lastName, () => {
-        alert('Something went wrong')
+      RegisterUser(email, password, firstName, lastName, (error) => {
+        // alert('Something went wrong')
+        console.log('registration errror', error)
+        setShowModal(true)
+        setModalMessage('Some Error occured while Registering the User')
       }, () => {
         setActiveTab(tabs.success)
         setSignupCreds({
@@ -153,14 +161,11 @@ const Form = ({
 
 
   const Login = () => {
-    // if (!validateLogin()) {
-    //   // error handling
-    //   return
-    // }
-    // alert('ok your are Loggedin')
+
     const { email, password } = loginCreds
     if (!email || !password) {
-      alert('all fields are required')
+      setShowModal(true)
+      setModalMessage('All Fields are required!, Fill all the fields')
       return
     }
     LoginUser(email, password, () => {
@@ -170,9 +175,10 @@ const Form = ({
       } else {
         window.location.reload()
       }
-      // thisLocation === '/auth' ? navigate('/') : window.location.reload()
-    }, () => {
-      alert('something went wrong')
+    }, (error) => {
+      console.log('error', error)
+      setShowModal(true)
+      setModalMessage('Some error occured while logging in the user')
     })
     setLoginCreds({
       email: '',
@@ -194,6 +200,9 @@ const Form = ({
   return (
 
     <>
+      {
+        showModal && <AllPopup message={modalMessage} setPopupVisible={setShowModal} />
+      }
       {
         showGreetPopup && <GreetPopup setPopupVisible={setShowGreetPopup} />
       }
@@ -286,14 +295,6 @@ const Form = ({
                 Login as Guest User
               </a>
             }
-            {/* <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
-              <FcGoogle size={24} />
-              Sign in with Google
-            </a>
-            <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
-              <img className="w-[24px] h-[24px]" src={facebook_icon} alt="facebook_icon" />
-              Sign in with Facebook
-            </a> */}
           </div>
         </div>}
     </>
