@@ -31,6 +31,7 @@ const Navbar = () => {
     const navigate = useNavigate()
     const token = localStorage.getItem('token')
     const userDetails = localStorage.getItem('userDetails')
+    const guestDetails = localStorage.getItem('guest_details')
     const [userDetailsObject, setUserDetailsObject] = useState(null)
     const dropdownRef = useRef(null)
     const notificationRef = useRef(null)
@@ -38,12 +39,12 @@ const Navbar = () => {
 
 
     useEffect(() => {
-        let thisUserDetails = localStorage.getItem('userDetails')
-        if (userDetails) {
+        let thisUserDetails = userDetails || guestDetails
+        if (thisUserDetails) {
             console.log("user deatails", btoa(thisUserDetails))
             setUserDetailsObject(JSON.parse(atob(thisUserDetails)))
         }
-        
+
     }, [])
 
     useEffect(() => {
@@ -199,7 +200,8 @@ const Navbar = () => {
                             // set dropdown
                             e.stopPropagation();
                             // console.log(e.target.id)
-                            setDropdown(prev => !prev)
+                            userDetails && setDropdown(prev => !prev)
+                            guestDetails && setShowLoginForm(true)
                             setNotificationToggle(false)
                         }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
                             <p id="profileButtonP" className="dark:text-white">{userDetailsObject.userName}</p>

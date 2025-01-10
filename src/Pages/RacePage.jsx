@@ -93,6 +93,16 @@ const RacePage = () => {
     const navigate = useNavigate()
     const stockChart = useRef()
 
+    const ud = localStorage.getItem('userDetails')
+    const userDetails2 = ud && JSON.parse(atob(ud))
+
+    const checkSelf = (id, name) => {
+        if (userDetails2 && id === userDetails2?.userId) {
+            return 'You'
+        }
+        return name
+    }
+
 
     // code by deepak
     const [data, setData] = useState({
@@ -758,9 +768,14 @@ const RacePage = () => {
                                         </div>
                                         <p onClick={() => {
                                             if (raceResults?.race_result['2']?.participants[0]?.user_id) {
-                                                navigate(`/userprofile/${raceResults?.race_result['2']?.participants[0]?.user_id}`)
+                                                if (userDetails2.userId === raceResults?.race_result['2']?.participants[0]?.user_id) {
+                                                    navigate(`/profile`)
+                                                }
+                                                else {
+                                                    navigate(`/profile/${raceResults?.race_result['2']?.participants[0]?.user_id}`)
+                                                }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['2']?.participants[0]?.user_name ? raceResults?.race_result['2']?.participants[0]?.user_name : ''}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['2']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['2']?.participants[0]?.user_id, raceResults?.race_result['2']?.participants[0]?.user_name) : ''}</p>
                                     </div>
 
                                     <div className="flex justify-center flex-col items-center relative bottom-8">
@@ -782,9 +797,14 @@ const RacePage = () => {
                                         </div>
                                         <p onClick={() => {
                                             if (raceResults?.race_result['1']?.participants[0]?.user_id) {
-                                                navigate(`/userprofile/${raceResults?.race_result[1]?.participants[0]?.user_id}`)
+                                                if (userDetails2.userId === raceResults?.race_result['1']?.participants[0]?.user_id) {
+                                                    navigate(`/profile`)
+                                                }
+                                                else {
+                                                    navigate(`/profile/${raceResults?.race_result['1']?.participants[0]?.user_id}`)
+                                                }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['1']?.participants[0]?.user_name}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['1']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['1']?.participants[0]?.user_id, raceResults?.race_result['1']?.participants[0]?.user_name) : ''}</p>
                                     </div>
 
                                     <div className="flex justify-center flex-col items-center">
@@ -805,9 +825,14 @@ const RacePage = () => {
                                         </div>
                                         <p onClick={() => {
                                             if (raceResults?.race_result['3']?.participants[0]?.user_id) {
-                                                navigate(`/userprofile/${raceResults?.race_result[3]?.participants[0]?.user_id}`)
+                                                if (userDetails2.userId === raceResults?.race_result['3']?.participants[0]?.user_id) {
+                                                    navigate(`/profile`)
+                                                }
+                                                else {
+                                                    navigate(`/profile/${raceResults?.race_result['3']?.participants[0]?.user_id}`)
+                                                }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['3']?.participants[0]?.user_name}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['3']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['3']?.participants[0]?.user_id, raceResults?.race_result['3']?.participants[0]?.user_name) : ''}</p>
                                     </div>
                                 </div>
 

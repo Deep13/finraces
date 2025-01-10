@@ -4,10 +4,11 @@ import { FcGoogle } from "react-icons/fc";
 import React, { useEffect, useState } from 'react'
 import facebook_icon from '../../assets/icons/facebook_icon.svg'
 import Verified from '../../assets/icons/Featured_icon.svg'
-import { RegisterUser, Login as LoginUser } from "../../Utils/api";
+import { RegisterUser, Login as LoginUser, updateProfile } from "../../Utils/api";
 import { useNavigate, useLocation } from "react-router-dom";
-import { joinAsGuest } from "../../Utils/api";
+// import { joinAsGuest } from "../../Utils/api";
 import { BiChevronRight } from "react-icons/bi";
+import GreetPopup from "../../Components/GreetPopup";
 
 
 
@@ -24,7 +25,8 @@ const Form = ({
 
   const [activeTab, setActiveTab] = useState(tabs.signup)
   const [signupCreds, setSignupCreds] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
   })
@@ -38,6 +40,9 @@ const Form = ({
   })
   const [loginActive, setLoginActive] = useState(false)
   const [signupActive, setSignupActive] = useState(false)
+  const [showGreetPopup, setShowGreetPopup] = useState(false)
+  const gD = localStorage.getItem('guest_details')
+  const guestDetails = gD && JSON.parse(atob(gD))
 
   const navigate = useNavigate()
   const thisLocation = useLocation()
@@ -110,25 +115,42 @@ const Form = ({
     // if (!validateSignup()) {
     //   return
     // }
-    let { email, password, fullName } = signupCreds
-    if (!email || !password || !fullName) {
+    let { email, password, firstName, lastName } = signupCreds
+    if (!email || !password || !firstName || !lastName) {
       alert('all fields are required')
       return
     }
     // here the signup function is called
     // alert('ok your are registered')
-    const { firstName, lastName } = splitFullName(fullName)
-    RegisterUser(email, password, firstName, lastName, () => {
-      alert('Something went wrong')
-    }, () => {
-      setActiveTab(tabs.success)
-      setSignupCreds({
-        fullName: '',
-        email: '',
-        password: '',
+    // const { firstName, lastName } = splitFullName(fullName)
+    guestDetails ?
+      updateProfile({ ...signupCreds, is_guest: false, "oldPassword": guestDetails.guest_password }, () => {
+        console.log('Profile Updated')
+        setActiveTab(tabs.success)
+        setSignupCreds({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+        })
+      }, () => {
+        console.log('Error Updating Profile')
       })
-    })
+      :
+      RegisterUser(email, password, firstName, lastName, () => {
+        alert('Something went wrong')
+      }, () => {
+        setActiveTab(tabs.success)
+        setSignupCreds({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+        })
+      })
   }
+
+
 
   const Login = () => {
     // if (!validateLogin()) {
@@ -166,11 +188,15 @@ const Form = ({
 
   useEffect(() => {
     // console.log(typeof (thisLocation.pathname))
+    setSignupCreds(prev => ({ ...prev, firstName: guestDetails?.userName || "" }))
   }, [])
 
   return (
 
     <>
+      {
+        showGreetPopup && <GreetPopup setPopupVisible={setShowGreetPopup} />
+      }
       {activeTab === tabs.success ?
         <div className={`w-full flex justify-center items-center ${thisLocation.pathname === '/' ? 'py-8' : ''}`}>
           <div className={`w-full  ${thisLocation.pathname === '/' ? 'scale-75' : 'scale-100'} relative flex items-center flex-col gap-[29px]`}>
@@ -200,8 +226,12 @@ const Form = ({
           {activeTab === tabs.signup &&
             <>
               <div className='text-start flex flex-col w-full'>
-                <label className="text-start mb-2 dark:text-white" htmlFor="">Full Name</label>
-                <input name="fullName" value={signupCreds.fullName} onChange={handleInput} placeholder='Enter your name' type="text" />
+                <label className="text-start mb-2 dark:text-white" htmlFor="">First Name</label>
+                <input name="firstName" value={signupCreds.firstName} onChange={handleInput} placeholder='Enter your first name' type="text" />
+              </div>
+              <div className='text-start flex flex-col w-full'>
+                <label className="text-start mb-2 dark:text-white" htmlFor="">Last Name</label>
+                <input name="lastName" value={signupCreds.lastName} onChange={handleInput} placeholder='Enter your last name' type="text" />
               </div>
               <div className='text-start flex flex-col w-full'>
                 <label className="text-start mb-2 dark:text-white" htmlFor="">Email</label>
@@ -237,19 +267,20 @@ const Form = ({
           {/* login form end  */}
 
           <div className="w-full flex flex-col gap-[24px]">
-            {!localStorage.getItem('guest_details') &&
+            {!guestDetails &&
               <a onClick={() => {
-                joinAsGuest(() => {
-                  closeForm(false)
-                  if (thisLocation.pathname === '/auth') {
-                    navigate('/')
-                  } else {
-                    window.location.reload()
-                  }
-                  // thisLocation === '/auth' ? navigate('/') : window.location.reload()
-                }, () => {
-                  alert('something went wrong')
-                })
+                setShowGreetPopup(true)
+                // joinAsGuest(() => {
+                //   closeForm(false)
+                //   if (thisLocation.pathname === '/auth') {
+                //     navigate('/')
+                //   } else {
+                //     window.location.reload()
+                //   }
+                //   // thisLocation === '/auth' ? navigate('/') : window.location.reload()
+                // }, () => {
+                //   alert('something went wrong')
+                // })
               }} className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
                 <BsPersonCircle size={24} />
                 Login as Guest User

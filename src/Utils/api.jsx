@@ -299,10 +299,7 @@ export const joinAsGuest = async (
     const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`)
     const data = await response.data
     console.log('Registration successful', data);
-    // localStorage.setItem('guest_email', data.email)
-    // localStorage.setItem('guest_password', data.password)
-    // localStorage.setItem('userName', data.firstName)
-    // localStorage.setItem('userId', data.id)
+   
     let details = {
       userName: data.firstName,
       userId: data.id,
