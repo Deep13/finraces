@@ -289,17 +289,23 @@ export const fetchAlreadyJoinedUsers = async (
 }
 
 export const joinAsGuest = async (
+  payload,
   onSuccess = () => { },
   onError = () => { },
 ) => {
 
+  // const { firstName } = payload
+  // if(!firstName) {
+  //   ('No first name is provided')
+  // }
+
   try {
     // console.log('Registration payload', payload);
 
-    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`)
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`, payload)
     const data = await response.data
     console.log('Registration successful', data);
-   
+
     let details = {
       userName: data.firstName,
       userId: data.id,

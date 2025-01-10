@@ -201,14 +201,14 @@ const Form = ({
         <div className={`w-full flex justify-center items-center ${thisLocation.pathname === '/' ? 'py-8' : ''}`}>
           <div className={`w-full  ${thisLocation.pathname === '/' ? 'scale-75' : 'scale-100'} relative flex items-center flex-col gap-[29px]`}>
             <div className="w-full py-4">
-              <h2 className="text-center text-[30px] text-[#292d32] dark:text-white">Email Verified!</h2>
-              <p className="text-[#384453] dark:text-white text-center">We have sent you a 6 digit code. Please enter here to Verify email.</p>
+              <h2 className="text-center text-[30px] text-[#292d32] dark:text-white">Successful Signup!</h2>
+              <p className="text-[#384453] dark:text-white text-center">Kindly login with your Credentials.</p>
             </div>
             <div>
               <img src={Verified} alt="verified_mark" />
             </div>
             <div className='text-[24px] text-[#1a1e25] font-semibold text-center dark:text-white'>Congratulations</div>
-            <p className="text-[#384453] dark:text-white">Your email has been successfully verified</p>
+            <p className="text-[#384453] dark:text-white">Welcome to finraces</p>
             <button onClick={() => setActiveTab(tabs.login)} className="bg-[#0d5ce5] text-white px-[22px] py-[20px] w-[330px] rounded-[10px] flex gap-1 justify-center">
               Continue
               <BiCheckCircle color="white" size={24} />
@@ -256,7 +256,7 @@ const Form = ({
                 <input name="email" value={loginCreds.email} onChange={handleInput} className='' placeholder='Enter your email' type="text" />
               </div>
               <div className='text-start flex flex-col w-full'>
-                <label className="text-start mb-2 dark:text-white" htmlFor="">Create Password</label>
+                <label className="text-start mb-2 dark:text-white" htmlFor=""> Password</label>
                 <input name="password" value={loginCreds.password} onChange={handleInput} className='' type='password' placeholder='Enter your Password' />
               </div>
               <button onClick={Login} disabled={buttonStates.login} className={`${loginActive ? 'bg-[#0d5ce5]' : 'bg-[#d2d2d2]'} rounded-[10px] text-white text-[24px] w-full px-[22px] py-[20px] flex items-center justify-center dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF] dark:font-semibold`}>

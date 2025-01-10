@@ -40,7 +40,9 @@ const GreetPopup = ({
                     </div>
                     <button
                         onClick={() => {
-                            joinAsGuest(() => {
+                            joinAsGuest({
+                                firstName: inputValue,
+                            }, () => {
                                 setPopupVisible(false)
                                 if (thisLocation.pathname === '/auth') {
                                     navigate('/')

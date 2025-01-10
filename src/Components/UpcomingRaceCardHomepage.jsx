@@ -18,7 +18,8 @@ const UpcomingRaceCardHomepage = ({
     stock1Name,
     stock2Name,
     stock3Name,
-    totalStocksCount
+    totalStocksCount,
+    participantsData
 }) => {
 
     const navigate = useNavigate()
@@ -151,7 +152,14 @@ const UpcomingRaceCardHomepage = ({
                     onClick={(e) => {
                         e.stopPropagation()
                         if ((userDetails || guestDetails)) {
-                            setJoinRaceFormVisible(true)
+                            let x = userDetails || guestDetails
+                            x = JSON.parse(atob(x))
+                            let aData = participantsData.filter(curr => curr.id === x.userId)
+                            if (aData.length == 0) {
+                                setJoinRaceFormVisible(true)
+                            } else {
+                                alert('You have already Joined the race')
+                            }
                         } else {
                             setShowLoginForm(true)
                         }

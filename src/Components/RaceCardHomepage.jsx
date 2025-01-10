@@ -35,6 +35,7 @@ const RaceCardHomepage = ({
     const [participants, setParticipants] = useState([])
     const { darkModeEnabled } = useContext(DarkModeContext)
     const [rankList, setRankList] = useState([{ user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }])
+    const navigate = useNavigate()
 
     useEffect(() => {
         getStocksDataForRace(raceId, (data) => {
@@ -155,7 +156,6 @@ const RaceCardHomepage = ({
     }
 
 
-    const navigate = useNavigate()
 
     const getRemainingSeconds = (targetDate, initial_date) => {
         const targetTime = new Date(targetDate).getTime(); // Convert target date to milliseconds
@@ -220,7 +220,12 @@ const RaceCardHomepage = ({
                     <p >Nik</p>
                 </div> */}
 
-                    <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            navigate(`/userprofile/$`)
+                        }}
+                        className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
                             <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[0].user_photo ? rankList[0].user_photo.path : placeholder} />
                             <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
