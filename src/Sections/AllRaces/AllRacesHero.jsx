@@ -13,7 +13,7 @@ const AllRacesHero = () => {
                 {/* <p className='text-[0.94rem] mb-[1rem] dark:text-white'>Continue where you left</p> */}
                 {/* <p className='text-[0.94rem] mb-[1.6rem] pr-[8rem] dark:text-white'>We provide you with the best prices, the highest quality most reliable supors.</p> */}
                 <div className='flex gap-4'>
-                    <button onClick={() => setCreateRace(true)} className='w-[8.9rem] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-black bg-[#e5f4ff] rounded-[33px]'>Create Race</button>
+                    <button onClick={() => setCreateRace(true)} className='w-[10rem] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-black bg-[#e5f4ff] rounded-[33px]'>Create Race</button>
                     {/* <button className='w-[8.9rem] bg-transparent dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-[#00387E] bg-[#e5f4ff] rounded-[33px]'>Join Race</button> */}
                 </div>
             </div>

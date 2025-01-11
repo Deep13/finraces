@@ -37,6 +37,7 @@ const UpcomingRacesAllRaces = () => {
                                 stock2Name={curr?.stocks['1']?.name}
                                 stock3Name={curr?.stocks['2']?.name}
                                 participants={curr.participants.length}
+                                participantsData={curr.participants}
                             />
                         );
                     }) :

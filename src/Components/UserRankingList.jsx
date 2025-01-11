@@ -6,6 +6,8 @@ const UserRankingList = ({
     rankList
 }) => {
     // console.log('Ranklist item structure', rankList[0])
+
+
     return (
         <div className="w-full flex flex-col gap-[9px] items-center overflow-auto">
             {

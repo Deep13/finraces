@@ -27,10 +27,10 @@ export const RegisterUser = async (
     const response = await axios.post(`${GlobalURL}/api/v1/auth/email/register`, payload);
     const data = await response.data
     console.log('Registration successful', data);
-    onSuccess()
+    onSuccess(data)
   } catch (error) {
     console.error('Registration failed:', error.response ? error.response.data : error.message);
-    onError()
+    onError(error)
   }
 };
 
@@ -66,11 +66,11 @@ export const Login = async (
     }
     localStorage.setItem('userDetails', btoa(JSON.stringify(loginUserDetails)))
     localStorage.removeItem('guest_details')
-    onSuccess()
+    onSuccess(response.data)
 
   } catch (error) {
     console.error('Login failed:', error.response ? error.response.data : error.message);
-    onError()
+    onError(error)
   }
 };
 
@@ -289,20 +289,23 @@ export const fetchAlreadyJoinedUsers = async (
 }
 
 export const joinAsGuest = async (
+  payload,
   onSuccess = () => { },
   onError = () => { },
 ) => {
 
+  // const { firstName } = payload
+  // if(!firstName) {
+  //   ('No first name is provided')
+  // }
+
   try {
     // console.log('Registration payload', payload);
 
-    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`)
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`, payload)
     const data = await response.data
     console.log('Registration successful', data);
-    // localStorage.setItem('guest_email', data.email)
-    // localStorage.setItem('guest_password', data.password)
-    // localStorage.setItem('userName', data.firstName)
-    // localStorage.setItem('userId', data.id)
+
     let details = {
       userName: data.firstName,
       userId: data.id,

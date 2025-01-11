@@ -41,8 +41,7 @@ const AllRaces = () => {
               ${activeTab === tab
                                         ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]'
                                         : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'
-                                    }`}
-                            >
+                                    }`}>
                                 {tab}
                             </button>
                         ))}

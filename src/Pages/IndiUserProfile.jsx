@@ -7,6 +7,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getUser, sendFriendRequest } from '../Utils/api';
 import avatarplaceholder from '../assets/images/avatarplaceholder.png'
 import { checkFriendRequestStatus, unfriend, blockUser, unblockUser, getUsersBlockStatus } from '../Utils/api';
+import NoProfilePopup from '../Components/NoProfilePopup';
 
 
 const IndiUserProfile = () => {
@@ -25,7 +26,11 @@ const IndiUserProfile = () => {
     })
     const [userDetails, setUserDetails] = useState({})
     const [reqSent, setReqSent] = useState(false)
+    const [noProfilePopup, setNoProfilePopup] = useState(false)
     const navigate = useNavigate()
+
+    const sd = localStorage.getItem('userDetails')
+    let selfDetails = sd && JSON.parse(atob(sd))
 
 
     const requestFriend = () => {
@@ -53,6 +58,9 @@ const IndiUserProfile = () => {
 
 
     useLayoutEffect(() => {
+        if (user_id === selfDetails.userId) {
+            navigate('/profile')
+        }
         window.scrollTo(0, 0);
         console.log(user_id)
         const token = localStorage.getItem('token')
@@ -60,6 +68,9 @@ const IndiUserProfile = () => {
 
         getUser(user_id, (data) => {
             console.log(data)
+            if (data.is_guest) {
+                setNoProfilePopup(true)
+            }
             setUserDetails(data)
         })
         token && checkFriendRequestStatus(user_id, (data) => {
@@ -79,6 +90,9 @@ const IndiUserProfile = () => {
 
     return (
         <>
+            {
+                noProfilePopup && <NoProfilePopup setPopupVisible={setNoProfilePopup} message={'Profile for the user is not available'} />
+            }
             <div className='w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]'>
                 {/* Ensure sidebar is inside a container with sufficient height */}
                 <Sidebar />

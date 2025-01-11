@@ -10,13 +10,15 @@ const AddFriend = () => {
   const { darkModeEnabled } = useContext(DarkModeContext)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterdResults, setFilterdResults] = useState([])
+  const ud = localStorage.getItem('userDetails')
+  const userDetails = ud && JSON.parse(atob(ud))
 
   const updateFilteredResults = useCallback(
     debounce(async (query) => {
       if (query.length > 2) {
         try {
           const results = await searchUsers(query)
-          setFilterdResults(results)
+          setFilterdResults(results?.data?.filter(curr => curr.id !== userDetails.userId))
         } catch (error) {
           console.error("Error fetching stocks:", error);
           setFilterdResults([]); // Handle error case
@@ -51,8 +53,9 @@ const AddFriend = () => {
       </div>
       <div className='w-full flex justify-start items-center gap-[1.5rem] flex-wrap'>
         {
-          filterdResults?.data?.length > 0 &&
-          filterdResults?.data?.map(curr => {
+          filterdResults &&
+          filterdResults?.length > 0 &&
+          filterdResults?.map(curr => {
             return (
               <AddFriendCard
                 key={curr.id}

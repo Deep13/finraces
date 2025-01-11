@@ -8,6 +8,7 @@ import { getUserDetails, updateProfile } from '../../Utils/api'
 import ChangePasswordPopup from '../../Components/ChangePasswordPopup'
 import DeleteAccountPopup from '../../Components/DeleteAccountPopup'
 import avatarplaceholder from '../../assets/images/avatarplaceholder.png'
+import AllPopup from '../../Components/AllPopup'
 
 const AccountManagement = () => {
 
@@ -18,6 +19,7 @@ const AccountManagement = () => {
     const [changePasswordPopup, setChangePasswordPopup] = useState(false)
     const [deleteAccountPopup, setDeleteAccountPopup] = useState(false)
     const [userData, setUserData] = useState({})
+    const [successPopup, setSuccessPopup] = useState(false)
 
     useEffect(() => {
         setImageIsLoading(true)
@@ -33,6 +35,7 @@ const AccountManagement = () => {
     const handleSaveInfo = () => {
         updateProfile(userData, () => {
             console.log('Profile Updated')
+            setSuccessPopup(true)
         }, () => {
             console.log('Error Updating Profile')
         })
@@ -45,6 +48,9 @@ const AccountManagement = () => {
 
     return (
         <>
+            {
+                successPopup && <AllPopup setPopupVisible={setSuccessPopup} title='Successful!' message='Your Profile is updated Successfully' />
+            }
             {
                 deleteAccountPopup &&
                 <DeleteAccountPopup
@@ -108,9 +114,15 @@ const AccountManagement = () => {
                                 <p className='font-semibold dark:text-white font-poppins'>{userData.firstName}</p>
                             </div> */}
                             <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
-                                <label htmlFor="profilename" className='dark:text-white'>Full Name</label>
+                                <label htmlFor="profilename" className='dark:text-white'>First Name</label>
                                 {/* <input value={userData.lastName} onChange={e => setUserData(prev => ({ ...prev, lastName: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' /> */}
-                                <p className='font-semibold dark:text-white'>{userData.firstName + " " + userData.lastName}</p>
+                                <p className='font-semibold dark:text-white'>{userData.firstName}</p>
+                                {/* <p className='font-semibold dark:text-white'>{userData.lastN}</p> */}
+                            </div>
+                            <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
+                                <label htmlFor="profilename" className='dark:text-white'>Last Name</label>
+                                {/* <input value={userData.lastName} onChange={e => setUserData(prev => ({ ...prev, lastName: e.target.value }))} className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='profilename' /> */}
+                                <p className='font-semibold dark:text-white'>{userData.lastName}</p>
                                 {/* <p className='font-semibold dark:text-white'>{userData.lastN}</p> */}
                             </div>
                         </div>

@@ -18,10 +18,16 @@ const UserRankingCard = ({
     const userData = localStorage.getItem('userDetails')
     const selfId = userData && JSON.parse(atob(userData)).userId
 
+    const userDetails = userData && JSON.parse(atob(userData))
+    const gd = localStorage.getItem('guest_details')
+    const guestDetails = gd && JSON.parse(atob(gd))
+    let actualDetail = userDetails || guestDetails
+    console.log(actualDetail)
+
     return (
         <div onClick={() => {
             if (userData && id === selfId) {
-                navigate('/profile')
+                !guestDetails && navigate('/profile')
                 return
             }
             navigate(`/userprofile/${id}`)
@@ -31,7 +37,7 @@ const UserRankingCard = ({
                     <img className='w-full h-full object-cover' src={userPhoto} alt="" />
                 </div>
                 <div className='flex flex-col items-center'>
-                    <p className='text-[1rem] font-semibold dark:text-white hover:underline'>{userName}</p>
+                    <p className='text-[1rem] font-semibold dark:text-white hover:underline'>{actualDetail.userName === userName.split(" ")[0] ? 'You' : userName}</p>
                     {/* <div className='flex gap-[4px] items-baseline'>
                         <div>
                             <img src={vector} alt="" />

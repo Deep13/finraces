@@ -93,6 +93,16 @@ const RacePage = () => {
     const navigate = useNavigate()
     const stockChart = useRef()
 
+    const ud = localStorage.getItem('userDetails')
+    const userDetails2 = ud && JSON.parse(atob(ud))
+
+    const checkSelf = (id, name) => {
+        if (userDetails2 && id === userDetails2?.userId) {
+            return 'You'
+        }
+        return name
+    }
+
 
     // code by deepak
     const [data, setData] = useState({
@@ -374,8 +384,6 @@ const RacePage = () => {
             console.log('Stocks Error', error)
         })
 
-        // console.log('animation box width', box.current ? box.current.offsetWidth : 'no width is displayed')
-        //fetch all races data
         fetchRaceDataDetailed(race_id, (res) => {
             console.log('racedata detailed:', res);
             const barColors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
@@ -384,26 +392,6 @@ const RacePage = () => {
             let stockNames = stocks.map(curr => (curr.ticker))
             let totalTime = calculateDurationInSeconds(res.start_date, res.end_date)
             let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
-
-            // let newPosArr = []
-            // sortAlphabetically2(stocks)?.forEach((stock, index) => {
-            //     const relativePosition = ((((stocks.length - index)) * (stocks.length * 10) / stocks.length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
-            //     newPosArr.push(relativePosition)
-            // })
-            // console.log('New Positions Array', newPosArr);
-            // setData((prevData) => {
-            //     const newData = newPosArr;
-
-            //     return {
-            //         ...prevData,
-            //         datasets: [
-            //             {
-            //                 ...prevData.datasets[0],
-            //                 data: newData,
-            //             },
-            //         ],
-            //     };
-            // });
 
             let newLogoAray = {}
             sortAlphabetically3(stocks).map(stock => {
@@ -430,19 +418,8 @@ const RacePage = () => {
                 newPosArr.push(relativePosition)
             })
             console.log('New Positions Array', newPosArr);
-            // setData((prevData) => {
-            //     const newData = newPosArr;
-
-            //     return {
-            //         ...prevData,
-            //         datasets: [
-            //             {
-            //                 ...prevData.datasets[0],
-            //                 data: newData,
-            //             },
-            //         ],
-            //     };
-            // });
+            
+            
             let newData = newPosArr
             setData({
                 labels: newLabels,
@@ -758,9 +735,14 @@ const RacePage = () => {
                                         </div>
                                         <p onClick={() => {
                                             if (raceResults?.race_result['2']?.participants[0]?.user_id) {
-                                                navigate(`/userprofile/${raceResults?.race_result['2']?.participants[0]?.user_id}`)
+                                                if (userDetails2.userId === raceResults?.race_result['2']?.participants[0]?.user_id) {
+                                                    navigate(`/profile`)
+                                                }
+                                                else {
+                                                    navigate(`/profile/${raceResults?.race_result['2']?.participants[0]?.user_id}`)
+                                                }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['2']?.participants[0]?.user_name ? raceResults?.race_result['2']?.participants[0]?.user_name : ''}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['2']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['2']?.participants[0]?.user_id, raceResults?.race_result['2']?.participants[0]?.user_name) : ''}</p>
                                     </div>
 
                                     <div className="flex justify-center flex-col items-center relative bottom-8">
@@ -782,9 +764,14 @@ const RacePage = () => {
                                         </div>
                                         <p onClick={() => {
                                             if (raceResults?.race_result['1']?.participants[0]?.user_id) {
-                                                navigate(`/userprofile/${raceResults?.race_result[1]?.participants[0]?.user_id}`)
+                                                if (userDetails2.userId === raceResults?.race_result['1']?.participants[0]?.user_id) {
+                                                    navigate(`/profile`)
+                                                }
+                                                else {
+                                                    navigate(`/profile/${raceResults?.race_result['1']?.participants[0]?.user_id}`)
+                                                }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['1']?.participants[0]?.user_name}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['1']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['1']?.participants[0]?.user_id, raceResults?.race_result['1']?.participants[0]?.user_name) : ''}</p>
                                     </div>
 
                                     <div className="flex justify-center flex-col items-center">
@@ -805,9 +792,14 @@ const RacePage = () => {
                                         </div>
                                         <p onClick={() => {
                                             if (raceResults?.race_result['3']?.participants[0]?.user_id) {
-                                                navigate(`/userprofile/${raceResults?.race_result[3]?.participants[0]?.user_id}`)
+                                                if (userDetails2.userId === raceResults?.race_result['3']?.participants[0]?.user_id) {
+                                                    navigate(`/profile`)
+                                                }
+                                                else {
+                                                    navigate(`/profile/${raceResults?.race_result['3']?.participants[0]?.user_id}`)
+                                                }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['3']?.participants[0]?.user_name}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['3']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['3']?.participants[0]?.user_id, raceResults?.race_result['3']?.participants[0]?.user_name) : ''}</p>
                                     </div>
                                 </div>
 

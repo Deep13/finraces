@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import graphrate from '../../src/assets/images/graphrate.svg'
 import { getRacesCountByRank } from '../Utils/api';
 import avatarplaceholder from '../assets/images/avatarplaceholder.png'
+import NoProfilePopup from '../Components/NoProfilePopup';
 
 const superTabsStrings = {
   Profile: 'Profile',
@@ -27,6 +28,7 @@ const Profile = () => {
   const [imageIsLoading, setImageIsLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState(data?.photo?.path)
   const [superTabs, setSuperTabs] = useState(superTabsStrings.Profile)
+  const [NoUserPopup, setNoUserPopup] = useState(false)
   const navigate = useNavigate()
 
 
@@ -34,6 +36,9 @@ const Profile = () => {
     setImageIsLoading(true)
     getUserDetails((data) => {
       setData(data)
+      if (data.is_guest) {
+        setNoProfilePopup(true)
+      }
       setImageUrl(data?.photo?.path)
       // if specific to user then get all badges here
       setTimeout(() => setImageIsLoading(false), 4000)
@@ -44,6 +49,9 @@ const Profile = () => {
 
   return (
     <>
+      {
+        NoUserPopup && <NoProfilePopup setPopupVisible={setNoUserPopup} message={"You don't have an account"} />
+      }
       {/* {
         uploadPopup &&
         <PicUploadPopUpd

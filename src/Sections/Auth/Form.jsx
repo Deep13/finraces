@@ -4,10 +4,12 @@ import { FcGoogle } from "react-icons/fc";
 import React, { useEffect, useState } from 'react'
 import facebook_icon from '../../assets/icons/facebook_icon.svg'
 import Verified from '../../assets/icons/Featured_icon.svg'
-import { RegisterUser, Login as LoginUser } from "../../Utils/api";
+import { RegisterUser, Login as LoginUser, updateProfile } from "../../Utils/api";
 import { useNavigate, useLocation } from "react-router-dom";
-import { joinAsGuest } from "../../Utils/api";
+// import { joinAsGuest } from "../../Utils/api";
 import { BiChevronRight } from "react-icons/bi";
+import GreetPopup from "../../Components/GreetPopup";
+import AllPopup from "../../Components/AllPopup";
 
 
 
@@ -24,7 +26,8 @@ const Form = ({
 
   const [activeTab, setActiveTab] = useState(tabs.signup)
   const [signupCreds, setSignupCreds] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
   })
@@ -38,6 +41,12 @@ const Form = ({
   })
   const [loginActive, setLoginActive] = useState(false)
   const [signupActive, setSignupActive] = useState(false)
+  const [showGreetPopup, setShowGreetPopup] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [modalMessage, setModalMessage] = useState('')
+  const [modalTitle, setModalTitle] = useState('')
+  const gD = localStorage.getItem('guest_details')
+  const guestDetails = gD && JSON.parse(atob(gD))
 
   const navigate = useNavigate()
   const thisLocation = useLocation()
@@ -107,38 +116,60 @@ const Form = ({
   }
 
   const Signup = () => {
-    // if (!validateSignup()) {
-    //   return
-    // }
-    let { email, password, fullName } = signupCreds
-    if (!email || !password || !fullName) {
-      alert('all fields are required')
+
+    let { email, password, firstName, lastName } = signupCreds
+    if (!email || !password || !firstName || !lastName) {
+      // alert('all fields are required')
+      setShowModal(true)
+      setModalTitle('Error !')
+      setModalMessage('All Fields are required!, Fill all the fields')
       return
     }
     // here the signup function is called
     // alert('ok your are registered')
-    const { firstName, lastName } = splitFullName(fullName)
-    RegisterUser(email, password, firstName, lastName, () => {
-      alert('Something went wrong')
-    }, () => {
-      setActiveTab(tabs.success)
-      setSignupCreds({
-        fullName: '',
-        email: '',
-        password: '',
+    // const { firstName, lastName } = splitFullName(fullName)
+    guestDetails ?
+      updateProfile({ ...signupCreds, is_guest: false, "oldPassword": guestDetails.guest_password }, () => {
+        console.log('Profile Updated')
+        setActiveTab(tabs.success)
+        setSignupCreds({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+        })
+      }, (error) => {
+        console.log('Error Updating Profile', error)
+        setShowModal(true)
+        setModalTitle('Error !')
+        setModalMessage('some error occured')
       })
-    })
+      :
+      RegisterUser(email, password, firstName, lastName, (error) => {
+        // alert('Something went wrong')
+        console.log('registration errror', error)
+        setShowModal(true)
+        setModalTitle('Error !')
+        setModalMessage('Some Error occured while Registering the User')
+      }, () => {
+        setActiveTab(tabs.success)
+        setSignupCreds({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+        })
+      })
   }
 
+
+
   const Login = () => {
-    // if (!validateLogin()) {
-    //   // error handling
-    //   return
-    // }
-    // alert('ok your are Loggedin')
+
     const { email, password } = loginCreds
     if (!email || !password) {
-      alert('all fields are required')
+      setShowModal(true)
+      setModalMessage('All Fields are required!, Fill all the fields')
       return
     }
     LoginUser(email, password, () => {
@@ -148,9 +179,21 @@ const Form = ({
       } else {
         window.location.reload()
       }
-      // thisLocation === '/auth' ? navigate('/') : window.location.reload()
-    }, () => {
-      alert('something went wrong')
+    }, (error) => {
+      console.log('error', error)
+      let OError = error?.response?.data?.errors
+      if (OError) {
+        if (OError.email || OError.password) {
+          setModalMessage('Invalid credentials')
+        }
+        else {
+          setModalMessage('Some Technical Error occured! We will get back to you soon')
+        }
+      } else {
+        setModalMessage('Some Technical Error occured! We will get back to you soon')
+      }
+      setShowModal(true)
+      setModalTitle('Error!')
     })
     setLoginCreds({
       email: '',
@@ -166,23 +209,30 @@ const Form = ({
 
   useEffect(() => {
     // console.log(typeof (thisLocation.pathname))
+    setSignupCreds(prev => ({ ...prev, firstName: guestDetails?.userName || "" }))
   }, [])
 
   return (
 
     <>
+      {
+        showModal && <AllPopup message={modalMessage} title={modalTitle} setPopupVisible={setShowModal} />
+      }
+      {
+        showGreetPopup && <GreetPopup setPopupVisible={setShowGreetPopup} />
+      }
       {activeTab === tabs.success ?
         <div className={`w-full flex justify-center items-center ${thisLocation.pathname === '/' ? 'py-8' : ''}`}>
           <div className={`w-full  ${thisLocation.pathname === '/' ? 'scale-75' : 'scale-100'} relative flex items-center flex-col gap-[29px]`}>
             <div className="w-full py-4">
-              <h2 className="text-center text-[30px] text-[#292d32] dark:text-white">Email Verified!</h2>
-              <p className="text-[#384453] dark:text-white text-center">We have sent you a 6 digit code. Please enter here to Verify email.</p>
+              <h2 className="text-center text-[30px] text-[#292d32] dark:text-white">Successful Signup!</h2>
+              <p className="text-[#384453] dark:text-white text-center">Kindly login with your Credentials.</p>
             </div>
             <div>
               <img src={Verified} alt="verified_mark" />
             </div>
             <div className='text-[24px] text-[#1a1e25] font-semibold text-center dark:text-white'>Congratulations</div>
-            <p className="text-[#384453] dark:text-white">Your email has been successfully verified</p>
+            <p className="text-[#384453] dark:text-white">Welcome to finraces</p>
             <button onClick={() => setActiveTab(tabs.login)} className="bg-[#0d5ce5] text-white px-[22px] py-[20px] w-[330px] rounded-[10px] flex gap-1 justify-center">
               Continue
               <BiCheckCircle color="white" size={24} />
@@ -200,8 +250,12 @@ const Form = ({
           {activeTab === tabs.signup &&
             <>
               <div className='text-start flex flex-col w-full'>
-                <label className="text-start mb-2 dark:text-white" htmlFor="">Full Name</label>
-                <input name="fullName" value={signupCreds.fullName} onChange={handleInput} placeholder='Enter your name' type="text" />
+                <label className="text-start mb-2 dark:text-white" htmlFor="">First Name</label>
+                <input name="firstName" value={signupCreds.firstName} onChange={handleInput} placeholder='Enter your first name' type="text" />
+              </div>
+              <div className='text-start flex flex-col w-full'>
+                <label className="text-start mb-2 dark:text-white" htmlFor="">Last Name</label>
+                <input name="lastName" value={signupCreds.lastName} onChange={handleInput} placeholder='Enter your last name' type="text" />
               </div>
               <div className='text-start flex flex-col w-full'>
                 <label className="text-start mb-2 dark:text-white" htmlFor="">Email</label>
@@ -226,7 +280,7 @@ const Form = ({
                 <input name="email" value={loginCreds.email} onChange={handleInput} className='' placeholder='Enter your email' type="text" />
               </div>
               <div className='text-start flex flex-col w-full'>
-                <label className="text-start mb-2 dark:text-white" htmlFor="">Create Password</label>
+                <label className="text-start mb-2 dark:text-white" htmlFor=""> Password</label>
                 <input name="password" value={loginCreds.password} onChange={handleInput} className='' type='password' placeholder='Enter your Password' />
               </div>
               <button onClick={Login} disabled={buttonStates.login} className={`${loginActive ? 'bg-[#0d5ce5]' : 'bg-[#d2d2d2]'} rounded-[10px] text-white text-[24px] w-full px-[22px] py-[20px] flex items-center justify-center dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF] dark:font-semibold`}>
@@ -237,32 +291,25 @@ const Form = ({
           {/* login form end  */}
 
           <div className="w-full flex flex-col gap-[24px]">
-            {!localStorage.getItem('guest_details') &&
+            {!guestDetails &&
               <a onClick={() => {
-                joinAsGuest(() => {
-                  closeForm(false)
-                  if (thisLocation.pathname === '/auth') {
-                    navigate('/')
-                  } else {
-                    window.location.reload()
-                  }
-                  // thisLocation === '/auth' ? navigate('/') : window.location.reload()
-                }, () => {
-                  alert('something went wrong')
-                })
+                setShowGreetPopup(true)
+                // joinAsGuest(() => {
+                //   closeForm(false)
+                //   if (thisLocation.pathname === '/auth') {
+                //     navigate('/')
+                //   } else {
+                //     window.location.reload()
+                //   }
+                //   // thisLocation === '/auth' ? navigate('/') : window.location.reload()
+                // }, () => {
+                //   alert('something went wrong')
+                // })
               }} className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
                 <BsPersonCircle size={24} />
                 Login as Guest User
               </a>
             }
-            {/* <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
-              <FcGoogle size={24} />
-              Sign in with Google
-            </a>
-            <a className="px-[16px] py-[10px] text-[#344054] flex gap-2 font-semibold cursor-pointer justify-center items-center border rounded-[8px] border-[#d0d5dd] dark:bg-white">
-              <img className="w-[24px] h-[24px]" src={facebook_icon} alt="facebook_icon" />
-              Sign in with Facebook
-            </a> */}
           </div>
         </div>}
     </>

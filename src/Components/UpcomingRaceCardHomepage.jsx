@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import JoinRace from './JoinRace'
 import { motion } from 'motion/react'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
+import AllPopup from './AllPopup'
 
 const UpcomingRaceCardHomepage = ({
     raceName = "An Arbitrary Race",
@@ -18,7 +19,8 @@ const UpcomingRaceCardHomepage = ({
     stock1Name,
     stock2Name,
     stock3Name,
-    totalStocksCount
+    totalStocksCount,
+    participantsData
 }) => {
 
     const navigate = useNavigate()
@@ -26,6 +28,9 @@ const UpcomingRaceCardHomepage = ({
     const userDetails = localStorage.getItem('userDetails')
     const guestDetails = localStorage.getItem('guest_details')
     const { setShowLoginForm } = useContext(DarkModeContext)
+    const [showModal, setShowModal] = useState(false)
+    const [modalTitle, setModalTitle] = useState('')
+    const [modalMessage, setModalMessage] = useState('')
 
     function calculateDuration(start_date, end_date) {
         // Parse the start and end dates
@@ -66,101 +71,116 @@ const UpcomingRaceCardHomepage = ({
 
 
     return (
-        <motion.div
-            custom={index}
-            initial="hidden"
-            animate="visible"
-            variants={cardAnimation}
-            className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem] flex flex-col justify-between'>
+        <>
             {
-                joinRaceFormVisible && <JoinRace
-                    raceName={raceName}
-                    closeForm={setJoinRaceFormVisible}
-                    race_id={raceId} />
+                showModal && <AllPopup title={modalTitle} message={modalMessage} setPopupVisible={setShowModal} />
             }
-            <div className='flex flex-col'>
-                <div className='w-full flex justify-between items-center'>
-                    <p onClick={() => {
-                        navigate(`/race/${raceId}`)
-                    }} className='mb-[0.4rem] font-bold text-[2rem] dark:text-white max-w-[75%] hover:underline cursor-pointer font-poppins'>{raceName}</p>
-                    <div className='flex gap-[6px] items-center self-start flex-wrap'>
-                        <div className="flex items-center space-x-[-15px]">
-                            {/* Stock 1 - Biggest */}
-                            {stock1 ? (
-                                <img
-                                    className="rounded-full w-12 h-12 border-[4px] border-[#002763] z-[10]"
-                                    src={stock1}
-                                    alt=""
-                                />
-                            ) : (
-                                <div className="rounded-full w-12 h-12 border-[4px] border-[#002763] z-[10] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
-                                    {stock1Name?.substring(0, 2)}
-                                </div>
-                            )}
-
-                            {/* Stock 2 - Medium */}
-                            {stock2 ? (
-                                <img
-                                    className="rounded-full w-10 h-10 border-[4px] border-[#002763] z-[9]"
-                                    src={stock2}
-                                    alt=""
-                                />
-                            ) : (
-                                stock2Name && (
-                                    <div className="rounded-full w-10 h-10 border-[4px] border-[#002763] z-[9] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
-                                        {stock2Name?.substring(0, 2)}
+            <motion.div
+                custom={index}
+                initial="hidden"
+                animate="visible"
+                variants={cardAnimation}
+                className='rounded-[15px] bg-[#E5f4ff] dark:bg-[#002763] pl-[1.8rem] px-[2.2rem] pt-[1.8rem] pb-[1.4rem] flex flex-col justify-between'>
+                {
+                    joinRaceFormVisible && <JoinRace
+                        raceName={raceName}
+                        closeForm={setJoinRaceFormVisible}
+                        race_id={raceId} />
+                }
+                <div className='flex flex-col'>
+                    <div className='w-full flex justify-between items-center'>
+                        <p onClick={() => {
+                            navigate(`/race/${raceId}`)
+                        }} className='mb-[0.4rem] font-bold text-[2rem] dark:text-white max-w-[75%] hover:underline cursor-pointer font-poppins'>{raceName}</p>
+                        <div className='flex gap-[6px] items-center self-start flex-wrap'>
+                            <div className="flex items-center space-x-[-15px]">
+                                {/* Stock 1 - Biggest */}
+                                {stock1 ? (
+                                    <img
+                                        className="rounded-full w-12 h-12 border-[4px] border-[#002763] z-[10]"
+                                        src={stock1}
+                                        alt=""
+                                    />
+                                ) : (
+                                    <div className="rounded-full w-12 h-12 border-[4px] border-[#002763] z-[10] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
+                                        {stock1Name?.substring(0, 2)}
                                     </div>
-                                )
-                            )}
+                                )}
 
-                            {/* Stock 3 - Smallest */}
-                            {stock3 ? (
-                                <img
-                                    className="rounded-full w-8 h-8 border-[4px] border-[#002763] z-[8]"
-                                    src={stock3}
-                                    alt=""
-                                />
-                            ) : (
-                                stock3Name && (
-                                    <div className="rounded-full w-8 h-8 border-[4px] border-[#002763] z-[8] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
-                                        {stock3Name?.substring(0, 2)}
-                                    </div>
-                                )
-                            )}
+                                {/* Stock 2 - Medium */}
+                                {stock2 ? (
+                                    <img
+                                        className="rounded-full w-10 h-10 border-[4px] border-[#002763] z-[9]"
+                                        src={stock2}
+                                        alt=""
+                                    />
+                                ) : (
+                                    stock2Name && (
+                                        <div className="rounded-full w-10 h-10 border-[4px] border-[#002763] z-[9] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
+                                            {stock2Name?.substring(0, 2)}
+                                        </div>
+                                    )
+                                )}
+
+                                {/* Stock 3 - Smallest */}
+                                {stock3 ? (
+                                    <img
+                                        className="rounded-full w-8 h-8 border-[4px] border-[#002763] z-[8]"
+                                        src={stock3}
+                                        alt=""
+                                    />
+                                ) : (
+                                    stock3Name && (
+                                        <div className="rounded-full w-8 h-8 border-[4px] border-[#002763] z-[8] grid place-items-center bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] font-semibold">
+                                            {stock3Name?.substring(0, 2)}
+                                        </div>
+                                    )
+                                )}
+                            </div>
+
+                            <p className='font-semibold text-[16px] text-[#b5b5b5]'>{totalStocksCount > 3 ? `+${totalStocksCount - 3}` : ''}</p>
                         </div>
-
-                        <p className='font-semibold text-[16px] text-[#b5b5b5]'>{totalStocksCount > 3 ? `+${totalStocksCount - 3}` : ''}</p>
+                    </div>
+                    <div className='w-full flex justify-between items-center mb-[5px]'>
+                        <div className='flex justify-between items-baseline'>
+                            <p className='font-bold text-[20px] mr-[1rem] dark:text-white'>Race will start at <span className='font-poppins'>{new Date(startDate).toLocaleTimeString(navigator.language, {
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}</span> <span className='font-poppins'>on {StartDate}</span></p>
+                        </div>
+                    </div>
+                    <div className='flex flex-col gap-[5px] mb-[14px]'>
+                        <p className='text-[12px] font-bold dark:text-white'><span className='font-poppins'>{participants}</span>{participants > 1 ? ' Participants' : ' Participant'}</p>
+                        <p className='text-[12px] dark:text-white font-poppins'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
                     </div>
                 </div>
-                <div className='w-full flex justify-between items-center mb-[5px]'>
-                    <div className='flex justify-between items-baseline'>
-                        <p className='font-bold text-[20px] mr-[1rem] dark:text-white'>Race will start at <span className='font-poppins'>{new Date(startDate).toLocaleTimeString(navigator.language, {
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        })}</span> <span className='font-poppins'>on {StartDate}</span></p>
-                    </div>
-                </div>
-                <div className='flex flex-col gap-[5px] mb-[14px]'>
-                    <p className='text-[12px] font-bold dark:text-white'><span className='font-poppins'>{participants}</span>{participants > 1 ? ' Participants' : ' Participant'}</p>
-                    <p className='text-[12px] dark:text-white font-poppins'>Duration {hours !== 0 && hours + " Hours"} {minutes !== 0 && minutes + " Minutes"}</p>
-                </div>
-            </div>
 
-            <div className='flex gap-[20px] justify-self-end'>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        if ((userDetails || guestDetails)) {
-                            setJoinRaceFormVisible(true)
-                        } else {
-                            setShowLoginForm(true)
-                        }
-                    }}
-                    className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>
-                    Join
-                </button>
-            </div>
-        </motion.div >
+                <div className='flex gap-[20px] justify-self-end'>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            if ((userDetails || guestDetails)) {
+                                let x = userDetails || guestDetails
+                                x = JSON.parse(atob(x))
+                                let aData = participantsData?.filter(curr => curr.id === x.userId)
+                                if (aData.length == 0) {
+                                    setJoinRaceFormVisible(true)
+                                } else {
+                                    // alert('You have already Joined the race')
+                                    setModalTitle('Hello!')
+                                    setModalMessage('You have already joined the race')
+                                    setShowModal(true)
+                                }
+                            } else {
+                                setShowLoginForm(true)
+                            }
+                        }}
+                        className='px-[19px] py-[10px] text-[14px] font-normal rounded-[25px] border borer-[0.76px] border-black dark:border-white dark:text-white'>
+                        Join
+                    </button>
+                </div>
+            </motion.div >
+        </>
     )
 }
 

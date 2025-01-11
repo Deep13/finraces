@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Form from '../Sections/Auth/Form'
 import formImage from '../assets/images/finraceformimage.jpg'
 import finrace_logo from '../assets/images/finraces_logo_auth.svg'
@@ -7,6 +7,11 @@ import { useNavigate } from 'react-router-dom'
 
 const Auth = () => {
   const navigate = useNavigate()
+
+  useEffect(() => {
+    let token = localStorage.getItem('token')
+    token && navigate('/')
+  }, [])
   return (
     <div className='w-screen h-screen  relative flex overflow-auto dark:bg-[#000924]'>
       <div className='flex-1 flex justify-center items-start overflow-auto'>

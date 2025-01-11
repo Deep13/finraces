@@ -19,6 +19,19 @@ const RaceWaitingZone = ({
 
     const [isTimerFinished, setIsTimerFinished] = useState(false)
 
+    const ud = localStorage.getItem('userDetails')
+    const gd = localStorage.getItem('guest_details')
+    const userDetails = ud && JSON.parse(atob(ud))
+    const guestDetails = gd && JSON.parse(atob(gd))
+    const det = userDetails || guestDetails
+
+    const checkSelf = (id, firstName) => {
+        if (id === det.userId) {
+            return 'You have'
+        }
+        return `${firstName} has`
+    }
+
     useEffect(() => { // this case useLayouteffect is really effective
         // if(countdownComplete) {
         //     closeCard(true)
@@ -82,14 +95,14 @@ const RaceWaitingZone = ({
                             {
                                 joinedUsersList?.map((curr, index) => {
                                     return (
-                                        <p key={index + 1}>{curr?.user?.firstName} has joined successfully</p>
+                                        <p key={index + 1}>{checkSelf(curr?.user?.id, curr?.user?.firstName)} joined successfully</p>
                                     )
                                 })
                             }
                             {
                                 liveUsers?.map((curr, index) => {
                                     return (
-                                        <p key={index + 1}>{curr?.firstName} has joined successfully</p>
+                                        <p key={index + 1}>{checkSelf(curr?.id, curr?.firstName)} joined successfully</p>
                                     )
                                 })
                             }
