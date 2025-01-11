@@ -44,6 +44,7 @@ const Form = ({
   const [showGreetPopup, setShowGreetPopup] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [modalMessage, setModalMessage] = useState('')
+  const [modalTitle, setModalTitle] = useState('')
   const gD = localStorage.getItem('guest_details')
   const guestDetails = gD && JSON.parse(atob(gD))
 
@@ -115,11 +116,12 @@ const Form = ({
   }
 
   const Signup = () => {
-    
+
     let { email, password, firstName, lastName } = signupCreds
     if (!email || !password || !firstName || !lastName) {
       // alert('all fields are required')
       setShowModal(true)
+      setModalTitle('Error !')
       setModalMessage('All Fields are required!, Fill all the fields')
       return
     }
@@ -139,6 +141,7 @@ const Form = ({
       }, (error) => {
         console.log('Error Updating Profile', error)
         setShowModal(true)
+        setModalTitle('Error !')
         setModalMessage('some error occured')
       })
       :
@@ -146,6 +149,7 @@ const Form = ({
         // alert('Something went wrong')
         console.log('registration errror', error)
         setShowModal(true)
+        setModalTitle('Error !')
         setModalMessage('Some Error occured while Registering the User')
       }, () => {
         setActiveTab(tabs.success)
@@ -177,8 +181,19 @@ const Form = ({
       }
     }, (error) => {
       console.log('error', error)
+      let OError = error?.response?.data?.errors
+      if (OError) {
+        if (OError.email || OError.password) {
+          setModalMessage('Invalid credentials')
+        }
+        else {
+          setModalMessage('Some Technical Error occured! We will get back to you soon')
+        }
+      } else {
+        setModalMessage('Some Technical Error occured! We will get back to you soon')
+      }
       setShowModal(true)
-      setModalMessage('Some error occured while logging in the user')
+      setModalTitle('Error!')
     })
     setLoginCreds({
       email: '',
@@ -201,7 +216,7 @@ const Form = ({
 
     <>
       {
-        showModal && <AllPopup message={modalMessage} setPopupVisible={setShowModal} />
+        showModal && <AllPopup message={modalMessage} title={modalTitle} setPopupVisible={setShowModal} />
       }
       {
         showGreetPopup && <GreetPopup setPopupVisible={setShowGreetPopup} />

@@ -29,6 +29,9 @@ const IndiUserProfile = () => {
     const [noProfilePopup, setNoProfilePopup] = useState(false)
     const navigate = useNavigate()
 
+    const sd = localStorage.getItem('userDetails')
+    let selfDetails = sd && JSON.parse(atob(sd))
+
 
     const requestFriend = () => {
         user_id && sendFriendRequest(user_id, (data) => {
@@ -55,6 +58,9 @@ const IndiUserProfile = () => {
 
 
     useLayoutEffect(() => {
+        if (user_id === selfDetails.userId) {
+            navigate('/profile')
+        }
         window.scrollTo(0, 0);
         console.log(user_id)
         const token = localStorage.getItem('token')
@@ -62,7 +68,7 @@ const IndiUserProfile = () => {
 
         getUser(user_id, (data) => {
             console.log(data)
-            if(data.is_guest) {
+            if (data.is_guest) {
                 setNoProfilePopup(true)
             }
             setUserDetails(data)

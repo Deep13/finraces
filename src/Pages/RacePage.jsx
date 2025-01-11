@@ -384,8 +384,6 @@ const RacePage = () => {
             console.log('Stocks Error', error)
         })
 
-        // console.log('animation box width', box.current ? box.current.offsetWidth : 'no width is displayed')
-        //fetch all races data
         fetchRaceDataDetailed(race_id, (res) => {
             console.log('racedata detailed:', res);
             const barColors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
@@ -394,26 +392,6 @@ const RacePage = () => {
             let stockNames = stocks.map(curr => (curr.ticker))
             let totalTime = calculateDurationInSeconds(res.start_date, res.end_date)
             let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
-
-            // let newPosArr = []
-            // sortAlphabetically2(stocks)?.forEach((stock, index) => {
-            //     const relativePosition = ((((stocks.length - index)) * (stocks.length * 10) / stocks.length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
-            //     newPosArr.push(relativePosition)
-            // })
-            // console.log('New Positions Array', newPosArr);
-            // setData((prevData) => {
-            //     const newData = newPosArr;
-
-            //     return {
-            //         ...prevData,
-            //         datasets: [
-            //             {
-            //                 ...prevData.datasets[0],
-            //                 data: newData,
-            //             },
-            //         ],
-            //     };
-            // });
 
             let newLogoAray = {}
             sortAlphabetically3(stocks).map(stock => {
@@ -440,19 +418,8 @@ const RacePage = () => {
                 newPosArr.push(relativePosition)
             })
             console.log('New Positions Array', newPosArr);
-            // setData((prevData) => {
-            //     const newData = newPosArr;
-
-            //     return {
-            //         ...prevData,
-            //         datasets: [
-            //             {
-            //                 ...prevData.datasets[0],
-            //                 data: newData,
-            //             },
-            //         ],
-            //     };
-            // });
+            
+            
             let newData = newPosArr
             setData({
                 labels: newLabels,

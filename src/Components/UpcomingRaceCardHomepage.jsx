@@ -29,6 +29,7 @@ const UpcomingRaceCardHomepage = ({
     const guestDetails = localStorage.getItem('guest_details')
     const { setShowLoginForm } = useContext(DarkModeContext)
     const [showModal, setShowModal] = useState(false)
+    const [modalTitle, setModalTitle] = useState('')
     const [modalMessage, setModalMessage] = useState('')
 
     function calculateDuration(start_date, end_date) {
@@ -72,7 +73,7 @@ const UpcomingRaceCardHomepage = ({
     return (
         <>
             {
-                showModal && <AllPopup message={modalMessage} setPopupVisible={setShowModal} />
+                showModal && <AllPopup title={modalTitle} message={modalMessage} setPopupVisible={setShowModal} />
             }
             <motion.div
                 custom={index}
@@ -161,11 +162,12 @@ const UpcomingRaceCardHomepage = ({
                             if ((userDetails || guestDetails)) {
                                 let x = userDetails || guestDetails
                                 x = JSON.parse(atob(x))
-                                let aData = participantsData.filter(curr => curr.id === x.userId)
+                                let aData = participantsData?.filter(curr => curr.id === x.userId)
                                 if (aData.length == 0) {
                                     setJoinRaceFormVisible(true)
                                 } else {
                                     // alert('You have already Joined the race')
+                                    setModalTitle('Hello!')
                                     setModalMessage('You have already joined the race')
                                     setShowModal(true)
                                 }

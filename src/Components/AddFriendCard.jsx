@@ -3,12 +3,13 @@ import { DarkModeContext } from '../Contexts/DarkModeProvider'
 import Person from '../assets/images/person2.png'
 import userplus from '../assets/images/userplus.svg'
 import { useNavigate } from 'react-router-dom'
+import placeholder from '../assets/images/avatarplaceholder.png'
 
 const AddFriendCard = ({
     id = 8745,
     userName = 'Burt Macklin',
     // email = 'burt.macklin@gmail.com',
-    image = Person
+    image = placeholder
 }) => {
     const { darkModeEnabled } = useContext(DarkModeContext)
     const navigate = useNavigate()
