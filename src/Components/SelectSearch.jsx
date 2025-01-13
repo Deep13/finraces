@@ -54,7 +54,8 @@ export default function SelectSearch({
     const customStyles = {
         control: (provided, state) => ({
             ...provided,
-            backgroundColor: darkModeEnabled ? "#010b2c" : "#2f2f2f", // Background color
+            backgroundColor: darkModeEnabled ? "#010b2c" : "#f4f4f4", // Background color
+            border: 'none',
             borderColor: state.isFocused
                 ? (darkModeEnabled ? "#4f4f4f" : "#888") // Neutral border for focus
                 : (darkModeEnabled ? "#4f4f4f" : "#ccc"), // Default border
