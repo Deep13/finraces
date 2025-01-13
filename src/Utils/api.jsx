@@ -664,6 +664,64 @@ export const searchStock = async (prefix) => {
   }
 };
 
+export const searchIndiStock = async (stockId, onSuccess = () => { }, onError = () => { }) => {
+
+
+  try {
+
+    const url = `${GlobalURL}/api/v1/public/stocks/${stockId}`
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Searched Stock with prefix', data);
+    onSuccess(data)
+    return data
+  } catch (error) {
+    // Handle errors
+    console.error('Something went wrong:', error.message);
+    onError(error)
+  }
+};
+
+
+export const debounceStockSearchj = async (
+  prefix,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+
+  try {
+
+
+    const url = `${GlobalURL}/api/v1/public/stocks?filters=${JSON.stringify({ namePrefix: prefix })}`
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Searched Stock with prefix', data.data);
+    onSuccess(data.data)
+    return data
+  } catch (error) {
+    // Handle errors
+    console.error('Something went wrong:', error.message);
+    // onError(error)
+  }
+};
+
 
 export const reportBug = async (
   reportData,

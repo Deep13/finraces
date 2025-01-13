@@ -1,7 +1,7 @@
 import React, { useState, useContext, useCallback } from "react";
 import Select from "react-select";
 import { debounce } from "lodash";
-import { searchStock } from "../Utils/api"; // Import your API function
+import { searchStock, debounceStockSearchj } from "../Utils/api"; // Import your API function
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 export default function SelectSearch({
@@ -19,13 +19,15 @@ export default function SelectSearch({
             if (inputValue.length > 2) {
                 setLoading(true); // Set loading state to true before starting the request
                 try {
-                    const response = await searchStock(inputValue); // Call API to search stocks
-                    setOptions(
-                        response.map((stock) => ({
-                            value: stock.id,
-                            label: stock.name,
-                        }))
-                    );
+                    await debounceStockSearchj(inputValue, (data) => {
+                        setOptions(
+                            data.map((stock) => ({
+                                value: stock.id,
+                                label: stock.name,
+                            }))
+                        );
+                    }); // Call API to search stocks
+
                 } catch (error) {
                     console.error("Error fetching stocks:", error);
                     setOptions([]); // Clear options on error
@@ -35,7 +37,7 @@ export default function SelectSearch({
             } else {
                 setOptions([]); // Reset options if input is too short
             }
-        }, 300), // Debounce to limit API calls
+        }, 500), // Debounce to limit API calls
         []
     );
 
