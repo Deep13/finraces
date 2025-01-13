@@ -3,11 +3,14 @@ import { BsUpload } from "react-icons/bs";
 import React, { useContext, useState } from 'react'
 import { uploadProfilePicture, updatePhoto } from "../Utils/api";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
+import { ColorRing } from "react-loader-spinner";
+
 
 const PicUploadPopUpd = ({
     exit,
     setImageUrl,
-    setImageIsLoading = () => { }
+    setImageIsLoading,
+    isLoading
 }) => {
 
 
@@ -31,7 +34,7 @@ const PicUploadPopUpd = ({
 
     return (
         <div className='fixed w-full h-screen top-0 left-0 z-[100] bg-black bg-opacity-50 grid place-items-center'>
-            <div className='py-8 px-12 rounded-lg bg-white shadow-xl relative h-[15rem] grid place-items-center w-[20rem] dark:bg-[#002763]'>
+            <div className='py-8 px-12 rounded-lg min-h-[10rem] bg-white shadow-xl relative max-h-[18rem] flex flex-col gap-3 justify-center items-center w-[20rem] dark:bg-[#002763]'>
                 <button onClick={() => {
                     exit(false)
                 }} className="absolute top-4 right-4">
@@ -43,27 +46,7 @@ const PicUploadPopUpd = ({
                 }
                 <button
                     onClick={() => {
-                        if (selectedFile) {
-                            // upload the image
-                            // alert('Image uploaded successfully')
-                            if (selectedFile) {
-                                uploadProfilePicture(selectedFile, (data) => {
-                                    setImageIsLoading(true)
-                                    updatePhoto(data.file.id, (data) => {
-                                        // set the pic data here
-                                        setImageUrl(data?.photo?.path)
-                                        setProfileImage(data?.photo?.path)
-                                        let userData = JSON.parse(atob(localStorage.getItem('userDetails')))
-                                        userData.photo.path = data?.data?.path
-                                        localStorage.setItem('userDetails', JSON.stringify(userData))
-                                    })
-                                    exit(false)
-                                    setTimeout(() => setImageIsLoading(false), 2500)
-                                })
-                            }
-                        } else {
-                            document.getElementById('fileInput')?.click()
-                        }
+                        document.getElementById('fileInput')?.click()
                     }}
                     className="flex gap-4 border-2 p-3 font-semibold items-center rounded-lg border-black dark:border dark:border-white">
                     <input
@@ -76,6 +59,42 @@ const PicUploadPopUpd = ({
                     <BsUpload size={30} color={darkModeEnabled ? 'white' : 'black'} />
                     uplod Image
                 </button>
+                {
+                    selectedFile && <button
+                        onClick={() => {
+                            if (selectedFile) {
+                                uploadProfilePicture(selectedFile, (data) => {
+                                    setImageIsLoading(true)
+                                    updatePhoto(data.file.id, (data) => {
+                                        // set the pic data here
+                                        setImageUrl(data?.photo?.path)
+                                        setProfileImage(data?.photo?.path)
+                                        let userData = JSON.parse(btoa(localStorage.getItem('userDetails')))
+                                        userData.photo.path = data?.data?.path
+                                        localStorage.setItem('userDetails', JSON.stringify(userData))
+                                    })
+                                    exit(false)
+                                    setTimeout(() => setImageIsLoading(false), 2500)
+                                })
+                            }
+
+
+                        }}
+                        className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-[2rem] py-[1rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold self-center">
+                        {
+                            isLoading ? <ColorRing
+                                visible={true}
+                                height="18"
+                                width="18"
+                                ariaLabel="color-ring-loading"
+                                // wrapperStyle={{}}
+                                wrapperClass="color-ring-wrapper"
+                                colors={['#ffffff']}
+                            /> :
+                                'Submit'
+                        }
+                    </button>
+                }
             </div>
         </div>
     )

@@ -9,6 +9,7 @@ import ChangePasswordPopup from '../../Components/ChangePasswordPopup'
 import DeleteAccountPopup from '../../Components/DeleteAccountPopup'
 import avatarplaceholder from '../../assets/images/avatarplaceholder.png'
 import AllPopup from '../../Components/AllPopup'
+import { ColorRing } from 'react-loader-spinner'
 
 const AccountManagement = () => {
 
@@ -20,6 +21,7 @@ const AccountManagement = () => {
     const [deleteAccountPopup, setDeleteAccountPopup] = useState(false)
     const [userData, setUserData] = useState({})
     const [successPopup, setSuccessPopup] = useState(false)
+    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         setImageIsLoading(true)

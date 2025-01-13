@@ -21,9 +21,10 @@ const GuestOrLoggedOutHero = () => {
     const [lastRaceName, setLastRaceName] = useState("Loading...")
     const [totalPoints, setTotalPoints] = useState(0)
 
-    const imageUrl = JSON.parse(atob(localStorage.getItem('userDetails')))
-    const userId = imageUrl?.userId
-    const userName = imageUrl?.userName
+    const iu = localStorage.getItem('userDetails')
+    const imageUrl = iu && JSON.parse(atob(iu))
+    const userId = imageUrl && imageUrl?.userId
+    const userName = imageUrl && imageUrl?.userName
 
     console.log("imageUrl", imageUrl)
 
@@ -33,13 +34,13 @@ const GuestOrLoggedOutHero = () => {
     }
 
     useEffect(() => {
-        lastRaceDataByUser(userId, (data) => {
+        userId && lastRaceDataByUser(userId, (data) => {
             console.log("racesDataByUser", data)
             setLastRaceStatus(data[0]?.status || "No Data")
             setLastRaceId(data[0]?.id || "")
             setLastRaceName(data[0]?.name || "No Data")
         })
-        getTotalPointsUser(userId, (data) => {
+        userId && getTotalPointsUser(userId, (data) => {
             console.log('Total Points', data)
             setTotalPoints(data)
         })
