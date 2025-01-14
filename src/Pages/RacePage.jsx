@@ -97,6 +97,8 @@ const RacePage = () => {
     const userDetails2 = ud && JSON.parse(atob(ud))
 
     const checkSelf = (id, name) => {
+        if (!id || !name) return '';
+
         if (userDetails2 && id === userDetails2?.userId) {
             return 'You'
         }
@@ -418,8 +420,8 @@ const RacePage = () => {
                 newPosArr.push(relativePosition)
             })
             console.log('New Positions Array', newPosArr);
-            
-            
+
+
             let newData = newPosArr
             setData({
                 labels: newLabels,
