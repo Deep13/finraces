@@ -144,6 +144,7 @@ const RacePage = () => {
             },
             y: {
                 ticks: {
+                    color: 'white',
                     display: true,
                 },
                 grid: {
@@ -388,7 +389,7 @@ const RacePage = () => {
 
         fetchRaceDataDetailed(race_id, (res) => {
             console.log('racedata detailed:', res);
-            const barColors = ['rgba(255, 99, 132, 0.8)', 'rgba(54, 162, 235, 0.8)', 'rgba(255, 206, 86, 0.8)', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
+            const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
 
             let stocks = (res.stocks) // this will be the natural position of stocks at first
             let stockNames = stocks.map(curr => (curr.ticker))
