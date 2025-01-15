@@ -27,10 +27,10 @@ export const RegisterUser = async (
     const response = await axios.post(`${GlobalURL}/api/v1/auth/email/register`, payload);
     const data = await response.data
     console.log('Registration successful', data);
-    onSuccess(data)
+    onSuccess()
   } catch (error) {
     console.error('Registration failed:', error.response ? error.response.data : error.message);
-    onError(error)
+    onError()
   }
 };
 
@@ -66,11 +66,11 @@ export const Login = async (
     }
     localStorage.setItem('userDetails', btoa(JSON.stringify(loginUserDetails)))
     localStorage.removeItem('guest_details')
-    onSuccess(response.data)
+    onSuccess()
 
   } catch (error) {
     console.error('Login failed:', error.response ? error.response.data : error.message);
-    onError(error)
+    onError()
   }
 };
 
@@ -289,23 +289,20 @@ export const fetchAlreadyJoinedUsers = async (
 }
 
 export const joinAsGuest = async (
-  payload,
   onSuccess = () => { },
   onError = () => { },
 ) => {
 
-  // const { firstName } = payload
-  // if(!firstName) {
-  //   ('No first name is provided')
-  // }
-
   try {
     // console.log('Registration payload', payload);
 
-    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`, payload)
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`)
     const data = await response.data
     console.log('Registration successful', data);
-
+    // localStorage.setItem('guest_email', data.email)
+    // localStorage.setItem('guest_password', data.password)
+    // localStorage.setItem('userName', data.firstName)
+    // localStorage.setItem('userId', data.id)
     let details = {
       userName: data.firstName,
       userId: data.id,
@@ -659,6 +656,64 @@ export const searchStock = async (prefix) => {
     console.log('Searched Stock with prefix', data);
     // onSuccess(transformedList(data))
     // return transformedList(data)
+    return data
+  } catch (error) {
+    // Handle errors
+    console.error('Something went wrong:', error.message);
+    // onError(error)
+  }
+};
+
+export const searchIndiStock = async (stockId, onSuccess = () => { }, onError = () => { }) => {
+
+
+  try {
+
+    const url = `${GlobalURL}/api/v1/public/stocks/${stockId}`
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Searched Stock with prefix', data);
+    onSuccess(data)
+    return data
+  } catch (error) {
+    // Handle errors
+    console.error('Something went wrong:', error.message);
+    onError(error)
+  }
+};
+
+
+export const debounceStockSearchj = async (
+  prefix,
+  onSuccess = () => { },
+  onError = () => { }
+) => {
+
+  try {
+
+
+    const url = `${GlobalURL}/api/v1/public/stocks?filters=${JSON.stringify({ namePrefix: prefix })}`
+
+    // Make the PATCH request
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Parse and return the response data
+    const data = await response.json();
+    console.log('Searched Stock with prefix', data.data);
+    onSuccess(data.data)
     return data
   } catch (error) {
     // Handle errors
@@ -1578,4 +1633,3 @@ export const unblockUser = async (userToUnblockId, onSuccess, onError) => {
     onError(error);
   }
 };
-

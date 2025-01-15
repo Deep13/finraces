@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useContext } from 'react'
 // import Select from 'react-select'
 // import AsyncSelect from 'react-select/async'
 import { RxCross1 } from "react-icons/rx";
-// import { searchStock } from '../Utils/api';
+import { searchIndiStock } from '../Utils/api';
 // import { debounce } from 'lodash';
 import { DarkModeContext } from '../Contexts/DarkModeProvider';
 import SelectSearch from './SelectSearch';
@@ -26,6 +26,7 @@ const StockEntryRow = ({
   const { darkModeEnabled } = useContext(DarkModeContext)
   const [enabled, setEnabled] = useState(false)
   const [currentStock, setCurrentStock] = useState({})
+  const [currentStockPrice, setCurrentStockPrice] = useState(0)
 
   const findStockPrice = (id) => {
     return stockList.find(stock => stock.id === id);
@@ -39,7 +40,11 @@ const StockEntryRow = ({
   }, [value])
 
   useEffect(() => {
-    handleRacePredictionsChange(index, 'current_price', currentStock?.price)
+    currentStock?.value && searchIndiStock(currentStock.value, (data) => {
+      setCurrentStockPrice(data.price)
+      handleRacePredictionsChange(index, 'current_price', data.price)
+    })
+
   }, [currentStock])
 
 
@@ -56,51 +61,14 @@ const StockEntryRow = ({
         </div>
         <div className="flex flex-col w-[15rem]">
           <label className="mb-[10px] dark:text-white" htmlFor="race_name">Select Stock</label>
-          {/* <input className="px-[1.1rem] rounded-[4px] py-[15px] shadow-inner" type="text" id="race_name" /> */}
-          {/* <Select
-            onChange={(arg) => {
-              handleRacePredictionsChange(index, 'stock_id', arg.value) // value is stock_id
-              setCurrentStockId(arg.value)
-            }}
-            classNames={{
-              control: () => 'px-[1.1rem] bg-[#f5f5f5] dark:bg-[#010B2C] rounded-[4px] py-[3px] shadow-inner',
-              menuList: () => `${darkModeEnabled && 'text-white'}`
-            }}
-            theme={(theme) => {
-              if (darkModeEnabled) {
-                return ({
-                  ...theme,
-                  colors: {
-                    ...theme.colors,
-                    primary25: '#5B89FF',
-                    primary: '#005BFF',
-                    neutral0: '#010B2C',
-                    neutral80: '#ffffff',
-                  },
-                })
-              } else {
-                return ({
-                  ...theme,
-                  // colors: {
-                  //   ...theme.colors,
-                  //   primary25: '#5B89FF',
-                  //   primary: '#005BFF',
-                  //   neutral0: '#010B2C',
-                  //   neutral80: '#ffffff',
-                  // },
-                })
-              }
-            }}
-            options={transformedData}
-            isSearchable
-            isClearable /> */}
+
           <SelectSearch setCurrentStock={setCurrentStock} index={index} handlePredicitonChange={handleRacePredictionsChange} />
         </div>
         <div className="flex flex-col w-[7rem]">
           <label className="mb-[10px] dark:text-white" htmlFor="race_name">Current Price</label>
           <div className="px-[1.1rem] rounded-[4px] py-[8px] text-start dark:text-white font-poppins" type="number" id="race_name" >
             {/* {currentStockId ? findStockPrice(currentStockId)?.price : 0} */}
-            {currentStock?.price ? currentStock?.price.toFixed(2) : 0}
+            {currentStockPrice ? currentStockPrice?.toFixed(2) : 0}
           </div>
         </div>
         <div className="flex flex-col">

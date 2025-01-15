@@ -269,7 +269,7 @@ const RaceCardHomepage = ({
                 <RaceTile
                     stocksData={stocksDataForRace}
                     stockRankList={stockRankList} />
-                <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" />
+                {/* <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" /> */}
                 <div className='bg-[#edf7ff] z-20 relative -right-2 dark:bg-[#002864]'>
                     <img src={darkModeEnabled ? finishdark : finish} alt="" />
                 </div>

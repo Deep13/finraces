@@ -3,7 +3,8 @@ import React from 'react'
 const AllPopup = ({
     title,
     message = 'You dont have a profile',
-    setPopupVisible
+    setPopupVisible,
+    extra = () => {},
 }) => {
     return (
         <div className='fixed w-full h-screen top-0 left-0 z-[100] bg-black bg-opacity-50 grid place-items-center'>
@@ -13,6 +14,7 @@ const AllPopup = ({
                 <p className='w-full text-center text-xl dark:text-white mb-4'>{message}</p>
                 <button onClick={() => {
                     setPopupVisible(false)
+                    extra(false)
                 }} className='hover:underline text-[rgba(225,225,225,0.6)] cursor-pointer'>back</button>
             </div>
         </div>
