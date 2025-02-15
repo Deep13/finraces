@@ -92,6 +92,7 @@ const RacePage = () => {
     const userDetails = localStorage.getItem('userDetails')
     const navigate = useNavigate()
     const stockChart = useRef()
+    const iframeRef = useRef(null);
 
     const ud = localStorage.getItem('userDetails')
     const userDetails2 = ud && JSON.parse(atob(ud))
@@ -320,6 +321,32 @@ const RacePage = () => {
     // const sortedStockRankList = (stockRankList) => stockRankList?.slice().sort((a, b) =>
     //     a.stock_name.localeCompare(b.name)
     // )
+
+    useEffect(() => {
+        if (raceResults) {
+            const numStocks = raceResults.stocks.length;
+            // const numStocks = 3
+            // const stockNames = ["Tesla", "Gooogle", "Deepak"]
+            const stockNames = raceResults.stocks.map(curr => curr.stock_ticker)
+            const iframe = iframeRef.current;
+            if (!iframe) return;
+
+            iframe.onload = () => {
+                const gameWindow = iframe.contentWindow;
+                if (gameWindow) {
+                    gameWindow.postMessage(
+                        {
+                            action: "start_game",
+                            num_horse: numStocks, // total number of
+                            name_horse: stockNames, // stocks values 
+
+                        },
+                        "*"
+                    );
+                }
+            };
+        }
+    }, [raceResults])
 
 
     useEffect(() => {
@@ -745,7 +772,7 @@ const RacePage = () => {
                                                     navigate(`/profile/${raceResults?.race_result['2']?.participants[0]?.user_id}`)
                                                 }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['2']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['2']?.participants[0]?.user_id, raceResults?.race_result['2']?.participants[0]?.user_name) : ''}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['2']?.participants['0']?.user_name ? checkSelf(raceResults?.race_result['2']?.participants[0]?.user_id, raceResults?.race_result['2']?.participants['0']?.user_name) : ''}</p>
                                     </div>
 
                                     <div className="flex justify-center flex-col items-center relative bottom-8">
@@ -891,7 +918,7 @@ const RacePage = () => {
                                     </div>
 
 
-                                    {data.labels.length > 0 && raceStatus !== 'finished' && (
+                                    {/* {data.labels.length > 0 && raceStatus !== 'finished' && (
                                         <Bar data={data} options={options} plugins={[customPlugin]} />
                                     )}
 
@@ -901,7 +928,15 @@ const RacePage = () => {
                                                 Race Finished
                                             </div>
                                         </div>
-                                    }
+                                    } */}
+                                    {raceResults && <iframe
+                                        className="flex-1 w-full h-[500px]"
+                                        ref={iframeRef}
+                                        src="/game/game/index.html" // Adjust path based on where you host the game
+                                    // width=""
+                                    // height="832px"
+                                    // frameBorder="0"
+                                    />}
                                 </div>
 
 
