@@ -46,7 +46,7 @@ var HORSE_DATA = {
     "odd_win_bet": [3.7, 5.5, 2.2, 11.75, 17.25, 8.75, 7.15, 6.15],
     "odd_place_bet": [1.95, 2.55, 1.25, 5.5, 7.75, 3.05, 2.50, 2.05],
     "odd_show_bet": [1.25, 1.7, 1.09, 2.55, 4, 1.75, 1.55, 1.35],
-    "forecast": [{ "first": 1, "second": 2, "odd": 20 }, { "first": 1, "second": 3, "odd": 6.25 }, { "first": 1, "second": 4, "odd": 60 }]
+    "forecast": []
 };
 var NUM_HOR = 0
 var ENABLE_FULLSCREEN;

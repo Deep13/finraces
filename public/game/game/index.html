@@ -78,7 +78,7 @@
                     // http://codecanyon.net/item/ctl-arcade-wordpress-plugin/13856421///////////
 
                 });
-
+                window.oMain = oMain;
                 $(oMain).on("recharge", function (evt) {
                     //INSERT HERE YOUR RECHARGE SCRIPT THAT RETURN MONEY TO RECHARGE
                     var iMoney = 100;
@@ -135,6 +135,10 @@
                 } else {
                     sizeHandler();
                 }
+            }
+
+            if (event.data.action === "update_rank") {
+                window.currRanks = event.data.positions;
             }
         });
     </script>

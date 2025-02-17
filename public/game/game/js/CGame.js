@@ -329,6 +329,9 @@ function CGame(iTotBet) {
 
         aRank.sort(this.compareXPos);
 
+        // aRank.map((val, index) => {
+        //     val.index = window.currRanks[index]
+        // })
         _oRankingPanel.refreshRank(aRank);
     };
 

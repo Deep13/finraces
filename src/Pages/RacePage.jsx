@@ -343,6 +343,16 @@ const RacePage = () => {
                         },
                         "*"
                     );
+                    setInterval(() => {
+                        gameWindow.postMessage(
+                            {
+                                action: "update_rank",
+                                positions: [2, 3, 1, 0], // total number of
+
+                            },
+                            "*"
+                        );
+                    }, 3000)
                 }
             };
         }
@@ -929,14 +939,15 @@ const RacePage = () => {
                                             </div>
                                         </div>
                                     } */}
-                                    {raceResults && <iframe
-                                        className="flex-1 w-full h-[500px]"
-                                        ref={iframeRef}
-                                        src="/game/game/index.html" // Adjust path based on where you host the game
-                                    // width=""
-                                    // height="832px"
-                                    // frameBorder="0"
-                                    />}
+                                    {raceResults &&
+                                        <iframe
+                                            className="flex-1 w-full h-[500px]"
+                                            ref={iframeRef}
+                                            src="/game/game/index.html" // Adjust path based on where you host the game
+                                        // width=""
+                                        // height="832px"
+                                        // frameBorder="0"
+                                        />}
                                 </div>
 
 
