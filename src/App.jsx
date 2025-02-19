@@ -18,6 +18,13 @@ import AllRaces from './Pages/AllRaces'
 import Community from './Pages/Community'
 import Screener from './Pages/Screener'
 import Watchlistpage from './Pages/Watchlistpage'
+import Notification from './Pages/Notification'
+import Chat from './Pages/Chat'
+import Learn from './Pages/Learn'
+import StockComparison from './Pages/StockComparison'
+import Market from './Pages/Market'
+import SingleStock from './Pages/SingleStock'
+import StockMarketTable from './Pages/StockMarketTable'
 // import Lenis from 'lenis'
 
 function App() {
@@ -39,6 +46,14 @@ function App() {
                 <Route path="/screener" element={<Screener />} />
                 <Route path="/watchlist" element={<Watchlistpage />} />
                 <Route path="/userprofile/:user_id" element={<IndiUserProfile />} />
+
+                <Route path="/notifications" element={<Notification />} />
+                <Route path="/chat" element={<Chat />} />
+                <Route path='/learn' element={<Learn/>}/>
+                <Route path='/stockComparison' element={<StockComparison/>}/>
+                <Route path='/market' element={<Market/>}/>
+                <Route path='/singleStock' element={<SingleStock/>}/>
+                <Route path='/stockTable' element={<StockMarketTable/>}/>
               </Route>
               <Route path="/auth" element={<Auth />} />
               <Route path="/leaderboard" element={<Leaderboard />} />

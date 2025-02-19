@@ -1633,3 +1633,131 @@ export const unblockUser = async (userToUnblockId, onSuccess, onError) => {
     onError(error);
   }
 };
+
+//market losers
+export const getMarketLosers = async (
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`${GlobalURL}/api/v1/stocks/market-losers`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+//market gainers
+export const getMarketGainers = async (
+  onSuccess = () => { },
+  onError = () => { },
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`${GlobalURL}/api/v1/stocks/market-gainers`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+//PE Ratio
+export const getPERatio = async (
+  onSuccess = () => { },
+  onError = () => { },
+  ticker
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`${GlobalURL}/api/v1/stocks/${ticker}/peratio`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+export const getIncomeStatement = async (
+  onSuccess = () => { },
+  onError = () => { },
+  ticker
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`${GlobalURL}/api/v1/stocks/${ticker}/incomestatement`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+
+
+export const getStockProfile = async (
+  onSuccess = () => { },
+  onError = () => { },
+  ticker
+) => {
+  let token = localStorage.getItem('token')
+  try {
+    let response = await axios.get(`${GlobalURL}/api/v1/stocks/${ticker}/profile`, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Example for passing a token
+      }
+    })
+    let result = await response.data
+    // console.log('result success', result)
+    onSuccess(result)
+    // setStocks(result.data)
+  } catch (e) {
+    console.error('stock error', e.response.data.message)
+    if (e.response.data.message === 'Unauthorized') {
+      alert('You are not Authorized')
+      onError()
+    }
+  }
+}
+

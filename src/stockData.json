@@ -1,0 +1,46 @@
+{
+    "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+    "stocks": {
+      "SCMI": {
+        "data": [10, 20, 15, 25, 30, 45],
+        "marketValue": "25.72B",
+        "enterpriseValue": "15.34B",
+        "priceToEarnings": "12.5x",
+        "dilutedEarning": "5.2B",
+        "sector": "Technology",
+        "industry": "Hardware",
+        "ceo": "Mr. Kira Yoshinaga"
+      },
+      "TSLA": {
+        "data": [5, 15, 10, 20, 25, 40],
+        "marketValue": "28.72B",
+        "enterpriseValue": "14.22B",
+        "priceToEarnings": "16.8x",
+        "dilutedEarning": "6.1B",
+        "sector": "Automotive",
+        "industry": "Electric Vehicles",
+        "ceo": "Elon Musk"
+      },
+      "MAGA": {
+        "data": [7, 45, 9, 53, 15, 14],
+        "marketValue": "25.72B",
+        "enterpriseValue": "18.22B",
+        "priceToEarnings": "15.8x",
+        "dilutedEarning": "6.1B",
+        "sector": "Automotive",
+        "industry": "Electric Vehicles",
+        "ceo": "Elon Musk"
+      },
+      "TISRo": {
+        "data": [9, 18, 27, 36, 45, 54],
+        "marketValue": "25.72B",
+        "enterpriseValue": "18.22B",
+        "priceToEarnings": "15.8x",
+        "dilutedEarning": "6.1B",
+        "sector": "Automotive",
+        "industry": "Electric Vehicles",
+        "ceo": "Elon Musk"
+      }
+    }
+  }
+  
