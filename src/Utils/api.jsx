@@ -10,18 +10,21 @@ export const RegisterUser = async (
   password,
   firstName,
   lastName,
+  gender,
   onError = () => { },
   onSuccess = () => { }) => {
   // Validate all required fields
-
   const payload = {
     email,
     password,
     firstName,
     lastName: lastName === "" ? " " : lastName,
+    gender,
     is_guest: false,
   };
 
+  console.log('payload',payload);
+  console.log('input',gender);
   try {
     // console.log('Registration payload', payload);
     const response = await axios.post(`${GlobalURL}/api/v1/auth/email/register`, payload);
@@ -62,7 +65,8 @@ export const Login = async (
     let loginUserDetails = {
       userName: response.data.user.firstName,
       userId: response.data.user.id,
-      photo: response.data.user.photo
+      photo: response.data.user.photo,
+      gender: response.data.user.gender
     }
     localStorage.setItem('userDetails', btoa(JSON.stringify(loginUserDetails)))
     localStorage.removeItem('guest_details')

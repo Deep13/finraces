@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import Hero from '../Sections/Homepage/Hero'
 import OngoingRaces from '../Sections/Homepage/OngoingRaces'
 import Leaderboard from '../Sections/Homepage/Leaderboard'
@@ -13,8 +13,19 @@ import GuestOrLoggedOutHero from '../Sections/Homepage/GuestOrLoggedOutHero'
 const Home = () => {
 
 
-  const userDetails = localStorage.getItem('userDetails')
+  // const userDetails = localStorage.getItem('userDetails')
+  const [userDetails, setUserDetails] = useState(() => {
+    return localStorage.getItem('userDetails');
+  });
 
+  useEffect(() => {
+    const checkUser = () => {
+      setUserDetails(localStorage.getItem('userDetails'));
+    };
+
+    window.addEventListener("storage", checkUser);
+    return () => window.removeEventListener("storage", checkUser);
+  }, []);
 
   return (
     <motion.div

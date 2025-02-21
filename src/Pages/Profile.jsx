@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import graphrate from '../../src/assets/images/graphrate.svg'
 import { getRacesCountByRank } from '../Utils/api';
 import avatarplaceholder from '../assets/images/avatarplaceholder.png'
+import malePlaceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
 import NoProfilePopup from '../Components/NoProfilePopup';
 
 const superTabsStrings = {
@@ -91,7 +93,7 @@ const Profile = () => {
                       wrapperClass=""
                     />
                   </div>} */}
-                  <img loading="lazy" className="w-full h-full object-cover" src={imageUrl || avatarplaceholder} alt="" />
+                  <img loading="lazy" className="w-full h-full object-cover" src={imageUrl || (data?.gender && data.gender=='female'?femalePlaceholder:malePlaceholder)} alt="" />
                   {/* <img className="z-[5]" src={golden_frame} alt="" /> */}
                 </div>
               </div>

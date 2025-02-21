@@ -20,7 +20,10 @@ import { AnimatePresence, motion } from "motion/react";
 import PopupSearch from "./PopupSearch";
 import SimpleSwitch from "./Switch";
 import avatarplaceholder from '../assets/images/avatarplaceholder.png'
+import malePlaceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
 import { getUser } from "../Utils/api";
+
 
 const Navbar = () => {
 
@@ -86,7 +89,6 @@ const Navbar = () => {
             document.removeEventListener('mousedown', handleOutsideClick);
         };
     }, [notificationToggle])
-
 
 
     return (
@@ -206,7 +208,7 @@ const Navbar = () => {
                         }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
                             <p id="profileButtonP" className="dark:text-white">{userDetailsObject.userName}</p>
                             <div id="profileButtonD" className="bg-white w-9 h-9 rounded-full overflow-hidden">
-                                <img id="profileButtonI" className="w-full h-full object-cover" src={profileImage || avatarplaceholder} alt="" />
+                                <img id="profileButtonI" className="w-full h-full object-cover" src={profileImage || (userDetailsObject.gender && userDetailsObject.gender=='female'?femalePlaceholder:malePlaceholder)} alt="" />
                             </div>
                             <AnimatePresence>
                                 {dropdown && <motion.div
@@ -222,7 +224,9 @@ const Navbar = () => {
                                         localStorage.removeItem('token')
                                         localStorage.removeItem('refreshToken')
                                         localStorage.removeItem('userDetails')
-                                        navigate('/auth')
+                                        setUserDetailsObject(null);
+                                        window.dispatchEvent(new Event("storage")); // 🔄 Ensure other tabs update
+                                        navigate('/')
                                     }} className="w-full p-3 dark:font-semibold hover:bg-red-500 hover:text-white transition-opacity duration-100 ease-linear dark:text-white">Log out</p>
                                 </motion.div>}
                             </AnimatePresence>

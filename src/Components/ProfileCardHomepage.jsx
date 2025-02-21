@@ -5,11 +5,13 @@ import dollar from '../assets/images/dollar.png'
 import { motion } from 'motion/react'
 import { useNavigate } from 'react-router-dom'
 import { getUserDetails } from '../Utils/api'
+import malePlaceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
 
 const ProfileCardHomepage = ({
     isFirst = false,
     // userName = 'Alysees',
-    image = person2,
+    image,
     fullName = 'Duke Wriothesley',
     rank = 1,
     points = 0,
@@ -17,6 +19,7 @@ const ProfileCardHomepage = ({
     id = 123564,
     email = "duke@email.com",
     activeTab,
+    gender='male'
 }) => {
     const navigate = useNavigate()
     const [YourDetails, setYourDetails] = useState(null)
@@ -64,7 +67,11 @@ const ProfileCardHomepage = ({
                 {YourDetails?.id === id && <p className='dark:text-yellow-400 font-bold text-xl flex gap-2'> <span className='text-[1.2rem] dark:text-yellow-400 font-bold'>#{rank}</span>You</p>}
             </div>
             <div className='w-full flex-1 overflow-hidden rounded-[10px] mb-[4px]'>
-                <img className='w-full h-full object-cover' src={image} alt={fullName} />
+                {(image && image!="")?
+                (<img className='w-full h-full object-cover' src={image} alt={fullName} />):
+                (<img className='w-full h-full object-cover' src={gender=='male'? malePlaceholder:femalePlaceholder} alt={fullName} />)
+            }
+                
             </div>
             <div className='w-full flex justify-between py-2'>
                 <div className='flex-1 h-full'>

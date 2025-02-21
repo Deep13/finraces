@@ -8,8 +8,10 @@ import cofeeman from '../assets/images/cofeeman.png'
 import baggybro from '../assets/images/baggybro.png'
 import kirayoshikage from '../assets/images/kirayoshikage.png'
 import gillbates2 from '../assets/images/gillbates2.png'
+
 import { getTopRankers } from '../Utils/api'
 import Pagination from '../Components/Pagination'
+
 
 const Leaderboard = () => {
   const leaderboardData = {
@@ -45,6 +47,24 @@ const Leaderboard = () => {
         rank: 4,
         points: 42000,
         email: 'ace.hunter@protonmail.com'
+      },
+      {
+        userName: 'LunaStar',
+        image: '',
+        fullName: 'Luna Starling',
+        rank: 5,
+        points: 45000,
+        email: 'luna.starling@outlook.com',
+        gender: 'male'
+      },
+      {
+        userName: 'AceHunter',
+        image: '',
+        fullName: 'Ace Hunter',
+        rank: 6,
+        points: 42000,
+        email: 'ace.hunter@protonmail.com',
+        gender: 'female'
       }
     ],
     "This Week": [
@@ -178,6 +198,30 @@ const Leaderboard = () => {
               ))}
             </div>
             <div className='w-full rounded-[20px] grid lg:grid-cols-4 md:grid-cols-2 gap-[1.3rem] md:px-[1.3rem] px-[0.7rem] py-[1.11rem]'>
+            <ProfileCardHomepage
+              key={71}
+              fullName={"Test Man"}
+              rank={71}
+              image={""}
+              points={0}
+              index={71}
+              id={71}
+              email={"testMan@testing.com"}
+              activeTab={activeTab}
+              gender={"male"}
+              />
+              <ProfileCardHomepage
+              key={72}
+              fullName={"Test Woman"}
+              rank={72}
+              image={""}
+              points={0}
+              index={72}
+              id={72}
+              email={"testWoman@testing.com"}
+              activeTab={activeTab}
+              gender={"female"}
+              />
               {
                 leaderboard &&
                 leaderboard?.slice(0, 4)?.map((curr, index) => {

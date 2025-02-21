@@ -24,12 +24,13 @@ const Form = ({
   closeForm = () => { }
 }) => {
 
-  const [activeTab, setActiveTab] = useState(tabs.signup)
+  const [activeTab, setActiveTab] = useState(tabs.login)
   const [signupCreds, setSignupCreds] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
+    gender:'',
   })
   const [loginCreds, setLoginCreds] = useState({
     email: '',
@@ -117,8 +118,8 @@ const Form = ({
 
   const Signup = () => {
 
-    let { email, password, firstName, lastName } = signupCreds
-    if (!email || !password || !firstName || !lastName) {
+    let { email, password, firstName, lastName,gender } = signupCreds
+    if (!email || !password || !firstName || !lastName || !gender) {
       // alert('all fields are required')
       setShowModal(true)
       setModalTitle('Error !')
@@ -137,6 +138,7 @@ const Form = ({
           lastName: '',
           email: '',
           password: '',
+          gender:'',
         })
       }, (error) => {
         console.log('Error Updating Profile', error)
@@ -145,7 +147,7 @@ const Form = ({
         setModalMessage('some error occured')
       })
       :
-      RegisterUser(email, password, firstName, lastName, (error) => {
+      RegisterUser(email, password, firstName, lastName,gender, (error) => {
         // alert('Something went wrong')
         console.log('registration errror', error)
         setShowModal(true)
@@ -158,6 +160,7 @@ const Form = ({
           lastName: '',
           email: '',
           password: '',
+          gender:''
         })
       })
   }
@@ -264,6 +267,19 @@ const Form = ({
               <div className='text-start flex flex-col w-full'>
                 <label className="text-start mb-2 dark:text-white" htmlFor="">Create Password</label>
                 <input name="password" value={signupCreds.password} onChange={handleInput} className='' type='password' placeholder='Enter your Password' />
+              </div>
+              <div className='text-start flex flex-col w-full'>
+                <label className="text-start mb-2 dark:text-white" htmlFor="gender">Gender</label>
+                <select 
+                  name="gender" 
+                  value={signupCreds.gender} 
+                  onChange={handleInput} 
+                  className='border rounded p-2 bg-white dark:bg-gray-800 dark:text-white'
+                >
+                  <option value="" disabled>Select your gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
               </div>
               <button onClick={Signup} disabled={buttonStates.signup} className={`${signupActive ? 'bg-[#0d5ce5]' : 'bg-[#d2d2d2]'} rounded-[10px] text-white text-[24px] w-full px-[22px] py-[20px] flex items-center justify-center dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF] dark:font-semibold`}>
                 Next <BiChevronRight size={18} />

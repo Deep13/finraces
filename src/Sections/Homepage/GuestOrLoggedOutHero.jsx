@@ -6,9 +6,12 @@ import diamond from '../../assets/images/diamondIcon.svg'
 // import { FiArrowUpRight } from 'react-icons/fi'
 import StockWatchlistCard from '../../Components/StockWatchlistCard'
 import avatarplaceholder from '../../assets/images/avatarplaceholder.png'
+import malePlaceholder from '../../assets/images/manPlaceholder.jpg'
+import femalePlaceholder from '../../assets/images/womanPlaceholder.jpg'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
 import { lastRaceDataByUser, getTotalPointsUser } from '../../Utils/api'
+import Hero from './Hero'
 
 
 
@@ -25,6 +28,7 @@ const GuestOrLoggedOutHero = () => {
     const imageUrl = iu && JSON.parse(atob(iu))
     const userId = imageUrl && imageUrl?.userId
     const userName = imageUrl && imageUrl?.userName
+    const gender= imageUrl && imageUrl?.gender
 
     console.log("imageUrl", imageUrl)
 
@@ -48,7 +52,7 @@ const GuestOrLoggedOutHero = () => {
 
     return (
         <>
-            <div className='max-w-[1400px] dark:bg-gradient-to-l dark:from-[rgba(0,0,0,0.25)] dark:to-[#0a0d2b] h-auto py-[2.2rem] px-[2.52rem] hero-gradient mb-[3.3rem] grid md:grid-cols-2 grid-cols-1 rounded-lg dark:border dark:border-[#00387E]'>
+            {/* <div className='max-w-[1400px] dark:bg-gradient-to-l dark:from-[rgba(0,0,0,0.25)] dark:to-[#0a0d2b] h-auto py-[2.2rem] px-[2.52rem] hero-gradient mb-[3.3rem] grid md:grid-cols-2 grid-cols-1 rounded-lg dark:border dark:border-[#00387E]'>
                 <div className='py-[1.76rem] flex-1 flex flex-col col-span-1 order-2 md:order-1 justify-center gap-4 items-start pl-4'>
                     <h1 className='md:text-[2.35rem] text-[2rem] font-bold leading-10 mb-[1rem] dark:text-[#5988FF]'>Welcome Back!</h1>
                     <p className='text-[0.94rem] mb-[1rem] dark:text-white'>Continue where you left</p>
@@ -69,11 +73,12 @@ const GuestOrLoggedOutHero = () => {
                 <div className='flex-1 overflow-hidden col-span-2 md:col-span-1 order-1 md:order-2'>
                     <img className='w-full h-full object-cover' src={stonks2} alt="" />
                 </div>
-            </div>
+            </div> */}
+            <Hero/>
 
             <div className='max-w-[1400px] rounded-lg mb-[3.3rem] flex gap-[2.8rem] justify-start flex-wrap items-start'>
                 <div className='rounded-xl overflow-hidden h-[10rem] w-[10rem]'>
-                    <img className='w-full h-full object-cover' src={profileImage || avatarplaceholder} alt="User Profile" />
+                    <img className='w-full h-full object-cover' src={profileImage ||  (gender && gender=='female'?femalePlaceholder:malePlaceholder)} alt="User Profile" />
                 </div>
 
                 <div onClick={() => {

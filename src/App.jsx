@@ -58,7 +58,10 @@ function App() {
               <Route path="/auth" element={<Auth />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
               <Route path="/allraces" element={<AllRaces />} />
-              <Route path="*" element={<ErrorPage />} />
+              {/* <Route path="*" element={<ErrorPage />} /> */}
+              <Route path="*" element={<NavFootWrapper />} >
+                <Route path="*" element={<Home />} />
+              </Route>
             </Routes>
           </GlobalProvider>
         </DarkModeProvider >
