@@ -8,6 +8,8 @@ import { getUserDetails, updateProfile } from '../../Utils/api'
 import ChangePasswordPopup from '../../Components/ChangePasswordPopup'
 import DeleteAccountPopup from '../../Components/DeleteAccountPopup'
 import avatarplaceholder from '../../assets/images/avatarplaceholder.png'
+import malePlaceholder from "../../assets/images/manPlaceholder.jpg"
+import femalePlaceholder from "../../assets/images/womanPlaceholder.jpg"
 import AllPopup from '../../Components/AllPopup'
 import { ColorRing } from 'react-loader-spinner'
 
@@ -22,7 +24,7 @@ const AccountManagement = () => {
     const [userData, setUserData] = useState({})
     const [successPopup, setSuccessPopup] = useState(false)
     const [showModal, setShowModal] = useState(false)
-
+    const [gender,setGender] = useState("");
     useEffect(() => {
         setImageIsLoading(true)
         getUserDetails((data) => {
@@ -30,6 +32,7 @@ const AccountManagement = () => {
             setUserName(data?.firstName + " " + data?.lastName)
             setUserData(data)
             setTimeout(() => setImageIsLoading(false), 3000)
+            setGender(data?.gender)
         })
 
     }, [])
@@ -88,7 +91,7 @@ const AccountManagement = () => {
                                     wrapperClass=""
                                 />
                             </div>}
-                            <img className='w-full h-full object-cover' src={imageUrl || avatarplaceholder} alt="" />
+                            <img className='w-full h-full object-cover' src={imageUrl || gender=='female'?femalePlaceholder:malePlaceholder} alt="" />
                         </div>
 
                         <div className='flex flex-col gap-[12px] flex-1 justify-center items-center'>

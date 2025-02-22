@@ -66,7 +66,7 @@ const Profile = () => {
         {/* Ensure sidebar is inside a container with sufficient height */}
         <Sidebar />
 
-        <div className='flex-1 px-[2%] md:px-[6%] max-w-[1400px]'>
+        <div className='flex-1 px-[2%] md:px-[6%]'>
           <div className='w-full rounded-xl bg-slate-200 p-4 flex flex-col gap-4 dark:bg-[#000D38]'>
             {/* profile picture and buttons  */}
             <div className='flex gap-4 flex-wrap'>

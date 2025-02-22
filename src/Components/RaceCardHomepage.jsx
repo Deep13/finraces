@@ -19,6 +19,9 @@ import { io } from 'socket.io-client'
 import RaceTile from '../Components/RaceTile'
 import { getStocksDataForRace } from '../Utils/api'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
+import malePlceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlceholder from '../assets/images/womanPlaceholder.jpg'
+
 
 
 const RaceCardHomepage = ({
@@ -168,6 +171,7 @@ const RaceCardHomepage = ({
     }
 
 
+    console.log("hi",rankList)
     return (
         <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
             <div className='w-full flex justify-between mb-[14px]'>
@@ -227,7 +231,11 @@ const RaceCardHomepage = ({
                         }}
                         className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[0].user_photo ? rankList[0].user_photo.path : placeholder} />
+                        <img 
+                                className='absolute z-[-1] w-[50%] rounded-[50%]' 
+                                src={rankList?.[1]?.user_photo?.path 
+                                        || (rankList?.[1]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
+                                />
                             <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
                         </div>
                         <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[0].user_name}</p>
@@ -235,7 +243,11 @@ const RaceCardHomepage = ({
 
                     <div className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[1].user_photo ? rankList[1].user_photo.path : placeholder} />
+                        <img 
+                                className='absolute z-[-1] w-[50%] rounded-[50%]' 
+                                src={rankList?.[0]?.user_photo?.path 
+                                        || (rankList?.[0]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
+                                />
                             <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
                         </div>
                         <p className='relative text-center font-semibold text-[12px] dark:text-white'>{rankList[1].user_name}</p>
@@ -243,7 +255,11 @@ const RaceCardHomepage = ({
 
                     <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[2].user_photo ? rankList[2].user_photo.path : placeholder} />
+                        <img 
+                                className='absolute z-[-1] w-[50%] rounded-[50%] mt-[0.55rem]' 
+                                src={rankList?.[2]?.user_photo?.path 
+                                        || (rankList?.[2]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
+                                />
                             <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
                         </div>
                         <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p>

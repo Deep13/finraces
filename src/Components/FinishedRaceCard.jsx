@@ -21,6 +21,9 @@ import { getStocksDataForRace } from '../Utils/api'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
 import { getRaceList } from '../Utils/api'
 
+import malePlceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlceholder from '../assets/images/womanPlaceholder.jpg'
+
 
 const FinishedRaceCard = ({
     raceId = '54asdffasaFSf',
@@ -33,6 +36,8 @@ const FinishedRaceCard = ({
     const { darkModeEnabled } = useContext(DarkModeContext)
     const [raceList, setRaceList] = useState()
     const navigate = useNavigate()
+
+    console.log("checking here",raceData?.participants?.[0]?.photo?.path)
 
 
     return (
@@ -73,8 +78,14 @@ const FinishedRaceCard = ({
                         title={raceData?.stocks[1]?.participants[0]?.user && (raceData?.stocks[1]?.participants[0]?.user.firstName + " " + raceData?.stocks[1]?.participants[0]?.user.lastName)}
                         className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            {raceData?.stocks[1]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[1]?.participants[0]?.user?.photo?.path} />}
-                            {!raceData?.stocks[1]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
+                            {/* {raceData?.stocks[1]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[1]?.participants[0]?.user?.photo?.path} />}
+                            {!raceData?.stocks[1]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />} */}
+                            <img 
+                                className='absolute z-[-1] w-[50%] rounded-[50%]' 
+                                src={raceData?.participants?.[1]?.photo?.path 
+                                        || (raceData?.participants?.[1]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
+                                />
+
                             <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
                         </div>
                         {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[0].user_name}</p> */}
@@ -89,8 +100,15 @@ const FinishedRaceCard = ({
                         title={raceData?.stocks[0]?.participants[0]?.user && (raceData?.stocks[0]?.participants[0]?.user.firstName + " " + raceData?.stocks[0]?.participants[0]?.user.lastName)}
                         className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            {raceData?.stocks[0]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[0]?.participants[0]?.user?.photo?.path} />}
-                            {!raceData?.stocks[0]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
+                            {/* {raceData?.stocks[0]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[0]?.participants[0]?.user?.photo?.path} />}
+                            {!raceData?.stocks[0]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />} */}
+                            {/* {raceData?.participants?.[0].photo?.path} */}
+                            <img 
+                                className='absolute z-[-1] w-[50%] rounded-[50%]' 
+                                src={raceData?.participants?.[0]?.photo?.path 
+                                        || (raceData?.participants?.[0]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
+                                />
+
                             <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
                         </div>
                         {/* <p className='relative text-center font-semibold text-[12px] dark:text-white'>{rankList[1].user_name}</p> */}
@@ -105,10 +123,17 @@ const FinishedRaceCard = ({
                         title={raceData?.stocks[2]?.participants[0]?.user && (raceData?.stocks[2]?.participants[0]?.user.firstName + " " + raceData?.stocks[2]?.participants[0]?.user.lastName)}
                         className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            {raceData?.stocks[2]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[2]?.participants[0]?.user?.photo?.path} />}
-                            {!raceData?.stocks[2]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
+                            {/* {raceData?.stocks[2]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[2]?.participants[0]?.user?.photo?.path} />}
+                            {!raceData?.stocks[2]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />} */}
+                            <img 
+                                className='absolute z-[-1] w-[50%] rounded-[50%] mt-[0.55rem]' 
+                                src={raceData?.participants?.[2]?.photo?.path 
+                                        || (raceData?.participants?.[2]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
+                                />
+
                             <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
                         </div>
+                        
                         {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p> */}
                     </div>
 

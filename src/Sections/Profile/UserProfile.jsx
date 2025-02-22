@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import badges from '../../assets/images/badges.png'
-import diamond from '../../assets/images/diamondIcon.svg'
+import diamond from '../../assets/images/crownCoin.png'
+import trophy from '../../assets/images/trophy.png'
+import trophy1st from '../../assets/images/1st-prize.png' 
+import trophy2nd from '../../assets/images/2nd-place.png' 
+import trophy3rd from '../../assets/images/3rd-place.png' 
+import flags from '../../assets/images/racing-flag.png'
+import winRateGraph from  '../../assets/images/winRateGraph.svg'
+import coinsGif from '../../assets/images/coinsGif.gif'
 // import { FiArrowUpRight } from "react-icons/fi";
 import Person from '../../assets/images/person2.png'
 import redbadge from '../../assets/images/redbadge.png'
@@ -19,6 +26,10 @@ import {
 } from '../../Utils/api';
 import { useNavigate } from 'react-router-dom';
 import { ColorRing } from 'react-loader-spinner'
+import GoldenDiamond from "../../Components/GoldDiamond.jsx"
+import { TbSum } from "react-icons/tb";
+
+import { GiPodiumWinner, GiPodiumSecond,GiPodiumThird } from "react-icons/gi";
 
 
 
@@ -87,12 +98,17 @@ const UserProfile = ({
             <div className='grid grid-cols-3 md:grid-cols-5 gap-4 dark:text-white'>
                 <div className='col-span-3 rounded-lg grid gap-4 grid-cols-2 grid-rows-2'>
                     <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-[#001B51] dark:border dark:border-[#00387E]">
-                        <div className='h-full'>
+                        <div className='h-full p-[10px] w-[150px]'>
                             <img src={diamond} alt="" />
+                            
+
+
+
+                   
                         </div>
                         <div className='flex flex-col gap-[8px]'>
-                            <p className='text-[1rem]'>Total Points</p>
-                            <p className='text-[1.5rem] font-poppins'>{totalPoints}</p>
+                            <p className='text-[1.5rem]'>Total Points</p>
+                            <p className='text-[3.5rem] font-poppins'>{totalPoints}</p>
                             {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
                                 <FiArrowUpRight color="green" size={15} />
                                 <p className="text-green-600">4.8%</p>
@@ -102,35 +118,70 @@ const UserProfile = ({
 
                     <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
                         <div className='flex flex-col gap-[8px]'>
-                            <p className='text-[1rem]'>Win Rate</p>
-                            <p className='text-[1.5rem] font-bold font-poppins'>{(winningRate * 100).toFixed(2)}%</p>
+                            <p className='text-[1.5rem]'>Win Rate</p>
+                            <p className='text-[2rem] font-bold font-poppins'>{(winningRate * 100).toFixed(2)}%</p>
                             {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
                                 <FiArrowUpRight color="green" size={15} />
                                 <p className="text-green-600">1.8%</p>
                             </div> */}
                         </div>
-                        <div className='h-full z-10 w-[10rem]'>
-                            <img src={graphrate_second} alt="" />
+                        <div className='h-full w-[150px] p-[10px] z-10'>
+                            <img src={flags} alt="" />
                         </div>
                     </div>
 
-                    <div className="col-span-2 row-span-1 rounded-lg flex justify-between gap-4 bg-white p-[1.5rem] dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
-                        <div className="flex-1 rounded-lg flex flex-col justify-between">
+                    <div className="col-span-2 row-span-1 rounded-lg flex flex-col justify-between gap-3 bg-white px-5 dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
+                        <div className="text-semibold text-[2rem]">Races</div>
+                        <div className='flex justify-between items-center p-2'>
+                            <div className="flex flex-col items-center justify-center gap-2">
+                                <div className='w-12 h-10'>
+                                  <img src={trophy} alt='totalImg'></img>
+                                </div>
+                                <div className='font-semibold text-lg'>Total</div>
+                                <div className='text-[1.2rem]'>{total}</div>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-3">
+                                <div className='w-12 h-10'>
+                                  <img src={trophy1st} alt='totalImg'></img>
+                                </div>
+                                <div className='font-semibold text-lg'>1st</div>
+                                <div className='text-[1.2rem]'>{raceCounts[1]}</div>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-3">
+                                <div className='w-12 h-10'>
+                                  <img src={trophy2nd} alt='totalImg'></img>
+                                </div>
+                                <div className='font-semibold text-lg'>2nd</div>
+                                <div className='text-[1.2rem]'>{raceCounts[2]}</div>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-3">
+                                <div className='w-12 h-10'>
+                                  <img src={trophy3rd} alt='3rdImg'></img>
+                                </div>
+                                <div className='font-semibold text-lg'>3rd</div>
+                                <div className='text-[1.2rem]'>{raceCounts[3]}</div>
+                            </div>
+                        </div>
+                        {/* <div className="flex-1 rounded-lg flex flex-col justify-between items-center text-center">
                             <p className="text-[1rem]">Race Participated</p>
+                            <p><TbSum  size={48}/></p>
                             <p className="text-[1.5rem] font-semibold font-poppins">{total}</p>
                         </div>
-                        <div className="flex-1 rounded-lg flex flex-col justify-between">
+                        <div className="flex-1 rounded-lg flex flex-col justify-between items-center text-center">
                             <p className="text-[1rem]">Races with 1st place</p>
+                            <p><GiPodiumWinner size={48}/></p>
                             <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[1]}</p>
                         </div>
-                        <div className="flex-1 rounded-lg flex flex-col justify-between">
+                        <div className="flex-1 rounded-lg flex flex-col justify-between items-center text-center">
                             <p className="text-[1rem]">Races with 2nd place</p>
+                            <p><GiPodiumSecond size={48}/></p>
                             <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[2]}</p>
                         </div>
-                        <div className="flex-1 rounded-lg flex flex-col justify-between">
-                            <p className="text-[1rem]">Races with 3rd place</p>
+                        <div className="flex-1 rounded-lg flex flex-col justify-between items-center text-center">
+                            <p className="text-[1rem] mx-auto">Races with 3rd place</p>
+                            <p><GiPodiumThird size={48}/></p>
                             <p className="text-[1.5rem] font-semibold font-poppins">{raceCounts[3]}</p>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className='col-span-2 bg-white rounded-lg p-[1.5rem] flex justify-center items-center flex-col dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white'>

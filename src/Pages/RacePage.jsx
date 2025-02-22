@@ -616,7 +616,7 @@ const RacePage = () => {
         console.log('Race status this is pain in >>>>>>>>>>>>>', raceDetails?.status)
     }, [raceStatus])
 
-
+    console.log("data",data)
     if (isLoadingRaceTile && raceStatus !== 'finished') {
         return (
             <>
@@ -782,7 +782,7 @@ const RacePage = () => {
                                                     navigate(`/profile/${raceResults?.race_result['2']?.participants[0]?.user_id}`)
                                                 }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['2']?.participants['0']?.user_name ? checkSelf(raceResults?.race_result['2']?.participants[0]?.user_id, raceResults?.race_result['2']?.participants['0']?.user_name) : ''}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result?.['2']?.participants?.['0']?.user_name ? checkSelf(raceResults?.race_result['2']?.participants?.[0]?.user_id, raceResults?.race_result['2']?.participants?.['0']?.user_name) : ''}</p>
                                     </div>
 
                                     <div className="flex justify-center flex-col items-center relative bottom-8">
@@ -826,7 +826,7 @@ const RacePage = () => {
                                             <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[12px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
                                                 <ImageSlider
                                                     data={imageData}
-                                                    currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[3]?.participants[0]?.user_id]?.position : 0}
+                                                    currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[3]?.participants?.[0]?.user_id]?.position : 0}
                                                 />
                                             </div>
                                         </div>
@@ -839,7 +839,7 @@ const RacePage = () => {
                                                     navigate(`/profile/${raceResults?.race_result['3']?.participants[0]?.user_id}`)
                                                 }
                                             }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['3']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['3']?.participants[0]?.user_id, raceResults?.race_result['3']?.participants[0]?.user_name) : ''}</p>
+                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result?.['3']?.participants?.[0]?.user_name ? checkSelf(raceResults?.race_result?.['3']?.participants?.[0]?.user_id, raceResults?.race_result?.['3']?.participants?.[0]?.user_name) : ''}</p>
                                     </div>
                                 </div>
 
@@ -928,7 +928,7 @@ const RacePage = () => {
                                     </div>
 
 
-                                    {/* {data.labels.length > 0 && raceStatus !== 'finished' && (
+                                    {data.labels.length > 0 && raceStatus !== 'finished' && (
                                         <Bar data={data} options={options} plugins={[customPlugin]} />
                                     )}
 
@@ -938,7 +938,7 @@ const RacePage = () => {
                                                 Race Finished
                                             </div>
                                         </div>
-                                    } */}
+                                    }
                                     {raceResults &&
                                         <iframe
                                             className="flex-1 w-full h-[500px]"

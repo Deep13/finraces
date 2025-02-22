@@ -49,36 +49,36 @@ const KeyFeatures = () => {
       <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Key Features</h2>
       {/* info section  */}
       <div className="w-full gap-[22px] mb-[3.5rem]">
-        <div className="gap-[23px] grid grid-cols-1 md:grid-cols-2">
+        <div className="gap-[50px] grid grid-cols-1 md:grid-cols-2 px-8">
           {/* card  */}
-          <div className='flex gap-[23px]'>
-            <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>01</div>
+          <div className='flex gap-[50px]'>
+            <div className='py-[27.3px] font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>01</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold dark:text-white'>AI Powered:</p>
               <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Transform how you work, play, and connect with our cutting-edge AI application.</p>
             </div>
           </div>
           {/* card  */}
-          <div className='flex gap-[23px]'>
-            <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>02</div>
+          <div className='flex gap-[50px]'>
+            <div className='py-[27.3px] font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>02</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold dark:text-white'>Intuitive Dashboard</p>
               <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Manage your resources with a user-friendly interface that puts you in control.  </p>
             </div>
           </div>
         </div>
-        <div className="gap-[23px] grid grid-cols-1 md:grid-cols-2">
+        <div className="gap-[50px] grid grid-cols-1 md:grid-cols-2 px-8">
           {/* card  */}
-          <div className='flex gap-[23px]'>
-            <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>03</div>
+          <div className='flex gap-[50px]'>
+            <div className='py-[27.3px] font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>03</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold dark:text-white'>Customizable Solutions</p>
               <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Tailor the cloud experience to meet your specific needs with flexible plans and options.  </p>
             </div>
           </div>
           {/* card  */}
-          <div className='flex gap-[23px]'>
-            <div className='py-[27.3px] flex-1 font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>04</div>
+          <div className='flex gap-[50px]'>
+            <div className='py-[27.3px] font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>04</div>
             <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
               <p className='text-[19.7px] font-semibold dark:text-white'>Advanced</p>
               <p className='text-[15.15px] leading-[30.3px] dark:text-white'> Gain valuable insights with powerful analytics tools designed to help you make data-driven decisions.</p>

@@ -2,15 +2,18 @@ import React, { useContext, useEffect, useState } from 'react'
 import stonks2 from '../../assets/images/stonks2.png'
 // import Person from '../../assets/images/person2.png'
 import coin2 from '../../assets/images/coin2.png'
-import diamond from '../../assets/images/diamondIcon.svg'
+// import diamond from '../../assets/images/diamondIcon.svg'
 // import { FiArrowUpRight } from 'react-icons/fi'
 import StockWatchlistCard from '../../Components/StockWatchlistCard'
 import avatarplaceholder from '../../assets/images/avatarplaceholder.png'
 import malePlaceholder from '../../assets/images/manPlaceholder.jpg'
 import femalePlaceholder from '../../assets/images/womanPlaceholder.jpg'
+import graphrate_second from '../../assets/images/graph.png'
+import flags from '../../assets/images/racing-flag.png'
+import diamond from '../../assets/images/crownCoin.png'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
-import { lastRaceDataByUser, getTotalPointsUser } from '../../Utils/api'
+import { lastRaceDataByUser, getTotalPointsUser, getWinningRate } from '../../Utils/api'
 import Hero from './Hero'
 
 
@@ -23,6 +26,7 @@ const GuestOrLoggedOutHero = () => {
     const [lastRaceId, setLastRaceId] = useState("")
     const [lastRaceName, setLastRaceName] = useState("Loading...")
     const [totalPoints, setTotalPoints] = useState(0)
+    const [winningRate, setWinningRate] = useState(0)
 
     const iu = localStorage.getItem('userDetails')
     const imageUrl = iu && JSON.parse(atob(iu))
@@ -47,6 +51,10 @@ const GuestOrLoggedOutHero = () => {
         userId && getTotalPointsUser(userId, (data) => {
             console.log('Total Points', data)
             setTotalPoints(data)
+        })
+        userId && getWinningRate(userId, (data) => {
+            console.log('Winning Rate', data)
+            setWinningRate(data)
         })
     }, [userId])
 
@@ -107,19 +115,43 @@ const GuestOrLoggedOutHero = () => {
                 )}
 
                 <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
-                    <div className='h-full'>
-                        <img src={diamond} alt="Diamond Icon" />
-                    </div>
+                <div className='h-full p-[10px] w-[100px]'>
+                            <img src={diamond} alt="" />
+                            
+
+
+
+                   
+                        </div>
                     <div className='flex flex-col gap-[8px]'>
                         <p className='text-[1rem] dark:text-white'>Total Points</p>
-                        <p className='text-[1.5rem] dark:text-white font-poppins'>{totalPoints}</p>
+                        <p className='text-[2rem] dark:text-white font-poppins'>{totalPoints}</p>
                     </div>
+                </div>
+
+                <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
+                    <div className='flex flex-col gap-[8px] dark:text-white'>
+                        <p className='text-[1rem]'>Win Rate</p>
+                        <p className='text-[2rem] font-bold font-poppins'>{(winningRate.rate * 100).toFixed(2)}%</p>
+                                            {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
+                                                <FiArrowUpRight color="green" size={15} />
+                                                <p className="text-green-600">1.8%</p>
+                                            </div> */}
+                    </div>
+                    <div className='h-full w-[100px] p-[10px] z-10'>
+                                                <img src={flags} alt="" />
+                                            </div>
                 </div>
             </div>
 
             <div className='mb-[3.3rem] w-full'>
                 <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Your Watchlist</h2>
-                <div className='w-full flex gap-[10px] justify-start flex-wrap'>
+                <div className='w-[83rem] pb-2 flex gap-[10px] justify-center overflow-x-scroll custom-scrollbar'>
+                    <StockWatchlistCard />
+                    <StockWatchlistCard />
+                    <StockWatchlistCard />
+                    <StockWatchlistCard />
+                    <StockWatchlistCard />
                     <StockWatchlistCard />
                     <StockWatchlistCard />
                     <StockWatchlistCard />

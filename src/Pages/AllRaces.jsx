@@ -16,7 +16,7 @@ const tabs = {
 
 const AllRaces = () => {
     const thisLocation = useLocation()
-    const [activeTab, setActiveTab] = useState(tabs[thisLocation.state.toString()]); // Corrected default tab
+    const [activeTab, setActiveTab] = useState(tabs[thisLocation?.state?.toString()]); // Corrected default tab
     const handleTabClick = (tabName) => {
         setActiveTab(tabName);
     };
