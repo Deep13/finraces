@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import badges from '../../assets/images/badges.png'
-import diamond from '../../assets/images/crownCoin.png'
+import diamond from '../../assets/images/Crowncoin.png'
 import trophy from '../../assets/images/trophy.png'
 import trophy1st from '../../assets/images/1st-prize.png'
 import trophy2nd from '../../assets/images/2nd-place.png'
