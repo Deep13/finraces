@@ -84,7 +84,7 @@ const GuestOrLoggedOutHero = () => {
             </div> */}
             <Hero />
 
-            <div className='max-w-[1400px] rounded-lg mb-[3.3rem] flex gap-[2.8rem] justify-start flex-wrap items-start'>
+            <div className='max-w-[1400px] rounded-lg mb-[3.3rem] flex justify-between flex-wrap items-start'>
                 <div className='rounded-xl overflow-hidden h-[10rem] w-[10rem]'>
                     <img className='w-full h-full object-cover' src={profileImage || (gender && gender == 'female' ? femalePlaceholder : malePlaceholder)} alt="User Profile" />
                 </div>
@@ -146,7 +146,7 @@ const GuestOrLoggedOutHero = () => {
 
             <div className='mb-[3.3rem] w-full'>
                 <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Your Watchlist</h2>
-                <div className='w-[83rem] pb-2 flex gap-[10px] justify-center overflow-x-scroll custom-scrollbar'>
+                <div className='max-w-[1400px] w-[100%] pb-2 flex gap-[10px] justify-center overflow-x-scroll custom-scrollbar'>
                     <StockWatchlistCard />
                     <StockWatchlistCard />
                     <StockWatchlistCard />
