@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Switch } from '@headlessui/react';
 import { getSettings, changeSettings } from '../../Utils/api';
+import { notification } from "antd";
+
+
+
 
 const AlertRow = ({ label, enabled, onToggle }) => {
 
@@ -42,12 +46,25 @@ const UserPreferences = () => {
         });
     }, []);
 
-    const handleToggle = (key) => {
+    const showNotification = (type, label, key) => {
+        console.log(type)
+        let status=settings[key]?"Off":"On"
+        const description=`${label} has been turned ${status}`
+        notification[type]({
+          label,
+          description,
+          placement: "topRight", // You can change placement
+          duration: 3, // Auto-close after 3 seconds
+        });
+      };
+
+    const handleToggle = (key,label) => {
         const updatedSettings = { ...settings, [key]: !settings[key] };
         setSettings(updatedSettings);
         changeSettings({ [key]: updatedSettings[key] }, (data) => {
             console.log(`successfully updated ${key}`, data)
         });
+        showNotification("info",label,key)
     };
 
     // useEffect(() => {
@@ -61,7 +78,7 @@ const UserPreferences = () => {
                     key={alert.key}
                     label={alert.label}
                     enabled={settings[alert.key]}
-                    onToggle={() => handleToggle(alert.key)}
+                    onToggle={() => handleToggle(alert.key,alert.label)}
                 />
             ))}
         </div>

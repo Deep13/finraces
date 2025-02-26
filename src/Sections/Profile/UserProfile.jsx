@@ -100,11 +100,7 @@ const UserProfile = ({
                     <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-[#001B51] dark:border dark:border-[#00387E]">
                         <div className='h-full p-[10px] w-[150px]'>
                             <img src={diamond} alt="" />
-                            
 
-
-
-                   
                         </div>
                         <div className='flex flex-col gap-[8px]'>
                             <p className='text-[1.5rem]'>Total Points</p>

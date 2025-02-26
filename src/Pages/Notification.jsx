@@ -2,6 +2,7 @@ import { useState,useEffect } from 'react';
 import Sidebar from '../Components/Sidebar'
 import { MdArrowBackIos } from "react-icons/md";
 import io from 'socket.io-client'
+import { updateNotification } from '../Utils/api';
 
 const Notification = () => {
     const [activeTab,setActiveTab]=useState("All")
@@ -13,41 +14,7 @@ const Notification = () => {
       ];
 
       const [notifications2, setNotifications] = useState([]);
-
-    //   useEffect(() => {
-    //       // Establish WebSocket connection
-    //       const socket = new WebSocket('https://www.missionatal.com'); // Replace with your WebSocket URL
-  
-    //       // Connection opened
-    //       socket.onopen = () => {
-    //           console.log("WebSocket connection established.");
-    //       };
-  
-    //       // Listen for messages
-    //       socket.onmessage = (event) => {
-    //           console.log("WebSocket message received:", event.data);
-  
-    //           // Parse the data and update notifications
-    //           const newNotification = JSON.parse(event.data); // Assuming the server sends JSON
-    //           setNotifications((prevNotifications) => [newNotification, ...prevNotifications]);
-    //       };
-  
-    //       // Handle errors
-    //       socket.onerror = (error) => {
-    //           console.error("WebSocket error:", error);
-    //       };
-  
-    //       // Connection closed
-    //       socket.onclose = () => {
-    //           console.log("WebSocket connection closed.");
-    //       };
-  
-    //       // Clean up the connection on component unmount
-    //       return () => {
-    //           socket.close();
-    //       };
-    //   }, []);
-
+      const [notificationIds,setNotificationIds] = useState([]);
     useEffect(() => {
         let ud = localStorage.getItem("userDetails");
         let userDetails = ud && JSON.parse(atob(ud));
@@ -81,11 +48,15 @@ const Notification = () => {
         
           socket.on("disconnect", (reason) => {
             console.warn("⚠️ Disconnected from server:", reason);
+            setNotifications([]);
           });
     
         socket.on("notifications", (data) => {
             console.log("Here")
-          setNotifications(JSON.stringify(data, null, 2)); // ✅ Update state properly
+            if(!data.notification.is_read){
+              setNotificationIds((prev)=>[...prev,data.notification.id])
+            }
+            setNotifications((prevNotifications) => [...prevNotifications, data]);
           console.log("Notification from server:", data);
         });
     
@@ -99,6 +70,13 @@ const Notification = () => {
         console.log("Updated notifications:", notifications2);
       }, [notifications2]); // ✅ Log state changes correctly
     
+      useEffect(()=>{
+        console.log(notificationIds)
+       updateNotification(notificationIds,
+        (data)=>{console.log(data)},
+        (error)=>{console.log(error)}
+       )
+      },[notificationIds])
   
   return (
     <div className='w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]'>
@@ -118,21 +96,21 @@ const Notification = () => {
                         </button>
                     ))}
                 </div>
-                <div className='w-[86%] h-[38rem] dark:bg-[#001B51] border dark:border-[#00387E] rounded-xl ml-5 px-5 py-2 overflow-y-auto notificationScrollbar'>
-                    {notifications.map((notification)=>(
-                        <div key={notification.id} className=' w-60%  bg-slate-200 rounded-xl px-[1.5rem] py-[0.5rem] flex flex-col gap-[0.75rem] dark:bg-[#002763] border dark:border-[#00387E] mt-3'>
-                            <h3 className="font-semibold text-md">{notification.title}</h3>
-                            <p className="text-sm text-gray-400 ">{notification.message}</p>
-                        </div>
+                <div className='w-[86%] h-[38rem] dark:bg-[#001B51] border dark:border-[#00387E] rounded-xl flex flex-col gap-2 ml-5 px-5 py-2 overflow-y-auto notificationScrollbar'>
+                    {notifications2?.map((notification)=>(
+                        <div key={notification.notification.id} className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
+                        <p className="text-[1rem] font-medium dark:text-white">{notification.notification.message.split(": ")[1]}</p>
+                        <p className="text-[0.8rem] dark:text-white">{notification.notification.message.split(": ")[0]}</p>
+                    </div>
 
                     ))}
-                    {notifications.map((notification)=>(
+                    {/* {notifications.map((notification)=>(
                         <div key={notification.id} className=' w-60%  bg-slate-200 rounded-xl px-[1.5rem] py-[0.5rem] flex flex-col gap-[0.75rem] dark:bg-[#002763] border dark:border-[#00387E] mt-3'>
                             <h3 className="font-semibold text-">{notification.title}</h3>
                             <p className="text-sm text-gray-400 ">{notification.message}</p>
                         </div>
 
-                    ))}
+                    ))} */}
                     {/* <div className=' w-60%  bg-white rounded-xl px-[1.5rem] py-[0.5rem] flex flex-col gap-[0.75rem] dark:bg-[#002763] dark:border dark:border-[#00387E] mb-3'>
                         <h3 className="font-semibold text-lg">🎉 Congratulations! 🏆</h3>
                         <p className="text-sm text-gray-400 mt-1">You\'ve won the "High Stakes Hustle" race! 🚀</p>

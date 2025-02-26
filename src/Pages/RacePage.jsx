@@ -14,6 +14,8 @@ import bronze_king_crown from '../assets/images/bronze_king_crown.svg'
 import Polygon7 from '../assets/images/Polygon7.svg'
 import Person from '../assets/images/person3.png'
 import Placeholder from '../assets/images/placeholder.png'
+// import malePlaceholder from "../assets/images/manPlaceholder.png";
+// import femalePlaceholder from "../assets/images/womanPlaceholder.png";
 import Person2 from '../assets/images/person23.png'
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
@@ -721,7 +723,7 @@ const RacePage = () => {
                     {/* dashboard  */}
                     <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
                         {/* this is full width container cuz we need the sidebar to remain at correct place */}
-                        <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-[24px] dark:bg-[#000D38] bg-[#EDF7FF]'>
+                        <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-t-[24px] dark:bg-[#000D38] bg-[#EDF7FF]'>
 
                             {/* actual dashboard  */}
                             <div className='flex-1 px-[22px] py-[18px]'>
@@ -785,7 +787,7 @@ const RacePage = () => {
                                         }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result?.['2']?.participants?.['0']?.user_name ? checkSelf(raceResults?.race_result['2']?.participants?.[0]?.user_id, raceResults?.race_result['2']?.participants?.['0']?.user_name) : ''}</p>
                                     </div>
 
-                                    <div className="flex justify-center flex-col items-center relative bottom-8">
+                                    <div className="flex justify-center flex-col items-center relative bottom-8 ">
                                         <div className="mb-[1rem]">
                                             <img src={golden_king_corwn} alt="" />
                                             <div className="flex justify-center items-center">
@@ -845,7 +847,7 @@ const RacePage = () => {
 
                                 <div className="flex-1 flex justify-center items-end gap-[2rem]">
 
-                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
+                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                         {
                                             stockRankList && stockRankList['1'] &&
                                             <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
@@ -865,7 +867,7 @@ const RacePage = () => {
                                             }
                                         </p>}
                                     </div>
-                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
+                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
                                         {
                                             stockRankList &&
                                             <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
@@ -886,7 +888,7 @@ const RacePage = () => {
                                             }
                                         </p>
                                     </div>
-                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#eaf5f5] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
+                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
                                         {
                                             stockRankList && stockRankList['2'] &&
                                             <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
@@ -951,17 +953,7 @@ const RacePage = () => {
                                 </div>
 
 
-                                {/* other stocks rally  */}
-                                <div className="w-full rounded-[20px] py-[13px] px-[16px] sm:max-w-[500px]  md:max-w-[650px] lg:max-w-[800px]">
-                                    <div className="flex justify-between w-full items-center mb-[18px]">
-                                        <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
-                                        {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
-                                    </div>
-
-                                    <StockRankList
-                                        stocksData={stocksDataForRace} // data from api below is data from socket
-                                        stockRankList={stockRankList} />
-                                </div>
+                                
 
                             </div>
 
@@ -1019,6 +1011,17 @@ const RacePage = () => {
                                 </div>}
                             </div>
                         </div>
+                        {/* other stocks rally  */}
+                        <div className="w-full py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
+                                    <div className="flex justify-between w-full items-center mb-[18px]">
+                                        <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
+                                        {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
+                                    </div>
+
+                                    <StockRankList
+                                        stocksData={stocksDataForRace} // data from api below is data from socket
+                                        stockRankList={stockRankList} />
+                                </div>
                     </div>
                 </motion.div>
             </>

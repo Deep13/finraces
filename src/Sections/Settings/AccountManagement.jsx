@@ -91,7 +91,7 @@ const AccountManagement = () => {
                                     wrapperClass=""
                                 />
                             </div>}
-                            <img className='w-full h-full object-cover' src={imageUrl || gender=='female'?femalePlaceholder:malePlaceholder} alt="" />
+                            <img className='w-full h-full object-cover' src={imageUrl==""?(gender=='female'?femalePlaceholder:malePlaceholder):(imageUrl)} alt="" />
                         </div>
 
                         <div className='flex flex-col gap-[12px] flex-1 justify-center items-center'>

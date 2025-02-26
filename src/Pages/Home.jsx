@@ -57,7 +57,7 @@ const Home = () => {
         <Leaderboard />
         <UpcomingRaces />
         <KeyFeatures />
-        <Heading />
+        {/* <Heading /> */}
         <FAQ />
       </div>
     </motion.div>

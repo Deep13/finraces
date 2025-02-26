@@ -5,6 +5,7 @@ import Person from '../../assets/images/person2.png'
 import { getSettings, changeSettings } from '../../Utils/api'
 import { getAllblockedUsers, unblockUser } from '../../Utils/api'
 import { ColorRing } from 'react-loader-spinner'
+import {notification} from 'antd'
 
 const PrivacySettings = () => {
 
@@ -33,14 +34,28 @@ const PrivacySettings = () => {
         })
     }, [])
 
+    const showNotification = (type, label, key) => {
+        console.log(type)
+        let status=key?"On":"Off"
+        const description=`${label} has been turned ${status}`
+        notification[type]({
+          label,
+          description,
+          placement: "topRight", // You can change placement
+          duration: 3, // Auto-close after 3 seconds
+        });
+      };
+
     // Function to handle changes in each setting
-    const handleChangeSettings = (key, value) => {
+    const handleChangeSettings = (key, value,text) => {
         // Update local settings state
         setSettings(prevSettings => ({
             ...prevSettings,
             [key]: value,
         }));
 
+        console.log("val",value,text)
+        showNotification("info",text,value)
         // Send the updated setting to the backend
         changeSettings({ [key]: value }, (data) => {
             console.log(`Updated ${key} setting successfully`, data.data)
@@ -60,7 +75,7 @@ const PrivacySettings = () => {
                     <p>{settings.show_achievements ? 'On' : 'Off'}</p>
                     <Switch
                         checked={settings.show_achievements}
-                        onChange={(newValue) => handleChangeSettings("show_achievements", newValue)}
+                        onChange={(newValue) => handleChangeSettings("show_achievements", newValue,"Show Achievements")}
                         className="group relative data-[checked]:bg-green-600 flex h-4 w-10 cursor-pointer rounded-full dark:bg-[#000924] dark:data-[checked]:bg-green-600 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white border border-black dark:border-none top-1"
                     >
                         <span
@@ -78,7 +93,7 @@ const PrivacySettings = () => {
                     <p>{settings.friend_request_allowed ? 'On' : 'Off'}</p>
                     <Switch
                         checked={settings.friend_request_allowed}
-                        onChange={(newValue) => handleChangeSettings("friend_request_allowed", newValue)}
+                        onChange={(newValue) => handleChangeSettings("friend_request_allowed", newValue,"Friend Requests")}
                         className="group relative data-[checked]:bg-green-600 flex h-4 w-10 cursor-pointer rounded-full dark:bg-[#000924] dark:data-[checked]:bg-green-600 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white border border-black dark:border-none top-1"
                     >
                         <span
@@ -96,7 +111,7 @@ const PrivacySettings = () => {
                     <p>{settings.messages_allowed ? 'On' : 'Off'}</p>
                     <Switch
                         checked={settings.messages_allowed}
-                        onChange={(newValue) => handleChangeSettings("messages_allowed", newValue)}
+                        onChange={(newValue) => handleChangeSettings("messages_allowed", newValue,"Messages")}
                         className="group relative data-[checked]:bg-green-600 flex h-4 w-10 cursor-pointer rounded-full dark:bg-[#000924] dark:data-[checked]:bg-green-600 p-1 transition-colors duration-200 ease-in-out focus:outline-none data-[focus]:outline-1 data-[focus]:outline-white border border-black dark:border-none top-1"
                     >
                         <span

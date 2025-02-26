@@ -7,8 +7,8 @@ const Hero = () => {
   return (
     <div className='max-w-[1400px] dark:bg-gradient-to-l dark:from-[rgba(0,0,0,0.25)] dark:to-[#0a0d2b] h-auto pt-[2.2rem] px-[2.52rem] hero-gradient mb-[3.3rem] grid md:grid-cols-2 gird-cols-1 rounded-lg dark:border dark:border-[#00387E]'>
       <div className='py-[1.76rem] flex-1 flex flex-col col-span-1 order-2 md:order-1'>
-        <h1 className='text-[3.8rem] font-bold leading-[55px] mb-[1rem] dark:text-white'>Simplifying Direct Stock Investing for You</h1>
-        <p className='text-[1.3rem] mb-[1rem] dark:text-white'>Explore community-driven stock ideas and receive expert recommendations from SEC Registered professionals.</p>
+        <h1 className='text-[3.8rem] font-bold leading-[55px] mb-[1rem] dark:text-white'>Finraces: Where Wealth Meets the Finish Line</h1>
+        <p className='text-[1.3rem] mb-[1rem] dark:text-white'>Compete, Predict, and Profit in the Ultimate Financial Race.</p>
         <p className='text-[0.94rem] mb-[1.6rem] pr-[8rem] dark:text-white'>We provide you with the best prices, the highest quality most reliable supors.</p>
         {/* <button onClick={() => {
           window.scrollTo(0,0)

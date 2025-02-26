@@ -1,35 +1,35 @@
 // Data for each FAQ item
 export const accordionData = [
     {
-        title: "What is the purpose of this platform?",
-        content: "This platform is designed to recognize individuals with strong stock market knowledge and prediction skills. It helps build a community of traders who can showcase their expertise and compete in stock performance races."
+        title: "What is Finraces?",
+        content: "Finraces is a gamified platform where you compete by predicting the performance of stocks, crypto, and other financial assets in exciting, real-time races. Test your skills, win rewards, and climb the leaderboards! "
     },
     {
-        title: "How does the stock race work?",
-        content: "Participants predict the price of selected stocks. The stock performance is tracked, and users who make the most accurate predictions are ranked as top performers."
+        title: "How do I start a race? ",
+        content: 'Simply click "Create Race," choose your assets (like stocks or crypto), set predicted ranks and values, pick a start date and time, and launch it. Others can then join your race to compete.'
     },
     {
-        title: "Who can participate in the stock race?",
-        content: "Anyone interested in the stock market can participate, whether they are beginners or experienced traders."
+        title: "Who can join a race? ",
+        content: "Anyone on the platform can join a public race from their dashboard, or you can invite specific friends to private races for a more exclusive challenge."
     },
     {
         title: "How is the winner determined?",
-        content: "Winners are determined based on the accuracy of their stock price predictions compared to the actual stock performance."
+        content: "The winner is the user whose predictions for asset ranks and values most closely match the actual market outcomes when the race ends. Accuracy is your ticket to victory! "
     },
     {
-        title: "Is the platform free to use?",
-        content: "Yes, the platform is free to join and participate in stock races."
+        title: "What can I win? ",
+        content: "Depending on the race, you can earn points, cash, crypto, or exclusive rewards. Prize pools vary by event, so check the details before you join."
     },
     {
-        title: "What benefits do top rankers get?",
-        content: "Top rankers gain recognition in the trading community for their stock market knowledge and prediction accuracy. This could help them build credibility as skilled traders."
+        title: "How long does a race last? ",
+        content: "Race duration is set by the creator—it could be a quick daily sprint or a week-long marathon. You’ll see the timeline before joining. "
     },
     {
-        title: "How often are the stock races held?",
-        content: "Stock races are held regularly. Participants can join new races as soon as they are announced on the platform."
+        title: "Can I track my progress? ",
+        content: "Yes! Your dashboard features customizable leaderboards where you can see your rankings, points, and wins across all your races, keeping you motivated to rise to the top."
     },
-    {
-        title: "Can I track my progress over time?",
-        content: "Yes, the platform allows you to track your prediction performance and compare it with other participants."
-    }
+    // {
+    //     title: "Can I track my progress over time?",
+    //     content: "Yes, the platform allows you to track your prediction performance and compare it with other participants."
+    // }
 ];

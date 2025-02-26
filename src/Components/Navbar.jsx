@@ -23,15 +23,66 @@ import avatarplaceholder from '../assets/images/avatarplaceholder.png'
 import malePlaceholder from '../assets/images/manPlaceholder.jpg'
 import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
 import { getUser } from "../Utils/api";
+import io from 'socket.io-client'
 
-
+  
 const Navbar = () => {
+    const [notifications, setNotifications] = useState([]);
+    useEffect(() => {
+        let ud = localStorage.getItem("userDetails");
+        let userDetails = ud && JSON.parse(atob(ud));
+        let { userId } = userDetails || {}; // Handle possible null values
+        let token = localStorage.getItem("token");
+    
+        if (!userId || !token) {
+          console.error("User ID or token is missing");
+          return; // Stop execution if userId or token is missing
+        }
+    
+        const socket = io("https://www.missionatal.com", {
+          auth: {
+            token: token,
+          },
+          query: { userId },
+          reconnection: true,
+          reconnectionAttempts: Infinity,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
+          transports: ["websocket"],
+        });
 
+        socket.on("connect", () => {
+            console.log("✅ Connected to WebSocket Server");
+          });
+        
+          socket.on("connect_error", (err) => {
+            console.error("❌ Connection Error:", err);
+          });
+        
+          socket.on("disconnect", (reason) => {
+            console.warn("⚠️ Disconnected from server:", reason);
+            setNotifications([]);
+          });
+    
+        socket.on("notifications", (data) => {
+            console.log("Here")
+            setNotifications((prevNotifications) => [...prevNotifications, data]);
+          console.log("Notification from server:", data);
+        });
+    
+        // Cleanup socket connection on component unmount
+        return () => {
+          socket.disconnect();
+        };
+      }, []); // ✅ Empty dependency array means this runs only once when the component mounts
+    
+ 
     const { darkModeEnabled, toggle, createRace, setCreateRace, showLoginForm, setShowLoginForm, profileImage, setProfileImage } = useContext(DarkModeContext)
     const [dropdown, setDropdown] = useState(false)
     const [notificationToggle, setNotificationToggle] = useState(false)
     const [search, setSearch] = useState(false)
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const [unseenNotifications,setUnseenNotifications] = useState([]);
     const token = localStorage.getItem('token')
     const userDetails = localStorage.getItem('userDetails')
     const guestDetails = localStorage.getItem('guest_details')
@@ -90,7 +141,19 @@ const Navbar = () => {
         };
     }, [notificationToggle])
 
+    useEffect(() => {
+        const unseen = notifications.filter(n => !n.notification.is_read); // No unnecessary 'if' statement
+        setUnseenNotifications(unseen);
+    }, [notifications]);
 
+    // useEffect(()=>{
+    //     console.log("useEffect running")
+    //     const unseen=notifications.filter((n)=>{
+    //         if(!n.notification.is_read)return true;
+    //     })
+    //     setUnseenNotifications(unseen)
+    // },[notifications])
+    
     return (
         <>
             {createRace && <CreateRace setCreateRace={setCreateRace} />}
@@ -154,6 +217,11 @@ const Navbar = () => {
                         // setDropdown(false)
                     }} role="button" className={`aspect-square ${notificationToggle && 'dark:bg-opacity-25'} dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px] relative cursor-pointer`}>
                         <FaRegBell color={darkModeEnabled ? 'white' : 'black'} size={18} />
+                        {unseenNotifications.length > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-s font-bold px-2 rounded-full">
+                                {unseenNotifications.length}
+                            </span>
+                        )}
                         <AnimatePresence>
 
                             {notificationToggle && <motion.div
@@ -164,11 +232,19 @@ const Navbar = () => {
                                 transition={{ duration: 0.2, ease: "easeInOut" }}
                                 className={`absolute top-14 -right-4 p-3 dark:bg-[#164286] shalxl dark:shadow-none bg-white w-[23.3rem] rounded-xl flex flex-col gap-3 items-center`}>
                                 {/* place notifications here  */}
-                                <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
+                                {unseenNotifications.map((notification)=>{
+                                    return(
+                                        <div key={notification.notification.id} className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
+                                            <p className="text-[1rem] font-medium dark:text-white">{notification.notification.message.split(": ")[1]}</p>
+                                            <p className="text-[0.8rem] dark:text-white">{notification.notification.message.split(": ")[0]}</p>
+                                        </div>
+                                    )
+                                })}
+                                {/* <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
                                     <p className="text-[1rem] font-medium dark:text-white">🎊 Congratulations 🏆</p>
                                     <p className="text-[0.8rem] dark:text-white">You have won the 'High Stakes Hustle' race! 🚀</p>
-                                </div>
-                                <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
+                                </div> */}
+                                {/* <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
                                     <p className="text-[1rem] font-medium dark:text-white">📩 New Message Received!</p>
                                     <p className="text-[0.8rem] dark:text-white">User : "Hey, congrats on your recent win! Let’s team up for the next race?"</p>
                                 </div>
@@ -179,10 +255,15 @@ const Navbar = () => {
                                 <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
                                     <p className="text-[1rem] font-medium dark:text-white">🌟 Level Up!</p>
                                     <p className="text-[0.8rem] dark:text-white">You’ve reached Level 10  🎮💡</p>
-                                </div>
-                                <button className="w-full bg-slate-300 dark:bg-[#002763] py-2 px-4 rounded-lg flex-shrink-0 font-semibold dark:text-white text-[0.7rem]">
+                                </div> */}
+                                <button onClick={()=>{
+                                    navigate('/notifications')
+                                    setUnseenNotifications([])
+                                    }} className="w-full bg-slate-300 dark:bg-[#002763] py-2 px-4 rounded-lg flex-shrink-0 font-semibold dark:text-white text-[0.7rem]">
                                     Show all
                                 </button>
+                               
+
                             </motion.div>}
                         </AnimatePresence>
                     </div>

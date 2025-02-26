@@ -26,7 +26,7 @@ const RaceWaitingZone = ({
     const det = userDetails || guestDetails
 
     const checkSelf = (id, firstName) => {
-        if (id === det.userId) {
+        if (id === det?.userId) {
             return 'You have'
         }
         return `${firstName} has`

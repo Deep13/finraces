@@ -464,6 +464,28 @@ export const getStocksDataForRace = async (race_id, onSuccess, onError) => {
   }
 };
 
+export const updateNotification=async(notificationIDs,onSuccess,onError)=>{
+  try{
+    const payload={
+      "ids":notificationIDs
+    }
+    const token=localStorage.getItem('token')
+    const response = await fetch(`${GlobalURL}/api/v1/notifications`, {
+      method: "PATCH", // Adjust the method if needed (e.g., POST, PUT, DELETE)
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body:JSON.stringify(payload)
+
+      
+    });
+    console.log(response)
+  }
+  catch(error){
+    onError(error)
+  }
+}
 
 export const getRaceResults = async (race_id, onSuccess, onError,) => {
   try {
