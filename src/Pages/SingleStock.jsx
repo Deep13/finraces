@@ -5,6 +5,9 @@ import facebookLogo from "../assets/images/f.png"
 import { RxMixerVertical } from "react-icons/rx";
 import { useState } from "react";
 import StockTrendChart from "../Components/StockTrendChart";
+import { useContext } from "react";
+import DarkModeProvider, { DarkModeContext } from "../Contexts/DarkModeProvider";
+import { addToWatchList } from "../Utils/api";
 
 const SingleStock = () => {
 
@@ -15,6 +18,8 @@ const SingleStock = () => {
     const [timeOpen, setTimeOpen] = useState(false);
     const [yearsOpen, setYearsOpen] = useState(false);
     const [filterOpen, setFilterOpen] = useState(false);
+    const {selectedStock}=useContext(DarkModeContext)
+
   
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
@@ -23,17 +28,17 @@ const SingleStock = () => {
         <div className="dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex flex-1 flex-col gap-3 rounded-xl border dark:border-[#00387E] dark:text-white">
             <div className="flex justify-between items-center">
                 <div className="flex justify-between p-2 gap-5 rounded-lg">
-                    <img className="rounded-full" src={facebookLogo} alt='stockImg'></img>
+                    <img className="rounded-full w-12 h-12" src={selectedStock?.icon_url} alt='stockImg'></img>
                         <div className="">
-                            <div className=" font-bold">Facebook(FCB)</div>
+                            <div className=" font-bold">{selectedStock?.name} ({selectedStock?.ticker})</div>
                             <div className="flex items-center justify-between gap-3">
-                                <div className="font-semibold">450$</div>
+                                <div className="font-semibold">{selectedStock?.price}$</div>
                                 <div className="flex gap-2 text-red-500">20%(-5%) <IoIosArrowDown/> </div>
                             </div>
                         </div>
                 </div>
 
-                <div className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
+                <div onClick={()=>{addToWatchList(selectedStock?.id,(data)=>{console.log(data),(error)=>{console.log(error)}})}} className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
                     <FaPlus/>
                     Watchlist
                 </div>

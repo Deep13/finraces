@@ -6,6 +6,8 @@ import Person from '../assets/images/person2.png'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { getUser, sendFriendRequest } from '../Utils/api';
 import avatarplaceholder from '../assets/images/avatarplaceholder.png'
+import malePlaceholder from "../assets/images/manPlaceholder.jpg"
+import femalePlaceholder from "../assets/images/womanPlaceholder.jpg"
 import { checkFriendRequestStatus, unfriend, blockUser, unblockUser, getUsersBlockStatus } from '../Utils/api';
 import NoProfilePopup from '../Components/NoProfilePopup';
 
@@ -58,7 +60,7 @@ const IndiUserProfile = () => {
 
 
     useLayoutEffect(() => {
-        if (user_id === selfDetails.userId) {
+        if (user_id === selfDetails?.userId) {
             navigate('/profile')
         }
         window.scrollTo(0, 0);
@@ -103,7 +105,7 @@ const IndiUserProfile = () => {
                         <div className='flex gap-4 flex-wrap'>
                             <div className=' overflow-hidden'>
                                 <div className="relative w-[15rem] overflow-hidden h-[15rem] rounded-lg group">
-                                    <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path || avatarplaceholder} alt="" />
+                                    <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path || userDetails?.gender=="female"?femalePlceholder:malePlaceholder} alt="" />
                                 </div>
                             </div>
                             <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>
@@ -127,26 +129,28 @@ const IndiUserProfile = () => {
                                     </div> */}
                                 </div>
                             </div>
+                            {(selfDetails && selfDetails.userId )&&
                             <div className='flex flex-col gap-3 justify-end'>
-                                {blockStatus && blockStatus === 'unblocked' && <button onClick={() => {
-                                    blockUser1()
-                                    setBlockStatus('blocked') // optimistic update
-                                }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Block</button>}
-                                {blockStatus && blockStatus === 'blocked' && <button onClick={() => {
-                                    blockId.length > 0 && unblockUser1()
-                                    blockId.length > 0 && setBlockStatus('unblocked')
-                                }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Unblock</button>}
-                                {(requestStatus === 'not initiated' || requestStatus === 'unfriend') && !requestSent && <button onClick={() => {
-                                    requestFriend()
-                                    setRequestSent(true)
-                                }} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>}
-                                {requestStatus === 'accepted' && <button onClick={() => {
-                                    console.log('unfriend pressed')
-                                    unfriendUser()
-                                }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Unfriend</button>}
-                                {requestStatus === 'pending' && <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Sent</button>}
-                                <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Message</button>
-                            </div>
+                            {blockStatus && blockStatus === 'unblocked' && <button onClick={() => {
+                                blockUser1()
+                                setBlockStatus('blocked') // optimistic update
+                            }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Block</button>}
+                            {blockStatus && blockStatus === 'blocked' && <button onClick={() => {
+                                blockId.length > 0 && unblockUser1()
+                                blockId.length > 0 && setBlockStatus('unblocked')
+                            }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Unblock</button>}
+                            {(requestStatus === 'not initiated' || requestStatus === 'unfriend') && !requestSent && <button onClick={() => {
+                                requestFriend()
+                                setRequestSent(true)
+                            }} className={'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]'} >Add Friend</button>}
+                            {requestStatus === 'accepted' && <button onClick={() => {
+                                console.log('unfriend pressed')
+                                unfriendUser()
+                            }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Unfriend</button>}
+                            {requestStatus === 'pending' && <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Request Sent</button>}
+                            <button onClick={() => { }} className={'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Message</button>
+                        </div>
+                            }
                         </div>
                         <UserProfile userId={user_id} />
                     </div>

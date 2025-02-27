@@ -9,6 +9,8 @@ import line_beside_medals from '../assets/images/line_beside_medals.png'
 import linedark from '../assets/images/linedark.svg'
 import person2 from '../assets/images/person2.png'
 import placeholder from '../assets/images/placeholder.png'
+import malePlaceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
 import start from '../assets/images/start.svg'
 import startdark from '../assets/images/startdark.svg'
 import finish from '../assets/images/finish.svg'
@@ -410,7 +412,7 @@ const RaceCardHomepage = ({
                         }}
                         className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[0].user_photo ? rankList[0].user_photo.path : placeholder} />
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender=='female'?femalePlaceholder:malePlaceholder} />
                             <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
                         </div>
                         <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[0].user_name}</p>
@@ -418,7 +420,7 @@ const RaceCardHomepage = ({
 
                     <div className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[1].user_photo ? rankList[1].user_photo.path : placeholder} />
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[1].user_photo ? rankList[1].user_photo.path : rankList[0].gender=='female'?femalePlaceholder:malePlaceholder} />
                             <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
                         </div>
                         <p className='relative text-center font-semibold text-[12px] dark:text-white'>{rankList[1].user_name}</p>
@@ -426,7 +428,7 @@ const RaceCardHomepage = ({
 
                     <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[2].user_photo ? rankList[2].user_photo.path : placeholder} />
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[2].user_photo ? rankList[2].user_photo.path : rankList[0].gender=='female'?femalePlaceholder:malePlaceholder} />
                             <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
                         </div>
                         <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p>

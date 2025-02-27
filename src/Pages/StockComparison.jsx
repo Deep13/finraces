@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { MdArrowBackIos } from "react-icons/md";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoIosArrowDown, IoIosCloseCircleOutline  } from "react-icons/io";
@@ -7,6 +7,9 @@ import { FaArrowRight } from "react-icons/fa";
 import Sidebar from "../Components/Sidebar";
 import StockChart from "../Components/StockChart";
 import StockWatchlistCard from "../Components/StockWatchlistCard"
+import {debounceStockSearchj, getStockHistory, searchStock} from "../Utils/api";
+import { debounce } from "lodash";
+
 
 const StockComparison = () => {
   const [graphType, setGraphType] = useState("price");
@@ -32,80 +35,106 @@ const StockComparison = () => {
   const [tableData, setTableData] = useState([]);
   const [datasets,setDatasets] = useState([{},{},{},{}]);
   const [chartData,setChartData] = useState([{},{},{},{}]);
-  useEffect(() => {
-    // Filter out empty values from selectedStocks
-    const validStocks = selectedStocks.filter(stock => stock.trim() !== "");
+  // useEffect(() => {
+  //   // Filter out empty values from selectedStocks
+  //   const validStocks = selectedStocks.filter(stock => stock.trim() !== "");
     
-    if (validStocks.length === 0) {
-      // If no stocks are selected, set tableData to "--"
-      setTableData([
-        { label: "Market Value", values: Array(4).fill("--") },
-        { label: "Enterprise Value", values: Array(4).fill("--") },
-        { label: "Price to Earnings", values: Array(4).fill("--") },
-        { label: "Diluted Earnings", values: Array(4).fill("--") },
-        { label: "Sector", values: Array(4).fill("--") },
-        { label: "Industry", values: Array(4).fill("--") },
-        { label: "CEO", values: Array(4).fill("--") },
-      ]);
-      return;
-    }
+  //   if (validStocks.length === 0) {
+  //     // If no stocks are selected, set tableData to "--"
+  //     setTableData([
+  //       { label: "Market Value", values: Array(4).fill("--") },
+  //       { label: "Enterprise Value", values: Array(4).fill("--") },
+  //       { label: "Price to Earnings", values: Array(4).fill("--") },
+  //       { label: "Diluted Earnings", values: Array(4).fill("--") },
+  //       { label: "Sector", values: Array(4).fill("--") },
+  //       { label: "Industry", values: Array(4).fill("--") },
+  //       { label: "CEO", values: Array(4).fill("--") },
+  //     ]);
+  //     return;
+  //   }
   
-    // Ensure tableData always has 4 values, filling missing ones with "--"
-    const transformedData = [
-      {
-        label: "Market Value",
-        values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.marketValue || "--"),
-      },
-      {
-        label: "Enterprise Value",
-        values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.enterpriseValue || "--"),
-      },
-      {
-        label: "Price to Earnings",
-        values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.priceToEarnings || "--"),
-      },
-      {
-        label: "Diluted Earnings",
-        values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.dilutedEarning || "--"),
-      },
-      {
-        label: "Sector",
-        values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.sector || "--"),
-      },
-      {
-        label: "Industry",
-        values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.industry || "--"),
-      },
-      {
-        label: "CEO",
-        values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.ceo || "--"),
-      },
-    ];
+  //   // Ensure tableData always has 4 values, filling missing ones with "--"
+  //   const transformedData = [
+  //     {
+  //       label: "Market Value",
+  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.marketValue || "--"),
+  //     },
+  //     {
+  //       label: "Enterprise Value",
+  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.enterpriseValue || "--"),
+  //     },
+  //     {
+  //       label: "Price to Earnings",
+  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.priceToEarnings || "--"),
+  //     },
+  //     {
+  //       label: "Diluted Earnings",
+  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.dilutedEarning || "--"),
+  //     },
+  //     {
+  //       label: "Sector",
+  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.sector || "--"),
+  //     },
+  //     {
+  //       label: "Industry",
+  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.industry || "--"),
+  //     },
+  //     {
+  //       label: "CEO",
+  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.ceo || "--"),
+  //     },
+  //   ];
   
-    console.log("tableData", transformedData);
-    setTableData(transformedData);
+  //   console.log("tableData", transformedData);
+  //   setTableData(transformedData);
   
-    // Chart data update
-    setDatasets(validStocks.map((stock, index) => ({
-      label: stock,
-      data: stocksData.stocks[stock]?.data || [], // Ensure safe access
-      borderColor: stockColors[index] || "#000", // Default color
-    })));
-  }, [stocksData, selectedStocks]);
-  
+  //   // Chart data update
+  //   setDatasets(validStocks.map((stock, index) => ({
+  //     label: stock,
+  //     data: stocksData.stocks[stock]?.data || [], // Ensure safe access
+  //     borderColor: stockColors[index] || "#000", // Default color
+  //   })));
+  // }, [stocksData, selectedStocks]);
 
-useEffect(()=>{console.log(selectedStocks)},[selectedStocks])
-  useEffect(() => {
-    fetch("src/stockData.json")
-      .then((response) => response.json()) // Convert response to JSON
-      .then((data) => {
-        console.log(Object.keys(data.stocks)); // Log the fetched data
-        setStocksData(data);
-      })
-      .catch((error) => console.error("Error fetching stock data:", error)); // Handle errors
-  }, []);
+  const fetchAndTransformStockData = async (timeframe, startDate, endDate) => {
+   selectedStocks.map((stock)=>{
+      if(stock==''){
+       return;
+      }
+      else{
+        console.log(stock.ticker,timeframe,startDate,endDate)
+        getStockHistory(stock.ticker,timeframe,startDate,endDate,(data)=>{console.log("data here",data),()=>{}})
+      }
 
 
+   })
+  };
+  
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const fetchStockOptions = useCallback(
+          debounce(async (inputValue) => {
+              if (inputValue.length > 2) {
+                  try {
+                      await debounceStockSearchj(inputValue, (data) => {
+                          console.log("data",data)
+                          setStocksData(data);
+                      }); // Call API to search stocks
+  
+                  } catch (error) {
+                      console.error("Error fetching stocks:", error);
+                     
+                  } finally {
+                     console.log("final")
+                  }
+              } else {
+                  console.log("A")
+              }
+          }, 500), // Debounce to limit API calls
+          []
+      );
+  
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
       <Sidebar />
@@ -154,7 +183,7 @@ useEffect(()=>{console.log(selectedStocks)},[selectedStocks])
             }} 
             key={index}
           >
-             <StockWatchlistCard/>            
+             <StockWatchlistCard data={selectedStocks[index]}/>            
           </div>
         ) : (
           // Show "Add Stock" button if nothing is selected
@@ -178,7 +207,9 @@ useEffect(()=>{console.log(selectedStocks)},[selectedStocks])
         <div className= "flex items-center justify-center">
           <button
             className="py-2 px-3 bg-blue-500 rounded-md"
-           onClick={()=>{setChartData(datasets)}}>
+           onClick={async()=>{
+            const d= await fetchAndTransformStockData('1hour',"2025-02-20", "2025-02-27")
+            setChartData(d)}}>
             Compare Stocks
           </button>
         </div>
@@ -311,7 +342,7 @@ useEffect(()=>{console.log(selectedStocks)},[selectedStocks])
           ))} */}
           {selectedStocks.map((stock,index)=>(
             <div key={index} className="flex justify-center items-center gap-2">
-              <div>{stock}</div>
+              <div>{stock.ticker}</div>
               <div style={{ backgroundColor:stockColors[index] }} className={`w-5 h-5`}></div>
             </div>
           ))}
@@ -389,45 +420,53 @@ useEffect(()=>{console.log(selectedStocks)},[selectedStocks])
 
     {/* Modal Content */}
     <div className="relative z-30 w-[30rem] h-[20rem] rounded-lg p-5 dark:bg-[#001a50] dark:text-white bg-white shadow-lg">
-      <button 
-        onClick={() => {
-          setShowModal(false);
-          setDropdownOpen(false);
-        }}
-        className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full transition">
-        <IoIosCloseCircleOutline size={32}/>
+      {/* Close Button */}
+      <button
+        onClick={() => setShowModal(false)}
+        className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full transition"
+      >
+        <IoIosCloseCircleOutline size={32} />
       </button>
-      
+
+      {/* Title */}
       <div className="text-lg font-bold mb-3">Add stock to compare</div>
 
-      {/* Custom Dropdown */}
-      <div className="relative">
-        <button
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          className="w-full rounded-lg bg-slate-200 px-2 py-3 border border-gray-300 text-left text-black">
-          {(selectedStocks[openedIndex]!=="")? selectedStocks[openedIndex] : "Search for a stock"}
-        </button>
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search for a stock..."
+        value={searchQuery}
+        onChange={(e) => {
+          setSearchQuery(e.target.value);
+          fetchStockOptions(e.target.value);
+        }}
+        className="w-full rounded-lg bg-slate-200 px-2 py-3 border border-gray-300 text-black outline-none"
+      />
 
-        {dropdownOpen && (
-          <div className="absolute text-black top-full left-0 w-full bg-white border border-gray-300 rounded-lg shadow-lg mt-1 z-20 max-h-40 overflow-y-auto">
-            {Object.keys(stocksData.stocks).map((stock) => (
-              <div 
-                key={stock} 
-                className="p-2 hover:bg-gray-200 cursor-pointer"
-                onClick={() => {
-                  setSelectedStocks(prevArr => {
-                    const newArr = [...prevArr]; // Create a new array
-                    newArr[openedIndex] = stock; // Update the value at the specified index
-                    return newArr; // Set the new array in state
-                  });
-                  setDropdownOpen(false);
-                }}>
-                {stock}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {searchQuery?.length>2 &&
+        <div className="dark:bg-[#000A2D] dark:text-white mt-2 rounded-lg p-2 max-h-48 overflow-y-auto notificationScrollbar">
+          {stocksData?.length>0?
+          (
+            <div className="flex flex-col gap-2">
+              {stocksData.map((data)=>(
+                <div onClick={()=>{
+                  selectedStocks[openedIndex]=data
+                  setSearchQuery("");
+                  setShowModal(false);
+                }} className="dark:bg-[#001a50] rounded-lg p-2 cursor-pointer" key={data.id}>
+                  <div className="font-semibold">{data.name}</div>
+                  <div>({data.ticker})</div>
+                </div>
+              )
+                
+              )}
+            </div>
+          ):(
+            <div>No stocks found</div>
+          )  
+        }
+        </div>
+      }
     </div>
   </div>
 )}

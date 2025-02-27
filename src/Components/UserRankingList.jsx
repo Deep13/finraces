@@ -5,7 +5,7 @@ import UserRankingCard from './UserRankingCard'
 const UserRankingList = ({
     rankList
 }) => {
-    // console.log('Ranklist item structure', rankList[0])
+    console.log('Ranklist item structure', rankList[0])
 
 
     return (

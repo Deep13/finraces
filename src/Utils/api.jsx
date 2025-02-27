@@ -1147,10 +1147,10 @@ export const fuzzySearch = async (prefix) => {
 
 
   try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('User is not authenticated. Token is missing.');
-    }
+    // const token = localStorage.getItem('token');
+    // if (!token) {
+    //   throw new Error('User is not authenticated. Token is missing.');
+    // }
 
     const url = `${GlobalURL}/api/v1/public/search/race-users?nameContains=${prefix}`
 
@@ -1787,3 +1787,55 @@ export const getStockProfile = async (
   }
 }
 
+export const getStockHistory = async (ticker, timeframe, startDate, endDate, onSuccess, onError) => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.get(`${GlobalURL}/api/v1/stocks/${ticker}/history`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: { timeframe, startDate, endDate }, // Use `params` for query parameters
+    });
+
+    // Check if request was successful
+    if (response.status === 200) {
+      onSuccess(response.data); // Pass stock history data
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+  } catch (error) {
+    console.error("Error fetching stock history:", error);
+
+    // If error response exists, pass it, otherwise send a generic error
+    onError(error.response ? error.response.data : { message: "An error occurred while fetching stock history." });
+  }
+};
+
+export const addToWatchList = async (stockId, onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem("token");
+    const payload = { stock: stockId };
+    const url = `${GlobalURL}/api/v1/stock-watchlists`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      // If response is not successful, throw an error with response status text
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to add stock to watchlist");
+    }
+
+    const data = await response.json(); // Parse response JSON
+    onSuccess(data); // Call success callback with API response
+  } catch (error) {
+    onError(error.message); // Call error callback with error message
+  }
+};

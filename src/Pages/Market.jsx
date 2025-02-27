@@ -83,14 +83,120 @@ const Market = () => {
                     </div>
                 </div>
                 <div className="flex gap-2 custom-scrollbar overflow-x-scroll flex-nowrap p-2">
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
+                <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
                 </div>
 
             </div>
@@ -281,14 +387,159 @@ const Market = () => {
                     </div>
                 </div>
                 <div className="flex gap-2 custom-scrollbar overflow-x-scroll flex-nowrap p-2">
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
+                <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+
+<StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
                 </div>
 
             </div>
@@ -302,14 +553,158 @@ const Market = () => {
                     </div>
                 </div>
                 <div className="flex gap-2 custom-scrollbar overflow-x-scroll flex-nowrap p-2">
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
-                <StockWatchlistCard className="min-w-[200px] shrink-0" />
+                <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
+                    <StockWatchlistCard
+                    
+                    data={{
+                        "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
+                        "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
+                        "price": 297.46,
+                        "type": "CS",
+                        "primary_exchange": "XNAS",
+                        "market": "stocks",
+                        "currency_name": "usd",
+                        "active": true,
+                        "name": "Tesla, Inc. Common Stock",
+                        "ticker_root": null,
+                        "ticker": "TSLA",
+                        "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
+                        "createdAt": "2025-02-23T11:38:50.932Z",
+                        "updatedAt": "2025-02-23T11:38:50.932Z"
+                    }}
+                    />
                 </div>
 
             </div>

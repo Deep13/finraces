@@ -31,13 +31,13 @@ const UserRankingCard = ({
                 return
             }
             navigate(`/userprofile/${id}`)
-        }} className={`rounded-[10px] cursor-pointer flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md dark:border-[#00387E] dark:bg-[#002763]`}>
-            <div className='flex gap-[15px] items-center'>
-                <div className='w-[2.8rem] aspect-square'>
-                    <img className='w-full h-full object-cover' src={userPhoto} alt="" />
+        }} className={`rounded-[20px] cursor-pointer flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md dark:border-[#00387E] dark:bg-[#002763]`}>
+            <div className='flex gap-[15px] items-center '>
+                <div className='w-[2.8rem] aspect-square rounded-md'>
+                    <img className='w-full h-full object-cover rounded-md' src={userPhoto} alt="" />
                 </div>
                 <div className='flex flex-col items-center'>
-                    <p className='text-[1rem] font-semibold dark:text-white hover:underline'>{actualDetail.userName === userName.split(" ")[0] ? 'You' : userName}</p>
+                    <p className='text-[1rem] font-semibold dark:text-white hover:underline'>{actualDetail?.userName === userName?.split(" ")[0] ? 'You' : userName}</p>
                     {/* <div className='flex gap-[4px] items-baseline'>
                         <div>
                             <img src={vector} alt="" />

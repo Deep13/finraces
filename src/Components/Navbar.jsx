@@ -35,7 +35,7 @@ const Navbar = () => {
         let token = localStorage.getItem("token");
     
         if (!userId || !token) {
-          console.error("User ID or token is missing");
+        //   console.error("User ID or token is missing");
           return; // Stop execution if userId or token is missing
         }
     
@@ -65,9 +65,9 @@ const Navbar = () => {
           });
     
         socket.on("notifications", (data) => {
-            console.log("Here")
+            
             setNotifications((prevNotifications) => [...prevNotifications, data]);
-          console.log("Notification from server:", data);
+        //   console.log("Notification from server:", data);
         });
     
         // Cleanup socket connection on component unmount
@@ -209,10 +209,10 @@ const Navbar = () => {
                         Create Race
                         <IoIosAdd size={20} />
                     </button>
-                    <button className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
+                    {/* <button className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
                         <img src={support} alt="Search" />
-                    </button>
-                    <div onClick={() => {
+                    </button> */}
+                    {userDetails && <div onClick={() => {
                         setNotificationToggle(prev => !prev)
                         // setDropdown(false)
                     }} role="button" className={`aspect-square ${notificationToggle && 'dark:bg-opacity-25'} dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px] relative cursor-pointer`}>
@@ -244,18 +244,9 @@ const Navbar = () => {
                                     <p className="text-[1rem] font-medium dark:text-white">🎊 Congratulations 🏆</p>
                                     <p className="text-[0.8rem] dark:text-white">You have won the 'High Stakes Hustle' race! 🚀</p>
                                 </div> */}
-                                {/* <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
-                                    <p className="text-[1rem] font-medium dark:text-white">📩 New Message Received!</p>
-                                    <p className="text-[0.8rem] dark:text-white">User : "Hey, congrats on your recent win! Let’s team up for the next race?"</p>
-                                </div>
-                                <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
-                                    <p className="text-[1rem] font-medium dark:text-white">🎯 Achievement Unlocked!</p>
-                                    <p className="text-[0.8rem] dark:text-white">The tech sector is on fire! Stocks are up by 15% today. Time to act fast! 🚀</p>
-                                </div>
-                                <div className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
-                                    <p className="text-[1rem] font-medium dark:text-white">🌟 Level Up!</p>
-                                    <p className="text-[0.8rem] dark:text-white">You’ve reached Level 10  🎮💡</p>
-                                </div> */}
+                                {unseenNotifications.length==0&&
+                                    <div className="text-white font-semibold text-lg">No new notifications</div>
+                                }
                                 <button onClick={()=>{
                                     navigate('/notifications')
                                     setUnseenNotifications([])
@@ -266,7 +257,7 @@ const Navbar = () => {
 
                             </motion.div>}
                         </AnimatePresence>
-                    </div>
+                    </div>}
                     {/* <div onClick={() => {
                         let userDetails = localStorage.getItem('userDetails')
                         if (!userDetails) {
@@ -306,6 +297,7 @@ const Navbar = () => {
                                         localStorage.removeItem('refreshToken')
                                         localStorage.removeItem('userDetails')
                                         setUserDetailsObject(null);
+                                        setUnseenNotifications([])
                                         window.dispatchEvent(new Event("storage")); // 🔄 Ensure other tabs update
                                         navigate('/')
                                     }} className="w-full p-3 dark:font-semibold hover:bg-red-500 hover:text-white transition-opacity duration-100 ease-linear dark:text-white">Log out</p>

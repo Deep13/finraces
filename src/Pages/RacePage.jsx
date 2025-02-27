@@ -14,8 +14,8 @@ import bronze_king_crown from '../assets/images/bronze_king_crown.svg'
 import Polygon7 from '../assets/images/Polygon7.svg'
 import Person from '../assets/images/person3.png'
 import Placeholder from '../assets/images/placeholder.png'
-// import malePlaceholder from "../assets/images/manPlaceholder.png";
-// import femalePlaceholder from "../assets/images/womanPlaceholder.png";
+import malePlaceholder from "../assets/images/manPlaceholder.jpg";
+import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
 import Person2 from '../assets/images/person23.png'
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
@@ -208,12 +208,26 @@ const RacePage = () => {
             let obj = {}
             let arr = [Placeholder]
             console.log(window.location.origin)
+            console.log("A",data)
             data?.participants?.map((val, index) => {
+                let imgD;
+                if(val?.photo?.path){
+                    imgD=val?.photo?.path
+                }
+                else{
+                    if(val.gender=="female"){
+                        imgD=femalePlaceholder
+                    }
+                    else{
+                        imgD=malePlaceholder
+                    }
+                }
                 obj[val.id] = {
-                    image: val?.photo?.path,
+                    image: imgD,
                     position: index + 1
                 }
-                arr.push(val?.photo?.path)
+                
+                arr.push(imgD)
             })
             setImageData(arr)
             setImageRank(obj)
@@ -281,7 +295,7 @@ const RacePage = () => {
                 result.push({
                     user_id: participant.user_id,
                     user_name: participant.user_name,
-                    user_photo: participant.user_photo ? participant.user_photo.path : Placeholder,
+                    user_photo: participant.user_photo ? participant.user_photo.path : participant.gender=="female"?femalePlaceholder:malePlaceholder,
                     rank: rank || "-" // Use the key as rank, or "-" if rank is not found
                 });
             });
@@ -292,7 +306,7 @@ const RacePage = () => {
             result.push({
                 user_id: participant.user_id,
                 user_name: participant.user_name,
-                user_photo: participant.user_photo ? participant.user_photo.path : Placeholder,
+                user_photo: participant.user_photo ? participant.user_photo.path : participant.gender=="female"?femalePlaceholder:malePlaceholder,
                 rank: "-"
             });
         });
@@ -1012,7 +1026,7 @@ const RacePage = () => {
                             </div>
                         </div>
                         {/* other stocks rally  */}
-                        <div className="w-full py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
+                        <div className="w-[87.5rem] py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
                                     <div className="flex justify-between w-full items-center mb-[18px]">
                                         <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
                                         {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}

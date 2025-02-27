@@ -13,6 +13,7 @@ const DarkModeProvider = ({ children }) => {
     const [createRace, setCreateRace] = useState(false)
     const [showLoginForm, setShowLoginForm] = useState(false)
     const [profileImage, setProfileImage] = useState('')
+    const [selectedStock,setSelectedStock] = useState({})
 
     useEffect(() => {
         let thisUserData = localStorage.getItem('userDetails')
@@ -31,7 +32,9 @@ const DarkModeProvider = ({ children }) => {
                 showLoginForm,
                 setShowLoginForm,
                 profileImage,
-                setProfileImage
+                setProfileImage,
+                selectedStock,
+                setSelectedStock
             }}>
             {children}
         </DarkModeContext.Provider>
