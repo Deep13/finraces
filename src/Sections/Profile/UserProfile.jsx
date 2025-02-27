@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import badges from '../../assets/images/badges.png'
-import diamond from '../../assets/images/crownCoin.png'
+import diamond from '../../assets/images/Crowncoin.png'
 import trophy from '../../assets/images/trophy.png'
-import trophy1st from '../../assets/images/1st-prize.png' 
-import trophy2nd from '../../assets/images/2nd-place.png' 
-import trophy3rd from '../../assets/images/3rd-place.png' 
+import trophy1st from '../../assets/images/1st-prize.png'
+import trophy2nd from '../../assets/images/2nd-place.png'
+import trophy3rd from '../../assets/images/3rd-place.png'
 import flags from '../../assets/images/racing-flag.png'
-import winRateGraph from  '../../assets/images/winRateGraph.svg'
 import coinsGif from '../../assets/images/coinsGif.gif'
 // import { FiArrowUpRight } from "react-icons/fi";
 import Person from '../../assets/images/person2.png'
@@ -29,7 +28,7 @@ import { ColorRing } from 'react-loader-spinner'
 import GoldenDiamond from "../../Components/GoldDiamond.jsx"
 import { TbSum } from "react-icons/tb";
 
-import { GiPodiumWinner, GiPodiumSecond,GiPodiumThird } from "react-icons/gi";
+import { GiPodiumWinner, GiPodiumSecond, GiPodiumThird } from "react-icons/gi";
 
 
 
@@ -101,6 +100,10 @@ const UserProfile = ({
                         <div className='h-full p-[10px] w-[150px]'>
                             <img src={diamond} alt="" />
 
+
+
+
+
                         </div>
                         <div className='flex flex-col gap-[8px]'>
                             <p className='text-[1.5rem]'>Total Points</p>
@@ -131,28 +134,28 @@ const UserProfile = ({
                         <div className='flex justify-between items-center p-2'>
                             <div className="flex flex-col items-center justify-center gap-2">
                                 <div className='w-12 h-10'>
-                                  <img src={trophy} alt='totalImg'></img>
+                                    <img src={trophy} alt='totalImg'></img>
                                 </div>
                                 <div className='font-semibold text-lg'>Total</div>
                                 <div className='text-[1.2rem]'>{total}</div>
                             </div>
                             <div className="flex flex-col items-center justify-center gap-3">
                                 <div className='w-12 h-10'>
-                                  <img src={trophy1st} alt='totalImg'></img>
+                                    <img src={trophy1st} alt='totalImg'></img>
                                 </div>
                                 <div className='font-semibold text-lg'>1st</div>
                                 <div className='text-[1.2rem]'>{raceCounts[1]}</div>
                             </div>
                             <div className="flex flex-col items-center justify-center gap-3">
                                 <div className='w-12 h-10'>
-                                  <img src={trophy2nd} alt='totalImg'></img>
+                                    <img src={trophy2nd} alt='totalImg'></img>
                                 </div>
                                 <div className='font-semibold text-lg'>2nd</div>
                                 <div className='text-[1.2rem]'>{raceCounts[2]}</div>
                             </div>
                             <div className="flex flex-col items-center justify-center gap-3">
                                 <div className='w-12 h-10'>
-                                  <img src={trophy3rd} alt='3rdImg'></img>
+                                    <img src={trophy3rd} alt='3rdImg'></img>
                                 </div>
                                 <div className='font-semibold text-lg'>3rd</div>
                                 <div className='text-[1.2rem]'>{raceCounts[3]}</div>

@@ -17,11 +17,9 @@ import { useNavigate } from 'react-router-dom'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { io } from 'socket.io-client'
 import RaceTile from '../Components/RaceTile'
-import { getStocksDataForRace } from '../Utils/api'
+import { fetchRaceDataDetailed } from '../Utils/api'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
-import malePlceholder from '../assets/images/manPlaceholder.jpg'
-import femalePlceholder from '../assets/images/womanPlaceholder.jpg'
-
+import { Bar } from "react-chartjs-2";
 
 
 const RaceCardHomepage = ({
@@ -38,14 +36,150 @@ const RaceCardHomepage = ({
     const [participants, setParticipants] = useState([])
     const { darkModeEnabled } = useContext(DarkModeContext)
     const [rankList, setRankList] = useState([{ user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }])
+    const [maxValue, setMaxValue] = useState(120);
+    const [logos, setLogos] = useState({});
     const navigate = useNavigate()
+    const options = {
+        indexAxis: "y",
+        responsive: true,
+        plugins: {
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                enabled: false,
+            },
+        },
+        scales: {
+            x: {
+                max: maxValue,
+                ticks: {
+                    display: false,
+                },
+                grid: {
+                    display: false,
+                },
+            },
+            y: {
+                ticks: {
+                    color: 'white',
+                    display: true,
+                },
+                grid: {
+                    display: true,
+                },
+            },
+        },
+    };
 
+    const customPlugin = {
+        id: "endIcons",
+        afterDatasetsDraw(chart) {
+            const {
+                ctx,
+                scales: { x, y },
+            } = chart;
+
+            chart.data.datasets[0].data.forEach((value, index) => {
+                const yPosition = y.getPixelForValue(index) - 15;
+                const xPosition = x.getPixelForValue(value) - 10;
+
+                const label = chart.data.labels[index];
+                const icon = logos[label];
+                if (icon) {
+                    // Begin path to draw circular clipping area
+                    ctx.save(); // Save the current canvas state
+                    ctx.beginPath();
+                    ctx.arc(
+                        xPosition + 15, // Center X of the icon
+                        yPosition + 15, // Center Y of the icon
+                        15, // Radius of the circle
+                        0, // Start angle
+                        2 * Math.PI // End angle
+                    );
+                    ctx.clip(); // Clip to the circular region
+
+                    // Draw the image inside the clipped region
+                    ctx.drawImage(icon, xPosition, yPosition, 30, 30);
+
+                    // Restore the canvas state to remove clipping
+                    ctx.restore();
+                }
+            });
+        },
+    };
+    // code by deepak
+    const [data, setData] = useState({
+        labels: [], // Initial labels
+        datasets: [
+            {
+                label: "Company Growth",
+                data: [], // Initial data
+                backgroundColor: [], // Colors for bars
+                barThickness: 10,
+            },
+        ],
+    });
     useEffect(() => {
-        getStocksDataForRace(raceId, (data) => {
-            setStocksDataForRace(data)
+        // getStocksDataForRace(raceId, (data) => {
+        //     setStocksDataForRace(data)
+        // })
+        fetchRaceDataDetailed(raceId, (res) => {
+            console.log('racedata detailed:', res);
+            const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
+
+            let stocks = (res.stocks) // this will be the natural position of stocks at first
+            let stockNames = stocks.map(curr => (curr.ticker))
+            let totalTime = calculateDurationInSeconds(res.start_date, res.end_date)
+            let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
+
+            let newLogoAray = {}
+            sortAlphabetically3(stocks).map(stock => {
+                newLogoAray[stock.ticker] = new Image();
+                newLogoAray[stock.ticker].src = stock.icon_url
+            })
+
+            console.log('newLogoAray', newLogoAray)
+            console.log('stockPositions', sortAlphabetically(stockNames))
+            const newLabels = sortAlphabetically(stockNames);
+            const newColors = barColors;
+            const newLogos = {};
+
+            sortAlphabetically3(stocks).forEach((item) => {
+                const image = new Image();
+                image.src = item.icon_url ? item.icon_url : placeholder;
+                newLogos[item.ticker] = image;
+            });
+            setLogos(newLogos);
+
+            let newPosArr = []
+            sortAlphabetically4(stocks)?.forEach((stock, index) => {
+                const relativePosition = ((((stocks.length - index)) * (stocks.length * 10) / stocks.length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
+                newPosArr.push(relativePosition)
+            })
+            console.log('New Positions Array', newPosArr);
+
+
+            let newData = newPosArr
+            setData({
+                labels: newLabels,
+                datasets: [
+                    {
+                        label: "Company Growth",
+                        data: newData, // Initialize with zeros
+                        backgroundColor: newColors,
+                        barThickness: 10,
+                    },
+                ],
+            });
+            setMaxValue(totalTime + (newLabels.length * 10))
+
+            // Code by Deepak End /////
         })
     }, [])
-
+    const sortAlphabetically4 = (stockRankList) => stockRankList?.slice().sort((a, b) =>
+        a.name.localeCompare(b.name)
+    )
     useEffect(() => {
         // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
         const socket = io('https://www.missionatal.com', {
@@ -105,6 +239,31 @@ const RaceCardHomepage = ({
                 setParticipants(getParticipants(data.data['race_result'], data.data['participantsWithNoRank']))
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
+
+                // code by deepak
+                let elapsedTime = calculateDurationInSeconds(data.data.start_date, new Date().toISOString())
+                let newPosArr = []
+                sortAlphabetically2(data.data['stocks'])?.forEach((stock) => {
+                    const relativePosition = ((((data.data['stocks'].length - stock.rank)) * (data.data['stocks'].length * 10) / data.data['stocks'].length) + elapsedTime);    // here 5 is total no. of stocks  *10 is not required here
+                    newPosArr.push(relativePosition)
+                })
+                // console.log('New Positions Array', newPosArr);
+                setData((prevData) => {
+                    const newData = newPosArr;
+
+                    return {
+                        ...prevData,
+                        datasets: [
+                            {
+                                ...prevData.datasets[0],
+                                data: newData,
+                            },
+                        ],
+                    };
+                });
+                // code by deepak
+
+
             }
         });
 
@@ -121,7 +280,28 @@ const RaceCardHomepage = ({
             console.log('Socket disconnected');
         };
     }, [raceId])
+    const sortAlphabetically3 = (stockRankList) => stockRankList?.slice().sort((a, b) =>
+        a.ticker.localeCompare(b.ticker)
+    )
+    const sortAlphabetically2 = (stockRankList) => stockRankList?.slice().sort((a, b) =>
+        a.stock_ticker.localeCompare(b.stock_ticker)
+    )
+    const sortAlphabetically = (stockRankList) => stockRankList?.slice().sort((a, b) =>
+        a.localeCompare(b)
+    )
+    function calculateDurationInSeconds(start_date, end_date) {
+        // Parse the start and end dates
+        const startDate = new Date(start_date);
+        const endDate = new Date(end_date);
 
+        // Calculate the difference in milliseconds
+        const differenceInMs = endDate - startDate;
+
+        // Convert milliseconds to seconds
+        const totalSeconds = Math.floor(differenceInMs / 1000);
+
+        return totalSeconds;
+    }
     const getParticipants = (raceResult, participantsWithNoRank) => {
         // console.log(raceResult, participantsWithNoRank)
         var result = [];
@@ -171,7 +351,6 @@ const RaceCardHomepage = ({
     }
 
 
-    console.log("hi",rankList)
     return (
         <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
             <div className='w-full flex justify-between mb-[14px]'>
@@ -231,11 +410,7 @@ const RaceCardHomepage = ({
                         }}
                         className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                        <img 
-                                className='absolute z-[-1] w-[50%] rounded-[50%]' 
-                                src={rankList?.[1]?.user_photo?.path 
-                                        || (rankList?.[1]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
-                                />
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[0].user_photo ? rankList[0].user_photo.path : placeholder} />
                             <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
                         </div>
                         <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[0].user_name}</p>
@@ -243,11 +418,7 @@ const RaceCardHomepage = ({
 
                     <div className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                        <img 
-                                className='absolute z-[-1] w-[50%] rounded-[50%]' 
-                                src={rankList?.[0]?.user_photo?.path 
-                                        || (rankList?.[0]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
-                                />
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[1].user_photo ? rankList[1].user_photo.path : placeholder} />
                             <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
                         </div>
                         <p className='relative text-center font-semibold text-[12px] dark:text-white'>{rankList[1].user_name}</p>
@@ -255,11 +426,7 @@ const RaceCardHomepage = ({
 
                     <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
                         <div className='relative flex justify-center items-center'>
-                        <img 
-                                className='absolute z-[-1] w-[50%] rounded-[50%] mt-[0.55rem]' 
-                                src={rankList?.[2]?.user_photo?.path 
-                                        || (rankList?.[2]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
-                                />
+                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[2].user_photo ? rankList[2].user_photo.path : placeholder} />
                             <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
                         </div>
                         <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p>
@@ -277,19 +444,21 @@ const RaceCardHomepage = ({
                     </div>
                 </div>
             </div>
-
-            <div className='w-full flex-1 mt-3 relative border border-dashed border-black dark:border-white  bg-[#edf7ff] flex justify-between items-center py-[2rem] dark:bg-[#002864]'>
+            {data.labels.length > 0 && (
+                <Bar data={data} options={options} plugins={[customPlugin]} />
+            )}
+            {/* <div className='w-full flex-1 mt-3 relative border border-dashed border-black dark:border-white  bg-[#edf7ff] flex justify-between items-center py-[2rem] dark:bg-[#002864]'>
                 <div className='bg-[#edf7ff] z-20 relative -left-2 dark:bg-[#002864]'>
                     <img src={darkModeEnabled ? startdark : start} alt="" />
                 </div>
                 <RaceTile
                     stocksData={stocksDataForRace}
                     stockRankList={stockRankList} />
-                {/* <div className="absolute w-full top-1/2 border-dashed border-black border dark:border-white" /> */}
                 <div className='bg-[#edf7ff] z-20 relative -right-2 dark:bg-[#002864]'>
                     <img src={darkModeEnabled ? finishdark : finish} alt="" />
                 </div>
-            </div>
+            </div> */}
+
         </div>
     )
 }

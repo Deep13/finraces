@@ -10,7 +10,7 @@ import malePlaceholder from '../../assets/images/manPlaceholder.jpg'
 import femalePlaceholder from '../../assets/images/womanPlaceholder.jpg'
 import graphrate_second from '../../assets/images/graph.png'
 import flags from '../../assets/images/racing-flag.png'
-import diamond from '../../assets/images/crownCoin.png'
+import diamond from '../../assets/images/Crowncoin.png'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
 import { lastRaceDataByUser, getTotalPointsUser, getWinningRate } from '../../Utils/api'
@@ -32,7 +32,7 @@ const GuestOrLoggedOutHero = () => {
     const imageUrl = iu && JSON.parse(atob(iu))
     const userId = imageUrl && imageUrl?.userId
     const userName = imageUrl && imageUrl?.userName
-    const gender= imageUrl && imageUrl?.gender
+    const gender = imageUrl && imageUrl?.gender
 
     console.log("imageUrl", imageUrl)
 
@@ -82,11 +82,11 @@ const GuestOrLoggedOutHero = () => {
                     <img className='w-full h-full object-cover' src={stonks2} alt="" />
                 </div>
             </div> */}
-            <Hero/>
+            <Hero />
 
-            <div className='max-w-[1400px] rounded-lg mb-[3.3rem] flex gap-[2.8rem] justify-start flex-wrap items-start'>
+            <div className='max-w-[1400px] rounded-lg mb-[3.3rem] flex justify-between flex-wrap items-start'>
                 <div className='rounded-xl overflow-hidden h-[10rem] w-[10rem]'>
-                    <img className='w-full h-full object-cover' src={profileImage ||  (gender && gender=='female'?femalePlaceholder:malePlaceholder)} alt="User Profile" />
+                    <img className='w-full h-full object-cover' src={profileImage || (gender && gender == 'female' ? femalePlaceholder : malePlaceholder)} alt="User Profile" />
                 </div>
 
                 <div onClick={() => {
@@ -115,14 +115,14 @@ const GuestOrLoggedOutHero = () => {
                 )}
 
                 <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
-                <div className='h-full p-[10px] w-[100px]'>
-                            <img src={diamond} alt="" />
-                            
+                    <div className='h-full p-[10px] w-[100px]'>
+                        <img src={diamond} alt="" />
 
 
 
-                   
-                        </div>
+
+
+                    </div>
                     <div className='flex flex-col gap-[8px]'>
                         <p className='text-[1rem] dark:text-white'>Total Points</p>
                         <p className='text-[2rem] dark:text-white font-poppins'>{totalPoints}</p>
@@ -133,20 +133,20 @@ const GuestOrLoggedOutHero = () => {
                     <div className='flex flex-col gap-[8px] dark:text-white'>
                         <p className='text-[1rem]'>Win Rate</p>
                         <p className='text-[2rem] font-bold font-poppins'>{(winningRate.rate * 100).toFixed(2)}%</p>
-                                            {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
+                        {/* <div className='flex font-semibold gap-2 rounded-full border border-green-600 justify-start self-start items-center px-2 py-1'>
                                                 <FiArrowUpRight color="green" size={15} />
                                                 <p className="text-green-600">1.8%</p>
                                             </div> */}
                     </div>
                     <div className='h-full w-[100px] p-[10px] z-10'>
-                                                <img src={flags} alt="" />
-                                            </div>
+                        <img src={flags} alt="" />
+                    </div>
                 </div>
             </div>
 
             <div className='mb-[3.3rem] w-full'>
                 <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Your Watchlist</h2>
-                <div className='w-[83rem] pb-2 flex gap-[10px] justify-center overflow-x-scroll custom-scrollbar'>
+                <div className='max-w-[1400px] w-[100%] pb-2 flex gap-[10px] justify-center overflow-x-scroll custom-scrollbar'>
                     <StockWatchlistCard />
                     <StockWatchlistCard />
                     <StockWatchlistCard />
