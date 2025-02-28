@@ -52,7 +52,7 @@ function App() {
                 <Route path='/learn' element={<Learn/>}/>
                 <Route path='/stockComparison' element={<StockComparison/>}/>
                 <Route path='/market' element={<Market/>}/>
-                <Route path='/stock/:id' element={<SingleStock/>}/>
+                <Route path='/stock/:ticker/:id' element={<SingleStock/>}/>
                 <Route path='/stockTable' element={<StockMarketTable/>}/>
               </Route>
               <Route path="/auth" element={<Auth />} />

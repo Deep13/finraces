@@ -28,6 +28,7 @@ const AllFriends = () => {
       friend?.user?.firstName?.toLowerCase().includes(searchQuery.toLowerCase())
       || friend?.user?.lastName?.toLowerCase().includes(searchQuery.toLowerCase())
     );
+    console.log('friend list',filteredFriends)
     setFilteredFriends(result);
   }, [searchQuery, friends]);
 

@@ -105,7 +105,7 @@ const IndiUserProfile = () => {
                         <div className='flex gap-4 flex-wrap'>
                             <div className=' overflow-hidden'>
                                 <div className="relative w-[15rem] overflow-hidden h-[15rem] rounded-lg group">
-                                    <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path || userDetails?.gender=="female"?femalePlceholder:malePlaceholder} alt="" />
+                                    <img loading="lazy" className="w-full h-full object-cover" src={userDetails?.photo?.path? userDetails?.photo?.path: (userDetails?.gender=="female"?femalePlaceholder:malePlaceholder)} alt="" />
                                 </div>
                             </div>
                             <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-[#001B51] dark:border dark:border-[#00387E]'>

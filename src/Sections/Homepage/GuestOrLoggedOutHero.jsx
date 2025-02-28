@@ -13,7 +13,7 @@ import flags from '../../assets/images/racing-flag.png'
 import diamond from '../../assets/images/Crowncoin.png'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
-import { lastRaceDataByUser, getTotalPointsUser, getWinningRate } from '../../Utils/api'
+import { lastRaceDataByUser, getTotalPointsUser, getWinningRate, getWatchList } from '../../Utils/api'
 import Hero from './Hero'
 
 
@@ -27,6 +27,7 @@ const GuestOrLoggedOutHero = () => {
     const [lastRaceName, setLastRaceName] = useState("Loading...")
     const [totalPoints, setTotalPoints] = useState(0)
     const [winningRate, setWinningRate] = useState(0)
+    const [watchList,setWatchList] = useState([]);
 
     const iu = localStorage.getItem('userDetails')
     const imageUrl = iu && JSON.parse(atob(iu))
@@ -34,7 +35,6 @@ const GuestOrLoggedOutHero = () => {
     const userName = imageUrl && imageUrl?.userName
     const gender = imageUrl && imageUrl?.gender
 
-    console.log("imageUrl", imageUrl)
 
     function capitalize(s) {
         if (s === 'scheduled') return 'Upcoming'
@@ -57,6 +57,15 @@ const GuestOrLoggedOutHero = () => {
             setWinningRate(data)
         })
     }, [userId])
+
+    useEffect(()=>{
+        getWatchList(
+            (data)=>{setWatchList(data.data)
+                console.log("check",data)
+            },
+            (error)=>{console.log("error",error)}
+        )
+    },[])
 
     return (
         <>
@@ -147,7 +156,12 @@ const GuestOrLoggedOutHero = () => {
             <div className='mb-[3.3rem] w-full'>
                 <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Your Watchlist</h2>
                 <div className='w-[83rem] pb-2 flex gap-[7px] overflow-x-scroll custom-scrollbar'>
-                <StockWatchlistCard
+                    {watchList?.map((stockData,index)=>{
+                        return(
+                            <StockWatchlistCard data={stockData} key={index}/>
+                        )
+                    })}
+                {/* <StockWatchlistCard
                     
                     data={{
                         "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
@@ -380,7 +394,7 @@ const GuestOrLoggedOutHero = () => {
                         "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
                         "createdAt": "2025-02-23T11:38:50.932Z",
                         "updatedAt": "2025-02-23T11:38:50.932Z"
-                    }}/> 
+                    }}/>  */}
                     {/* <StockWatchlistCard />
                     <StockWatchlistCard />
                     <StockWatchlistCard />

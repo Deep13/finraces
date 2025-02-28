@@ -31,7 +31,7 @@ const Requests = () => {
                                     id={curr.id}
                                     key={curr.id}
                                     removeRequest={removeRequest}
-                                    image={curr.sender.photo.path}
+                                    image={curr?.sender?.photo?.path}
                                     name={curr.sender.firstName + " " + curr.sender.lastName}
                                     userId={curr.sender.id}
                                 />

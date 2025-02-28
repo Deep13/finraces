@@ -6,9 +6,10 @@ import { RxMixerVertical } from "react-icons/rx";
 import { FaArrowRight } from "react-icons/fa";
 import Sidebar from "../Components/Sidebar";
 import StockChart from "../Components/StockChart";
-import StockWatchlistCard from "../Components/StockWatchlistCard"
-import {debounceStockSearchj, getStockHistory, searchStock} from "../Utils/api";
+import StockComparisonCard from "../Components/StockComparisonCard"
+import {debounceStockSearchj, getStockComparisonData, getStockHistory, searchStock} from "../Utils/api";
 import { debounce } from "lodash";
+import stockData from "../stockData.json"
 
 
 const StockComparison = () => {
@@ -32,7 +33,37 @@ const StockComparison = () => {
 
   const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const stockColors = [ "#00E396","#FEB019","#FF4560","#775DD0"]
-  const [tableData, setTableData] = useState([]);
+  const [tableData, setTableData] = useState([
+    { label: "Avg. Shares", values: Array(4).fill("--") },
+    { label: "Avg. Earning per Share", values: Array(4).fill("--") },
+    { label: "Gross Profit", values: Array(4).fill("--") },
+    { label: "P/E Ratio", values: Array(4).fill("--") },
+    { label: "Diluted Earnings Per Share", values: Array(4).fill("--") },
+    { label: "Net Income Loss", values: Array(4).fill("--") },
+    // { label: "SIC", values: Array(4).fill("--") },
+  ]);
+  const [IncometableData, setIncomeTableData] = useState([
+    { label: "Revenue", values: Array(4).fill("--") },
+    { label: "Operating Expenses", values: Array(4).fill("--") },
+    { label: "Operating Income", values: Array(4).fill("--") },
+    { label: "Research and Development", values: Array(4).fill("--") },
+  
+  ]);
+  const [sheetTableData, setSheetTableData] = useState([
+    { label: "Assets", values: Array(4).fill("--") },
+    { label: "Equity", values: Array(4).fill("--") },
+    { label: "Inventory", values: Array(4).fill("--") },
+    { label: "Liabilities", values: Array(4).fill("--") },
+    { label: "Long-term Debt", values: Array(4).fill("--") },
+  
+  ]);
+  const [cashTableData, setCashTableData] = useState([
+    { label: "Net Cash Flow", values: Array(4).fill("--") },
+    { label: "Financial Activities", values: Array(4).fill("--") },
+    { label: "Investing Activities", values: Array(4).fill("--") },
+    { label: "Operating Activities", values: Array(4).fill("--") },
+  
+  ]);
   const [datasets,setDatasets] = useState([{},{},{},{}]);
   const [chartData,setChartData] = useState([{},{},{},{}]);
   // useEffect(() => {
@@ -41,15 +72,7 @@ const StockComparison = () => {
     
   //   if (validStocks.length === 0) {
   //     // If no stocks are selected, set tableData to "--"
-  //     setTableData([
-  //       { label: "Market Value", values: Array(4).fill("--") },
-  //       { label: "Enterprise Value", values: Array(4).fill("--") },
-  //       { label: "Price to Earnings", values: Array(4).fill("--") },
-  //       { label: "Diluted Earnings", values: Array(4).fill("--") },
-  //       { label: "Sector", values: Array(4).fill("--") },
-  //       { label: "Industry", values: Array(4).fill("--") },
-  //       { label: "CEO", values: Array(4).fill("--") },
-  //     ]);
+     
   //     return;
   //   }
   
@@ -96,18 +119,42 @@ const StockComparison = () => {
   //   })));
   // }, [stocksData, selectedStocks]);
 
+  const processStockData = (stockData) => {
+    const { labels, stocks } = stockData;
+  
+    const stockColors = {
+      NFLX: "#E50914", // Netflix (Red)
+      TSLA: "#CC0000", // Tesla (Dark Red)
+      AAPL: "#A2AAAD", // Apple (Grey)
+      AMZN: "#FF9900", // Amazon (Orange)
+    };
+  
+    const datasets = Object.entries(stocks).map(([symbol, stock]) => ({
+      label: symbol,
+      data: stock.data,
+      borderColor: stockColors[symbol] || "#00E396",
+      backgroundColor: stockColors[symbol] || "#00E396",
+    }));
+  
+    return { labels, datasets };
+  };
+
   const fetchAndTransformStockData = async (timeframe, startDate, endDate) => {
-   selectedStocks.map((stock)=>{
-      if(stock==''){
-       return;
-      }
-      else{
-        console.log(stock.ticker,timeframe,startDate,endDate)
-        getStockHistory(stock.ticker,timeframe,startDate,endDate,(data)=>{console.log("data here",data),()=>{}})
-      }
+  //  selectedStocks.map((stock)=>{
+  //     if(stock==''){
+  //      return;
+  //     }
+  //     else{
+  //       console.log(stock.ticker,timeframe,startDate,endDate)
+  //       getStockHistory(stock.ticker,timeframe,startDate,endDate,(data)=>{console.log("data here",data),()=>{}})
+  //     }
 
 
-   })
+  //  })
+  const {datasets}=processStockData(stockData)
+
+  return datasets
+
   };
   
 
@@ -134,6 +181,63 @@ const StockComparison = () => {
           }, 500), // Debounce to limit API calls
           []
       );
+
+  useEffect(()=>{
+    if(selectedStocks[openedIndex]?.ticker){
+      getStockComparisonData(selectedStocks[openedIndex].ticker,
+        (data)=>{
+          console.log("res",data);
+          setIncomeTableData((prevData)=>{
+            let updatedData=prevData;
+            updatedData[0].values[openedIndex]=data.financials.income_statement.revenues?.value
+            updatedData[1].values[openedIndex]=data.financials.income_statement.operating_expenses?.value
+            updatedData[2].values[openedIndex]=(data.financials.income_statement.operating_income_loss?.value)
+            updatedData[3].values[openedIndex]=(data.financials.income_statement.research_and_development?.value)
+            
+
+            return updatedData;
+          })
+          setTableData((prevData)=>{
+            let updatedData=prevData;
+            updatedData[0].values[openedIndex]=data.financials.income_statement?.basic_average_shares?.value
+            updatedData[1].values[openedIndex]=data.financials.income_statement?.basic_earnings_per_share?.value
+            updatedData[2].values[openedIndex]=(data?.peratio)
+            updatedData[3].values[openedIndex]=(data.financials.income_statement?.diluted_earnings_per_share?.value)
+            updatedData[4].values[openedIndex]=(data.financials.comprehensive_income.comprehensive_income_loss?.value)
+            // updatedData[5].values[openedIndex]=(data?.sic)
+
+            return updatedData;
+          })
+
+          setSheetTableData((prevData)=>{
+            let updatedData=prevData;
+            updatedData[0].values[openedIndex]=data.financials.balance_sheet?.assets?.value
+            updatedData[1].values[openedIndex]=data.financials.balance_sheet?.equity?.value
+            updatedData[2].values[openedIndex]=(data.financials.balance_sheet?.inventory?.value)
+            updatedData[3].values[openedIndex]=(data.financials.balance_sheet?.liabilities?.value)
+            updatedData[4].values[openedIndex]=(data.financials.balance_sheet.long_term_debt?.value)
+
+
+            return updatedData;
+          })
+
+          setCashTableData((prevData)=>{
+            let updatedData=prevData;
+            updatedData[0].values[openedIndex]=data.financials.cash_flow_statement?.net_cash_flow.value
+            updatedData[1].values[openedIndex]=data.financials.cash_flow_statement?.net_cash_flow_from_financing_activities.value
+            updatedData[2].values[openedIndex]=(data.financials.cash_flow_statement?.net_cash_flow_from_investing_activities.value)
+            updatedData[3].values[openedIndex]=(data.financials.cash_flow_statement?.net_cash_flow_from_operating_activities.value)
+            // updatedData[4].values[openedIndex]=(data.financials.cash_flow_statement)
+
+
+            return updatedData;
+          })
+
+        },
+        (error)=>{console.log("er",error)}
+      )
+    }
+  },[selectedStocks])
   
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
@@ -183,7 +287,7 @@ const StockComparison = () => {
             }} 
             key={index}
           >
-             <StockWatchlistCard data={selectedStocks[index]}/>            
+             <StockComparisonCard data={selectedStocks[index]}/>            
           </div>
         ) : (
           // Show "Add Stock" button if nothing is selected
@@ -364,8 +468,8 @@ const StockComparison = () => {
         </div>
 
         <div className="h-auto dark:bg-[#001a50] dark:border-0 border-2 rounded-xl py-2 px-5 mb-7">
-          <div className="font-semibold text-[1.5rem] font-poppins my-5">Price Performance</div>
-          {tableData.map((row, rowIndex) => (
+          <div className="font-semibold text-[1.5rem] font-poppins my-5">Balance Sheet</div>
+          {sheetTableData.map((row, rowIndex) => (
             <div key={rowIndex} className="grid grid-cols-5 gap-4 dark:text-slate-200 py-2">
               <div className="col-span-1 flex justify-start">{row.label}</div>
               {row.values.map((value, colIndex) => (
@@ -378,7 +482,7 @@ const StockComparison = () => {
         </div>
         <div className="h-auto dark:bg-[#001a50] dark:border-0 border-2 rounded-xl py-2 px-5 mb-7">
           <div className="font-semibold text-[1.5rem] font-poppins my-5">Income Statement</div>
-          {tableData.map((row, rowIndex) => (
+          {IncometableData.map((row, rowIndex) => (
             <div key={rowIndex} className="grid grid-cols-5 gap-4 dark:text-slate-200 py-2">
               <div className="col-span-1 flex justify-start">{row.label}</div>
               {row.values.map((value, colIndex) => (
@@ -391,8 +495,8 @@ const StockComparison = () => {
         </div>
 
         <div className="h-auto dark:bg-[#001a50] dark:border-0 border-2 rounded-xl py-2 px-5 mb-7">
-          <div className="font-semibold text-[1.5rem] font-poppins my-5">Margin</div>
-          {tableData.map((row, rowIndex) => (
+          <div className="font-semibold text-[1.5rem] font-poppins my-5">Cash Flow</div>
+          {cashTableData.map((row, rowIndex) => (
             <div key={rowIndex} className="grid grid-cols-5 gap-4 dark:text-slate-200 py-2">
               <div className="col-span-1 flex justify-start">{row.label}</div>
               {row.values.map((value, colIndex) => (
@@ -450,7 +554,11 @@ const StockComparison = () => {
             <div className="flex flex-col gap-2">
               {stocksData.map((data)=>(
                 <div onClick={()=>{
-                  selectedStocks[openedIndex]=data
+                  setSelectedStocks((prevStocks) => {
+                    const updatedStocks = [...prevStocks]; // Create a new array
+                    updatedStocks[openedIndex] = data; // Update the specific index
+                    return updatedStocks; // Set the new state
+                });
                   setSearchQuery("");
                   setShowModal(false);
                 }} className="dark:bg-[#001a50] rounded-lg p-2 cursor-pointer" key={data.id}>

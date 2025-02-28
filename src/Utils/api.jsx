@@ -1775,7 +1775,7 @@ export const getStockProfile = async (
       }
     })
     let result = await response.data
-    // console.log('result success', result)
+    console.log('result success', ticker)
     onSuccess(result)
     // setStocks(result.data)
   } catch (e) {
@@ -1839,3 +1839,48 @@ export const addToWatchList = async (stockId, onSuccess, onError) => {
     onError(error.message); // Call error callback with error message
   }
 };
+
+export const getWatchList=async(onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+
+    const response = await axios.get(`${GlobalURL}/api/v1/stock-watchlists`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      onSuccess(response.data); // Pass stock history data
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+
+  }
+  catch(error){
+    onError(error);
+  }
+}
+
+export const getStockComparisonData=async(ticker,onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+    let url=`${GlobalURL}/api/v1/stocks/${ticker}/financials`
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Check if request was successful
+    if (response.status === 200) {
+      onSuccess(response.data); // Pass stock history data
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+  }
+  catch(error){
+    onError(error);
+  }
+}
