@@ -10,10 +10,11 @@ import StockComparisonCard from "../Components/StockComparisonCard"
 import {debounceStockSearchj, getStockComparisonData, getStockHistory, searchStock} from "../Utils/api";
 import { debounce } from "lodash";
 import stockData from "../stockData.json"
+import CandleChart from "../Components/CandleChart";
 
 
 const StockComparison = () => {
-  const [graphType, setGraphType] = useState("price");
+  const [graphType, setGraphType] = useState("line");
 
   // State for dropdowns
   const [timeRange, setTimeRange] = useState("5M");
@@ -187,51 +188,91 @@ const StockComparison = () => {
       getStockComparisonData(selectedStocks[openedIndex].ticker,
         (data)=>{
           console.log("res",data);
-          setIncomeTableData((prevData)=>{
-            let updatedData=prevData;
-            updatedData[0].values[openedIndex]=data.financials.income_statement.revenues?.value
-            updatedData[1].values[openedIndex]=data.financials.income_statement.operating_expenses?.value
-            updatedData[2].values[openedIndex]=(data.financials.income_statement.operating_income_loss?.value)
-            updatedData[3].values[openedIndex]=(data.financials.income_statement.research_and_development?.value)
+          setIncomeTableData((prevData) => {
+            let updatedData = [...prevData];
+          
+            updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
+            updatedData[0].values[openedIndex] = data.financials.income_statement.revenues?.value ?? "--";
+          
+            updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
+            updatedData[1].values[openedIndex] = data.financials.income_statement.operating_expenses?.value ?? "--";
+          
+            updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
+            updatedData[2].values[openedIndex] = data.financials.income_statement.operating_income_loss?.value ?? "--";
+          
+            updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
+            updatedData[3].values[openedIndex] = data.financials.income_statement.research_and_development?.value ?? "--";
+          
+            return updatedData;
+          });
+          
+          
+          setTableData((prevData) => {
+            let updatedData = [...prevData];
+          
+            updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
+            updatedData[0].values[openedIndex] = data.financials.income_statement?.basic_average_shares?.value ?? "--";
+          
+            updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
+            updatedData[1].values[openedIndex] = data.financials.income_statement?.basic_earnings_per_share?.value ?? "--";
+          
+            updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
+            updatedData[2].values[openedIndex] = data?.peratio ?? "--";
+          
+            updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
+            updatedData[3].values[openedIndex] = data.financials.income_statement?.diluted_earnings_per_share?.value ?? "--";
             
-
+            updatedData[4] = { ...updatedData[4], values: [...updatedData[4].values] };
+            updatedData[4].values[openedIndex] = data.financials.income_statement.diluted_earnings_per_share?.value ?? "--";
+          
+            updatedData[5] = { ...updatedData[5], values: [...updatedData[5].values] };
+            updatedData[5].values[openedIndex] = data.financials.comprehensive_income.comprehensive_income_loss?.value ?? "--";
+          
             return updatedData;
-          })
-          setTableData((prevData)=>{
-            let updatedData=prevData;
-            updatedData[0].values[openedIndex]=data.financials.income_statement?.basic_average_shares?.value
-            updatedData[1].values[openedIndex]=data.financials.income_statement?.basic_earnings_per_share?.value
-            updatedData[2].values[openedIndex]=(data?.peratio)
-            updatedData[3].values[openedIndex]=(data.financials.income_statement?.diluted_earnings_per_share?.value)
-            updatedData[4].values[openedIndex]=(data.financials.comprehensive_income.comprehensive_income_loss?.value)
-            // updatedData[5].values[openedIndex]=(data?.sic)
+          });
+          
 
+          setSheetTableData((prevData) => {
+            let updatedData = [...prevData];
+          
+            updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
+            updatedData[0].values[openedIndex] = data.financials.balance_sheet?.assets?.value ?? "--";
+          
+            updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
+            updatedData[1].values[openedIndex] = data.financials.balance_sheet?.equity?.value ?? "--";
+          
+            updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
+            updatedData[2].values[openedIndex] = data.financials.balance_sheet?.inventory?.value ?? "--";
+          
+            updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
+            updatedData[3].values[openedIndex] = data.financials.balance_sheet?.liabilities?.value ?? "--";
+          
+            updatedData[4] = { ...updatedData[4], values: [...updatedData[4].values] };
+            updatedData[4].values[openedIndex] = data.financials.balance_sheet.long_term_debt?.value ?? "--";
+          
             return updatedData;
-          })
+          });
+          
+          
 
-          setSheetTableData((prevData)=>{
-            let updatedData=prevData;
-            updatedData[0].values[openedIndex]=data.financials.balance_sheet?.assets?.value
-            updatedData[1].values[openedIndex]=data.financials.balance_sheet?.equity?.value
-            updatedData[2].values[openedIndex]=(data.financials.balance_sheet?.inventory?.value)
-            updatedData[3].values[openedIndex]=(data.financials.balance_sheet?.liabilities?.value)
-            updatedData[4].values[openedIndex]=(data.financials.balance_sheet.long_term_debt?.value)
-
-
+          setCashTableData((prevData) => {
+            let updatedData = [...prevData];
+          
+            updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
+            updatedData[0].values[openedIndex] = data.financials.cash_flow_statement?.net_cash_flow?.value ?? "--";
+          
+            updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
+            updatedData[1].values[openedIndex] = data.financials.cash_flow_statement?.net_cash_flow_from_financing_activities?.value ?? "--";
+          
+            updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
+            updatedData[2].values[openedIndex] = data.financials.cash_flow_statement?.net_cash_flow_from_investing_activities?.value ?? "--";
+          
+            updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
+            updatedData[3].values[openedIndex] = data.financials.cash_flow_statement?.net_cash_flow_from_operating_activities?.value ?? "--";
+          
             return updatedData;
-          })
-
-          setCashTableData((prevData)=>{
-            let updatedData=prevData;
-            updatedData[0].values[openedIndex]=data.financials.cash_flow_statement?.net_cash_flow.value
-            updatedData[1].values[openedIndex]=data.financials.cash_flow_statement?.net_cash_flow_from_financing_activities.value
-            updatedData[2].values[openedIndex]=(data.financials.cash_flow_statement?.net_cash_flow_from_investing_activities.value)
-            updatedData[3].values[openedIndex]=(data.financials.cash_flow_statement?.net_cash_flow_from_operating_activities.value)
-            // updatedData[4].values[openedIndex]=(data.financials.cash_flow_statement)
-
-
-            return updatedData;
-          })
+          });
+          
 
         },
         (error)=>{console.log("er",error)}
@@ -257,23 +298,7 @@ const StockComparison = () => {
           <div className="w-[10%]">
             <span>Add Stocks</span>
           </div>
-          {/* <div className="flex  justify-between w-[95%]">
-            {Array(4)
-              .fill()
-              .map((_, index) => (
-                <div
-                onClick={()=>{
-                  setShowModal(true)
-                  setOpenedIndex(index)
-                  }} 
-                  key={index}
-                  className="w-[24%] cursor-pointer dark:text-slate-400 bg-[#e5f4ff] dark:bg-[#001B51] border dark:border-[#00387E] flex flex-col justify-center items-center rounded-lg"
-                >
-                  <IoAddCircleOutline size={32} />
-                  <span>Add Stock</span>
-                </div>
-              ))}
-          </div> */}
+          
           <div className="flex justify-center gap-2 w-[100%]">
     {Array(4)
       .fill()
@@ -324,7 +349,7 @@ const StockComparison = () => {
               Chart
             </span>
             <div className="border dark:border-[#00387E] flex p-2 rounded-sm cursor-pointer">
-              {["price", "market", "candle"].map((type) => (
+              {["line", "area", "candle"].map((type) => (
                 <span
                   key={type}
                   className={`${graphType === type ? "bg-blue-500" : ""} rounded-md px-7`}
@@ -427,7 +452,22 @@ const StockComparison = () => {
         {/* Chart Placeholder */}
         <div className="h-[30rem] w-full bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mb-7">
           <div className="w-full h-full">
-            <StockChart labels={labels} datasets={chartData} />
+            {graphType=='line'&&
+            <StockChart labels={labels} datasets={chartData} />}
+            {graphType=='area'&&
+            <StockChart labels={labels} datasets={chartData} area={true}/>}
+            {graphType=='candle' &&
+            <CandleChart 
+            labels={["Jan", "Feb", "Mar", "Apr"]}
+            candles={[
+              { x: "Jan", y: [100, 120, 90, 110] }, 
+              { x: "Feb", y: [110, 130, 100, 120] },
+              { x: "Mar", y: [120, 140, 110, 130] },
+              { x: "Apr", y: [130, 150, 120, 140] },
+            ]}
+          />
+          
+            }
           </div>
         </div>
 

@@ -19,6 +19,8 @@
     "axios": "^1.7.7",
     "bootstrap-table": "^1.23.5",
     "chart.js": "^4.4.7",
+    "chartjs-chart-financial": "^0.2.1",
+    "chartjs-plugin-zoom": "^2.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.5.1",
