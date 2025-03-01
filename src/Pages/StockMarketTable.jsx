@@ -63,7 +63,7 @@ const StockMarketTable = () => {
         <div className='flex flex-col w-[70rem] gap-5 dark:bg-[#000D38] py-5 md:px-6 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E]  dark:text-white'>
             <div className="flex justify-between items-center ">
                 <div className='font-semibold text-[1.5rem] font-poppins flex flex-row items-center'>
-                    <MdArrowBackIos/>
+                    {/* <MdArrowBackIos/> */}
                     Stock Market
                 </div>
 

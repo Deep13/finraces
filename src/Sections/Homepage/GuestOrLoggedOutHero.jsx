@@ -153,9 +153,9 @@ const GuestOrLoggedOutHero = () => {
                 </div>
             </div>
 
-            <div className='mb-[3.3rem] w-full'>
+            <div className='mb-[3.3rem] w-full flex flex-col justify-center'>
                 <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Your Watchlist</h2>
-                <div className='w-[83rem] pb-2 flex gap-[7px] overflow-x-scroll custom-scrollbar'>
+                <div className='w-[80.5rem] pb-2 flex gap-[7px] overflow-x-scroll custom-scrollbar'>
                     {watchList?.map((stockData,index)=>{
                         return(
                             <StockWatchlistCard data={stockData} key={index}/>

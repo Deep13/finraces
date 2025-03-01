@@ -124,10 +124,10 @@ const StockComparison = () => {
     const { labels, stocks } = stockData;
   
     const stockColors = {
-      NFLX: "#E50914", // Netflix (Red)
-      TSLA: "#CC0000", // Tesla (Dark Red)
-      AAPL: "#A2AAAD", // Apple (Grey)
-      AMZN: "#FF9900", // Amazon (Orange)
+      NFLX: "#00E396", // Netflix (Red)
+      TSLA: "#FEB019", // Tesla (Dark Red)
+      AAPL: "#FF4560", // Apple (Grey)
+      AMZN: "#775DD0", // Amazon (Orange)
     };
   
     const datasets = Object.entries(stocks).map(([symbol, stock]) => ({
@@ -288,7 +288,7 @@ const StockComparison = () => {
         {/* Header */}
         <div>
           <span className="font-semibold text-[1.5rem] font-poppins items-center flex flex-row mb-5">
-            <MdArrowBackIos />
+            {/* <MdArrowBackIos /> */}
             Stock Comparison
           </span>
         </div>

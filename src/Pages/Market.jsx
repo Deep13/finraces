@@ -102,7 +102,7 @@ const Market = () => {
         
         <div className='flex flex-col w-[70rem] gap-2 dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E]  dark:text-white'>
             <span className='font-semibold text-[1.5rem] font-poppins flex flex-row items-center'>
-                <MdArrowBackIos/>
+               
                My Watchlist
             </span>
 

@@ -1884,3 +1884,64 @@ export const getStockComparisonData=async(ticker,onSuccess,onError)=>{
     onError(error);
   }
 }
+
+
+export const getChats=async(onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+    let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
+    console.log("user",userDetails)
+    let url=`${GlobalURL}/api/v1/messages?receiver=${userDetails.userId}`
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Check if request was successful
+    if (response.status === 200) {
+      
+      onSuccess(response.data); // Pass stock history data
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+
+
+  }
+  catch(error){
+    onError(error);
+  }
+}
+
+export const postChats=async(msg,reciever,onSuccess,onError)=>{
+  try{
+    let token = localStorage.getItem("token");
+    const payload = { 
+      content: msg,
+      reciever:reciever
+     };
+    const url = `${GlobalURL}/api/v1/messages`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      // If response is not successful, throw an error with response status text
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to add stock to watchlist");
+    }
+
+    const data = await response.json(); // Parse response JSON
+    onSuccess(data); // Call success callback with API response
+  }
+  catch(error){
+    onError(error);
+  }
+}

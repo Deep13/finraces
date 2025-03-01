@@ -24,7 +24,7 @@ const Sidebar = () => {
         let ud=localStorage.getItem('userDetails');
         switch(nav){
             case "Watchlist":
-                navigate('/market')
+                navigate('/stockComparison')
                 break;
             
             case "My Races":
@@ -58,7 +58,7 @@ const Sidebar = () => {
                     <img src={darkModeEnabled ? compassdark : compass} alt="discover" />
                     Discover
                 </button>
-                <button onClick={()=>navigate('/stockTable')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
+                <button onClick={()=>navigate('/market')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
                     <img src={darkModeEnabled ? statsdark : stats} alt="stocks" />
                     Stocks
                 </button>
@@ -80,7 +80,7 @@ const Sidebar = () => {
                 </button>
                 <button onClick={()=>handleNavigation("Watchlist")} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
                     <img src={darkModeEnabled ? forwarddark : forward} alt="my watchlist" />
-                    My Watchlist
+                   Compare Stocks
                 </button>
             </div>
         </div>
