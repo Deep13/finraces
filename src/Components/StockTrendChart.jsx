@@ -13,32 +13,42 @@ import {
 // Register Chart.js components
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Filler);
 
-const StockTrendChart = ({ stockData=[
-  { "date": "2025-02-27 00:00:00", "close": 281.95 },
-  { "date": "2025-02-26 00:00:00", "close": 290.8 },
-  { "date": "2025-02-25 00:00:00", "close": 302.8 },
-  { "date": "2025-02-24 00:00:00", "close": 330.53 },
-  { "date": "2025-02-21 00:00:00", "close": 337.8 },
-  { "date": "2025-02-20 00:00:00", "close": 354.4 },
-] }) => {
-  if (!stockData || stockData.length === 0) {
+const generateStaticData = (filter) => {
+  const now = new Date();
+  let labels = [], data = [];
+
+  if (filter === "1D") {
+    labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
+    data = labels.map(() => 100 + Math.random() * 5);
+  } else {
+    const days = { "1W": 7, "1M": 30, "3M": 90, "6M": 180 }[filter] || 30;
+    labels = Array.from({ length: days + 1 }, (_, i) => {
+      let date = new Date();
+      date.setDate(now.getDate() - (days - i));
+      return date.toISOString().split("T")[0];
+    });
+    data = labels.map(() => 100 + Math.random() * 10);
+  }
+
+  return labels.map((date, index) => ({ date, close: data[index] }));
+};
+
+const StockTrendChart = ({ stockData = [], static: isStatic = false, filter = "1M" }) => {
+  const processedStockData = isStatic ? generateStaticData(filter) : stockData;
+
+  if (!processedStockData || processedStockData.length === 0) {
     return <p>No stock data available</p>;
   }
 
-  // Extract dates (formatted as Day and Date) and close prices
-  const labels = stockData.map((item) => {
-    const date = new Date(item.date);
-    return date.toLocaleDateString("en-US", { weekday: "short", day: "numeric" });
-  });
-
-  const closePrices = stockData.map((item) => item.close);
+  const labels = processedStockData.map((item) => item.date.split(" ")[0]);
+  const closePrices = processedStockData.map((item) => item.close);
 
   const data = {
-    labels: labels.reverse(), // Reverse to get oldest to newest order
+    labels,
     datasets: [
       {
         label: "Stock Trend",
-        data: closePrices.reverse(), // Reverse to match the labels
+        data: closePrices,
         borderColor: "#42A5F5",
         backgroundColor: (context) => {
           const ctx = context.chart.ctx;
@@ -52,7 +62,7 @@ const StockTrendChart = ({ stockData=[
         pointBackgroundColor: "#42A5F5",
         pointBorderColor: "#fff",
         fill: true,
-        tension: 0.4, // Smooth curve
+        tension: 0.4,
       },
     ],
   };

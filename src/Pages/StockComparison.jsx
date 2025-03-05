@@ -17,7 +17,7 @@ const StockComparison = () => {
   const [graphType, setGraphType] = useState("line");
 
   // State for dropdowns
-  const [timeRange, setTimeRange] = useState("5M");
+  const [timeRange, setTimeRange] = useState("1M");
   const [years, setYears] = useState("Years");
   const [filter, setFilter] = useState("Filters");
 
@@ -32,7 +32,7 @@ const StockComparison = () => {
 
   const [showModal,setShowModal] = useState(false);
 
-  const labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const [labels, setLabels] = useState([]);
   const stockColors = [ "#00E396","#FEB019","#FF4560","#775DD0"]
   const [tableData, setTableData] = useState([
     { label: "Avg. Shares", values: Array(4).fill("--") },
@@ -65,101 +65,90 @@ const StockComparison = () => {
     { label: "Operating Activities", values: Array(4).fill("--") },
   
   ]);
-  const [datasets,setDatasets] = useState([{},{},{},{}]);
+  // const [datasets,setDatasets] = useState([{},{},{},{}]);
   const [chartData,setChartData] = useState([{},{},{},{}]);
-  // useEffect(() => {
-  //   // Filter out empty values from selectedStocks
-  //   const validStocks = selectedStocks.filter(stock => stock.trim() !== "");
-    
-  //   if (validStocks.length === 0) {
-  //     // If no stocks are selected, set tableData to "--"
-     
-  //     return;
-  //   }
+  const [candleData,setCandleData] = useState([{},{},{},{}]);
   
-  //   // Ensure tableData always has 4 values, filling missing ones with "--"
-  //   const transformedData = [
-  //     {
-  //       label: "Market Value",
-  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.marketValue || "--"),
-  //     },
-  //     {
-  //       label: "Enterprise Value",
-  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.enterpriseValue || "--"),
-  //     },
-  //     {
-  //       label: "Price to Earnings",
-  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.priceToEarnings || "--"),
-  //     },
-  //     {
-  //       label: "Diluted Earnings",
-  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.dilutedEarning || "--"),
-  //     },
-  //     {
-  //       label: "Sector",
-  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.sector || "--"),
-  //     },
-  //     {
-  //       label: "Industry",
-  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.industry || "--"),
-  //     },
-  //     {
-  //       label: "CEO",
-  //       values: Array(4).fill("--").map((_, i) => stocksData.stocks[validStocks[i]]?.ceo || "--"),
-  //     },
-  //   ];
+  // const processStockData = (stockData) => {
+  //   const { labels, stocks } = stockData;
   
-  //   console.log("tableData", transformedData);
-  //   setTableData(transformedData);
+  //   const stockColors = {
+  //     NFLX: "#00E396", // Netflix (Red)
+  //     TSLA: "#FEB019", // Tesla (Dark Red)
+  //     AAPL: "#FF4560", // Apple (Grey)
+  //     AMZN: "#775DD0", // Amazon (Orange)
+  //   };
   
-  //   // Chart data update
-  //   setDatasets(validStocks.map((stock, index) => ({
-  //     label: stock,
-  //     data: stocksData.stocks[stock]?.data || [], // Ensure safe access
-  //     borderColor: stockColors[index] || "#000", // Default color
-  //   })));
-  // }, [stocksData, selectedStocks]);
-
-  const processStockData = (stockData) => {
-    const { labels, stocks } = stockData;
+  //   const datasets = Object.entries(stocks).map(([symbol, stock]) => ({
+  //     label: symbol,
+  //     data: stock.data,
+  //     borderColor: stockColors[symbol] || "#00E396",
+  //     backgroundColor: stockColors[symbol] || "#00E396",
+  //   }));
   
-    const stockColors = {
-      NFLX: "#00E396", // Netflix (Red)
-      TSLA: "#FEB019", // Tesla (Dark Red)
-      AAPL: "#FF4560", // Apple (Grey)
-      AMZN: "#775DD0", // Amazon (Orange)
-    };
-  
-    const datasets = Object.entries(stocks).map(([symbol, stock]) => ({
-      label: symbol,
-      data: stock.data,
-      borderColor: stockColors[symbol] || "#00E396",
-      backgroundColor: stockColors[symbol] || "#00E396",
+  //   return { labels, datasets };
+  // };
+  const formatCandleData = (stockHistory) => {
+    return stockHistory.map((entry) => ({
+      x: entry.date, // Ensure date is formatted correctly
+      y: [entry.open, entry.high, entry.low, entry.close], // OHLC format
     }));
-  
-    return { labels, datasets };
   };
-
-  const fetchAndTransformStockData = async (timeframe, startDate, endDate) => {
-  //  selectedStocks.map((stock)=>{
-  //     if(stock==''){
-  //      return;
-  //     }
-  //     else{
-  //       console.log(stock.ticker,timeframe,startDate,endDate)
-  //       getStockHistory(stock.ticker,timeframe,startDate,endDate,(data)=>{console.log("data here",data),()=>{}})
-  //     }
-
-
-  //  })
-  const {datasets}=processStockData(stockData)
-
-  return datasets
-
-  };
+  const fetchStockDataForChart = () => {
+    let allPromises = selectedStocks.map((stock, index) => {
+      return new Promise((resolve, reject) => {
+        getStockHistory(
+          stock.ticker,
+          "1day",
+          "2024-12-01", // Replace with your dynamic `fromDate`
+          "2025-02-28", // Replace with your dynamic `toDate`
+          (data) => {
+            resolve({ ticker: stock.ticker, data });
+          },
+          (error) => reject(error)
+        );
+      });
+    });
   
+    Promise.all(allPromises)
+      .then((results) => {
+        let datasets = [];
+        let dateLabels = [];
+        let candleDatasets=[];
+  
+        results.forEach((stockData, index) => {
+          let stockPrices = stockData.data.map((entry) => entry.close);
+          let stockDates = stockData.data.map((entry) => entry.date.split(" ")[0]);
+  
+          // Use the first stock's dates as labels
+          if (index === 0) {
+            setLabels(stockDates.reverse()); // Reverse to get chronological order
+          }
+  
+          datasets.push({
+            label: stockData.ticker,
+            data: stockPrices.reverse(),
+            borderColor: stockColors[index % stockColors.length], // Cycle through stockColors
+            backgroundColor: stockColors[index % stockColors.length] + "33", // Add transparency for area chart
+            fill: graphType === "area",
+          });
+
+          candleDatasets.push({
+            label: stockData.ticker,
+            data: formatCandleData(stockData.data), // Convert to OHLC format
+          });
+        });
+
+        console.log("candle",candleDatasets)
+  
+        setChartData(datasets);
+        setCandleData(candleDatasets);
+      })
+      .catch((error) => console.log("Error fetching stock data:", error));
+  };
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [numVal,setNum]=useState(0);
 
   const fetchStockOptions = useCallback(
           debounce(async (inputValue) => {
@@ -184,101 +173,123 @@ const StockComparison = () => {
       );
 
   useEffect(()=>{
-    if(selectedStocks[openedIndex]?.ticker){
-      getStockComparisonData(selectedStocks[openedIndex].ticker,
-        (data)=>{
-          console.log("res",data);
-          setIncomeTableData((prevData) => {
-            let updatedData = [...prevData];
-          
-            updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
-            updatedData[0].values[openedIndex] = data.financials.income_statement.revenues?.value ?? "--";
-          
-            updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
-            updatedData[1].values[openedIndex] = data.financials.income_statement.operating_expenses?.value ?? "--";
-          
-            updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
-            updatedData[2].values[openedIndex] = data.financials.income_statement.operating_income_loss?.value ?? "--";
-          
-            updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
-            updatedData[3].values[openedIndex] = data.financials.income_statement.research_and_development?.value ?? "--";
-          
-            return updatedData;
-          });
-          
-          
-          setTableData((prevData) => {
-            let updatedData = [...prevData];
-          
-            updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
-            updatedData[0].values[openedIndex] = data.financials.income_statement?.basic_average_shares?.value ?? "--";
-          
-            updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
-            updatedData[1].values[openedIndex] = data.financials.income_statement?.basic_earnings_per_share?.value ?? "--";
-          
-            updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
-            updatedData[2].values[openedIndex] = data?.peratio ?? "--";
-          
-            updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
-            updatedData[3].values[openedIndex] = data.financials.income_statement?.diluted_earnings_per_share?.value ?? "--";
-            
-            updatedData[4] = { ...updatedData[4], values: [...updatedData[4].values] };
-            updatedData[4].values[openedIndex] = data.financials.income_statement.diluted_earnings_per_share?.value ?? "--";
-          
-            updatedData[5] = { ...updatedData[5], values: [...updatedData[5].values] };
-            updatedData[5].values[openedIndex] = data.financials.comprehensive_income.comprehensive_income_loss?.value ?? "--";
-          
-            return updatedData;
-          });
-          
-
-          setSheetTableData((prevData) => {
-            let updatedData = [...prevData];
-          
-            updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
-            updatedData[0].values[openedIndex] = data.financials.balance_sheet?.assets?.value ?? "--";
-          
-            updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
-            updatedData[1].values[openedIndex] = data.financials.balance_sheet?.equity?.value ?? "--";
-          
-            updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
-            updatedData[2].values[openedIndex] = data.financials.balance_sheet?.inventory?.value ?? "--";
-          
-            updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
-            updatedData[3].values[openedIndex] = data.financials.balance_sheet?.liabilities?.value ?? "--";
-          
-            updatedData[4] = { ...updatedData[4], values: [...updatedData[4].values] };
-            updatedData[4].values[openedIndex] = data.financials.balance_sheet.long_term_debt?.value ?? "--";
-          
-            return updatedData;
-          });
-          
-          
-
-          setCashTableData((prevData) => {
-            let updatedData = [...prevData];
-          
-            updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
-            updatedData[0].values[openedIndex] = data.financials.cash_flow_statement?.net_cash_flow?.value ?? "--";
-          
-            updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
-            updatedData[1].values[openedIndex] = data.financials.cash_flow_statement?.net_cash_flow_from_financing_activities?.value ?? "--";
-          
-            updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
-            updatedData[2].values[openedIndex] = data.financials.cash_flow_statement?.net_cash_flow_from_investing_activities?.value ?? "--";
-          
-            updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
-            updatedData[3].values[openedIndex] = data.financials.cash_flow_statement?.net_cash_flow_from_operating_activities?.value ?? "--";
-          
-            return updatedData;
-          });
-          
-
-        },
-        (error)=>{console.log("er",error)}
-      )
-    }
+    
+    
+    
   },[selectedStocks])
+
+  const buttonClick=()=>{
+    let count=0;
+    for(let i=0;i<4;i++){
+      //fill the tables 
+      
+      if(selectedStocks[i]?.ticker){
+        count=count+1;
+        getStockComparisonData(selectedStocks[i].ticker,
+          (data)=>{
+            console.log("res",data);
+            setIncomeTableData((prevData) => {
+              let updatedData = [...prevData];
+            
+              updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
+              updatedData[0].values[i] = data.financials.income_statement.revenues?.value ?? "--";
+            
+              updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
+              updatedData[1].values[i] = data.financials.income_statement.operating_expenses?.value ?? "--";
+            
+              updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
+              updatedData[2].values[i] = data.financials.income_statement.operating_income_loss?.value ?? "--";
+            
+              updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
+              updatedData[3].values[i] = data.financials.income_statement.research_and_development?.value ?? "--";
+            
+              return updatedData;
+            });
+            
+            
+            setTableData((prevData) => {
+              let updatedData = [...prevData];
+            
+              updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
+              updatedData[0].values[i] = data.financials.income_statement?.basic_average_shares?.value ?? "--";
+            
+              updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
+              updatedData[1].values[i] = data.financials.income_statement?.basic_earnings_per_share?.value ?? "--";
+            
+              updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
+              updatedData[2].values[i] = data?.peratio ?? "--";
+            
+              updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
+              updatedData[3].values[i] = data.financials.income_statement?.diluted_earnings_per_share?.value ?? "--";
+              
+              updatedData[4] = { ...updatedData[4], values: [...updatedData[4].values] };
+              updatedData[4].values[i] = data.financials.income_statement.diluted_earnings_per_share?.value ?? "--";
+            
+              updatedData[5] = { ...updatedData[5], values: [...updatedData[5].values] };
+              updatedData[5].values[i] = data.financials.comprehensive_income.comprehensive_income_loss?.value ?? "--";
+            
+              return updatedData;
+            });
+            
+  
+            setSheetTableData((prevData) => {
+              let updatedData = [...prevData];
+            
+              updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
+              updatedData[0].values[i] = data.financials.balance_sheet?.assets?.value ?? "--";
+            
+              updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
+              updatedData[1].values[i] = data.financials.balance_sheet?.equity?.value ?? "--";
+            
+              updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
+              updatedData[2].values[i] = data.financials.balance_sheet?.inventory?.value ?? "--";
+            
+              updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
+              updatedData[3].values[i] = data.financials.balance_sheet?.liabilities?.value ?? "--";
+            
+              updatedData[4] = { ...updatedData[4], values: [...updatedData[4].values] };
+              updatedData[4].values[i] = data.financials.balance_sheet.long_term_debt?.value ?? "--";
+            
+              return updatedData;
+            });
+            
+            
+  
+            setCashTableData((prevData) => {
+              let updatedData = [...prevData];
+            
+              updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
+              updatedData[0].values[i] = data.financials.cash_flow_statement?.net_cash_flow?.value ?? "--";
+            
+              updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
+              updatedData[1].values[i] = data.financials.cash_flow_statement?.net_cash_flow_from_financing_activities?.value ?? "--";
+            
+              updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
+              updatedData[2].values[i] = data.financials.cash_flow_statement?.net_cash_flow_from_investing_activities?.value ?? "--";
+            
+              updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
+              updatedData[3].values[i] = data.financials.cash_flow_statement?.net_cash_flow_from_operating_activities?.value ?? "--";
+            
+              return updatedData;
+            });
+            
+  
+          },
+          (error)=>{console.log("er",error)}
+        )
+      }
+      
+
+      //chart Data
+
+    }
+    setNum(count);
+      console.log(count);
+
+    //make graphs
+    fetchStockDataForChart()
+
+  }
   
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
@@ -295,9 +306,9 @@ const StockComparison = () => {
 
         <div 
           className=" bg-[#e4eaf0] dark:bg-[#001a50] flex rounded-xl py-2 px-2 mb-7">
-          <div className="w-[10%]">
+          {/* <div className="w-[10%]">
             <span>Add Stocks</span>
-          </div>
+          </div> */}
           
           <div className="flex justify-center gap-2 w-[100%]">
     {Array(4)
@@ -336,9 +347,7 @@ const StockComparison = () => {
         <div className= "flex items-center justify-center">
           <button
             className="py-2 px-3 bg-blue-500 rounded-md"
-           onClick={async()=>{
-            const d= await fetchAndTransformStockData('1hour',"2025-02-20", "2025-02-27")
-            setChartData(d)}}>
+           onClick={()=>buttonClick()}>
             Compare Stocks
           </button>
         </div>
@@ -349,7 +358,7 @@ const StockComparison = () => {
               Chart
             </span>
             <div className="border dark:border-[#00387E] flex p-2 rounded-sm cursor-pointer">
-              {["line", "area", "candle"].map((type) => (
+              {["line", "area"].map((type) => (
                 <span
                   key={type}
                   className={`${graphType === type ? "bg-blue-500" : ""} rounded-md px-7`}
@@ -378,7 +387,7 @@ const StockComparison = () => {
                 </button>
                 {timeOpen && (
                   <div className="absolute top-full left-0 w-full bg-white dark:bg-[#00387E] shadow-lg rounded-md mt-1 z-10">
-                    {["1M", "3M", "6M", "1Y", "5Y"].map((option) => (
+                    {["1D", "1W", "1M", "3M", "6M"].map((option) => (
                       <div
                         key={option}
                         className="p-2 py-4 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer text-center"
@@ -395,7 +404,7 @@ const StockComparison = () => {
               </div>
 
               {/* Years Dropdown */}
-              <div className="relative">
+              {/* <div className="relative">
                 <button
                   className="flex py-2 items-center justify-between gap-2 pb-1 rounded-md px-3 border dark:border-[#00387E] cursor-pointer"
                   onClick={() => setYearsOpen(!yearsOpen)}
@@ -418,10 +427,10 @@ const StockComparison = () => {
                     ))}
                   </div>
                 )}
-              </div>
+              </div> */}
 
               {/* Filters Dropdown */}
-              <div className="relative">
+              {/* <div className="relative">
                 <button
                   className="flex py-2 items-center justify-between gap-2 pb-1 rounded-md px-3 border dark:border-[#00387E] cursor-pointer"
                   onClick={() => setFilterOpen(!filterOpen)}
@@ -444,7 +453,7 @@ const StockComparison = () => {
                     ))}
                   </div>
                 )}
-              </div>
+              </div> */}
 
             </div>
           </div>
@@ -453,21 +462,16 @@ const StockComparison = () => {
         <div className="h-[30rem] w-full bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mb-7">
           <div className="w-full h-full">
             {graphType=='line'&&
-            <StockChart labels={labels} datasets={chartData} />}
+            <StockChart labels={labels} datasets={chartData} staticData={true} filter={timeRange} num={numVal} />}
             {graphType=='area'&&
-            <StockChart labels={labels} datasets={chartData} area={true}/>}
-            {graphType=='candle' &&
+            <StockChart labels={labels} datasets={chartData} area={true} staticData={true} filter={timeRange } num={numVal}/>}
+            {/* {graphType=='candle' &&
             <CandleChart 
-            labels={["Jan", "Feb", "Mar", "Apr"]}
-            candles={[
-              { x: "Jan", y: [100, 120, 90, 110] }, 
-              { x: "Feb", y: [110, 130, 100, 120] },
-              { x: "Mar", y: [120, 140, 110, 130] },
-              { x: "Apr", y: [130, 150, 120, 140] },
-            ]}
+            labels={labels}
+            candles={candleData}
           />
           
-            }
+            } */}
           </div>
         </div>
 

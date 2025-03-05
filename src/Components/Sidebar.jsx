@@ -15,6 +15,7 @@ import recent from '../assets/icons/sidebar/recent.svg'
 import recentdark from '../assets/icons/sidebar/recentdark.svg'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
+import { MdCompare } from "react-icons/md";
 
 const Sidebar = () => {
     const { darkModeEnabled,setShowLoginForm } = useContext(DarkModeContext)
@@ -79,7 +80,8 @@ const Sidebar = () => {
                     My Races
                 </button>
                 <button onClick={()=>handleNavigation("Watchlist")} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    <img src={darkModeEnabled ? forwarddark : forward} alt="my watchlist" />
+                    {/* <img src={darkModeEnabled ? forwarddark : forward} alt="my watchlist" /> */}
+                    <MdCompare size={24}/>
                    Compare Stocks
                 </button>
             </div>

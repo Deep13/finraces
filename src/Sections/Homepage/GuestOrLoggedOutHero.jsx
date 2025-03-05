@@ -158,7 +158,7 @@ const GuestOrLoggedOutHero = () => {
                 <div className='w-[80.5rem] pb-2 flex gap-[7px] overflow-x-scroll custom-scrollbar'>
                     {watchList?.map((stockData,index)=>{
                         return(
-                            <StockWatchlistCard data={stockData} key={index}/>
+                            <StockWatchlistCard data={stockData.stock} key={index}/>
                         )
                     })}
                 {/* <StockWatchlistCard

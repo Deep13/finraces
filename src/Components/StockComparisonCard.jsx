@@ -25,7 +25,7 @@ const StockWatchlistCard = ({ data }) => {
                     </div>
                     <div className='text-[0.9rem] font-semibold'>{data?.ticker}</div>
                 </div>
-                <BiUpArrowAlt size={25} color="green" />
+                {/* <BiUpArrowAlt size={25} color="green" /> */}
             </div>
 
             {/* Stock Name */}

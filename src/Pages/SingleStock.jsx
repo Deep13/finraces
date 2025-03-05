@@ -9,11 +9,12 @@ import { useContext } from "react";
 import DarkModeProvider, { DarkModeContext } from "../Contexts/DarkModeProvider";
 import { addToWatchList, getStockHistory, getStockProfile } from "../Utils/api";
 import { useParams } from "react-router-dom";
+import CandleChart from "../Components/CandleChart";
 
 const SingleStock = () => {
 
-    const [graphType, setGraphType] = useState("price");
-    const [timeRange, setTimeRange] = useState("5M");
+    const [graphType, setGraphType] = useState("area");
+    const [timeRange, setTimeRange] = useState("1M");
     const [years, setYears] = useState("Years");
     const [filter, setFilter] = useState("Filters");
     const [timeOpen, setTimeOpen] = useState(false);
@@ -79,20 +80,20 @@ const SingleStock = () => {
                 <div className=" flex flex-col justify-center gap-2 h-32">
                     <div className="text-[#D1D1D1]">Market Cap</div>
                     <div className="font-semibold text-xl font-popins">{stockData?.mktCap? stockData.mktCap:"150,000,000"}</div>
-                    <div className=" mx-auto py-1 px-2 rounded-lg bg-[#26666333] opacity-80 text-[#6BEBA4]">4.12%</div>
+                    
                 </div>
                 <div className=" flex flex-col justify-center gap-2 h-32">
                     <div className="text-[#D1D1D1]">Volume</div>
                     <div className="font-semibold text-xl font-popins">{stockData?.volAvg?stockData.volAvg:"150,000,000"}</div>
-                    <div className=" mx-auto py-1 px-2 rounded-lg bg-[#26666333] opacity-80 text-[#6BEBA4]">4.12%</div>
+                    
                 </div><div className=" flex flex-col justify-center gap-2 h-32">
                     <div className="text-[#D1D1D1]">Circulating Supply</div>
                     <div className="font-semibold text-xl font-popins">15,00,000</div>
-                    <div className=" mx-auto py-1 px-2 rounded-lg bg-[#26666333] opacity-80 text-[#6BEBA4]">4.12%</div>
+                    
                 </div><div className=" flex flex-col justify-center gap-2 h-32">
                     <div className="text-[#D1D1D1]">P/E Ratio</div>
                     <div className="font-semibold text-xl font-popins">15,00,000</div>
-                    <div className=" mx-auto py-1 px-2 rounded-lg bg-[#26666333] opacity-80 text-[#6BEBA4]">4.12%</div>
+                    
                 </div>
             </div>
 
@@ -102,7 +103,7 @@ const SingleStock = () => {
                           Chart
                         </span>
                         <div className="border dark:border-[#00387E] flex p-2 rounded-sm cursor-pointer">
-                          {["price", "market", "candle"].map((type) => (
+                          {["area", "candle"].map((type) => (
                             <span
                               key={type}
                               className={`${graphType === type ? "bg-blue-500" : ""} rounded-md px-7`}
@@ -131,7 +132,7 @@ const SingleStock = () => {
                             </button>
                             {timeOpen && (
                               <div className="absolute top-full left-0 w-full bg-white dark:bg-[#00387E] shadow-lg rounded-md mt-1 z-10">
-                                {["1M", "3M", "6M", "1Y", "5Y"].map((option) => (
+                                {["1D", "1W", "1M", "3M", "6M"].map((option) => (
                                   <div
                                     key={option}
                                     className="p-2 py-4 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer text-center"
@@ -148,63 +149,14 @@ const SingleStock = () => {
                           </div>
             
                           {/* Years Dropdown */}
-                          <div className="relative">
-                            <button
-                              className="flex py-2 items-center justify-between gap-2 pb-1 rounded-md px-3 border dark:border-[#00387E] cursor-pointer"
-                              onClick={() => setYearsOpen(!yearsOpen)}
-                            >
-                              {years} <IoIosArrowDown />
-                            </button>
-                            {yearsOpen && (
-                              <div className="absolute top-full left-0 w-full bg-white dark:bg-[#00387E] shadow-lg rounded-md mt-1 z-10">
-                                {["2023", "2024", "2025"].map((option) => (
-                                  <div
-                                    key={option}
-                                    className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer text-center"
-                                    onClick={() => {
-                                      setYears(option);
-                                      setYearsOpen(false);
-                                    }}
-                                  >
-                                    {option}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-            
-                          {/* Filters Dropdown */}
-                          <div className="relative">
-                            <button
-                              className="flex py-2 items-center justify-between gap-2 pb-1 rounded-md px-3 border dark:border-[#00387E] cursor-pointer"
-                              onClick={() => setFilterOpen(!filterOpen)}
-                            >
-                              {filter} <RxMixerVertical />
-                            </button>
-                            {filterOpen && (
-                              <div className="absolute top-full left-0 w-full bg-white dark:bg-[#00387E] shadow-lg rounded-md mt-1 z-10">
-                                {["Volume", "Market Cap", "Growth"].map((option) => (
-                                  <div
-                                    key={option}
-                                    className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer text-center"
-                                    onClick={() => {
-                                      setFilter(option);
-                                      setFilterOpen(false);
-                                    }}
-                                  >
-                                    {option}
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-            
+                          
                         </div>
                       </div>
             </div>
 
             <div className="dark:bg-[#002763] h-80 border dark:border-[#00387E] rounded-xl">
-                <StockTrendChart stockData={historyData}/>
+                {graphType=="area"&&<StockTrendChart stockData={historyData} static={true} filter={timeRange}/>}
+                {graphType=="candle"&&<CandleChart stockData={historyData} static={true} filter={timeRange}/>}
             </div>
         </div>
     </div>

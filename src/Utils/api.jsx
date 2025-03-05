@@ -1667,7 +1667,7 @@ export const getMarketLosers = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/stocks/market-losers`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/stocks/losers`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1692,7 +1692,7 @@ export const getMarketGainers = async (
 ) => {
   let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/stocks/market-gainers`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/stocks/gainers`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }
@@ -1886,12 +1886,13 @@ export const getStockComparisonData=async(ticker,onSuccess,onError)=>{
 }
 
 
-export const getChats=async(onSuccess,onError)=>{
+export const getChats=async(onSuccess,onError,id,page=1)=>{
+  if(!id)return;
   try{
     let token=localStorage.getItem('token');
     let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
     console.log("user",userDetails)
-    let url=`${GlobalURL}/api/v1/messages?receiver=${userDetails.userId}`
+    let url=`${GlobalURL}/api/v1/messages?receiver=${id}&page=${page}`
 
     const response = await axios.get(url, {
       headers: {
@@ -1915,11 +1916,12 @@ export const getChats=async(onSuccess,onError)=>{
 }
 
 export const postChats=async(msg,reciever,onSuccess,onError)=>{
+  console.log("check",msg,reciever)
   try{
     let token = localStorage.getItem("token");
     const payload = { 
       content: msg,
-      reciever:reciever
+      receiver:reciever
      };
     const url = `${GlobalURL}/api/v1/messages`;
 
@@ -1935,11 +1937,40 @@ export const postChats=async(msg,reciever,onSuccess,onError)=>{
     if (!response.ok) {
       // If response is not successful, throw an error with response status text
       const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to add stock to watchlist");
+      throw new Error(errorData.message);
     }
 
     const data = await response.json(); // Parse response JSON
     onSuccess(data); // Call success callback with API response
+  }
+  catch(error){
+    onError(error);
+  }
+}
+
+
+export const getAllChats=async(onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+    let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
+    console.log("user",userDetails)
+    let url=`${GlobalURL}/api/v1/messages/users`
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Check if request was successful
+    if (response.status === 200) {
+      
+      onSuccess(response.data); // Pass stock history data
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+
+
   }
   catch(error){
     onError(error);
