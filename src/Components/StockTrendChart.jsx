@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -13,42 +14,37 @@ import {
 // Register Chart.js components
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Filler);
 
-const generateStaticData = (filter) => {
-  const now = new Date();
-  let labels = [], data = [];
-
-  if (filter === "1D") {
-    labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-    data = labels.map(() => 100 + Math.random() * 5);
-  } else {
-    const days = { "1W": 7, "1M": 30, "3M": 90, "6M": 180 }[filter] || 30;
-    labels = Array.from({ length: days + 1 }, (_, i) => {
-      let date = new Date();
-      date.setDate(now.getDate() - (days - i));
-      return date.toISOString().split("T")[0];
-    });
-    data = labels.map(() => 100 + Math.random() * 10);
-  }
-
-  return labels.map((date, index) => ({ date, close: data[index] }));
-};
-
 const StockTrendChart = ({ stockData = [], static: isStatic = false, filter = "1M" }) => {
-  const processedStockData = isStatic ? generateStaticData(filter) : stockData;
+  const [chartData, setChartData] = useState({ labels: [], closePrices: [] });
 
-  if (!processedStockData || processedStockData.length === 0) {
+  useEffect(() => {
+    if (!stockData || !stockData.results || stockData.results.length === 0) {
+      return;
+    }
+
+    // Extract labels & prices
+    const labels = stockData.results.map((entry) => {
+      const dateObj = new Date(entry.t);
+      return filter === "1D"
+        ? `${dateObj.getHours().toString().padStart(2, "0")}:${dateObj.getMinutes().toString().padStart(2, "0")}`
+        : dateObj.toISOString().split("T")[0];
+    });
+
+    const closePrices = stockData.results.map((entry) => entry.c);
+
+    setChartData({ labels, closePrices });
+  }, [stockData, filter]);
+
+  if (chartData.labels.length === 0) {
     return <p>No stock data available</p>;
   }
 
-  const labels = processedStockData.map((item) => item.date.split(" ")[0]);
-  const closePrices = processedStockData.map((item) => item.close);
-
   const data = {
-    labels,
+    labels: chartData.labels,
     datasets: [
       {
         label: "Stock Trend",
-        data: closePrices,
+        data: chartData.closePrices,
         borderColor: "#42A5F5",
         backgroundColor: (context) => {
           const ctx = context.chart.ctx;

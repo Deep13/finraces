@@ -6,7 +6,7 @@ import StockTrendChart from "../Components/StockTrendChart";
 import { IoIosArrowDown} from "react-icons/io";
 import { useEffect, useState, useRef } from "react";
 import StockTrendChartMini from "../Components/StockChartMini";
-import { getMarketGainers, getMarketLosers, getStockHistory, getWatchList,searchStock } from "../Utils/api";
+import { getMarketGainers, getMarketLosers, getStockChartData, getStockHistory, getWatchList,searchStock } from "../Utils/api";
 
 const stockData = [
     {
@@ -136,12 +136,10 @@ const Market = () => {
         const fromDate = sevenDaysAgo.toISOString().split('T')[0]; // Format: YYYY-MM-DD
         const toDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
-        getStockHistory(ticker,'1day',fromDate,toDate,
-            (data)=>{
-              console.log("c",ticker,fromDate,toDate,data)
+        getStockChartData(ticker,fromDate,toDate,'day',(data)=>{
             setChartData(data)
-          }
-          ,(error)=>{console.log(error)})
+        },(error)=>{console.log(error)})
+          
     },[selectedStock])
 
   return (
@@ -149,7 +147,7 @@ const Market = () => {
     {/* Ensure sidebar is inside a container with sufficient height */}
         <Sidebar />
         
-        <div className='flex flex-col w-[70rem] gap-2 dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E]  dark:text-white'>
+        <div className='flex flex-col w-[70rem] gap-2 bg-[#e5f4ff] dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E]  dark:text-white'>
             <span className='font-semibold text-[1.5rem] font-poppins flex flex-row items-center'>
                
                My Watchlist
@@ -172,8 +170,8 @@ const Market = () => {
                     <div className="mt-16">
                             
                         </div>}
-                    <div className="bg-[#001B51] rounded-lg p-3 w-[57rem] border border-[#00387E] h-80">
-                        <StockTrendChart stockData={chartData} filter="1W" static={true}/>
+                    <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 w-[57rem] border dark:border-[#00387E] h-80">
+                        <StockTrendChart stockData={chartData} filter="1W" static={false}/>
                     </div>
 
                 </div>
@@ -182,10 +180,10 @@ const Market = () => {
                         <div className="font-semibold text-2xl">WatchList</div>
                         {/* <div className="">See all</div> */}
                     </div>
-                <div className="bg-[#001B51] rounded-lg p-3 border border-[#00387E] flex-2 ">
+                <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 border dark:border-[#00387E] flex-2 ">
                     <div className="flex flex-col gap-2 max-h-[18.5rem] w-[15rem] h-[18.5rem] overflow-y-scroll custom-scrollbar p-2">
                         {watchList?.map((stockData,index)=>(
-                            <div onClick={()=>{setSelectedStock(stockData)}} key={index} className=" max-w-60 flex justify-between items-center cursor-pointer p-2 gap-5 dark:bg-[#002763] border dark:border-[#00387E] rounded-lg">
+                            <div onClick={()=>{setSelectedStock(stockData)}} key={index} className=" max-w-60 flex justify-between items-center cursor-pointer p-2 gap-5 bg-[#e5f4ff] dark:bg-[#002763] border dark:border-[#00387E] rounded-lg">
                             <img className="rounded-full w-10 h-10" src={stockData?.stock?.icon_url} alt='stockImg'></img>
                                     <div className="">
                                         <div className=" font-bold">{stockData?.stock?.name}({stockData?.stock.ticker})</div>

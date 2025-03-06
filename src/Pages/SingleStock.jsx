@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import StockTrendChart from "../Components/StockTrendChart";
 import { useContext } from "react";
 import DarkModeProvider, { DarkModeContext } from "../Contexts/DarkModeProvider";
-import { addToWatchList, checkWatchlist, deleteFromWatchlist, getStockHistory, getStockProfile } from "../Utils/api";
+import { addToWatchList, checkWatchlist, deleteFromWatchlist, getStockChartData, getStockComparisonData, getStockHistory, getStockProfile, getWatchList } from "../Utils/api";
 import { useParams } from "react-router-dom";
 import CandleChart from "../Components/CandleChart";
 
@@ -22,9 +22,13 @@ const SingleStock = () => {
     const [filterOpen, setFilterOpen] = useState(false);
     // const {selectedStock}=useContext(DarkModeContext)
     const [inWatchlist,setInWatchList]=useState(false);
+    const [watchListID,setWatchListID]=useState(null);
     const [stockData,setStockData]=useState();
     const [historyData,setHistoryData]=useState();
+    const[PERatio,setPERatio]=useState(157.45);
+    const [showPopUp,setShowPopUp]=useState(false);
 
+    const filterMap={"1D":1,"1W":7,"1M":30,"3M":90,"6M":180}
     const {ticker,id}=useParams()
 
     useEffect(
@@ -38,25 +42,64 @@ const SingleStock = () => {
         },
         (error)=>{console.log(error)},ticker)
 
+        getStockComparisonData(ticker,(data)=>{
+          setPERatio(data?.peratio)
+        },(error)=>{
+          console.log("Error",error)
+        })
+
         const today = new Date();
         const sevenDaysAgo = new Date();
-        sevenDaysAgo.setDate(today.getDate() - 7);
+        sevenDaysAgo.setDate(today.getDate() - filterMap[timeRange]);
 
         const fromDate = sevenDaysAgo.toISOString().split('T')[0]; // Format: YYYY-MM-DD
         const toDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
-
-        getStockHistory(ticker,'1day',fromDate,toDate,
+        let units='day';
+        if (timeRange === '1D') {
+          units = 'hour';
+      }
+        getStockChartData(ticker,fromDate,toDate,units,
           (data)=>{
             console.log("c",ticker,fromDate,toDate,data)
           setHistoryData(data)
         }
         ,(error)=>{console.log(error)})
 
-        checkWatchlist(ticker,(data)=>{setInWatchList(data)},(error)=>{console.log("Error",error)})
+        // checkWatchlist(ticker,(data)=>{setInWatchList(data)},(error)=>{console.log("Error",error)})
+        getWatchList((data)=>{
+          console.log("big d",data)
+          data.data.map((entry)=>{
+            if(entry.stock.ticker==ticker){
+              setInWatchList(true);
+              setWatchListID(entry.id);
+            }
+          })
+        },(error)=>{
+          console.log("Error",error)
+        })
         
     },[])
 
-    console.log(inWatchlist)
+    
+
+    useEffect(()=>{
+      const today = new Date();
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(today.getDate() - filterMap[timeRange]);
+
+      const fromDate = sevenDaysAgo.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+      const toDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+      let units='day';
+      if (timeRange === '1D') {
+        units = 'hour';
+    }
+      getStockChartData(ticker,fromDate,toDate,units,
+        (data)=>{
+          console.log("c",ticker,fromDate,toDate,data)
+        setHistoryData(data)
+      }
+      ,(error)=>{console.log(error)})
+    },[timeRange])
   
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
@@ -76,12 +119,12 @@ const SingleStock = () => {
                 </div>
 
                 {inWatchlist?(
-                  <div onClick={()=>{deleteFromWatchlist(id,(data)=>{console.log(data); setInWatchList(false)},(error)=>{console.log(error)})}} className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
+                  <div onClick={()=>{deleteFromWatchlist(watchListID,(data)=>{console.log(data); setInWatchList(false); setShowPopUp(true)},(error)=>{console.log(error)})}} className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
                   <FaMinus/>
                   Watchlist
               </div>
                 ):(
-                  <div onClick={()=>{addToWatchList(id,(data)=>{console.log(data); setInWatchList(true)},(error)=>{console.log(error)})}} className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
+                  <div onClick={()=>{addToWatchList(id,(data)=>{console.log(data); setInWatchList(true); setShowPopUp(true)},(error)=>{console.log(error)})}} className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
                     <FaPlus/>
                     Watchlist
                 </div>
@@ -104,7 +147,7 @@ const SingleStock = () => {
                     
                 </div><div className=" flex flex-col justify-center gap-2 h-32">
                     <div className="text-[#D1D1D1]">P/E Ratio</div>
-                    <div className="font-semibold text-xl font-popins">15,00,000</div>
+                    <div className="font-semibold text-xl font-popins">{PERatio}</div>
                     
                 </div>
             </div>
@@ -167,9 +210,15 @@ const SingleStock = () => {
             </div>
 
             <div className="dark:bg-[#002763] h-80 border dark:border-[#00387E] rounded-xl">
-                {graphType=="area"&&<StockTrendChart stockData={historyData} static={true} filter={timeRange}/>}
-                {graphType=="candle"&&<CandleChart stockData={historyData} static={true} filter={timeRange}/>}
+                {graphType=="area"&&<StockTrendChart stockData={historyData} static={false} filter={timeRange}/>}
+                {graphType=="candle"&&<CandleChart stockData={historyData} static={false} filter={timeRange}/>}
             </div>
+
+            {showPopUp&&
+            <div className="dark:bg-[#002763] border dark:border-[#00387E] flex flex-col items-center justify-center gap-5 absolute top-30 left-[65%] w-60 h-40 rounded-lg p-2">
+               <div className="mx-auto text-center"> Stock has been {inWatchlist?"added to the watchlist":"removed from the watchlist"}</div>  
+               <div className="bg-blue-500 px-3 py-2 rounded-lg cursor-pointer" onClick={()=>setShowPopUp(false)}>Close</div>
+              </div>}
         </div>
     </div>
   )

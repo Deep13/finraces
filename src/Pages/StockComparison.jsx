@@ -7,7 +7,7 @@ import { FaArrowRight } from "react-icons/fa";
 import Sidebar from "../Components/Sidebar";
 import StockChart from "../Components/StockChart";
 import StockComparisonCard from "../Components/StockComparisonCard"
-import {debounceStockSearchj, getStockComparisonData, getStockHistory, searchStock} from "../Utils/api";
+import {debounceStockSearchj, getStockChartData, getStockComparisonData, getStockHistory, searchStock} from "../Utils/api";
 import { debounce } from "lodash";
 import stockData from "../stockData.json"
 import CandleChart from "../Components/CandleChart";
@@ -18,7 +18,7 @@ const StockComparison = () => {
 
   // State for dropdowns
   const [timeRange, setTimeRange] = useState("1M");
-  const [years, setYears] = useState("Years");
+  const [years, setYears] = useState("Close");
   const [filter, setFilter] = useState("Filters");
 
   // Dropdown visibility states
@@ -34,6 +34,8 @@ const StockComparison = () => {
 
   const [labels, setLabels] = useState([]);
   const stockColors = [ "#00E396","#FEB019","#FF4560","#775DD0"]
+  const filterMap={"1D":1,"1W":7,"1M":30,"3M":90,"6M":180}
+  const typeMap={"Open":'o',"Close":'c',"Low":'l',"High":'h'}
   const [tableData, setTableData] = useState([
     { label: "Avg. Shares", values: Array(4).fill("--") },
     { label: "Avg. Earning per Share", values: Array(4).fill("--") },
@@ -88,6 +90,16 @@ const StockComparison = () => {
   
   //   return { labels, datasets };
   // };
+  const getDateRange = () => {
+    const endDate = new Date(); // Today's date
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - (filterMap[timeRange] || 0)); // Subtract the days
+
+    return {
+        startDate: startDate.toISOString().split("T")[0], // Format: YYYY-MM-DD
+        endDate: endDate.toISOString().split("T")[0],     // Format: YYYY-MM-DD
+    };
+};
   const formatCandleData = (stockHistory) => {
     return stockHistory.map((entry) => ({
       x: entry.date, // Ensure date is formatted correctly
@@ -95,57 +107,80 @@ const StockComparison = () => {
     }));
   };
   const fetchStockDataForChart = () => {
-    let allPromises = selectedStocks.map((stock, index) => {
-      return new Promise((resolve, reject) => {
-        getStockHistory(
-          stock.ticker,
-          "1day",
-          "2024-12-01", // Replace with your dynamic `fromDate`
-          "2025-02-28", // Replace with your dynamic `toDate`
-          (data) => {
-            resolve({ ticker: stock.ticker, data });
-          },
-          (error) => reject(error)
-        );
-      });
-    });
-  
-    Promise.all(allPromises)
-      .then((results) => {
-        let datasets = [];
-        let dateLabels = [];
-        let candleDatasets=[];
-  
-        results.forEach((stockData, index) => {
-          let stockPrices = stockData.data.map((entry) => entry.close);
-          let stockDates = stockData.data.map((entry) => entry.date.split(" ")[0]);
-  
-          // Use the first stock's dates as labels
-          if (index === 0) {
-            setLabels(stockDates.reverse()); // Reverse to get chronological order
-          }
-  
-          datasets.push({
-            label: stockData.ticker,
-            data: stockPrices.reverse(),
-            borderColor: stockColors[index % stockColors.length], // Cycle through stockColors
-            backgroundColor: stockColors[index % stockColors.length] + "33", // Add transparency for area chart
-            fill: graphType === "area",
-          });
+    let { startDate, endDate } = getDateRange();
+    let units = 'day';
 
-          candleDatasets.push({
-            label: stockData.ticker,
-            data: formatCandleData(stockData.data), // Convert to OHLC format
-          });
+    if (timeRange === '1D') {
+        units = 'hour';
+    }
+
+    console.log("Check", startDate, endDate, units);
+    
+    let validStocks = selectedStocks.filter(stock => stock.ticker);
+    
+    if (validStocks.length === 0) {
+        console.log("No valid tickers found, skipping API calls.");
+        return;
+    }
+
+    let allPromises = validStocks.map((stock, index) => {
+        return new Promise((resolve, reject) => {
+            getStockChartData(stock.ticker, startDate, endDate, units,
+                (data) => { resolve({ ticker: stock.ticker, data }); },
+                (error) => reject(error)
+            );
         });
+    });
 
-        console.log("candle",candleDatasets)
-  
-        setChartData(datasets);
-        setCandleData(candleDatasets);
-      })
-      .catch((error) => console.log("Error fetching stock data:", error));
-  };
+    Promise.all(allPromises)
+        .then((results) => {
+            let datasets = [];
+            let candleDatasets = [];
+            let dateLabels = [];
+
+            results.forEach((stockData, index) => {
+                console.log(stockData);
+
+                if (!stockData.data?.results) {
+                    console.error("Unexpected API response structure:", stockData.data);
+                    return;
+                }
+
+                let stockPrices = stockData.data.results.map((entry) => entry[typeMap[years]]); // Closing prices
+                let stockDates = stockData.data.results.map((entry) => {
+                    let dateObj = new Date(entry.t);
+                    return timeRange === '1D' 
+                        ? dateObj.toISOString().split("T")[1].slice(0, 5) // Extract HH:MM
+                        : dateObj.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+                });
+
+                // Store the first stock's dates as labels
+                if (index === 0) {
+                    dateLabels = [...stockDates] // Reverse date labels
+                    setLabels(dateLabels);
+                }
+
+                datasets.push({
+                    label: stockData.ticker,
+                    data: [...stockPrices], // Reverse stock prices
+                    borderColor: stockColors[index % stockColors.length],
+                    backgroundColor: stockColors[index % stockColors.length] + "33",
+                    fill: graphType === "area",
+                });
+
+                candleDatasets.push({
+                    label: stockData.ticker,
+                    data: formatCandleData([...stockData.data.results].reverse()), // Reverse OHLC data
+                });
+            });
+
+            console.log("datasets", datasets);
+            setChartData(datasets);
+            setCandleData(candleDatasets);
+        })
+        .catch((error) => console.log("Error fetching stock data:", error));
+};
+
 
   const [searchQuery, setSearchQuery] = useState("");
   const [numVal,setNum]=useState(0);
@@ -173,10 +208,8 @@ const StockComparison = () => {
       );
 
   useEffect(()=>{
-    
-    
-    
-  },[selectedStocks])
+        
+  },[timeRange])
 
   const buttonClick=()=>{
     let count=0;
@@ -404,7 +437,7 @@ const StockComparison = () => {
               </div>
 
               {/* Years Dropdown */}
-              {/* <div className="relative">
+              <div className="relative">
                 <button
                   className="flex py-2 items-center justify-between gap-2 pb-1 rounded-md px-3 border dark:border-[#00387E] cursor-pointer"
                   onClick={() => setYearsOpen(!yearsOpen)}
@@ -413,7 +446,7 @@ const StockComparison = () => {
                 </button>
                 {yearsOpen && (
                   <div className="absolute top-full left-0 w-full bg-white dark:bg-[#00387E] shadow-lg rounded-md mt-1 z-10">
-                    {["2023", "2024", "2025"].map((option) => (
+                    {["Open", "High", "Low","Close"].map((option) => (
                       <div
                         key={option}
                         className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer text-center"
@@ -427,7 +460,7 @@ const StockComparison = () => {
                     ))}
                   </div>
                 )}
-              </div> */}
+              </div>
 
               {/* Filters Dropdown */}
               {/* <div className="relative">
@@ -462,9 +495,9 @@ const StockComparison = () => {
         <div className="h-[30rem] w-full bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mb-7">
           <div className="w-full h-full">
             {graphType=='line'&&
-            <StockChart labels={labels} datasets={chartData} staticData={true} filter={timeRange} num={numVal} />}
+            <StockChart labels={labels} datasets={chartData} staticData={false} filter={timeRange} num={numVal} />}
             {graphType=='area'&&
-            <StockChart labels={labels} datasets={chartData} area={true} staticData={true} filter={timeRange } num={numVal}/>}
+            <StockChart labels={labels} datasets={chartData} area={true} staticData={false} filter={timeRange } num={numVal}/>}
             {/* {graphType=='candle' &&
             <CandleChart 
             labels={labels}

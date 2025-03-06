@@ -2030,3 +2030,31 @@ export const checkWatchlist=async(ticker,onSuccess,onError)=>{
     onError(error);
   }
 }
+
+export const getStockChartData=async(ticker,startDate,endDate,units,onSuccess,onError)=>{
+  console.log("inputs",ticker,startDate,endDate,units)
+  try{
+    let token=localStorage.getItem('token');
+
+    let url=`${GlobalURL}/api/v1/stocks/${ticker}/aggregates?multiplierNum=1&timespanUnit=${units}&startDate=${startDate}&endDate=${endDate}`
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Check if request was successful
+    if (response.status === 200) {
+      
+      onSuccess(response.data); // Pass stock history data
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+
+
+  }
+  catch(error){
+    onError(error);
+  }
+}

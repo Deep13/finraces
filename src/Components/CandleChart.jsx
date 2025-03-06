@@ -2,6 +2,20 @@ import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import PropTypes from "prop-types";
 
+const processStockData = (stockData) => {
+  if (!stockData || !stockData.results || stockData.results.length === 0) {
+    return [];
+  }
+  
+  return [{
+    label: stockData.ticker || "Stock",
+    data: stockData.results.map((item) => ({
+      x: item.t, // Timestamp
+      y: [item.o, item.h, item.l, item.c], // Open, High, Low, Close
+    })),
+  }];
+};
+
 const generateStaticCandles = (filter) => {
   const now = new Date();
   const candles = [];
@@ -21,14 +35,12 @@ const generateStaticCandles = (filter) => {
   return [{ label: "Static Stock", data: candles }];
 };
 
-const CandleChart = ({ labels = [], candles = [], static: isStatic = false, filter = "1M" }) => {
-  const processedCandles = isStatic ? generateStaticCandles(filter) : candles;
+const CandleChart = ({ stockData, static: isStatic = false, filter = "1M" }) => {
+  const processedCandles = isStatic ? generateStaticCandles(filter) : processStockData(stockData);
 
-  if (!processedCandles || processedCandles.length === 0 || JSON.stringify(processedCandles) === JSON.stringify([{},{},{},{}])) {
+  if (!processedCandles || processedCandles.length === 0) {
     return <p style={{ color: "white", textAlign: "center" }}>Please select stocks to compare</p>;
   }
-
-  const [zoomLevel, setZoomLevel] = useState(1);
 
   const options = {
     chart: {
@@ -57,55 +69,28 @@ const CandleChart = ({ labels = [], candles = [], static: isStatic = false, filt
       data: stock.data,
     }));
 
-  const handleZoomIn = () => setZoomLevel(prev => Math.min(prev + 0.2, 2));
-  const handleZoomOut = () => setZoomLevel(prev => Math.max(prev - 0.2, 0.5));
-  const handleResetZoom = () => setZoomLevel(1);
+    console.log("labels",processedCandles)
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "270px", overflow: "hidden" }}>
-      <div style={buttonContainerStyle}>
-        {/* <button onClick={handleZoomIn} style={buttonStyle}>+</button>
-        <button onClick={handleZoomOut} style={buttonStyle}>-</button>
-        <button onClick={handleResetZoom} style={buttonStyle}>Reset</button> */}
-      </div>
-
-      <div style={{ transform: `scale(${zoomLevel})`, transformOrigin: "center" }}>
-        <ReactApexChart options={options} series={series} type="candlestick" height={400} />
-      </div>
+    <div style={{ width: "100%", height: "300px" }}>
+      <ReactApexChart options={options} series={series} type="candlestick" height={300} />
     </div>
   );
 };
 
-const buttonContainerStyle = {
-  position: "absolute",
-  bottom: "-10px",
-  left: "50%",
-  transform: "translateX(-50%)",
-  display: "flex",
-  gap: "8px",
-  zIndex: 10,
-};
-
-const buttonStyle = {
-  padding: "6px 10px",
-  fontSize: "14px",
-  fontWeight: "bold",
-  backgroundColor: "#6b7280",
-  color: "#fff",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
-  transition: "background 0.2s",
-};
-
 CandleChart.propTypes = {
-  labels: PropTypes.arrayOf(PropTypes.string).isRequired,
-  candles: PropTypes.arrayOf(
-    PropTypes.shape({
-      x: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      y: PropTypes.arrayOf(PropTypes.number).isRequired,
-    })
-  ).isRequired,
+  stockData: PropTypes.shape({
+    ticker: PropTypes.string,
+    results: PropTypes.arrayOf(
+      PropTypes.shape({
+        t: PropTypes.number.isRequired, // Timestamp
+        o: PropTypes.number.isRequired, // Open
+        h: PropTypes.number.isRequired, // High
+        l: PropTypes.number.isRequired, // Low
+        c: PropTypes.number.isRequired, // Close
+      })
+    ),
+  }),
   static: PropTypes.bool,
   filter: PropTypes.string,
 };
