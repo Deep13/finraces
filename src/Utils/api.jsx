@@ -1862,6 +1862,33 @@ export const getWatchList=async(onSuccess,onError)=>{
   }
 }
 
+export const deleteFromWatchlist=async(id,onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+    
+    let url=`${GlobalURL}/api/v1/stock-watchlists/${id}`
+
+    const response = await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Check if request was successful
+    if (response.status === 200) {
+      
+      onSuccess(response.data); // Pass stock history data
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+
+
+  }
+  catch(error){
+    onError(error);
+  }
+}
+
 export const getStockComparisonData=async(ticker,onSuccess,onError)=>{
   try{
     let token=localStorage.getItem('token');
@@ -1955,6 +1982,33 @@ export const getAllChats=async(onSuccess,onError)=>{
     let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
     console.log("user",userDetails)
     let url=`${GlobalURL}/api/v1/messages/users`
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    // Check if request was successful
+    if (response.status === 200) {
+      
+      onSuccess(response.data); // Pass stock history data
+    } else {
+      throw new Error(`Unexpected response status: ${response.status}`);
+    }
+
+
+  }
+  catch(error){
+    onError(error);
+  }
+}
+
+export const checkWatchlist=async(ticker,onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+
+    let url=`${GlobalURL}/api/v1/stock-watchlists/ticker/${ticker}/exists`
 
     const response = await axios.get(url, {
       headers: {

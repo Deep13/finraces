@@ -1,13 +1,13 @@
 import Sidebar from "../Components/Sidebar"
 import { IoIosArrowDown} from "react-icons/io";
-import { FaPlus } from "react-icons/fa6";
+import { FaMinus, FaPlus } from "react-icons/fa6";
 import facebookLogo from "../assets/images/f.png"
 import { RxMixerVertical } from "react-icons/rx";
 import { useEffect, useState } from "react";
 import StockTrendChart from "../Components/StockTrendChart";
 import { useContext } from "react";
 import DarkModeProvider, { DarkModeContext } from "../Contexts/DarkModeProvider";
-import { addToWatchList, getStockHistory, getStockProfile } from "../Utils/api";
+import { addToWatchList, checkWatchlist, deleteFromWatchlist, getStockHistory, getStockProfile } from "../Utils/api";
 import { useParams } from "react-router-dom";
 import CandleChart from "../Components/CandleChart";
 
@@ -21,6 +21,7 @@ const SingleStock = () => {
     const [yearsOpen, setYearsOpen] = useState(false);
     const [filterOpen, setFilterOpen] = useState(false);
     // const {selectedStock}=useContext(DarkModeContext)
+    const [inWatchlist,setInWatchList]=useState(false);
     const [stockData,setStockData]=useState();
     const [historyData,setHistoryData]=useState();
 
@@ -50,8 +51,12 @@ const SingleStock = () => {
           setHistoryData(data)
         }
         ,(error)=>{console.log(error)})
+
+        checkWatchlist(ticker,(data)=>{setInWatchList(data)},(error)=>{console.log("Error",error)})
         
     },[])
+
+    console.log(inWatchlist)
   
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
@@ -70,10 +75,17 @@ const SingleStock = () => {
                         </div>
                 </div>
 
-                <div onClick={()=>{addToWatchList(id,(data)=>{console.log(data),(error)=>{console.log(error)}})}} className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
+                {inWatchlist?(
+                  <div onClick={()=>{deleteFromWatchlist(id,(data)=>{console.log(data); setInWatchList(false)},(error)=>{console.log(error)})}} className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
+                  <FaMinus/>
+                  Watchlist
+              </div>
+                ):(
+                  <div onClick={()=>{addToWatchList(id,(data)=>{console.log(data); setInWatchList(true)},(error)=>{console.log(error)})}} className="flex gap-2 items-center rounded-md border dark:border-[#00387E] px-3 cursor-pointer py-1">
                     <FaPlus/>
                     Watchlist
                 </div>
+                )}
             </div>
 
             <div className="flex justify-between py-2 px-5 gap-5 dark:bg-[#002763] border dark:border-[#00387E] rounded-xl">
@@ -87,8 +99,8 @@ const SingleStock = () => {
                     <div className="font-semibold text-xl font-popins">{stockData?.volAvg?stockData.volAvg:"150,000,000"}</div>
                     
                 </div><div className=" flex flex-col justify-center gap-2 h-32">
-                    <div className="text-[#D1D1D1]">Circulating Supply</div>
-                    <div className="font-semibold text-xl font-popins">15,00,000</div>
+                    <div className="text-[#D1D1D1]">DCF</div>
+                    <div className="font-semibold text-xl font-popins">{stockData?.dcf? stockData.dcf.toFixed(2):"150,000"}</div>
                     
                 </div><div className=" flex flex-col justify-center gap-2 h-32">
                     <div className="text-[#D1D1D1]">P/E Ratio</div>

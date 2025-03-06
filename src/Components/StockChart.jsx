@@ -36,7 +36,7 @@ const generateStaticData = (filter, num) => {
     datasets.push({
       label: `Stock ${i + 1}`,
       data: labels.map(() => 100 + Math.random() * 10), // Random stock prices
-      borderColor: ["#00E396", "#FF4560", "#775DD0", "#008FFB"][i], // Different colors
+      borderColor: [ "#00E396","#FEB019","#FF4560","#775DD0"][i], // Different colors
     });
   }
 
