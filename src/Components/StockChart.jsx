@@ -1,4 +1,4 @@
-import { useContext, useRef, useState, useMemo } from "react";
+import { useContext, useRef, useState, useMemo,useEffect } from "react";
 import PropTypes from "prop-types";
 import { Line } from "react-chartjs-2";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
@@ -44,12 +44,23 @@ const generateStaticData = (filter, num) => {
 };
 
 
-const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter = "1M", staticData = false }) => {
+const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter = "1M", staticData = false,disableAnimation=false }) => {
   const { darkModeEnabled } = useContext(DarkModeContext);
   const chartRef = useRef(null);
   const [selectedPoints, setSelectedPoints] = useState({ start: null, end: null, difference: null });
 
   const staticChartData = useMemo(() => (staticData ? generateStaticData(filter,num) : { labels, datasets }), [staticData, filter, labels, datasets]);
+
+
+
+  // useEffect(() => {
+  //   // Cleanup function: Destroy previous chart instance before updating
+  //   return () => {
+  //     if (chartRef.current) {
+  //       chartRef.current.destroy();
+  //     }
+  //   };
+  // }, [labels, datasets]); // Runs whenever labels or datasets change
 
   const data = {
     labels: staticChartData.labels,
@@ -63,6 +74,42 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
       fill: area,
     })),
   };
+  const totalDuration = 4000;
+  const delayBetweenPoints = totalDuration / staticChartData.labels.length;
+  
+  const previousY = (ctx) =>
+    ctx.index === 0
+      ? ctx?.chart?.scales?.y?.getPixelForValue(100)
+      : ctx?.chart?.getDatasetMeta(ctx?.datasetIndex)?.data?.[ctx?.index - 1]?.getProps(["y"], true)?.y;
+
+  const animation = {
+    x: {
+      type: "number",
+      easing: "linear",
+      duration: delayBetweenPoints,
+      from: NaN,
+      delay(ctx) {
+        if (ctx.type !== "data" || ctx.xStarted) {
+          return 0;
+        }
+        ctx.xStarted = true;
+        return ctx.index * delayBetweenPoints;
+      },
+    },
+    y: {
+      type: "number",
+      easing: "linear",
+      duration: delayBetweenPoints,
+      from:previousY,
+      delay(ctx) {
+        if (ctx.type !== "data" || ctx.yStarted) {
+          return 0;
+        }
+        ctx.yStarted = true;
+        return ctx.index * delayBetweenPoints;
+      },
+    },
+  };
 
   const getGradient = (ctx, borderColor) => {
     if (!ctx?.chart?.ctx) return borderColor;
@@ -74,26 +121,34 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
   };
 
   const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        enabled: true,
-        backgroundColor: darkModeEnabled ? "#333" : "#fff",
-        titleColor: darkModeEnabled ? "#fff" : "#000",
-        bodyColor: darkModeEnabled ? "#fff" : "#000",
-      },
-      zoom: {
-        pan: { enabled: true, mode: "xy" },
-        zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: "xy" },
-      },
+  responsive: true,
+  maintainAspectRatio: false,
+  animation:disableAnimation?false:animation,
+  scales: {
+    x: {
+      ticks: { color: darkModeEnabled ? "#fff" : "#000" },
+      grid: { color: darkModeEnabled ? "#444" : "#ddd" },
     },
-    scales: {
-      x: { ticks: { color: darkModeEnabled ? "#fff" : "#000" }, grid: { color: darkModeEnabled ? "#444" : "#ddd" } },
-      y: { ticks: { color: darkModeEnabled ? "#fff" : "#000" }, grid: { color: darkModeEnabled ? "#444" : "#ddd", borderDash: [5, 5] } },
+    y: {
+      ticks: { color: darkModeEnabled ? "#fff" : "#000" },
+      grid: { color: darkModeEnabled ? "#444" : "#ddd", borderDash: [5, 5] },
     },
-  };
+  },
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      enabled: true,
+      backgroundColor: darkModeEnabled ? "#333" : "#fff",
+      titleColor: darkModeEnabled ? "#fff" : "#000",
+      bodyColor: darkModeEnabled ? "#fff" : "#000",
+    },
+    zoom: {
+      pan: { enabled: true, mode: "xy" },
+      zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: "xy" },
+    },
+  },
+};
+
 
   const handleResetSelection = () => {
     if (chartRef.current) {

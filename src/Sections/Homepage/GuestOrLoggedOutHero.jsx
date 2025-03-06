@@ -184,7 +184,7 @@ const GuestOrLoggedOutHero = () => {
             </div>
 
             {/* Scrollable Stock Cards */}
-            <div ref={sliderRef} className="flex gap-2 overflow-x-hidden flex-nowrap p-2 scroll-smooth">
+            <div ref={sliderRef} className="flex gap-2 overflow-x-hidden flex-nowrap p-2 scroll-smooth max-w-[81rem]">
                 {watchList && watchList.length > 0 ? (
                     watchList.map((stockData, index) => (
                         <StockWatchlistCard key={index} data={stockData.stock} />

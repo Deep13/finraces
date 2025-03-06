@@ -323,6 +323,10 @@ const StockComparison = () => {
     fetchStockDataForChart()
 
   }
+
+  useEffect(()=>{
+    fetchStockDataForChart()
+  },[timeRange,years])
   
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
@@ -497,7 +501,7 @@ const StockComparison = () => {
             {graphType=='line'&&
             <StockChart labels={labels} datasets={chartData} staticData={false} filter={timeRange} num={numVal} />}
             {graphType=='area'&&
-            <StockChart labels={labels} datasets={chartData} area={true} staticData={false} filter={timeRange } num={numVal}/>}
+            <StockChart labels={labels} datasets={chartData} area={true} staticData={false} filter={timeRange } num={numVal} disableAnimation={true}/>}
             {/* {graphType=='candle' &&
             <CandleChart 
             labels={labels}
