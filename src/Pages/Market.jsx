@@ -155,50 +155,51 @@ const Market = () => {
 
             
 
-            <div className="flex justify-center gap-5 mt-5">
-                <div className=" flex flex-1 flex-col gap-2">
-                   {selectedStock? <div className="flex p-2 gap-5 rounded-lg items-center">
-                            <img className="rounded-full w-10 h-10" src={selectedStock?.stock?.icon_url} alt='stockImg'></img>
-                            <div className="">
-                                <div className="text-xl font-bold">{selectedStock?.stock?.name}({selectedStock?.stock?.ticker})</div>
-                                <div className="flex items-center justify-between gap-3">
-                                    <div className="font-semibold">{(selectedStock?.stock?.price +'$') ||"N/A"}</div>
-                                    {/* <div className="flex gap-2 text-red-500">20%(-5%) <IoIosArrowDown/> </div> */}
-                                </div>
-                            </div>
-                    </div>:
-                    <div className="mt-16">
-                            
-                        </div>}
-                    <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 w-[57rem] border dark:border-[#00387E] h-80">
-                        <StockTrendChart stockData={chartData} filter="1W" static={false}/>
-                    </div>
+            <div className="flex flex-col lg:flex-row justify-center gap-5 mt-5 w-full">
+  {/* Selected Stock */}
+  <div className="flex flex-1 flex-col gap-2 w-full">
+    {selectedStock ? (
+      <div className="flex p-2 gap-5 rounded-lg items-center w-full bg-white dark:bg-[#002763] border dark:border-[#00387E]">
+        <img className="rounded-full w-10 h-10" src={selectedStock?.stock?.icon_url} alt='stockImg' />
+        <div className="flex-1 min-w-0">
+          <div className="text-xl font-bold truncate">{selectedStock?.stock?.name} ({selectedStock?.stock?.ticker})</div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="font-semibold">{(selectedStock?.stock?.price +'$') || "N/A"}</div>
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div className="mt-16"></div>
+    )}
 
-                </div>
-                <div>
-                <div className="flex justify-between mt-5 mb-5">
-                        <div className="font-semibold text-2xl">WatchList</div>
-                        {/* <div className="">See all</div> */}
-                    </div>
-                <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 border dark:border-[#00387E] flex-2 ">
-                    <div className="flex flex-col gap-2 max-h-[18.5rem] w-[15rem] h-[18.5rem] overflow-y-scroll custom-scrollbar p-2">
-                        {watchList?.map((stockData,index)=>(
-                            <div onClick={()=>{setSelectedStock(stockData)}} key={index} className=" max-w-60 flex justify-between items-center cursor-pointer p-2 gap-5 bg-[#e5f4ff] dark:bg-[#002763] border dark:border-[#00387E] rounded-lg">
-                            <img className="rounded-full w-10 h-10" src={stockData?.stock?.icon_url} alt='stockImg'></img>
-                                    <div className="">
-                                        <div className=" font-bold">{stockData?.stock?.name}({stockData?.stock.ticker})</div>
-                                        <div className="flex items-center justify-between gap-3">
-                                            <div className="font-semibold">{stockData?.stock?.price}$</div>
-                                            {/* <div className="flex gap-2 text-red-500">20%(-5%) <IoIosArrowDown/> </div> */}
-                                        </div>
-                                    </div>
-                                
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                </div>
+    <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 w-full border dark:border-[#00387E] h-80 overflow-hidden">
+      <StockTrendChart stockData={chartData} filter="1W" static={false} />
+    </div>
+  </div>
+
+  {/* Watchlist */}
+  <div className="w-full md:w-[15rem]">
+    <div className="flex justify-between mt-5 mb-5">
+      <div className="font-semibold text-2xl">WatchList</div>
+    </div>
+    <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 border dark:border-[#00387E] flex-2">
+      <div className="flex flex-col gap-2 max-h-[18.5rem] overflow-y-auto custom-scrollbar p-2 w-full">
+        {watchList?.map((stockData, index) => (
+          <div onClick={() => { setSelectedStock(stockData) }} key={index} 
+               className="flex justify-between items-center cursor-pointer p-2 gap-5 bg-[#e5f4ff] dark:bg-[#002763] border dark:border-[#00387E] rounded-lg w-full">
+            <img className="rounded-full w-10 h-10" src={stockData?.stock?.icon_url} alt='stockImg' />
+            <div className="flex-1 min-w-0">
+              <div className="font-bold truncate">{stockData?.stock?.name} ({stockData?.stock.ticker})</div>
+              <div className="flex items-center justify-between gap-3">
+                <div className="font-semibold">{stockData?.stock?.price}$</div>
+              </div>
             </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
 
             <div className="bg-[#001B51] rounded-lg p-3 border border-[#00387E]">
                 <div className="flex justify-between items-center">
@@ -298,7 +299,7 @@ const Market = () => {
                 </div>
             </div>
 
-            <div className="flex flex-col gap-2 mt-5 relative">
+            <div className="flex flex-col gap-2 mt-5 relative w-[76rem] max-w-[60rem] 2xl:max-w-[76rem]">
             {/* Title & Right Arrow */}
             <div className="flex justify-between items-center">
                 <div className="font-semibold">Top Gainers</div>
@@ -321,7 +322,7 @@ const Market = () => {
             {/* Scrollable Card Slider */}
             <div
                 ref={sliderRef}
-                className="flex gap-2 overflow-x-hidden flex-nowrap p-2 scroll-smooth"
+                className="flex overflow-x-hidden flex-nowrap p-2 scroll-smooth"
             >
                 {marketGainers && marketGainers.length > 0 ? (
                     marketGainers
@@ -334,7 +335,9 @@ const Market = () => {
                 )}
             </div>
         </div>
-        <div className="flex flex-col gap-2 mt-5 relative">
+
+            
+        <div className="flex flex-col gap-2 mt-5 relative w-[76rem] max-w-[60rem] 2xl:max-w-[76rem]">
             {/* Title & Right Arrow */}
             <div className="flex justify-between items-center">
                 <div className="font-semibold">Top Losers</div>
@@ -357,7 +360,7 @@ const Market = () => {
             {/* Scrollable Card Slider */}
             <div
                 ref={sliderRef2}
-                className="flex gap-2 overflow-x-hidden flex-nowrap p-2 scroll-smooth"
+                className="flex overflow-x-hidden flex-nowrap p-2 scroll-smooth"
             >
                 {marketLosers && marketLosers.length > 0 ? (
                     marketLosers

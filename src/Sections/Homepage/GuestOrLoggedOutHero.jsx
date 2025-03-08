@@ -169,31 +169,37 @@ const GuestOrLoggedOutHero = () => {
                 </div>
             </div>
 
-             <div className="flex flex-col gap-2 mt-5 relative">
-            {/* Title & Navigation Buttons */}
-            <div className="flex justify-between items-center">
-                <div className="text-[2.14rem] text-center mx-auto font-bold mb-[1.4rem] dark:text-white">Watchlist</div>
-                <div className="flex gap-2">
-                    <button className="rounded-full bg-[#001B51] p-2 cursor-pointer" onClick={scrollLeft}>
-                        <MdArrowBackIos className="text-white" />
-                    </button>
-                    <button className="rounded-full bg-[#001B51] p-2 cursor-pointer" onClick={scrollRight}>
-                        <MdArrowForwardIos className="text-white" />
-                    </button>
-                </div>
-            </div>
+            <div className="flex flex-col gap-2 mt-5 relative">
+  {/* Title & Navigation Buttons */}
+  <div className="flex justify-between items-center">
+    <div className="text-[2.14rem] text-center mx-auto font-bold mb-[1.4rem] dark:text-white">
+      Watchlist
+    </div>
+    <div className="flex gap-2">
+      <button className="rounded-full bg-[#001B51] p-2 cursor-pointer" onClick={scrollLeft}>
+        <MdArrowBackIos className="text-white" />
+      </button>
+      <button className="rounded-full bg-[#001B51] p-2 cursor-pointer" onClick={scrollRight}>
+        <MdArrowForwardIos className="text-white" />
+      </button>
+    </div>
+  </div>
 
-            {/* Scrollable Stock Cards */}
-            <div ref={sliderRef} className="flex gap-2 overflow-x-hidden flex-nowrap p-2 scroll-smooth max-w-[81rem]">
-                {watchList && watchList.length > 0 ? (
-                    watchList.map((stockData, index) => (
-                        <StockWatchlistCard key={index} data={stockData.stock} />
-                    ))
-                ) : (
-                    <p>Loading watchlist...</p> // Fallback UI
-                )}
-            </div>
-        </div>
+  {/* Scrollable Stock Cards */}
+  <div
+    ref={sliderRef}
+    className="flex gap-2 overflow-x-hidden flex-nowrap p-2 scroll-smooth max-w-[65rem] 2xl:max-w-[81rem]"
+  >
+    {watchList && watchList.length > 0 ? (
+      watchList.map((stockData, index) => (
+        <StockWatchlistCard key={index} data={stockData.stock} />
+      ))
+    ) : (
+      <p>Loading watchlist...</p> // Fallback UI
+    )}
+  </div>
+</div>
+
         </>
     )
 }

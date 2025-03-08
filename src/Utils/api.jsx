@@ -1947,6 +1947,7 @@ export const postChats=async(msg,reciever,onSuccess,onError)=>{
   try{
     let token = localStorage.getItem("token");
     const payload = { 
+      is_read:false,
       content: msg,
       receiver:reciever
      };

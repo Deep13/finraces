@@ -125,6 +125,12 @@ const Chat = () => {
         // setMessages((prevMessages) => [ data,...prevMessages]);
         handleNewMessage(data)
       }
+      else if(chatUsers.some(user => user.id === data?.fromUserId)){
+        console.log("in user list")
+      }
+      else{
+        chatUsers.append(data?.sender)
+      }
     });
 
     return () => {
