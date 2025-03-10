@@ -1679,7 +1679,7 @@ export const getMarketLosers = async (
   } catch (e) {
     console.error('stock error', e.response.data.message)
     if (e.response.data.message === 'Unauthorized') {
-      alert('You are not Authorized')
+      // alert('You are not Authorized')
       onError()
     }
   }
@@ -1704,7 +1704,7 @@ export const getMarketGainers = async (
   } catch (e) {
     console.error('stock error', e.response.data.message)
     if (e.response.data.message === 'Unauthorized') {
-      alert('You are not Authorized')
+      // alert('You are not Authorized')
       onError()
     }
   }
@@ -1730,7 +1730,7 @@ export const getPERatio = async (
   } catch (e) {
     console.error('stock error', e.response.data.message)
     if (e.response.data.message === 'Unauthorized') {
-      alert('You are not Authorized')
+      // alert('You are not Authorized')
       onError()
     }
   }
@@ -1755,7 +1755,7 @@ export const getIncomeStatement = async (
   } catch (e) {
     console.error('stock error', e.response.data.message)
     if (e.response.data.message === 'Unauthorized') {
-      alert('You are not Authorized')
+      // alert('You are not Authorized')
       onError()
     }
   }
@@ -1781,7 +1781,6 @@ export const getStockProfile = async (
   } catch (e) {
     console.error('stock error', e.response.data.message)
     if (e.response.data.message === 'Unauthorized') {
-      alert('You are not Authorized')
       onError()
     }
   }

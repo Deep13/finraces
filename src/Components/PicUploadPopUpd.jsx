@@ -6,6 +6,7 @@ import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import { ColorRing } from "react-loader-spinner";
 
 
+
 const PicUploadPopUpd = ({
     exit,
     setImageUrl,
@@ -16,6 +17,7 @@ const PicUploadPopUpd = ({
 
     const [selectedFile, setSelectedFile] = useState(null);
     const { darkModeEnabled, setProfileImage } = useContext(DarkModeContext)
+    const [showPopUp,setShowPopUp]=useState(false);
 
     const handleFileChange = (event) => {
         const files = event.target.files;
@@ -34,6 +36,17 @@ const PicUploadPopUpd = ({
 
     return (
         <div className='fixed w-full h-screen top-0 left-0 z-[100] bg-black bg-opacity-50 grid place-items-center'>
+            {
+                showPopUp && <div className="w-full h-full fixed top-0 left-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
+                    <div className="w-[30rem] h-[15rem] bg-white dark:bg-[#00387e] rounded-[20px] p-[20px] flex flex-col items-center justify-center gap-4">
+                        <p className="text-3xl font-semibold text-green-500">Updated Successfully</p>
+                        {/* <p className="text-xl font-semibold">Thank you for your feedback</p> */}
+                        <button onClick={() => {setShowPopUp(false)
+                            exit(false)
+                        }} className="darktext-[#e4eaf0] bg-[#e4eaf0] text-lg dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-[1rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold font-poppins">Okay</button>
+                    </div>
+                </div>
+            }
             <div className='py-8 px-12 rounded-lg min-h-[10rem] bg-white shadow-xl relative max-h-[18rem] flex flex-col gap-3 justify-center items-center w-[20rem] dark:bg-[#002763]'>
                 <button onClick={() => {
                     exit(false)
@@ -69,12 +82,15 @@ const PicUploadPopUpd = ({
                                         // set the pic data here
                                         setImageUrl(data?.photo?.path)
                                         setProfileImage(data?.photo?.path)
-                                        let userData = JSON.parse(btoa(localStorage.getItem('userDetails')))
+                                        let userData = JSON.parse(atob(localStorage.getItem('userDetails')))
                                         userData.photo.path = data?.data?.path
-                                        localStorage.setItem('userDetails', JSON.stringify(userData))
+                                        localStorage.setItem('userDetails', btoa(JSON.stringify((userData))))
+                                        setShowPopUp(true);
                                     })
-                                    exit(false)
+                                    // exit(false)
                                     setTimeout(() => setImageIsLoading(false), 2500)
+                                },(error)=>{
+                                    console.log("error",error)
                                 })
                             }
 

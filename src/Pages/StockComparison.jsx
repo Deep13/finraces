@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { MdArrowBackIos } from "react-icons/md";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { IoIosArrowDown, IoIosCloseCircleOutline  } from "react-icons/io";
@@ -11,6 +11,7 @@ import {debounceStockSearchj, getStockChartData, getStockComparisonData, getStoc
 import { debounce } from "lodash";
 import stockData from "../stockData.json"
 import CandleChart from "../Components/CandleChart";
+import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 
 const StockComparison = () => {
@@ -71,6 +72,18 @@ const StockComparison = () => {
   const [chartData,setChartData] = useState([{},{},{},{}]);
   const [candleData,setCandleData] = useState([{},{},{},{}]);
   
+  const {setShowLoginForm} =useContext(DarkModeContext)
+  
+  
+      useEffect(()=>{
+          let token=localStorage.getItem('token');
+          let ud=localStorage.getItem('userDetails');
+  
+          if(!ud || !token){
+              setShowLoginForm(true);
+          }
+      },[])
+
   // const processStockData = (stockData) => {
   //   const { labels, stocks } = stockData;
   
@@ -212,6 +225,13 @@ const StockComparison = () => {
   },[timeRange])
 
   const buttonClick=()=>{
+    let token=localStorage.getItem('token');
+    let ud=localStorage.getItem('userDetails');
+    
+    if(!ud || !token){
+      setShowLoginForm(true);
+    }
+
     let count=0;
     for(let i=0;i<4;i++){
       //fill the tables 
@@ -225,16 +245,16 @@ const StockComparison = () => {
               let updatedData = [...prevData];
             
               updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
-              updatedData[0].values[i] = data.financials.income_statement.revenues?.value ?? "--";
+              updatedData[0].values[i] = data?.financials?.income_statement?.revenues?.value ?? "--";
             
               updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
-              updatedData[1].values[i] = data.financials.income_statement.operating_expenses?.value ?? "--";
+              updatedData[1].values[i] = data?.financials?.income_statement?.operating_expenses?.value ?? "--";
             
               updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
-              updatedData[2].values[i] = data.financials.income_statement.operating_income_loss?.value ?? "--";
+              updatedData[2].values[i] = data?.financials?.income_statement?.operating_income_loss?.value ?? "--";
             
               updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
-              updatedData[3].values[i] = data.financials.income_statement.research_and_development?.value ?? "--";
+              updatedData[3].values[i] = data?.financials?.income_statement?.research_and_development?.value ?? "--";
             
               return updatedData;
             });
@@ -244,22 +264,22 @@ const StockComparison = () => {
               let updatedData = [...prevData];
             
               updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
-              updatedData[0].values[i] = data.financials.income_statement?.basic_average_shares?.value ?? "--";
+              updatedData[0].values[i] = data?.financials?.income_statement?.basic_average_shares?.value ?? "--";
             
               updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
-              updatedData[1].values[i] = data.financials.income_statement?.basic_earnings_per_share?.value ?? "--";
+              updatedData[1].values[i] = data?.financials?.income_statement?.basic_earnings_per_share?.value ?? "--";
             
               updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
               updatedData[2].values[i] = data?.peratio ?? "--";
             
               updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
-              updatedData[3].values[i] = data.financials.income_statement?.diluted_earnings_per_share?.value ?? "--";
+              updatedData[3].values[i] = data?.financials?.income_statement?.diluted_earnings_per_share?.value ?? "--";
               
               updatedData[4] = { ...updatedData[4], values: [...updatedData[4].values] };
-              updatedData[4].values[i] = data.financials.income_statement.diluted_earnings_per_share?.value ?? "--";
+              updatedData[4].values[i] = data?.financials?.income_statement?.diluted_earnings_per_share?.value ?? "--";
             
               updatedData[5] = { ...updatedData[5], values: [...updatedData[5].values] };
-              updatedData[5].values[i] = data.financials.comprehensive_income.comprehensive_income_loss?.value ?? "--";
+              updatedData[5].values[i] = data?.financials?.comprehensive_income?.comprehensive_income_loss?.value ?? "--";
             
               return updatedData;
             });
@@ -269,19 +289,19 @@ const StockComparison = () => {
               let updatedData = [...prevData];
             
               updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
-              updatedData[0].values[i] = data.financials.balance_sheet?.assets?.value ?? "--";
+              updatedData[0].values[i] = data?.financials?.balance_sheet?.assets?.value ?? "--";
             
               updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
-              updatedData[1].values[i] = data.financials.balance_sheet?.equity?.value ?? "--";
+              updatedData[1].values[i] = data?.financials?.balance_sheet?.equity?.value ?? "--";
             
               updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
-              updatedData[2].values[i] = data.financials.balance_sheet?.inventory?.value ?? "--";
+              updatedData[2].values[i] = data?.financials?.balance_sheet?.inventory?.value ?? "--";
             
               updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
-              updatedData[3].values[i] = data.financials.balance_sheet?.liabilities?.value ?? "--";
+              updatedData[3].values[i] = data?.financials?.balance_sheet?.liabilities?.value ?? "--";
             
               updatedData[4] = { ...updatedData[4], values: [...updatedData[4].values] };
-              updatedData[4].values[i] = data.financials.balance_sheet.long_term_debt?.value ?? "--";
+              updatedData[4].values[i] = data?.financials?.balance_sheet.long_term_debt?.value ?? "--";
             
               return updatedData;
             });
@@ -292,16 +312,16 @@ const StockComparison = () => {
               let updatedData = [...prevData];
             
               updatedData[0] = { ...updatedData[0], values: [...updatedData[0].values] };
-              updatedData[0].values[i] = data.financials.cash_flow_statement?.net_cash_flow?.value ?? "--";
+              updatedData[0].values[i] = data?.financials?.cash_flow_statement?.net_cash_flow?.value ?? "--";
             
               updatedData[1] = { ...updatedData[1], values: [...updatedData[1].values] };
-              updatedData[1].values[i] = data.financials.cash_flow_statement?.net_cash_flow_from_financing_activities?.value ?? "--";
+              updatedData[1].values[i] = data?.financials?.cash_flow_statement?.net_cash_flow_from_financing_activities?.value ?? "--";
             
               updatedData[2] = { ...updatedData[2], values: [...updatedData[2].values] };
-              updatedData[2].values[i] = data.financials.cash_flow_statement?.net_cash_flow_from_investing_activities?.value ?? "--";
+              updatedData[2].values[i] = data?.financials?.cash_flow_statement?.net_cash_flow_from_investing_activities?.value ?? "--";
             
               updatedData[3] = { ...updatedData[3], values: [...updatedData[3].values] };
-              updatedData[3].values[i] = data.financials.cash_flow_statement?.net_cash_flow_from_operating_activities?.value ?? "--";
+              updatedData[3].values[i] = data?.financials?.cash_flow_statement?.net_cash_flow_from_operating_activities?.value ?? "--";
             
               return updatedData;
             });
@@ -331,7 +351,7 @@ const StockComparison = () => {
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
       <Sidebar />
-      <div className="dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex flex-1 flex-col rounded-xl border dark:border-[#00387E] dark:text-white">
+      <div className="dark:bg-[#000D38] min-h-[200rem] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex flex-1 flex-col rounded-xl border dark:border-[#00387E] dark:text-white">
         
         {/* Header */}
         <div>
@@ -495,6 +515,18 @@ const StockComparison = () => {
             </div>
           </div>
         </div>
+        <div className="h-[3rem] z-50 top-20 sticky border-2 dark:border-0 dark:bg-[#001a50] grid grid-cols-5 rounded-xl py-2 px-5 mb-7 font-poppins font-semibold">
+          <div className="col-span-1 flex justify-center items-center">
+            Stocks
+            <FaArrowRight />
+          </div>
+          {selectedStocks.map((stock,index)=>(
+            <div key={index} className="flex justify-center items-center gap-2">
+              <div>{stock.ticker}</div>
+              <div style={{ backgroundColor:stockColors[index] }} className={`w-5 h-5`}></div>
+            </div>
+          ))}
+        </div>
         {/* Chart Placeholder */}
         <div className="h-[30rem] w-full bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mb-7">
           <div className="w-full h-full">
@@ -514,24 +546,7 @@ const StockComparison = () => {
 
 
         {/* Stocks Header */}
-        <div className="h-[3rem] border-2 dark:border-0 dark:bg-[#001a50] grid grid-cols-5 rounded-xl py-2 px-5 mb-7 font-poppins font-semibold">
-          <div className="col-span-1 flex justify-center items-center">
-            Stocks
-            <FaArrowRight />
-          </div>
-          {/* {datasets.map((stock, index) => (
-            <div key={index} className="flex justify-center items-center gap-2">
-              <div>{stock.label}</div>
-              <div style={{ backgroundColor: stock.borderColor }} className={`w-5 h-5`}></div>
-            </div>
-          ))} */}
-          {selectedStocks.map((stock,index)=>(
-            <div key={index} className="flex justify-center items-center gap-2">
-              <div>{stock.ticker}</div>
-              <div style={{ backgroundColor:stockColors[index] }} className={`w-5 h-5`}></div>
-            </div>
-          ))}
-        </div>
+        
 
         {/* Table Section */}
         <div className="h-auto dark:bg-[#001a50] dark:border-0 border-2 rounded-xl py-2 px-5 mb-7">

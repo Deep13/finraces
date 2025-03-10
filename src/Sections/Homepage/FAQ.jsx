@@ -1,13 +1,15 @@
 import { BsChevronCompactDown, BsChevronCompactUp } from "react-icons/bs";
 import { AiOutlineArrowRight } from "react-icons/ai";
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import line from '../../assets/images/Group.png'
 import { accordionData } from "../../Utils/Data";
+import { DarkModeContext } from "../../Contexts/DarkModeProvider";
+
 
 const FAQ = () => {
 
     const [activeIndex, setActiveIndex] = useState(null);
-
+    const {setReport} =useContext(DarkModeContext)
 
 
     const toggleAccordion = (index) => {
@@ -23,9 +25,9 @@ const FAQ = () => {
                 <img className='mb-[15.2px]' src={line} alt="" />
                 {/* links  */}
                 <div className='w-[60%] flex flex-col gap-[8px]'>
-                    <button className='rounded-[20.62px] bg-[#e5f4ff] text-[1.21rem] font-extrabold text-start p-[1rem] relative dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]  dark:text-white flex justify-between items-center'>Visit FAQ Center <span className=""><AiOutlineArrowRight size={27} /></span></button>
-                    <button className='rounded-[20.62px] bg-[#e5f4ff] text-[1.21rem] font-extrabold text-start p-[1rem] relative dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]  dark:text-white flex justify-between items-center'>Visit our blog<span className=""><AiOutlineArrowRight size={27} /></span></button>
-                    <button className='rounded-[20.62px] bg-[#e5f4ff] text-[1.21rem] font-extrabold text-start p-[1rem] relative dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]  dark:text-white flex justify-between items-center'>Ask for more help <span className=""><AiOutlineArrowRight size={27} /></span></button>
+                    {/* <button className='rounded-[20.62px] bg-[#e5f4ff] text-[1.21rem] font-extrabold text-start p-[1rem] relative dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]  dark:text-white flex justify-between items-center'>Visit FAQ Center <span className=""><AiOutlineArrowRight size={27} /></span></button>
+                    <button className='rounded-[20.62px] bg-[#e5f4ff] text-[1.21rem] font-extrabold text-start p-[1rem] relative dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]  dark:text-white flex justify-between items-center'>Visit our blog<span className=""><AiOutlineArrowRight size={27} /></span></button> */}
+                    <button onClick={()=>{setReport(true)}} className='rounded-[20.62px] bg-[#e5f4ff] text-[1.21rem] font-extrabold text-start p-[1rem] relative dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]  dark:text-white flex justify-between items-center'>Ask for more help <span className=""><AiOutlineArrowRight size={27} /></span></button>
                 </div>
             </div>
             <div className='h-full flex flex-col justify-start gap-[8px]'>

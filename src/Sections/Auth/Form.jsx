@@ -270,16 +270,27 @@ const Form = ({
               </div>
               <div className='text-start flex flex-col w-full'>
                 <label className="text-start mb-2 dark:text-white" htmlFor="gender">Gender</label>
-                <select 
-                  name="gender" 
-                  value={signupCreds.gender} 
-                  onChange={handleInput} 
-                  className='border rounded p-2 bg-white dark:bg-gray-800 dark:text-white'
-                >
-                  <option value="" disabled>Select your gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                </select>
+                <div className="flex items-center space-x-3">
+  <span className="text-gray-700 dark:text-white">Male</span>
+  
+  <label className="relative inline-flex items-center cursor-pointer">
+    <input 
+      type="checkbox" 
+      className="sr-only peer" 
+      checked={signupCreds.gender === "female"} 
+      onChange={() => 
+        setSignupCreds((prev) => ({
+          ...prev,
+          gender: prev.gender === "male" ? "female" : "male"
+        }))
+      }
+    />
+    <div className="w-12 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-1 after:left-1 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+  </label>
+
+  <span className="text-gray-700 dark:text-white">Female</span>
+</div>
+
               </div>
               <button onClick={Signup} disabled={buttonStates.signup} className={`${signupActive ? 'bg-[#0d5ce5]' : 'bg-[#d2d2d2]'} rounded-[10px] text-white text-[24px] w-full px-[22px] py-[20px] flex items-center justify-center dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF] dark:font-semibold`}>
                 Next <BiChevronRight size={18} />

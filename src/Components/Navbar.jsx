@@ -77,7 +77,7 @@ const Navbar = () => {
       }, []); // ✅ Empty dependency array means this runs only once when the component mounts
     
  
-    const { darkModeEnabled, toggle, createRace, setCreateRace, showLoginForm, setShowLoginForm, profileImage, setProfileImage } = useContext(DarkModeContext)
+    const { darkModeEnabled, toggle, createRace, setCreateRace, showLoginForm, setShowLoginForm, profileImage, setReport } = useContext(DarkModeContext)
     const [dropdown, setDropdown] = useState(false)
     const [notificationToggle, setNotificationToggle] = useState(false)
     const [search, setSearch] = useState(false)
@@ -292,6 +292,7 @@ const Navbar = () => {
                                     className={`absolute top-16 bg-white rounded-lg right-0 w-[130%] overflow-hidden shadow-2xl dark:bg-[#002864]`}>
                                     <button onClick={() => navigate('/profile')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear text-start dark:text-white dark:hover:bg-opacity-20">Profile</button>
                                     <p onClick={() => navigate('/settings')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Settings</p>
+                                    <p onClick={() => setReport(true)} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Support</p>
                                     <p title="Log out button" onClick={() => {
                                         localStorage.removeItem('token')
                                         localStorage.removeItem('refreshToken')

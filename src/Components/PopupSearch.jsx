@@ -130,7 +130,7 @@ const PopupSearch = ({ setPopupSearch }) => {
                 </div>
 
                 {/* Search results for users */}
-                <div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
+                {searchQuery.length>0 && <div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
                     <div className="max-w-[39rem] min-w-[10rem] max-h-[12rem] overflow-auto py-8 rounded-xl bg-[#001B51] p-4 flex justify flex-wrap gap-4">
                         {users?.length > 0 ? (
                             users?.map((user) => (
@@ -147,10 +147,10 @@ const PopupSearch = ({ setPopupSearch }) => {
                         )}
                     </div>
                     {users.length > 6 && <button className="px-4 py-3 font-bold text-sm dark:text-white dark:bg-[#001B51] rounded-lg">Show All</button>}
-                </div>
+                </div>}
 
                 {/* Search results for races */}
-                <div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
+                {searchQuery.length>0 && <div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
                     <div className="max-w-[40rem] min-w-[10rem] max-h-[11.5rem] rounded-xl bg-[#001B51] p-4 flex justify flex-wrap gap-4 overflow-hidden">
                         {races?.length > 0 ? (
                             races?.map((race) => (
@@ -170,7 +170,7 @@ const PopupSearch = ({ setPopupSearch }) => {
                         navigate('/allraces', { state: 'Finished Races' })
                         setPopupSearch(false)
                     }} className="px-4 py-3 font-bold text-sm dark:text-white dark:bg-[#001B51] rounded-lg">Show All</button>}
-                </div>
+                </div>}
             </div>
         </motion.div>
     );

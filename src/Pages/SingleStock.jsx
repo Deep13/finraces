@@ -214,11 +214,26 @@ const SingleStock = () => {
                 {graphType=="candle"&&<CandleChart stockData={historyData} static={false} filter={timeRange}/>}
             </div>
 
-            {showPopUp&&
-            <div className="dark:bg-[#002763] border dark:border-[#00387E] flex flex-col items-center justify-center gap-5 absolute top-30 left-[65%] w-60 h-40 rounded-lg p-2">
-               <div className="mx-auto text-center"> Stock has been {inWatchlist?"added to the watchlist":"removed from the watchlist"}</div>  
-               <div className="bg-blue-500 px-3 py-2 rounded-lg cursor-pointer" onClick={()=>setShowPopUp(false)}>Close</div>
-              </div>}
+            {showPopUp && (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
+    <div className="dark:bg-[#002763] bg-white border dark:border-[#00387E] shadow-lg flex flex-col items-center justify-center gap-4 w-64 p-4 rounded-lg">
+      {/* Popup Message */}
+      <p className="text-center text-lg font-medium text-gray-900 dark:text-white">
+        Stock has been {inWatchlist ? "added to the watchlist" : "removed from the watchlist"}.
+      </p>  
+
+      {/* Close Button */}
+      <button
+        className="bg-blue-500 hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-lg transition-all"
+        onClick={() => setShowPopUp(false)}
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
+
         </div>
     </div>
   )

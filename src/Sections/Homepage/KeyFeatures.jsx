@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import cardImage from '../../assets/images/card_video_image.png'
 import news_icon from '../../assets/images/news_icon.svg'
 import newsdark from '../../assets/images/newsdark.svg'
@@ -35,79 +35,62 @@ const keyFeaturesData = [
   },
 ];
 
-
-
-
 const KeyFeatures = () => {
-
   const { darkModeEnabled } = React.useContext(DarkModeContext)
+
   return (
-    <div className='max-w-[1400px] relative mb-[5rem] md:mb-[3.29rem]'>
-      {/* <a className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
-        See All <BiChevronRight size={18} />
-      </a> */}
-      <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Key Features</h2>
-      {/* info section  */}
-      <div className="w-full gap-[22px] mb-[3.5rem]">
-        <div className="gap-[23px] grid grid-cols-1 md:grid-cols-2">
-          {/* card  */}
-          <div className='flex gap-[5rem] px-20'>
-            <div className='py-[27.3px] font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>01</div>
-            <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
-              <p className='text-[19.7px] font-semibold dark:text-white'>Live Market Races</p>
-              <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Join real-time competitions where you predict the performance of stocks, crypto, and other assets, racing against others to see who can spot the winners fastest.</p>
+    <div className='max-w-[1400px] mx-auto relative mb-20 md:mb-14 px-4 md:px-8 lg:px-12'>
+      <h2 className='text-3xl md:text-4xl font-bold text-center mb-6 dark:text-white'>Key Features</h2>
+
+      {/* Feature Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-10 mb-12">
+        {[{
+          number: '01',
+          title: 'Live Market Races',
+          description: 'Join real-time competitions where you predict the performance of stocks, crypto, and other assets, racing against others to see who can spot the winners fastest.'
+        }, {
+          number: '02',
+          title: 'Customizable Leaderboards',
+          description: 'Track your ranking, wins, and earnings on dynamic leaderboards tailored to your favourite markets or challenge types, fuelling your competitive edge.'
+        }, {
+          number: '03',
+          title: 'Prize Pools & Rewards',
+          description: 'Win cash, crypto, or exclusive perks by outpacing opponents in daily, weekly, or special event races tied to market movements.'
+        }, {
+          number: '04',
+          title: 'Strategy Playbook',
+          description: 'Access tools and insights to sharpen your predictions, from market trends to historical data, turning financial know-how into race-ready tactics.'
+        }].map(({ number, title, description }) => (
+          <div key={number} className='flex gap-6 md:gap-10 items-start'>
+            <div className='text-5xl md:text-6xl font-medium text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>
+              {number}
+            </div>
+            <div className='flex-1'>
+              <p className='text-lg md:text-xl font-semibold dark:text-white'>{title}</p>
+              <p className='text-sm md:text-base leading-6 md:leading-7 dark:text-white'>{description}</p>
             </div>
           </div>
-          {/* card  */}
-          <div className='flex gap-[5rem] px-20'>
-            <div className='py-[27.3px] font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>02</div>
-            <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
-              <p className='text-[19.7px] font-semibold dark:text-white'>Customizable Leaderboards</p>
-              <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Track your ranking, wins, and earnings on dynamic leaderboards tailored to your favourite markets or challenge types, fuelling your competitive edge. </p>
-            </div>
-          </div>
-        </div>
-        <div className="gap-[23px] grid grid-cols-1 md:grid-cols-2">
-          {/* card  */}
-          <div className='flex gap-[5rem] px-20'>
-            <div className='py-[27.3px] font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>03</div>
-            <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
-              <p className='text-[19.7px] font-semibold dark:text-white'>Prize Pools & Rewards</p>
-              <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Win cash, crypto, or exclusive perks by outpacing opponents in daily, weekly, or special event races tied to market movements. </p>
-            </div>
-          </div>
-          {/* card  */}
-          <div className='flex gap-[5rem] px-20'>
-            <div className='py-[27.3px] font-medium text-[64px] text-gradient dark:bg-clip-text text-transparent dark:bg-gradient-to-r from-[#66D9FF] to-[#125399]'>04</div>
-            <div className='w-[433.1px] h-full flex flex-col gap-[15px] py-[15px]'>
-              <p className='text-[19.7px] font-semibold dark:text-white'>Strategy Playboo</p>
-              <p className='text-[15.15px] leading-[30.3px] dark:text-white'>Access tools and insights to sharpen your predictions, from market trends to historical data, turning financial know-how into race-ready tactics. </p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
-      <div className='w-full rounded-[10px] bg-[#e5f4ff] px-[1.56rem] pt-[1.18rem] mb-[3rem] dark:bg-transparent dark:border dark:border-white'>
-        <div className='flex gap-[10px] mb-[2.1rem]'>
-          <img src={darkModeEnabled ? newsdark : news_icon} alt="video to show How does it work" />
-          <h3 className='text-[2rem] font-semibold dark:text-white'>How does it work ?</h3>
+      {/* How does it work? */}
+      <div className='w-full rounded-xl bg-[#e5f4ff] px-6 py-6 md:px-8 md:py-8 dark:bg-transparent dark:border dark:border-white'>
+        <div className='flex items-center gap-4 mb-6'>
+          <img src={darkModeEnabled ? newsdark : news_icon} alt="News Icon" className="w-8 h-8" />
+          <h3 className='text-xl md:text-2xl font-semibold dark:text-white'>How does it work?</h3>
         </div>
-        <div className='grid grid-cols-2 md:grid-cols-4 gap-[36px] pb-[48px]'>
-          {/* here will be the cards */}
-          {/* card */}
-          {
-            keyFeaturesData.map(curr => (
-              <KeyFeaturesCard
-                key={curr.id}
-                title={curr.title}
-                cardImage={curr.cardImage}
-                description={curr.description}
-              />)
-            )
-          }
+
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
+          {keyFeaturesData.map(curr => (
+            <KeyFeaturesCard
+              key={curr.id}
+              title={curr.title}
+              cardImage={curr.cardImage}
+              description={curr.description}
+            />
+          ))}
         </div>
       </div>
-
     </div>
   )
 }
