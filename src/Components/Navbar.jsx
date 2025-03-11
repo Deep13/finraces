@@ -232,7 +232,7 @@ const Navbar = () => {
                                 transition={{ duration: 0.2, ease: "easeInOut" }}
                                 className={`absolute top-14 -right-4 p-3 dark:bg-[#164286] shalxl dark:shadow-none bg-white w-[23.3rem] rounded-xl flex flex-col gap-3 items-center`}>
                                 {/* place notifications here  */}
-                                {unseenNotifications.map((notification)=>{
+                                {unseenNotifications.slice(0, 5).map((notification)=>{
                                     return(
                                         <div key={notification.notification.id} className="w-full bg-slate-200 dark:bg-[#002763] py-2 px-4 rounded-lg">
                                             <p className="text-[1rem] font-medium dark:text-white">{notification.notification.message.split(": ")[1]}</p>

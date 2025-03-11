@@ -576,7 +576,9 @@ const RacePage = () => {
             if (data.event === 'race-data') {
                 setRaceResults(data.data)
                 // console.log('race data socket', data.data)
-                setRaceStatus(data.data.status) // somehow this is not reflecting
+                if(data?.data?.status){
+                    setRaceStatus(data.data.status)
+                } // somehow this is not reflecting
                 setIsLoadingRaceTile(false)
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
@@ -735,7 +737,7 @@ const RacePage = () => {
                     <Sidebar />
 
                     {/* dashboard  */}
-                    <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
+                    <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem] overflow-x-hidden'>
                         {/* this is full width container cuz we need the sidebar to remain at correct place */}
                         <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-t-[24px] dark:bg-[#000D38] bg-[#EDF7FF]'>
 
@@ -1026,7 +1028,7 @@ const RacePage = () => {
                             </div>
                         </div>
                         {/* other stocks rally  */}
-                        <div className="w-[87.5rem] py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
+                        <div className="w-[83.5rem] py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
                                     <div className="flex justify-between w-full items-center mb-[18px]">
                                         <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
                                         {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
