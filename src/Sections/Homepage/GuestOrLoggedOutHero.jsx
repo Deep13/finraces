@@ -30,6 +30,8 @@ const GuestOrLoggedOutHero = () => {
     const [totalPoints, setTotalPoints] = useState(0)
     const [winningRate, setWinningRate] = useState(0)
     const [watchList,setWatchList] = useState([]);
+    const [page,setPage]=useState(2);
+    const [hasNext,setHasNext]=useState(false);
 
     const iu = localStorage.getItem('userDetails')
     const imageUrl = iu && JSON.parse(atob(iu))
@@ -41,15 +43,26 @@ const GuestOrLoggedOutHero = () => {
 
     const scrollLeft = () => {
         if (sliderRef.current) {
-            sliderRef.current.scrollBy({ left: -200, behavior: "smooth" });
+            sliderRef.current.scrollBy({ left: -255, behavior: "smooth" });
         }
     };
 
     const scrollRight = () => {
         if (sliderRef.current) {
-            sliderRef.current.scrollBy({ left: 200, behavior: "smooth" });
+            sliderRef.current.scrollBy({ left: 255, behavior: "smooth" });
+    
+            // Wait for scroll to complete, then check if near the end
+            setTimeout(() => {
+                const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+    
+                // If scrolled near the right end, fetch more stocks
+                if (scrollLeft + clientWidth >= scrollWidth - 50 && hasNext) {
+                    fetchWatchList(page);
+                }
+            }, 500); // Delay to ensure smooth scroll before checking
         }
     };
+    
 
 
     function capitalize(s) {
@@ -78,10 +91,49 @@ const GuestOrLoggedOutHero = () => {
         getWatchList(
             (data)=>{setWatchList(data.data)
                 console.log("check",data)
+                setHasNext(data.hasNextPage)
             },
             (error)=>{console.log("error",error)}
         )
     },[])
+
+     // Function to fetch stocks
+  const fetchWatchList = (pageNumber) => {
+    if (!hasNext) return; // Prevent duplicate calls
+
+    
+    getWatchList(
+      (data) => {
+        setWatchList((prev) => [...prev, ...data.data]); // Append new data
+        setHasNext(data.hasNextPage); // Update hasNext flag
+        setPage(pageNumber + 1); // Increment page number
+      },
+      (error) => {
+        console.log("Error fetching stocks:", error);
+      },
+      pageNumber // Pass page number to API
+    );
+  };
+
+  // Detect when user scrolls to the end
+  const handleScroll = () => {
+    if (!sliderRef.current) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+
+    // If user scrolled near the right end, load more
+    if (scrollLeft + clientWidth >= scrollWidth - 20) {
+      fetchWatchList(page);
+    }
+  };
+
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    slider.addEventListener("scroll", handleScroll);
+    return () => slider.removeEventListener("scroll", handleScroll);
+  }, [page, hasNext]);
 
     return (
         <>

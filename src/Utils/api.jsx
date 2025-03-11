@@ -1839,11 +1839,11 @@ export const addToWatchList = async (stockId, onSuccess, onError) => {
   }
 };
 
-export const getWatchList=async(onSuccess,onError)=>{
+export const getWatchList=async(onSuccess,onError,pageNum=1)=>{
   try{
     let token=localStorage.getItem('token');
 
-    const response = await axios.get(`${GlobalURL}/api/v1/stock-watchlists`, {
+    const response = await axios.get(`${GlobalURL}/api/v1/stock-watchlists?page=${pageNum}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

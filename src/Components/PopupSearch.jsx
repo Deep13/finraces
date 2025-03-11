@@ -10,6 +10,7 @@ import facebook from '../assets/images/facebook.svg'
 import { debounce, filter } from "lodash";
 import { fuzzySearch } from "../Utils/api";
 import { useNavigate } from "react-router-dom";
+import { ColorRing } from "react-loader-spinner";
 
 
 const usersData = [
@@ -45,20 +46,25 @@ const PopupSearch = ({ setPopupSearch }) => {
     const [filteredResults, setFilteredResults] = useState(null)
     const [users, setUsers] = useState([])
     const [races, setRaces] = useState([])
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
 
     const updateFilteredResults = useCallback(
         debounce(async (newQuery) => { // direcy callback instead of defining it ouside
             if (newQuery.length > 2) {
+                 setLoading(true); // Start loading
                 try {
                     const response = await fuzzySearch(newQuery); // Replace with your actual API call
                     setFilteredResults(response); // Adjust according to your API response structure
                 } catch (error) {
                     console.error("Error fetching stocks:", error);
                     setFilteredResults([]); // Handle error case
-                }
+                }finally {
+                setLoading(false); // Stop loading after API call completes
+            }
             } else {
                 setFilteredResults([]); // Reset to default list if query is too short
+                setLoading(false); 
             }
         }, 300)
         , [])
@@ -130,27 +136,44 @@ const PopupSearch = ({ setPopupSearch }) => {
                 </div>
 
                 {/* Search results for users */}
-                {searchQuery.length>0 && <div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
-                    <div className="max-w-[39rem] min-w-[10rem] max-h-[12rem] overflow-auto py-8 rounded-xl bg-[#001B51] p-4 flex justify flex-wrap gap-4">
-                        {users?.length > 0 ? (
-                            users?.map((user) => (
-                                <SearchUserCard
-                                    key={user?.id}
-                                    id={user?.id}
-                                    name={user?.firstName + " " + user?.lastName}
-                                    image={user?.photo?.path}
-                                    exitSearch={setPopupSearch}
-                                />
-                            ))
-                        ) : (
-                            <p className="text-white">No users found</p>
-                        )}
-                    </div>
-                    {users.length > 6 && <button className="px-4 py-3 font-bold text-sm dark:text-white dark:bg-[#001B51] rounded-lg">Show All</button>}
-                </div>}
+                {searchQuery.length > 2 && (
+    <div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
+        <div className="max-w-[39rem] min-w-[10rem] max-h-[12rem] overflow-auto py-8 rounded-xl bg-[#001B51] p-4 flex justify-center flex-wrap gap-4">
+            {loading ? (
+                <ColorRing
+                    visible={true}
+                    height="80"
+                    width="80"
+                    ariaLabel="color-ring-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="color-ring-wrapper"
+                    colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+                />
+            ) : users?.length > 0 ? (
+                users.map((user) => (
+                    <SearchUserCard
+                        key={user?.id}
+                        id={user?.id}
+                        name={`${user?.firstName} ${user?.lastName}`}
+                        image={user?.photo?.path}
+                        exitSearch={setPopupSearch}
+                    />
+                ))
+            ) : (
+                <p className="text-white">No users found</p>
+            )}
+        </div>
+        {users.length > 6 && (
+            <button className="px-4 py-3 font-bold text-sm dark:text-white dark:bg-[#001B51] rounded-lg">
+                Show All
+            </button>
+        )}
+    </div>
+)}
+
 
                 {/* Search results for races */}
-                {searchQuery.length>0 && <div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
+                {(searchQuery.length>2 && !loading) &&<div className="flex-1 pt-4 mb-4 flex flex-col gap-4 items-center">
                     <div className="max-w-[40rem] min-w-[10rem] max-h-[11.5rem] rounded-xl bg-[#001B51] p-4 flex justify flex-wrap gap-4 overflow-hidden">
                         {races?.length > 0 ? (
                             races?.map((race) => (

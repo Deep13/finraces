@@ -2,31 +2,57 @@ import React, { useEffect, useState } from 'react'
 import RaceCardHomepage from '../../Components/RaceCardHomepage'
 import Pagination from '../../Components/Pagination'
 import { getRaceList } from '../../Utils/api'
+import { ColorRing } from 'react-loader-spinner'
 
 const OngoingRacesAllRaces = () => {
     const [raceList, setRaceList] = useState([])
+    const [loading,setLoading]=useState(false);
 
     useEffect(() => {
+        setLoading(true)
         getRaceList('running', (data) => {
             // alert('success')
             console.log('running races', data)
             setRaceList(data)
-        }, () => {
+            setLoading(false)
+        }, (error) => {
             // alert('failure')
+            console.log("error",error)
+            setLoading(false);
         })
     }, [])
     return (
         <div className='max-w-[1400px] relative mb-[3.3rem]'>
-            <div className='w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2'>
-                {
-                    raceList[0] ? raceList.map((curr, index) => {
-                        return (
-                            <RaceCardHomepage start_Date={curr.start_date} end_date={curr.end_date} raceName={curr.name} raceId={curr.id} key={index + 1} />
-                        )
-                    }) :
-                        <p className='dark:text-white'>There are no ongoing races right now</p>
-                }
-            </div>
+            <div className='w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2 min-h-[200px] relative'>
+    {loading ? (
+        <div className='absolute inset-0 flex items-center justify-center'>
+            <ColorRing
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="color-ring-loading"
+                wrapperStyle={{}}
+                wrapperClass="color-ring-wrapper"
+                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+            />
+        </div>
+    ) : (
+        raceList.length > 0 ? (
+            raceList.map((curr, index) => (
+                <RaceCardHomepage 
+                    key={curr.id} 
+                    start_Date={curr.start_date} 
+                    end_date={curr.end_date} 
+                    raceName={curr.name} 
+                    raceId={curr.id} 
+                />
+            ))
+        ) : (
+            <p className='dark:text-white col-span-2 text-center'>There are no ongoing races right now</p>
+        )
+    )}
+</div>
+
             {/* <Pagination currentPage={2} totalPages={10} onPageChange={() => { }} /> */}
         </div>
     )

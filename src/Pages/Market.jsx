@@ -68,7 +68,9 @@ const Market = () => {
     const sliderRef2 = useRef(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [stocksData,setStocksData] = useState();
-
+    const [page,setPage]=useState(2);
+    const [hasNext,setHasNext]=useState(false);
+    const observerRef = useRef(null); // Observer reference for last item
     const {setShowLoginForm} =useContext(DarkModeContext)
 
 
@@ -160,11 +162,55 @@ const Market = () => {
             (data)=>{
                 setWatchList(data.data)
                 setSelectedStock(data.data[0])
+                
+                setHasNext(data.hasNextPage)
                 console.log("check",data)
             },
             (error)=>{console.log("error",error)}
         )
     },[])
+
+    // Function to fetch stocks
+  const fetchWatchList = (pageNumber) => {
+    if (!hasNext) return; // Prevent duplicate calls
+
+    
+    getWatchList(
+      (data) => {
+        setWatchList((prev) => [...prev, ...data.data]); // Append new data
+        setHasNext(data.hasNextPage); // Update hasNext flag
+        setPage(pageNumber + 1); // Increment page number
+        
+      },
+      (error) => {
+        console.log("Error fetching stocks:", error);
+        
+      },
+      pageNumber // Pass page number to API
+    );
+  };
+
+  // Infinite Scroll using IntersectionObserver
+  useEffect(() => {
+    if (!watchList?.length) return;
+
+    const lastStockElement = observerRef.current;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNext) {
+          fetchWatchList(page); // Fetch next page
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    if (lastStockElement) observer.observe(lastStockElement);
+
+    return () => {
+      if (lastStockElement) observer.unobserve(lastStockElement);
+    };
+  }, [watchList, hasNext]);
 
     useEffect(()=>{
         const today = new Date();
@@ -258,7 +304,7 @@ const Market = () => {
              <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 border dark:border-[#00387E] flex-2">
                <div className="flex flex-col gap-2 max-h-[18.5rem] overflow-y-auto custom-scrollbar p-2 w-full">
                  {watchList?.map((stockData, index) => (
-                   <div onClick={() => { setSelectedStock(stockData) }} key={index} 
+                   <div ref={index === watchList.length - 1 ? observerRef : null} onClick={() => { setSelectedStock(stockData) }} key={index} 
                         className="flex group justify-between items-center cursor-pointer p-2 gap-5 bg-[#e5f4ff] dark:bg-[#002763] border dark:border-[#00387E] rounded-lg w-full">
                      <img className="rounded-full w-10 h-10" src={stockData?.stock?.icon_url} alt='stockImg' />
                      <div className="flex-1 min-w-0">
