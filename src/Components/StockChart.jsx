@@ -45,8 +45,8 @@ const generateStaticData = (filter, num) => {
 
 
 const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter = "1M", staticData = false,disableAnimation=false }) => {
-  const { darkModeEnabled } = useContext(DarkModeContext);
-  const chartRef = useRef(null);
+  const { darkModeEnabled ,chartRef} = useContext(DarkModeContext);
+  
   const [selectedPoints, setSelectedPoints] = useState({ start: null, end: null, difference: null });
 
   const staticChartData = useMemo(() => (staticData ? generateStaticData(filter,num) : { labels, datasets }), [staticData, filter, labels, datasets]);
@@ -150,18 +150,18 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
 };
 
 
-  const handleResetSelection = () => {
-    if (chartRef.current) {
-      chartRef.current.resetZoom();
-      setSelectedPoints({ start: null, end: null, difference: null });
-    }
-  };
+  // const handleResetSelection = () => {
+  //   if (chartRef.current) {
+  //     chartRef.current.resetZoom();
+  //     setSelectedPoints({ start: null, end: null, difference: null });
+  //   }
+  // };
 
   return (
     <div style={{ position: "relative", width: "100%", height: "400px" }}>
       <Line ref={chartRef} data={data} options={options} />
       <div style={{ display: "flex", justifyContent: "center", marginTop: "10px", gap: "10px" }}>
-        <button onClick={handleResetSelection} style={buttonStyle}>Reset</button>
+        {/* <button onClick={handleResetSelection} style={buttonStyle}>Reset</button> */}
       </div>
       {selectedPoints.start !== null && selectedPoints.end !== null && (
         <div style={{ textAlign: "center", marginTop: "10px", color: darkModeEnabled ? "#fff" : "#000" }}>

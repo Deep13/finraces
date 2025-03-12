@@ -72,7 +72,7 @@ const StockComparison = () => {
   const [chartData,setChartData] = useState([{},{},{},{}]);
   const [candleData,setCandleData] = useState([{},{},{},{}]);
   
-  const {setShowLoginForm} =useContext(DarkModeContext)
+  const {setShowLoginForm,chartRef} =useContext(DarkModeContext)
   
   
       useEffect(()=>{
@@ -433,7 +433,11 @@ const StockComparison = () => {
               Stats
             </span>
             <div className="flex p-2 rounded-sm gap-3 relative">
-
+              <button className="darktext-[#e4eaf0] bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold" onClick={()=>{
+                if (chartRef.current) {
+                  chartRef.current.resetZoom();
+                }
+              }}>Reset Zoom</button>
               {/* Time Range Dropdown */}
               <div className="relative">
                 <button

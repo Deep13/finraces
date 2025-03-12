@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useRef, useState } from "react";
 import { getUser } from "../Utils/api";
 
 
@@ -15,6 +15,7 @@ const DarkModeProvider = ({ children }) => {
     const [profileImage, setProfileImage] = useState('')
     const [selectedStock,setSelectedStock] = useState({})
     const [report, setReport] = useState(false);
+    const chartRef = useRef(null);
 
     useEffect(() => {
         let thisUserData = localStorage.getItem('userDetails')
@@ -36,7 +37,8 @@ const DarkModeProvider = ({ children }) => {
                 setProfileImage,
                 selectedStock,
                 setSelectedStock,
-                report,setReport
+                report,setReport,
+                chartRef
             }}>
             {children}
         </DarkModeContext.Provider>
