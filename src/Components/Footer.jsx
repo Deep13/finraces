@@ -14,96 +14,36 @@ import whatsappdark from '../assets/images/whatsappdark.svg'
 import telegram from '../assets/images/telegram.svg'
 import telegramdark from '../assets/images/telegramdark.svg'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
+import { useNavigate } from 'react-router-dom'
 
 
 
 
 const Footer = () => {
   const { darkModeEnabled } = useContext(DarkModeContext)
+  const navigate=useNavigate();
   return (
-    <footer className='w-full bg-[#e5f4ff] dark:bg-[#002763] gap-[1.9rem] grid grid-cols-1 md:grid-cols-2 pt-[2.8rem] px-[5%] relative'>
-      <div className='absolute bottom-0 left-0 w-full'>
-        <img className='w-[34.23rem]' src={darkModeEnabled ? shapedark : shape} alt="shape" />
-      </div>
+    <footer className="bg-[#e5f4ff] dark:bg-[#002763] dark:text-white py-4 px-6 text-center">
+    <p className="font-bold text-lg mb-2">
+        © Copyright 2025 FinRaces | All rights reserved
+    </p>
+    {/* <p className="text-sm opacity-75">95.86% Payout rate in 2023.</p> */}
+    <div className="flex flex-wrap justify-center gap-4 mt-2 text-sm">
+        <div onClick={()=>{navigate('/')}} className="hover:underline cursor-pointer">Home</div>
+        <div onClick={()=>{navigate('/allraces',{ state: 'Upcoming Races' })}} className="hover:underline cursor-pointer">Upcoming Races</div>
+        <div onClick={()=>{navigate('/allraces',{ state: 'Ongoing Races' })}} className="hover:underline cursor-pointer">Ongoing Races</div>
+        <div onClick={()=>{navigate('/allraces',{ state: 'Finished Races' })}} className="hover:underline cursor-pointer">Finished Races</div>
+        <div onClick={()=>{navigate('/market')}} className="hover:underline cursor-pointer">Market Research</div>
+        <div onClick={()=>{navigate('/stockComparison')}} className="hover:underline cursor-pointer">Stock Comparison</div>
+        {/* <div onClick={()=>{navigate('/')}} className="hover:underline">Twitter</div>
+        <div onClick={()=>{navigate('/')}} className="hover:underline">Instagram</div>
+        <div onClick={()=>{navigate('/')}} className="hover:underline">Affiliate Program</div>
+        <div onClick={()=>{navigate('/')}} className="hover:underline">Game Reviews</div> */}
+        <div onClick={()=>{navigate('/auth')}} className="hover:underline cursor-pointer">Log In</div>
+        {/* <a onClick={()=>{navigate('/')}} className="hover:underline">Consent Choices</div> */}
+    </div>
+</footer>
 
-      {/* first column  */}
-      <div className='w-[34.23rem] h-full relative'>
-        <h5 className='text-[1rem] mb-[1rem] font-semibold dark:text-white'>Navigation</h5>
-        <div className='flex w-full gap-[5.64rem]'>
-          <div className='flex flex-col gap-[6px]'>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-          </div>
-          <div className='flex flex-col gap-[6px]'>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-            <p className='text-[0.82rem] dark:text-white'>Lorem, ipsum</p>
-          </div>
-        </div>
-        {/* copyrights  */}
-        {/* <div className='absolute left-0 bottom-0 flex flex-col gap-[5px]'>
-          <p className='text-[0.9rem]'>Copyright</p>
-          <p className='text-[0.9rem]'>Privacy</p>
-          <p className='text-[0.9rem]'>All rights reserved</p>
-        </div> */}
-      </div>
-
-      {/* second column  */}
-      <div className='w-[34rem] h-full flex flex-col gap-[3.77rem] relative pb-[3rem]'>
-        <h5 className='text-[1rem] mb-[1rem] font-semibold dark:text-white'>Contact us</h5>
-        <div className='flex w-full gap-[5.64rem]'>
-          <div className='flex flex-col gap-[6px]'>
-            <p className='text-[0.82rem] dark:text-white'>+1 (406) 555-0120</p>
-            <p className='text-[0.82rem] dark:text-white'>+1 (406) 555-0120</p>
-          </div>
-          <div className='flex flex-col gap-[6px]'>
-            <p className='text-[0.82rem] dark:text-white'>hello@logoipsum.com</p>
-          </div>
-        </div>
-
-        {/* 64 px GAP HERE  */}
-
-        <div className='w-full gap-[5.64rem] grid grid-cols-1 lg:grid-cols-2'>
-          <div className='flex flex-col gap-[6px]'>
-            <h5 className='text-[1rem] mb-[1.4rem] font-semibold dark:text-white'>follow us</h5>
-            <div className='w-full flex gap-[10px]'>
-              <img src={darkModeEnabled ? fbdark : fb} alt="" />
-              <img src={darkModeEnabled ? gdark : g} alt="" />
-              <img src={darkModeEnabled ? instadark : insta} alt="" />
-              {/* <img src={darkModeEnabled ? Youtubedark : Youtube} alt="" /> */}
-            </div>
-          </div>
-          <div className='flex flex-col gap-[6px]'>
-            <h5 className='text-[1rem] mb-[1.4rem] text-start font-semibold dark:text-white'>Lets chat</h5>
-            <div className='flex gap-[10px]'>
-              <img src={darkModeEnabled ? telegramdark : telegram} alt="" />
-              <img src={darkModeEnabled ? whatsappdark : whatsapp} alt="" />
-            </div>
-          </div>
-        </div>
-
-        {/* 64 px GAP HERE  */}
-
-        <div className='flex w-full gap-[5.64rem]'>
-          <div className='flex flex-col gap-[6px]'>
-            <h5 className='text-[1rem] mb-[1.4rem] font-semibold dark:text-white'>Location</h5>
-            <div className='text-[0.82rem] dark:text-white'>
-              2259 Westheimer Rd. Santa Ana, Illinois 85486
-            </div>
-          </div>
-        </div>
-
-        {/* copyrights  */}
-        <div className='absolute left-0 bottom-0 flex flex-col gap-[5px]'>
-          <p className='text-[0.9rem] dark:text-white'>© 2024 — Logoipsum</p>
-        </div>
-      </div>
-
-    </footer>
   )
 }
 

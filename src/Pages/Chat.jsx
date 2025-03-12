@@ -3,7 +3,7 @@ import { RxMixerVertical } from "react-icons/rx";
 import { MdArrowBackIos } from "react-icons/md";
 import { FaPaperPlane } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
-import { getAllChats, getChats, postChats, searchUsers } from "../Utils/api";
+import { getAllChats, getChats, getUser, postChats, searchUsers } from "../Utils/api";
 import Sidebar from "../Components/Sidebar";
 import { debounce } from "lodash";
 import { globalUrl } from "../Config";
@@ -53,18 +53,12 @@ const Chat = () => {
 
   const handleNewMessage = (socketResponse) => {
     const { fromUserId, message } = socketResponse;
-
-    // Assuming `selectedUser` is the currently opened chat user
+    console.log(selectedUser)
+    // Case 1: Message is from the user currently opened in chat
     if (selectedUser?.id === fromUserId) {
         const newMessage = {
             content: message.message,
-            receiver: {
-                // id: currentUser.id, // Assuming you have the current user details
-                // firstName: currentUser.firstName,
-                // lastName: currentUser.lastName,
-                isBot: false,
-                // gender: currentUser.gender,
-            },
+            receiver: { isBot: false },
             sender: {
                 id: fromUserId,
                 firstName: selectedUser.firstName,
@@ -78,9 +72,64 @@ const Chat = () => {
         };
 
         // Update state to reflect the new message
-        setMessages((prevMessages) => [newMessage,...prevMessages]);
+        setMessages((prevMessages) => [newMessage, ...prevMessages]);
+    } else {
+        // Case 2 & 3: Message is from someone else (either in contacts or not)
+        setChatUsers((prevChatUsers) => {
+          const userIndex = prevChatUsers.findIndex((chat) => chat.user.id === fromUserId);
+      
+          if (userIndex !== -1) {
+              // Case 2: User is in contact list, update unread count
+              return prevChatUsers.map((chat, index) =>
+                  index === userIndex
+                      ? { ...chat, unreadCount: (parseInt(chat.unreadCount, 10) + 1).toString() }
+                      : chat
+              );
+          }
+      
+          // Case 3: User is not in the contact list, fetch user data
+          getUser(fromUserId, (userData) => {
+            if (!userData) {
+                console.log("User not found");
+                return;
+            }
+    
+            setChatUsers((prevChatUsers) => {
+                // **Check if user already exists**
+                const userExists = prevChatUsers.some((chat) => chat.user.id === userData.id);
+                if (userExists) {
+                    console.log("User already exists in chat list, skipping add.");
+                    return prevChatUsers; // Do nothing, return existing state
+                }
+    
+                // **Create new user**
+                const newUser = {
+                    user: {
+                        id: userData.id,
+                        firstName: userData.firstName || "Unknown",
+                        lastName: userData.lastName || "",
+                        gender: userData.gender || null,
+                        photo: userData.photo || null,
+                        email: userData.email || "",
+                        role: userData.role?.name || "User",
+                        status: userData.status?.name || "Active",
+                    },
+                    unreadCount: 1,
+                };
+    
+                // **Add the new user and return new state**
+                return [...prevChatUsers, newUser];
+            });
+        }, (error) => {
+            console.log("Error fetching user:", error);
+        });
+      
+          return prevChatUsers; // Keep the current state unchanged while waiting for `getUser`
+      });
+      
     }
 };
+
 
   useEffect(() => {
     if (!userId || !globalUrl) return;
@@ -121,16 +170,9 @@ const Chat = () => {
 
     newSocket.on("receive-chat-message", (data) => {
       console.log("New message received:", data);
-      if (selectedUser && data?.fromUserId === selectedUser?.id) {
-        // setMessages((prevMessages) => [ data,...prevMessages]);
-        handleNewMessage(data)
-      }
-      else if(chatUsers.some(user => user.id === data?.fromUserId)){
-        console.log("in user list")
-      }
-      else{
-        chatUsers.append(data?.sender)
-      }
+      
+      handleNewMessage(data)
+      
     });
 
     return () => {
@@ -198,40 +240,47 @@ const handleSendMessage = () => {
 
   // console.log(filteredFriends)
 
-  useEffect(()=>{
+  // useEffect(()=>{
 
-    if(selectedUser && selectedUser.id){
-      getChats(
-        (data) => {
-          console.log("chats", data);
-          setHasNextPage(data.hasNextPage);
-          setChatData(data)
+  //   if(selectedUser && selectedUser.id){
+  //     getChats(
+  //       (data) => {
+  //         console.log("chats", data);
+  //         setHasNextPage(data.hasNextPage);
+  //         setChatData(data)
   
-          // Extract unique users from chat messages
-          const users = new Map(); // Store unique users
-          data.data.forEach((msg) => {
-            const otherUser =
-              msg.sender.id === userDetails.userId ? msg.receiver : msg.sender;
-            // if (!users.has(otherUser.id)) {
-            //   users.set(otherUser.id, otherUser);
-            // }
-            users.set(otherUser.id, otherUser);
-          });
-          console.log("chat user",users)
-          // setChatUsers([...users.values()]); // Convert Map to array
-        },
-        (error) => {
-          console.error("Error fetching chats:", error);
-        },
-        selectedUser.id
-      );
-    }
-  },[selectedUser])
+  //         // Extract unique users from chat messages
+  //         const users = new Map(); // Store unique users
+  //         data.data.forEach((msg) => {
+  //           const otherUser =
+  //             msg.sender.id === userDetails.userId ? msg.receiver : msg.sender;
+  //           // if (!users.has(otherUser.id)) {
+  //           //   users.set(otherUser.id, otherUser);
+  //           // }
+  //           users.set(otherUser.id, otherUser);
+  //         });
+  //         console.log("chat user",users)
+  //         // setChatUsers([...users.values()]); // Convert Map to array
+  //       },
+  //       (error) => {
+  //         console.error("Error fetching chats:", error);
+  //       },
+  //       selectedUser.id
+  //     );
+  //   }
+  // },[selectedUser])
 
   const handleSelectUser = (user) => {
     setSelectedUser(user);
     setFilteredFriends([]);
     setSearchQuery("");
+
+    // Update unreadCount of selected user to 0
+    setChatUsers((prevChatUsers) =>
+      prevChatUsers.map((chat) =>
+          chat.user.id === user.id ? { ...chat, unreadCount: 0 } : chat
+      )
+  );
   
     getChats(
       (res) => {
@@ -340,7 +389,7 @@ const handleSendMessage = () => {
       
       {/* Dropdown for filtered users */}
       {filteredFriends.length > 0 && (
-        <div className="absolute w-full mt-1 bg-white dark:bg-[#001a50] border border-gray-300 dark:border-gray-600 rounded-lg shadow-md max-h-60 overflow-y-auto z-50">
+        <div className="absolute w-full mt-1 bg-white dark:bg-[#001a50] border border-gray-300 dark:border-gray-600 rounded-lg shadow-md max-h-60 overflow-y-auto z-50 notificationScrollbar">
           {filteredFriends.map((user) => (
             <div
               key={user.id}
@@ -362,14 +411,15 @@ const handleSendMessage = () => {
   
   <div className="overflow-y-auto h-[20.5rem] pr-3 notificationScrollbar">
   {chatUsers
-  .filter((user) => user.id !== userDetails.userId) // Exclude the logged-in user
+  .filter((user) => user.user.id !== userDetails.userId) // Exclude the logged-in user
   .map((user) => (
     <div
-      key={user.id}
-      className="flex flex-row items-center px-3 py-4 mb-2 rounded-lg bg-slate-200 dark:bg-[#002763] cursor-pointer"
-      onClick={() => handleSelectUser(user)}
+      key={user.user.id}
+      className="flex flex-row items-center justify-between px-3 py-4 mb-2 rounded-lg bg-slate-200 dark:bg-[#002763] cursor-pointer"
+      onClick={() => handleSelectUser(user.user)}
     >
-      {user.firstName} {user.lastName}
+      <div>{user.user.firstName} {user.user.lastName}</div>
+      {user.unreadCount!="0"  &&<div className="rounded-full bg-red-600 w-6 text-center">{user.unreadCount}</div>}
     </div>
   ))}
 

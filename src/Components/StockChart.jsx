@@ -135,7 +135,7 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
     },
   },
   plugins: {
-    legend: { display: false },
+    legend: { display: labels.length>0?true:false },
     tooltip: {
       enabled: true,
       backgroundColor: darkModeEnabled ? "#333" : "#fff",

@@ -8,7 +8,7 @@ import { debounce } from "lodash";
 import StockTrendChartMini from "../Components/StockChartMini";
 import { deleteFromWatchlist, getMarketGainers, getMarketLosers, getStockChartData, getWatchList,searchStock, debounceStockSearchj, addToWatchList } from "../Utils/api";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
-
+import { FiMinusCircle } from "react-icons/fi";
 const stockData = [
     {
       name: "Apple",
@@ -72,6 +72,7 @@ const Market = () => {
     const [hasNext,setHasNext]=useState(false);
     const observerRef = useRef(null); // Observer reference for last item
     const {setShowLoginForm} =useContext(DarkModeContext)
+    
 
 
     useEffect(()=>{
@@ -172,7 +173,7 @@ const Market = () => {
 
     // Function to fetch stocks
   const fetchWatchList = (pageNumber) => {
-    if (!hasNext) return; // Prevent duplicate calls
+    if (!hasNext) return;
 
     
     getWatchList(
@@ -280,7 +281,8 @@ const Market = () => {
                <div className="flex p-2 gap-5 rounded-lg items-center w-full bg-white dark:bg-[#002763] border dark:border-[#00387E]">
                  <img className="rounded-full w-10 h-10" src={selectedStock?.stock?.icon_url} alt='stockImg' />
                  <div className="flex-1 min-w-0">
-                   <div className="text-xl font-bold truncate">{selectedStock?.stock?.name} ({selectedStock?.stock?.ticker})</div>
+                   <div className="text-xl font-bold truncate flex gap-2 items-center">{selectedStock?.stock?.name} ({selectedStock?.stock?.ticker}) <FiMinusCircle onClick={()=>{setShowModal(true)}} color="red" size={28} className="cursor-pointer ml-10 mt-4" /></div>
+                   
                    <div className="flex items-center justify-between gap-3">
                      <div className="font-semibold">{(selectedStock?.stock?.price +'$') || "N/A"}</div>
                    </div>
@@ -304,14 +306,14 @@ const Market = () => {
              <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 border dark:border-[#00387E] flex-2">
                <div className="flex flex-col gap-2 max-h-[18.5rem] overflow-y-auto custom-scrollbar p-2 w-full">
                  {watchList?.map((stockData, index) => (
-                   <div ref={index === watchList.length - 1 ? observerRef : null} onClick={() => { setSelectedStock(stockData) }} key={index} 
+                   <div ref={index === watchList.length - 1 ? observerRef : null} onClick={() => { setSelectedStock(stockData), setChoosenStock(stockData) }} key={index} 
                         className="flex group justify-between items-center cursor-pointer p-2 gap-5 bg-[#e5f4ff] dark:bg-[#002763] border dark:border-[#00387E] rounded-lg w-full">
                      <img className="rounded-full w-10 h-10" src={stockData?.stock?.icon_url} alt='stockImg' />
                      <div className="flex-1 min-w-0">
                        <div className="font-bold truncate">{stockData?.stock?.name} ({stockData?.stock.ticker})</div>
                        <div className="flex items-center justify-between gap-3">
                          <div className="font-semibold">{stockData?.stock?.price?.toFixed(2)}$</div>
-                         <div onClick={()=>{setShowModal(true), setChoosenStock(stockData)}} className="hidden group-hover:flex px-2 py-1 border-2 border-red-800 rounded-lg"><FaMinus color="red"/></div>
+                         {/* <div onClick={()=>{setShowModal(true), setChoosenStock(stockData)}} className="hidden group-hover:flex px-2 py-1"><FiMinusCircle color="red"/></div> */}
                        </div>
                      </div>
                    </div>
@@ -530,6 +532,14 @@ const Market = () => {
             setWatchList((prevWatchlist) =>
                 prevWatchlist.filter((item) => item.id !== choosenStock.id)
               );
+            // if(selectedStock.id!=watchList?[0].id){
+            //   if(watchList.length-1>0)selectedStock=watchList[0]
+            // }
+            // else{
+            //   if(watchList.length-1>0){
+            //     selectedStock=watchList[1]
+            //   }
+            // }
         },(error)=>{console.log("error",error)})}}
         >
           Remove

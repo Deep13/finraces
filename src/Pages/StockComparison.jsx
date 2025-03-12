@@ -351,7 +351,7 @@ const StockComparison = () => {
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
       <Sidebar />
-      <div className="dark:bg-[#000D38] min-h-[200rem] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex flex-1 flex-col rounded-xl border dark:border-[#00387E] dark:text-white">
+      <div className="dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex flex-1 flex-col rounded-xl border dark:border-[#00387E] dark:text-white">
         
         {/* Header */}
         <div>
@@ -515,18 +515,7 @@ const StockComparison = () => {
             </div>
           </div>
         </div>
-        <div className="h-[3rem] z-50 top-20 sticky border-2 dark:border-0 dark:bg-[#001a50] grid grid-cols-5 rounded-xl py-2 px-5 mb-7 font-poppins font-semibold">
-          <div className="col-span-1 flex justify-center items-center">
-            Stocks
-            <FaArrowRight />
-          </div>
-          {selectedStocks.map((stock,index)=>(
-            <div key={index} className="flex justify-center items-center gap-2">
-              <div>{stock.ticker}</div>
-              <div style={{ backgroundColor:stockColors[index] }} className={`w-5 h-5`}></div>
-            </div>
-          ))}
-        </div>
+        
         {/* Chart Placeholder */}
         <div className="h-[30rem] w-full bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mb-7">
           <div className="w-full h-full">
@@ -544,6 +533,19 @@ const StockComparison = () => {
           </div>
         </div>
 
+        <div className="h-[3rem] z-50 top-20 sticky border-2 dark:border-0 dark:bg-[#001a50] grid grid-cols-5 rounded-xl py-2 px-5 mb-7 font-poppins font-semibold">
+          <div className="col-span-1 flex justify-center items-center">
+            Stocks
+            <FaArrowRight />
+          </div>
+          {selectedStocks.map((stock,index)=>(
+            <div key={index} className="flex justify-center items-center col-span-1 gap-2">
+              <div>{stock.ticker}</div>
+              <div style={{ backgroundColor:stockColors[index] }} className={`w-5 h-5`}></div>
+            </div>
+          ))}
+        </div>
+
 
         {/* Stocks Header */}
         
@@ -555,7 +557,7 @@ const StockComparison = () => {
             <div key={rowIndex} className="grid grid-cols-5 gap-4  dark:text-slate-200 py-2">
               <div className="col-span-1 flex justify-start">{row.label}</div>
               {row.values.map((value, colIndex) => (
-                <div key={colIndex} className="flex justify-center">
+                <div key={colIndex} className="flex justify-center col-span-1">
                   {value || "--"}
                 </div>
               ))}

@@ -30,7 +30,7 @@ const Form = ({
     lastName: '',
     email: '',
     password: '',
-    gender:'',
+    gender:'male',
   })
   const [loginCreds, setLoginCreds] = useState({
     email: '',
