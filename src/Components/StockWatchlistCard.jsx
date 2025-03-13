@@ -17,7 +17,9 @@ const StockWatchlistCard = ({ data }) => {
         <div 
             onClick={() => {
                 setSelectedStock(data);
-                navigate(`/stock/${data.ticker}/${data.id}`);
+                if(localStorage.getItem('token')){
+                    navigate(`/stock/${data.ticker}/${data.id}`);
+                }
             }} 
             className='cursor-pointer w-[15rem] h-[10rem] min-w-[15rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between mr-3'
         >

@@ -21,6 +21,7 @@ const NavFootWrapper = () => {
   const [successModel,setSuccessModel]=useState(false);
   const [reportData, setReportData] = useState({
       title: '',
+      email:'',
       priority: 'Low',
       area: 'Bug',
       description: ''
@@ -80,6 +81,15 @@ const NavFootWrapper = () => {
                                     value={reportData.title} 
                                     onChange={e => setReportData(prev => ({ ...prev, title: e.target.value }))}
                                     type="text" 
+                                />
+                            </div>
+                            <div className="flex flex-col">
+                                <label className="dark:text-white">Email</label>
+                                <input 
+                                    className="p-2 border rounded-md dark:bg-[#001F52] dark:text-white" 
+                                    value={reportData.email} 
+                                    onChange={e => setReportData(prev => ({ ...prev, email: e.target.value }))}
+                                    type="email" 
                                 />
                             </div>
 

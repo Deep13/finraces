@@ -9,12 +9,14 @@ import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 export default function SelectDropdownStatic({
     data,
-    value = data[1],
+    value,
     setUserData
 }) {
     const { darkModeEnabled } = useContext(DarkModeContext)
     const [query, setQuery] = useState('')
     // const [selected, setSelected] = useState(data[1])
+
+    console.log("data,value",data,value)
 
     const filteredPeople =
         query === ''
@@ -31,7 +33,7 @@ export default function SelectDropdownStatic({
                         'w-full rounded-lg border-none bg-white/5 py-3 px-[1.1rem] text-sm/6 text-white',
                         'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
                     )}
-                    displayValue={(item) => item?.name}
+                    displayValue={(item) => item?.name ||"Please select your country" }
                     onChange={(event) => setQuery(event.target.value)}
                 />
                 <ComboboxButton className="group absolute inset-y-0 right-0 px-2.5">

@@ -37,6 +37,11 @@ const AccountManagement = () => {
 
     }, [])
 
+    // useEffect(()=>{
+    //     if(userData.country==""){
+    //         setUserData
+    //     }
+    // },[userData])
     const handleSaveInfo = () => {
         updateProfile(userData, () => {
             console.log('Profile Updated')
@@ -91,7 +96,7 @@ const AccountManagement = () => {
                                     wrapperClass=""
                                 />
                             </div>}
-                            <img className='w-full h-full object-cover' src={imageUrl==""?(gender=='female'?femalePlaceholder:malePlaceholder):(imageUrl)} alt="" />
+                            <img className='w-full h-full object-cover' src={(!imageUrl||imageUrl=="")?(gender=='female'?femalePlaceholder:malePlaceholder):(imageUrl)} alt="" />
                         </div>
 
                         <div className='flex flex-col gap-[12px] flex-1 justify-center items-center'>
@@ -139,7 +144,7 @@ const AccountManagement = () => {
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="username" className='dark:text-white'>Country</label>
                             {/* <input className='px-[20px] py-[9px] bg-white dark:bg-[#010B2C] text-[1rem] dark:border dark:border-[#00387E] rounded' type="text" name='username' /> */}
-                            <SelectDropdownStatic value={countries[findCountryIndex(userData.country)]} setUserData={setUserData} data={countries} />
+                            <SelectDropdownStatic value={countries[findCountryIndex(userData.country)] ||null} setUserData={setUserData} data={countries} />
                         </div>
                         <div className='flex flex-col gap-[10px] mb-[0.7rem] flex-1'>
                             <label htmlFor="profilename" className='dark:text-white'>State</label>

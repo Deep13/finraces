@@ -15,7 +15,7 @@ const StockPriceCard = ({
 
   const navigate=useNavigate();
   return (
-    <div onClick={()=>{navigate(`/stock/${ticker}/${stockId}`);}}
+    <div onClick={()=>{if(localStorage.getItem('token')){navigate(`/stock/${ticker}/${stockId}`);}}}
 
      className='h-auto w-[16rem] cursor-pointer rounded-[10px] py-[0.9rem] px-[0.8rem] border border-solid border-[#e1e4e5] flex flex-col gap-[0.7rem] flex-shrink-0 bg-[#f5f5f5] dark:border-[#00387E] dark:border dark:bg-[#002763] ml-3'>
       <div className='flex justify-between w-full items-center'>

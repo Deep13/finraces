@@ -22,6 +22,7 @@ import RaceTile from '../Components/RaceTile'
 import { fetchRaceDataDetailed } from '../Utils/api'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
 import { Bar } from "react-chartjs-2";
+import { ColorRing } from 'react-loader-spinner'
 
 
 const RaceCardHomepage = ({
@@ -40,6 +41,7 @@ const RaceCardHomepage = ({
     const [rankList, setRankList] = useState([{ user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }])
     const [maxValue, setMaxValue] = useState(120);
     const [logos, setLogos] = useState({});
+    const [loading,setLoading] = useState(false);
     const navigate = useNavigate()
     const options = {
         indexAxis: "y",
@@ -118,7 +120,7 @@ const RaceCardHomepage = ({
                 label: "Company Growth",
                 data: [], // Initial data
                 backgroundColor: [], // Colors for bars
-                barThickness: 10,
+                barThickness: 1,
             },
         ],
     });
@@ -126,6 +128,7 @@ const RaceCardHomepage = ({
         // getStocksDataForRace(raceId, (data) => {
         //     setStocksDataForRace(data)
         // })
+        setLoading(true);
         fetchRaceDataDetailed(raceId, (res) => {
             console.log('racedata detailed:', res);
             const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
@@ -170,12 +173,12 @@ const RaceCardHomepage = ({
                         label: "Company Growth",
                         data: newData, // Initialize with zeros
                         backgroundColor: newColors,
-                        barThickness: 10,
+                        barThickness: 4,
                     },
                 ],
             });
             setMaxValue(totalTime + (newLabels.length * 10))
-
+            setLoading(false)
             // Code by Deepak End /////
         })
     }, [])
@@ -354,7 +357,22 @@ const RaceCardHomepage = ({
 
 
     return (
-        <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
+        <>
+        {loading?(
+            <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] items-center justify-center h-52 w-full'>
+                <ColorRing
+                                                                            visible={true}
+                                                                            height="45"
+                                                                            width="45"
+                                                                            ariaLabel="color-ring-loading"
+                                                                            wrapperStyle={{}}
+                                                                            wrapperClass="color-ring-wrapper"
+                                                                            colors={['#e15b64', '#f47e60',]}
+                                                                        />
+            </div>
+
+        ):(
+            <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
             <div className='w-full flex justify-between mb-[14px]'>
                 <div className='flex gap-[0.76rem] flex-1'>
                     <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
@@ -462,6 +480,8 @@ const RaceCardHomepage = ({
             </div> */}
 
         </div>
+        )}
+        </>
     )
 }
 

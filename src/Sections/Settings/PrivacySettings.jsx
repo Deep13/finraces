@@ -10,13 +10,13 @@ import {notification} from 'antd'
 const PrivacySettings = () => {
 
     const [settings, setSettings] = useState({
-        "messages_allowed": true,
-        "friend_request_allowed": true,
-        "show_achievements": true,
-        "community_alert": true,
-        "achievement_alert": true,
-        "race_alert": true,
-        "notification_alert": true
+        "messages_allowed": false,
+        "friend_request_allowed": false,
+        "show_achievements": false,
+        "community_alert": false,
+        "achievement_alert": false,
+        "race_alert": false,
+        "notification_alert": false
     })
     const [blockedUsersList, setBlockedUsersList] = useState([])
     const [isLoading, setIsLoading] = useState(true)

@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import stonks2 from '../../assets/images/stonks2.png'
 // import Person from '../../assets/images/person2.png'
 import coin2 from '../../assets/images/coin2.png'
 // import diamond from '../../assets/images/diamondIcon.svg'
+import { IoIosAdd } from "react-icons/io";
 // import { FiArrowUpRight } from 'react-icons/fi'
 import StockWatchlistCard from '../../Components/StockWatchlistCard'
 import avatarplaceholder from '../../assets/images/avatarplaceholder.png'
@@ -13,25 +14,33 @@ import flags from '../../assets/images/racing-flag.png'
 import diamond from '../../assets/images/Crowncoin.png'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
-import { lastRaceDataByUser, getTotalPointsUser, getWinningRate, getWatchList } from '../../Utils/api'
+import { lastRaceDataByUser, getTotalPointsUser, getWinningRate, getWatchList, debounceStockSearchj, addToWatchList } from '../../Utils/api'
 import Hero from './Hero'
 import { useRef } from "react";
 import { MdArrowBackIos, MdArrowForwardIos } from "react-icons/md";
+import { FaMinus,FaPlus } from "react-icons/fa";
+import { debounce } from 'lodash';
+
 
 
 
 
 const GuestOrLoggedOutHero = () => {
-    const { setCreateRace, profileImage,setSelectedStock } = useContext(DarkModeContext)
+    const { setCreateRace, profileImage,setSelectedStock ,setShowLoginForm} = useContext(DarkModeContext)
     const navigate = useNavigate()
     const [lastRaceStatus, setLastRaceStatus] = useState("Loading...")
+    const [searchQuery, setSearchQuery] = useState("");
+    const [stocksData,setStocksData] = useState();
     const [lastRaceId, setLastRaceId] = useState("")
     const [lastRaceName, setLastRaceName] = useState("Loading...")
+    const [showSearch,setShowSearch]=useState(false);
+    
     const [totalPoints, setTotalPoints] = useState(0)
     const [winningRate, setWinningRate] = useState(0)
     const [watchList,setWatchList] = useState([]);
     const [page,setPage]=useState(2);
     const [hasNext,setHasNext]=useState(false);
+    const token = localStorage.getItem('token')
 
     const iu = localStorage.getItem('userDetails')
     const imageUrl = iu && JSON.parse(atob(iu))
@@ -40,6 +49,58 @@ const GuestOrLoggedOutHero = () => {
     const gender = imageUrl && imageUrl?.gender
 
     const sliderRef = useRef(null);
+
+    const fetchStockOptions = useCallback(
+                  debounce(async (inputValue) => {
+                      if (inputValue.length > 2) {
+                          try {
+                              await debounceStockSearchj(inputValue, (data) => {
+                                  console.log("data",data)
+                                  setStocksData(data);
+                              }); // Call API to search stocks
+          
+                          } catch (error) {
+                              console.error("Error fetching stocks:", error);
+                             
+                          } finally {
+                             console.log("final")
+                          }
+                      } else {
+                          console.log("A")
+                      }
+                  }, 500), // Debounce to limit API calls
+                  []
+              );
+
+              const updateState = (searchedStock) => {
+                // Check if stock is already in the watchlist
+                const isAlreadyInWatchlist = watchList.some(item => item.stock.id === searchedStock.id);
+                let userDetails=localStorage.getItem('userDetails');
+                console.log(atob(userDetails))
+              
+                if (!isAlreadyInWatchlist) {
+                  // Create a new watchlist entry
+                  const newStockEntry = {
+                    stock: {
+                      icon_url: searchedStock.icon_url,
+                      logo_url: searchedStock.logo_url,
+                      id: searchedStock.id,
+                      ticker: searchedStock.ticker,
+                      price: searchedStock.price,
+                      name: searchedStock.name,
+                    },
+                    user:userDetails,
+                    id: crypto.randomUUID(), // Generate a unique ID
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                  };
+              
+                  // Append the new stock entry to the watchlist
+                  setWatchList([...watchList, newStockEntry]);
+                } else {
+                  console.log("Stock is already in the watchlist.");
+                }
+              };
 
     const scrollLeft = () => {
         if (sliderRef.current) {
@@ -193,9 +254,21 @@ const GuestOrLoggedOutHero = () => {
         </div>
     </div>
 ) : (
-    <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex flex-col items-center justify-center text-center dark:bg-transparent dark:border dark:border-[#00387E] h-[10rem]">
+    <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-2 items-center justify-center text-center dark:bg-transparent dark:border dark:border-[#00387E] h-[10rem]">
         <p className="text-[1rem] font-semibold dark:text-white">Start Racing Today!</p>
         <p className="text-sm text-gray-500 dark:text-gray-400">Compete, earn, and grow in the world of stock predictions.</p>
+        <button onClick={() => {
+            // create Race
+            if (!token) {
+                setShowLoginForm(true)
+                // navigate('/auth')
+                return
+            }
+            setCreateRace(true)
+            }} className="darktext-[#e4eaf0] mt-5 bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] pl-[1.5rem] pr-[0.8rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold">
+                Create Race
+                <IoIosAdd size={20} />
+            </button>
     </div>
 )}
 
@@ -263,9 +336,136 @@ const GuestOrLoggedOutHero = () => {
                 their trends effortlessly. Build your watchlist today. 
             </div>
             <div className='font-extrabold text-2xl mt-3 dark:text-white'>Watch. Track. Grow.</div>
+
+            <div onClick={()=>{
+                if(localStorage.getItem('token') && localStorage.getItem('userDetails')){
+                    setShowSearch(true)
+                }
+                else{
+                    setShowLoginForm(true)
+                }
+                            
+            }} className="border border-black dark:border-white px-3 py-2 cursor-pointer rounded-lg flex gap-2 items-center justify-center w-32 mx-auto mt-5">Add <FaPlus/></div>
+                   
         </div>
                   
     </div>  // Fallback UI
+    )}
+    {showSearch && (
+      <div className="fixed inset-0 flex items-center justify-center z-20">
+        {/* Overlay */}
+        <div 
+          className="absolute inset-0 bg-black bg-opacity-50"
+          onClick={() => {
+            setShowSearch(false)
+        }}
+        ></div>
+    
+        {/* Modal Content */}
+        <div className="relative z-30 w-[30rem] h-[20rem] rounded-lg p-5 dark:bg-[#001a50] dark:text-white bg-white shadow-lg">
+          {/* Close Button */}
+          <button
+            onClick={() => {
+                setShowSearch(false)
+                setSearchQuery("")
+                // setStocksData()
+            }}
+            className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full transition"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              strokeWidth={2} 
+              stroke="currentColor" 
+              className="w-6 h-6 text-white cursor-pointer"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+    
+          {/* Title */}
+          <div className="text-lg font-bold mb-3">Add stock to watchlist</div>
+    
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Search for a stock..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              fetchStockOptions(e.target.value);
+            }}
+            className="w-full rounded-lg bg-slate-200 px-2 py-3 border border-gray-300 text-black outline-none"
+          />
+    
+            {searchQuery?.length > 2 && (
+                    <div className="dark:bg-[#000A2D] dark:text-white mt-2 rounded-lg p-2 max-h-48 overflow-y-auto notificationScrollbar">
+                      {stocksData?.length > 0 ? (
+                        <div className="flex flex-col gap-2">
+                          {stocksData.map((data) => {
+                            const isInWatchlist = watchList.some((item) => item.stock.id === data.id);
+            
+                            return (
+                              <div 
+                                key={data.id} 
+                                className="dark:bg-[#001a50] flex items-center justify-between rounded-lg p-2 cursor-pointer"
+                              >
+                                <div>
+                                  <div className="font-semibold">{data.name}</div>
+                                  <div>({data.ticker})</div>
+                                </div>
+            
+                                <button 
+                                  className={`p-1 rounded-full ${
+                                    isInWatchlist ? "bg-green-500" : "bg-blue-500 hover:bg-blue-600"
+                                  } text-white transition`}
+                                  onClick={() => {
+                                    if (!isInWatchlist) {
+                                      addToWatchList(data.id,()=>{
+                                        updateState(data)
+                                      },(error)=>{console.log("error", error)})
+                                    }
+                                  }}
+                                >
+                                  {isInWatchlist ? (
+                                    // Tick Icon
+                                    <svg 
+                                      xmlns="http://www.w3.org/2000/svg" 
+                                      fill="none" 
+                                      viewBox="0 0 24 24" 
+                                      strokeWidth={2} 
+                                      stroke="currentColor" 
+                                      className="w-5 h-5"
+                                    >
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  ) : (
+                                    // Plus Icon
+                                    <svg 
+                                      xmlns="http://www.w3.org/2000/svg" 
+                                      fill="none" 
+                                      viewBox="0 0 24 24" 
+                                      strokeWidth={2} 
+                                      stroke="currentColor" 
+                                      className="w-5 h-5"
+                                    >
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m-8-8h16" />
+                                    </svg>
+                                  )}
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        <div>No stocks found</div>
+                      )}
+                    </div>
+                  )}
+          
+        </div>
+      </div>
     )}
   </div>
 </div>

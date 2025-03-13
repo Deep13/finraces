@@ -585,7 +585,7 @@ const Market = () => {
       </button>
 
       {/* Title */}
-      <div className="text-lg font-bold mb-3">Add stock to compare</div>
+      <div className="text-lg font-bold mb-3">Add stock to watchlist</div>
 
       {/* Search Input */}
       <input
