@@ -46,15 +46,27 @@ const NavFootWrapper = () => {
 
       <Outlet />
       <Footer />
-      {
-                successModel && <div className="w-full h-full fixed top-0 left-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="w-[30rem] h-[15rem] bg-white dark:bg-[#00387e] rounded-[20px] p-[20px] flex flex-col items-center justify-center gap-4">
-                        <p className="text-3xl font-semibold text-green-500">Submitted Successfully</p>
-                        <p className="text-xl font-semibold">Thank you for your feedback</p>
-                        <button onClick={() => setSuccessModel(false)} className="darktext-[#e4eaf0] bg-[#e4eaf0] text-lg dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-[1rem] h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold font-poppins">Okay</button>
-                    </div>
-                </div>
-            }
+      {successModel && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div
+      role="dialog"
+      aria-modal="true"
+      className="w-[30rem] max-w-[90%] p-6 bg-white dark:bg-[#00387E] rounded-2xl flex flex-col items-center justify-center gap-4 shadow-lg"
+    >
+      <p className="text-3xl font-semibold text-green-500">Success!</p>
+      <p className="text-lg text-center text-gray-700 dark:text-white">
+        Thank you for your feedback.
+      </p>
+      <button
+        onClick={() => setSuccessModel(false)}
+        className="px-5 py-2 text-white bg-blue-600 rounded-lg hover:bg-blue-700 dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF] dark:hover:opacity-90 transition-all"
+      >
+        Okay
+      </button>
+    </div>
+  </div>
+)}
+
       {report && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white dark:bg-[#010B2C] rounded-lg shadow-lg p-6 w-[90%] md:w-[500px]">
