@@ -123,7 +123,7 @@ const GuestOrLoggedOutHero = () => {
 
     // If user scrolled near the right end, load more
     if (scrollLeft + clientWidth >= scrollWidth - 20) {
-      fetchWatchList(page);
+      fetchWatchList(page+1);
     }
   };
 
@@ -179,17 +179,26 @@ const GuestOrLoggedOutHero = () => {
                     </div>
                 </div>
 
-                {lastRaceId && (
-                    <div
-                        className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center group hover:border-black h-[10rem]"
-                        onClick={() => navigate(`/race/${lastRaceId}`)}
-                        title='Visit your last race by clicking on this card'>
-                        <div className='flex flex-col gap-[8px] cursor-pointer'>
-                            <p className='text-[1rem] dark:text-[#D1D1D1]'>{capitalize(lastRaceStatus)} Race</p>
-                            <p className='text-[1rem] line-clamp-2 max-w-[15rem] dark:text-white font-semibold group-hover:underline font-poppins'>{lastRaceName}</p>
-                        </div>
-                    </div>
-                )}
+                {lastRaceId ? (
+    <div
+        className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center group hover:border-black h-[10rem]"
+        onClick={() => navigate(`/race/${lastRaceId}`)}
+        title="Visit your last race by clicking on this card"
+    >
+        <div className="flex flex-col gap-[8px] cursor-pointer">
+            <p className="text-[1rem] dark:text-[#D1D1D1]">{capitalize(lastRaceStatus)} Race</p>
+            <p className="text-[1rem] line-clamp-2 max-w-[15rem] dark:text-white font-semibold group-hover:underline font-poppins">
+                {lastRaceName}
+            </p>
+        </div>
+    </div>
+) : (
+    <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex flex-col items-center justify-center text-center dark:bg-transparent dark:border dark:border-[#00387E] h-[10rem]">
+        <p className="text-[1rem] font-semibold dark:text-white">Start Racing Today!</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">Compete, earn, and grow in the world of stock predictions.</p>
+    </div>
+)}
+
 
                 <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
                     <div className='h-full p-[10px] w-[100px]'>
@@ -247,7 +256,16 @@ const GuestOrLoggedOutHero = () => {
         <StockWatchlistCard key={index} data={stockData.stock} />
       ))
     ) : (
-      <p>Loading watchlist...</p> // Fallback UI
+      <div className="rounded-lg p-3 w-full flex flex-col gap-5 mb-[8rem]">
+        <div className="font-bold dark:text-slate-400 text-center">
+           <div>
+                Your personalized stock tracker. Save your favorite stocks and monitor 
+                their trends effortlessly. Build your watchlist today. 
+            </div>
+            <div className='font-extrabold text-2xl mt-3 dark:text-white'>Watch. Track. Grow.</div>
+        </div>
+                  
+    </div>  // Fallback UI
     )}
   </div>
 </div>

@@ -47,7 +47,7 @@ const Chat = () => {
     };
     
     scrollToBottom();
-  }, [messages, selectedUser]);
+  }, [message,selectedUser]);
 
   // Initialize socket connection
 
@@ -294,8 +294,11 @@ const handleSendMessage = () => {
           const newMessages = userMessages.filter(
             (msg) => !prevMessages.some((prevMsg) => prevMsg.id === msg.id)
           );
-          return [...newMessages, ...prevMessages];
+          return [...newMessages];
         });
+        // setMessage([...userMessages])
+
+        setHasNextPage(res.hasNextPage)
       },
       (error) => {
         console.error("Error fetching chats:", error);

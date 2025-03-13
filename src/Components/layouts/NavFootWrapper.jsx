@@ -29,7 +29,13 @@ const NavFootWrapper = () => {
   const submitBugReport = async() => {
       console.log('Submitting Report:', reportData);
       await reportBug(reportData, (data) => {
-                  setSuccessModel(true)
+                  setSuccessModel(true);
+                  setReportData({
+                    title: '',
+                    priority: 'Low',
+                    area: 'Bug',
+                    description: ''
+                })
      })
       setReport(false); // Close modal after submission
   };

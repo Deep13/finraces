@@ -42,6 +42,7 @@ const GreetPopup = ({
                         onClick={() => {
                             joinAsGuest({
                                 firstName: inputValue,
+                                lastName: inputValue
                             }, () => {
                                 setPopupVisible(false)
                                 if (thisLocation.pathname === '/auth') {

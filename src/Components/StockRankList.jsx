@@ -8,12 +8,14 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "../Components/ui/carousel"
+import { useNavigate } from 'react-router-dom'
 
 const StockRankList = ({
     stockRankList, // this is coming from socket connection
     stocksData // this is coming from api
 }) => {
 
+    const navigate=useNavigate();
     return (
         // <div className="flex-1 flex justify-start gap-[10px] custom-scrollbar overflow-auto">
         <Carousel
@@ -47,6 +49,9 @@ const StockRankList = ({
                                     stockId={curr.stock_id}
                                     stockLastRate={curr.stock_last_rate}
                                     imageUrl={imageUrl}
+                                    onClick={()=>{navigate(`/stock/${curr.ticker}/${curr.id}`);}}
+
+                                    className="cursor-pointer"
                                 />
                                 // </CarouselItem>
                             )

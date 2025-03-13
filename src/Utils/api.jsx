@@ -293,14 +293,15 @@ export const fetchAlreadyJoinedUsers = async (
 }
 
 export const joinAsGuest = async (
+  payload,
   onSuccess = () => { },
-  onError = () => { },
+  onError = () => { }
 ) => {
 
   try {
-    // console.log('Registration payload', payload);
+    console.log('Registration payload', payload);
 
-    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`)
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`,payload)
     const data = await response.data
     console.log('Registration successful', data);
     // localStorage.setItem('guest_email', data.email)
@@ -655,19 +656,19 @@ export const searchStock = async (prefix) => {
   }
 
   try {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('User is not authenticated. Token is missing.');
-    }
+    // const token = localStorage.getItem('token');
+    // if (!token) {
+    //   throw new Error('User is not authenticated. Token is missing.');
+    // }
 
-    const url = `${GlobalURL}/api/v1/stocks/search?prefix=${prefix}`
+    const url = `${GlobalURL}/api/v1/public/stocks/search?prefix=${prefix}`
 
     // Make the PATCH request
     const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
       },
     });
 
@@ -756,13 +757,13 @@ export const reportBug = async (
 ) => {
   try {
     // Retrieve the token from localStorage
-    const token = localStorage.getItem('token');
-    if (!token) {
-      throw new Error('User is not authenticated. Token is missing.');
-    }
+    // const token = localStorage.getItem('token');
+    // if (!token) {
+    //   throw new Error('User is not authenticated. Token is missing.');
+    // }
 
     // Define the API endpoint
-    const url = `${GlobalURL}/api/v1/issues`
+    const url = `${GlobalURL}/api/v1/public/issues`
 
     // Create the payload
     const payload = {
@@ -775,7 +776,7 @@ export const reportBug = async (
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     });
@@ -927,6 +928,11 @@ export const updateProfile = async (payload, onSuccess, onError) => {
 
     // Define the API endpoint
     const url = `${GlobalURL}/api/v1/auth/me`
+    const replaceEmptyStrings = (obj) => {
+      return JSON.parse(JSON.stringify(obj, (key, value) => (value === "" ? " " : value)));
+  };
+  
+  const updatedPayload = replaceEmptyStrings(payload);
 
 
     // Make the PATCH request
@@ -936,7 +942,7 @@ export const updateProfile = async (payload, onSuccess, onError) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(updatedPayload),
     });
 
     // Handle non-OK responses
@@ -1665,11 +1671,11 @@ export const getMarketLosers = async (
   onSuccess = () => { },
   onError = () => { },
 ) => {
-  let token = localStorage.getItem('token')
+  // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/stocks/losers`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/public/stocks/losers`, {
       headers: {
-        'Authorization': `Bearer ${token}`, // Example for passing a token
+        // 'Authorization': `Bearer ${token}`, // Example for passing a token
       }
     })
     let result = await response.data
@@ -1690,11 +1696,11 @@ export const getMarketGainers = async (
   onSuccess = () => { },
   onError = () => { },
 ) => {
-  let token = localStorage.getItem('token')
+  // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/stocks/gainers`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/public/stocks/gainers`, {
       headers: {
-        'Authorization': `Bearer ${token}`, // Example for passing a token
+        // 'Authorization': `Bearer ${token}`, // Example for passing a token
       }
     })
     let result = await response.data

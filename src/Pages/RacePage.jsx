@@ -863,7 +863,7 @@ const RacePage = () => {
 
                                 <div className="flex-1 flex justify-center items-end gap-[2rem]">
 
-                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
+                                    <div onClick={()=>{navigate(`/stock/${stockRankList['1']?.stock_ticker}/${stockRankList['1']?.stock_id}`);}} className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] cursor-pointer items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
                                         {
                                             stockRankList && stockRankList['1'] &&
                                             <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
@@ -883,7 +883,7 @@ const RacePage = () => {
                                             }
                                         </p>}
                                     </div>
-                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
+                                    <div onClick={()=>{navigate(`/stock/${stockRankList['0']?.stock_ticker}/${stockRankList['0']?.stock_id}`);}} className={`w-[10rem] cursor-pointer flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
                                         {
                                             stockRankList &&
                                             <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
@@ -904,7 +904,7 @@ const RacePage = () => {
                                             }
                                         </p>
                                     </div>
-                                    <div className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
+                                    <div onClick={()=>{navigate(`/stock/${stockRankList['2']?.stock_ticker}/${stockRankList['2']?.stock_id}`);}} className={`w-[10rem] cursor-pointer flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
                                         {
                                             stockRankList && stockRankList['2'] &&
                                             <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">

@@ -5,6 +5,7 @@ import React, { useEffect, useState, useLayoutEffect } from 'react';
 import image from '../assets/images/illustration.svg';
 import CountDownTimer from '../Components/CountDown'
 import { motion, AnimatePresence } from "motion/react";
+import { useNavigate } from "react-router-dom";
 // import RaceResult from "./RaceResult";
 
 const RaceWaitingZone = ({
@@ -24,6 +25,7 @@ const RaceWaitingZone = ({
     const userDetails = ud && JSON.parse(atob(ud))
     const guestDetails = gd && JSON.parse(atob(gd))
     const det = userDetails || guestDetails
+    const navigate=useNavigate()
 
     const checkSelf = (id, firstName) => {
         if (id === det?.userId) {
@@ -107,11 +109,13 @@ const RaceWaitingZone = ({
                                 })
                             }
                         </div>
-                    </motion.div>
-                    {/* <div
-                     className="text-blue-400 font-semibold hover:underline cursor-pointer">
+                        <div
+                        onClick={()=>{navigate('/allraces',{ state: 'Upcoming Races' })}}
+                     className="bg-[#2177cb] text-white p-2 rounded-lg font-semibold hover:underline cursor-pointer">
                         Back
-                    </div> */}
+                    </div>
+                    </motion.div>
+                    
                 </motion.div>
             </AnimatePresence>
         </>

@@ -159,7 +159,8 @@ const Market = () => {
         );
         
         
-        getWatchList(
+        if(localStorage.getItem('token')){
+          getWatchList(
             (data)=>{
                 setWatchList(data.data)
                 setSelectedStock(data.data[0])
@@ -169,6 +170,7 @@ const Market = () => {
             },
             (error)=>{console.log("error",error)}
         )
+        }
     },[])
 
     // Function to fetch stocks

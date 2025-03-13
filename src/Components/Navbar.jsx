@@ -9,6 +9,7 @@ import logo from '../assets/icons/logofinraces.svg'
 import globe from '../assets/icons/globe_icon.svg'
 import searchIcon from '../assets/icons/search_icon.svg'
 import support from '../assets/icons/support_icon.svg'
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import CreateRace from "./CreateRace";
 // import { Switch } from "antd";
 import darkLogo from '../assets/images/darklogo.png'
@@ -95,7 +96,7 @@ const Navbar = () => {
     useEffect(() => {
         let thisUserDetails = userDetails || guestDetails
         if (thisUserDetails) {
-            console.log("user deatails", btoa(thisUserDetails))
+            console.log("user deatails", JSON.parse(atob(thisUserDetails)))
             setUserDetailsObject(JSON.parse(atob(thisUserDetails)))
         }
 
@@ -209,9 +210,10 @@ const Navbar = () => {
                         Create Race
                         <IoIosAdd size={20} />
                     </button>
-                    {/* <button className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px]'>
-                        <img src={support} alt="Search" />
-                    </button> */}
+                    {userDetails &&<button onClick={()=>{navigate('/chat')}} className='aspect-square dark:bg-[#001a50] h-[2.35rem] grid place-items-center rounded-[8px] dark:text-white'>
+                        {/* <img src={support} alt="Search" /> */}
+                        <IoChatboxEllipsesOutline size={28} />
+                    </button>}
                     {userDetails && <div onClick={() => {
                         setNotificationToggle(prev => !prev)
                         // setDropdown(false)
@@ -270,7 +272,7 @@ const Navbar = () => {
                         <img src={globe} alt="Search" />
                     </div> */}
                     {
-                        userDetailsObject && <div id="profileButton" onClick={(e) => {
+                        userDetails && userDetailsObject && <div id="profileButton" onClick={(e) => {
                             // set dropdown
                             e.stopPropagation();
                             // console.log(e.target.id)
@@ -297,6 +299,43 @@ const Navbar = () => {
                                         localStorage.removeItem('token')
                                         localStorage.removeItem('refreshToken')
                                         localStorage.removeItem('userDetails')
+                                        setUserDetailsObject(null);
+                                        setUnseenNotifications([])
+                                        window.dispatchEvent(new Event("storage")); // 🔄 Ensure other tabs update
+                                        navigate('/')
+                                    }} className="w-full p-3 dark:font-semibold hover:bg-red-500 hover:text-white transition-opacity duration-100 ease-linear dark:text-white">Log out</p>
+                                </motion.div>}
+                            </AnimatePresence>
+                        </div>
+                    }
+                    {
+                        guestDetails && userDetailsObject && <div id="profileButton" onClick={(e) => {
+                            // set dropdown
+                            e.stopPropagation();
+                            // console.log(e.target.id)
+                            setDropdown(prev => !prev)
+                            // guestDetails && setShowLoginForm(true)
+                            setNotificationToggle(false)
+                        }} className={`flex ${dropdown && 'dark:bg-blue-900 bg-slate-300'} justify-center items-center gap-2 relative p-2 px-4 rounded-lg cursor-pointer`}>
+                            <p id="profileButtonP" className="dark:text-white">{userDetailsObject.userName}</p>
+                            <div id="profileButtonD" className="bg-white w-9 h-9 rounded-full overflow-hidden">
+                                <img id="profileButtonI" className="w-full h-full object-cover" src={profileImage || (userDetailsObject.gender && userDetailsObject.gender=='female'?femalePlaceholder:malePlaceholder)} alt="" />
+                            </div>
+                            <AnimatePresence>
+                                {dropdown && <motion.div
+                                    ref={dropdownRef}
+                                    initial={{ opacity: 0, y: -10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ duration: 0.2, ease: "easeInOut" }}
+                                    className={`absolute top-16 bg-white rounded-lg right-0 w-[130%] overflow-hidden shadow-2xl dark:bg-[#002864]`}>
+                                    {/* <button onClick={() => navigate('/profile')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear text-start dark:text-white dark:hover:bg-opacity-20">Profile</button>
+                                    <p onClick={() => navigate('/settings')} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Settings</p> */}
+                                    <p onClick={() => setReport(true)} className="w-full p-3 hover:bg-slate-200 transition-opacity duration-100 ease-linear dark:text-white dark:hover:bg-opacity-20">Support</p>
+                                    <p title="Log out button" onClick={() => {
+                                        localStorage.removeItem('token')
+                                        localStorage.removeItem('refreshToken')
+                                        localStorage.removeItem('guest_details')
                                         setUserDetailsObject(null);
                                         setUnseenNotifications([])
                                         window.dispatchEvent(new Event("storage")); // 🔄 Ensure other tabs update

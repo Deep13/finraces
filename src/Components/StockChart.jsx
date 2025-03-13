@@ -68,9 +68,9 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
       ...dataset,
       backgroundColor: area ? (ctx) => getGradient(ctx, dataset.borderColor || "#00E396") : dataset.borderColor || "#00E396",
       borderWidth: 2,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      tension: 0.4,
+      pointRadius: 0,
+      pointHoverRadius: 0,
+      tension: area?1:0,
       fill: area,
     })),
   };
@@ -145,6 +145,12 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
     zoom: {
       pan: { enabled: true, mode: "xy" },
       zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: "xy" },
+    },
+  },
+  elements: {
+    point: {
+      radius: 0, // Hides points
+      hoverRadius: 0, // Hides points on hover
     },
   },
 };
