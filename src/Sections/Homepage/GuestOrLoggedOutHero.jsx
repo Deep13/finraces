@@ -167,7 +167,8 @@ const GuestOrLoggedOutHero = () => {
       (data) => {
         setWatchList((prev) => [...prev, ...data.data]); // Append new data
         setHasNext(data.hasNextPage); // Update hasNext flag
-        setPage(pageNumber + 1); // Increment page number
+        setPage((prevPage) => prevPage + 1);
+ // Increment page number
       },
       (error) => {
         console.log("Error fetching stocks:", error);

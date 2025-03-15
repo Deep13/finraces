@@ -23,7 +23,7 @@ const Footer = () => {
   const { darkModeEnabled } = useContext(DarkModeContext)
   const navigate=useNavigate();
   return (
-    <footer className="bg-[#e5f4ff] dark:bg-[#002763] dark:text-white py-4 px-6 text-center">
+    <footer className="bg-[#e5f4ff] dark:bg-[#002763] dark:text-white py-4 px-6 text-center h-28">
     <p className="font-bold text-lg mb-2">
         © Copyright 2025 FinRaces | All rights reserved
     </p>

@@ -19,6 +19,7 @@ const NavFootWrapper = () => {
 
   const {report,setReport}=useContext(DarkModeContext)
   const [successModel,setSuccessModel]=useState(false);
+  const [errorMsg,setErrorMsg]=useState("");
   const [reportData, setReportData] = useState({
       title: '',
       email:'',
@@ -29,16 +30,34 @@ const NavFootWrapper = () => {
 
   const submitBugReport = async() => {
       console.log('Submitting Report:', reportData);
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      // Validate fields
+      if (!reportData.title || !reportData.email || !reportData.priority || !reportData.area || !reportData.description) {
+        // alert("All fields are required!");
+        setErrorMsg("All fields are required!")
+        return;
+      }
+    
+      // Validate email format
+      if (!emailRegex.test(reportData.email)) {
+        // alert("Please enter a valid email address!");
+        setErrorMsg("Please enter a valid email address!");
+        return;
+      }
+
       await reportBug(reportData, (data) => {
                   setSuccessModel(true);
                   setReportData({
                     title: '',
+                    email:'',
                     priority: 'Low',
                     area: 'Bug',
                     description: ''
                 })
      })
       setReport(false); // Close modal after submission
+      setErrorMsg("");
   };
 
   return (
@@ -72,6 +91,10 @@ const NavFootWrapper = () => {
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
                     <div className="bg-white dark:bg-[#010B2C] rounded-lg shadow-lg p-6 w-[90%] md:w-[500px]">
                         <h2 className="text-xl font-bold dark:text-white mb-4">Report A Bug</h2>
+
+                        {errorMsg!="" &&
+                          <h2 className='text-red-600 font-poppins font-semibold'>{errorMsg}</h2>
+                        }
                         <div className="flex flex-col gap-3">
                             {/* Title */}
                             <div className="flex flex-col">
