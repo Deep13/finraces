@@ -41,12 +41,12 @@ const Settings = () => {
         duration: 0.4,
         ease: 'easeInOut'
       }}
-      className='w-full relative h-[74.6vh] flex py-8 dark:bg-[#000924] overflow-auto'>
+      className='w-full relative flex py-8 dark:bg-[#000924] overflow-auto flex-1'>
       {/* Ensure sidebar is inside a container with sufficient height */}
       <Sidebar />
 
       <div className='flex-1 px-[2%] md:px-[6%] pt-[2.1rem]'>
-        <div className='w-full dark:bg-[#000A2D] dark:border dark:border-[#00387E] rounded-[24px] h-full pb-6'>
+        <div className='w-full dark:bg-[#000A2D] dark:border dark:border-[#00387E] rounded-[24px] h-full pb-6 '>
 
           <div className='dark:text-white w-full h-full'>
             <div className='w-full flex flex-col gap-4 justify-start mb-4'>
