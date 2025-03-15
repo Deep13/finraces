@@ -77,9 +77,9 @@ const StockComparison = () => {
   
       useEffect(()=>{
           let token=localStorage.getItem('token');
-          let ud=localStorage.getItem('userDetails');
+          // let ud=localStorage.getItem('userDetails');
   
-          if(!ud || !token){
+          if(!token){
               setShowLoginForm(true);
           }
       },[])
@@ -226,10 +226,11 @@ const StockComparison = () => {
 
   const buttonClick=()=>{
     let token=localStorage.getItem('token');
-    let ud=localStorage.getItem('userDetails');
+    // let ud=localStorage.getItem('userDetails');
     
-    if(!ud || !token){
+    if(!token){
       setShowLoginForm(true);
+      return;
     }
 
     let count=0;
@@ -537,7 +538,7 @@ const StockComparison = () => {
           </div>
         </div>
 
-        <div className="h-[3rem] z-50 top-20 sticky border-2 dark:border-0 dark:bg-[#001a50] grid grid-cols-5 rounded-xl py-2 px-5 mb-7 font-poppins font-semibold">
+        <div className="h-[3rem] z-10 top-20 sticky border-2 dark:border-0 dark:bg-[#001a50] grid grid-cols-5 rounded-xl py-2 px-5 mb-7 font-poppins font-semibold">
           <div className="col-span-1 flex justify-center items-center">
             Stocks
             <FaArrowRight />

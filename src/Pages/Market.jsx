@@ -77,9 +77,9 @@ const Market = () => {
 
     useEffect(()=>{
         let token=localStorage.getItem('token');
-        let ud=localStorage.getItem('userDetails');
+        // let ud=localStorage.getItem('userDetails');
 
-        if(!ud || !token){
+        if(!token){
             setShowLoginForm(true);
         }
     },[])
