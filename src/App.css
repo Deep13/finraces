@@ -1,0 +1,11 @@
+.ongoing-users {
+  border-radius: 8px;
+  height: 200px;
+  width: 200px;
+}
+.ongoing-rank {
+  width: 200px;
+  position: absolute;
+  bottom: -30px;
+  left: -10px;
+}

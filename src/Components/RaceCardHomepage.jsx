@@ -4,6 +4,9 @@ import boxdark from '../assets/images/boxdark.svg'
 import info from '../assets/images/ongoingRaces/info_icon.svg'
 import gold_crown from '../assets/images/gold_crown.svg'
 import silver_crown from '../assets/images/silver_corwn.svg'
+import Crown_1 from '../assets/images/Crown_1.png'
+import Crown_2 from '../assets/images/Crown_2.png'
+import Crown_3 from '../assets/images/Crown_3.png'
 import bronze_corwn from '../assets/images/bronze_corwn.svg'
 import line_beside_medals from '../assets/images/line_beside_medals.png'
 import linedark from '../assets/images/linedark.svg'
@@ -29,7 +32,8 @@ const RaceCardHomepage = ({
     raceId = '54asdffasaFSf',
     raceName = 'Abstrace Race',
     end_date,
-    start_Date
+    start_Date,
+    onRaceFinished
     // participants,
 }) => {
 
@@ -41,7 +45,7 @@ const RaceCardHomepage = ({
     const [rankList, setRankList] = useState([{ user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }, { user_name: "-", user_photo: "" }])
     const [maxValue, setMaxValue] = useState(120);
     const [logos, setLogos] = useState({});
-    const [loading,setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
     const options = {
         indexAxis: "y",
@@ -178,7 +182,7 @@ const RaceCardHomepage = ({
                 ],
             });
             setMaxValue(totalTime + (newLabels.length * 10))
-            setLoading(false)
+
             // Code by Deepak End /////
         })
     }, [])
@@ -241,6 +245,13 @@ const RaceCardHomepage = ({
             if (data.event === 'race-data') {
                 // console.log(JSON.stringify(data.data))
                 // setRaceResults(data.data)
+                if (data.data.status == "finished") {
+                    console.log("Race finished");
+                    onRaceFinished();
+                    // setData({ labels: [] });
+                    socket.disconnect();
+                    return;
+                }
                 setParticipants(getParticipants(data.data['race_result'], data.data['participantsWithNoRank']))
                 setRankList(getParticipantsWithRanks(data.data['race_result'], data.data['participantsWithNoRank']))
                 setStockRankList(data.data['stocks'])
@@ -266,6 +277,7 @@ const RaceCardHomepage = ({
                         ],
                     };
                 });
+                setLoading(false)
                 // code by deepak
 
 
@@ -358,78 +370,85 @@ const RaceCardHomepage = ({
 
     return (
         <>
-        {loading?(
-            <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] items-center justify-center h-52 w-full'>
-                <ColorRing
-                                                                            visible={true}
-                                                                            height="45"
-                                                                            width="45"
-                                                                            ariaLabel="color-ring-loading"
-                                                                            wrapperStyle={{}}
-                                                                            wrapperClass="color-ring-wrapper"
-                                                                            colors={['#e15b64', '#f47e60',]}
-                                                                        />
-            </div>
+            {loading ? (
+                <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] items-center justify-center h-52 w-full'>
+                    <ColorRing
+                        visible={true}
+                        height="45"
+                        width="45"
+                        ariaLabel="color-ring-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="color-ring-wrapper"
+                        colors={['#e15b64', '#f47e60',]}
+                    />
+                </div>
 
-        ):(
-            <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
-            <div className='w-full flex justify-between mb-[14px]'>
-                <div className='flex gap-[0.76rem] flex-1'>
-                    <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
-                    <div className='h-full'>
-                        <h3 className='text-[0.85rem] line-clamp-3 font-bold dark:text-white'>{raceName}</h3>
-                        {/* <p className='text-[0.7rem]'>XYZ</p> */}
-                    </div>
-                    {/* <div className=''>
+            ) : (
+                <div onClick={() => navigate(`/race/${raceId}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
+                    <div className='w-full flex justify-between mb-[14px]'>
+                        <div className='flex gap-[0.76rem] flex-1'>
+                            <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
+                            <div className='h-full'>
+                                <h3 className='text-[0.85rem] line-clamp-3 font-bold dark:text-white'>{raceName}</h3>
+                                {/* <p className='text-[0.7rem]'>XYZ</p> */}
+                            </div>
+                            {/* <div className=''>
                         <img className='w-[10px] h-[10px]' src={info} alt="info icon" />
                     </div> */}
-                </div>
-                <div className='flex-1 flex justify-center'>
-                    <CountdownCircleTimer
-                        isPlaying
-                        size={50}
-                        strokeWidth={3}
-                        duration={getRemainingSeconds(end_date, start_Date)} // total duration depcits a full circle.
-                        colors={['#5b89ff']}
-                        initialRemainingTime={getRemainingSeconds(end_date, new Date())} // time that is remaining from now
-                        colorsTime={[7]}>
-                        {({ remainingTime }) => {
-                            const hours = Math.floor(remainingTime / 3600)
-                            const minutes = Math.floor((remainingTime % 3600) / 60)
-                            const seconds = remainingTime % 60
+                        </div>
+                        <div className='flex-1 flex justify-center'>
+                            <CountdownCircleTimer
+                                isPlaying
+                                size={50}
+                                strokeWidth={3}
+                                duration={getRemainingSeconds(end_date, start_Date)} // total duration depcits a full circle.
+                                colors={['#5b89ff']}
+                                initialRemainingTime={getRemainingSeconds(end_date, new Date())} // time that is remaining from now
+                                colorsTime={[7]}>
+                                {({ remainingTime }) => {
+                                    const hours = Math.floor(remainingTime / 3600)
+                                    const minutes = Math.floor((remainingTime % 3600) / 60)
+                                    const seconds = remainingTime % 60
 
-                            return <div className='text-[0.63rem] font-semibold dark:text-white font-poppins'>
-                                {hours}:{minutes}:{seconds}
-                            </div>
-                        }}
-                    </CountdownCircleTimer>
-                </div>
-                <div className='h-full flex flex-col justify-start items-end flex-1'>
-                    <h3 className='text-[1.05rem] font-bold dark:text-white'>{`${participants?.length} participants`}</h3>
-                    {/* <p className='text-[0.7rem] dark:text-white'>{`${participants?.length} participants`}</p> */}
-                </div>
-            </div>
+                                    return <div className='text-[0.63rem] font-semibold dark:text-white font-poppins'>
+                                        {hours}:{minutes}:{seconds}
+                                    </div>
+                                }}
+                            </CountdownCircleTimer>
+                        </div>
+                        <div className='h-full flex flex-col justify-start items-end flex-1'>
+                            <h3 className='text-[1.05rem] font-bold dark:text-white'>{`${participants?.length} participants`}</h3>
+                            {/* <p className='text-[0.7rem] dark:text-white'>{`${participants?.length} participants`}</p> */}
+                        </div>
+                    </div>
 
-            <div className='w-full flex justify-center items-center mb-[25px] relative'>
-                {/* absolute elements */}
-                <div className='absolute left-0 top-1/2 -scale-100'>
+                    <div className='w-full flex justify-center items-center mb-[25px] relative'>
+                        {/* absolute elements */}
+                        {/* <div className='absolute left-0 top-1/2 -scale-100'>
                     <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
-                </div>
+                </div> */}
 
-                <div className='w-full flex justify-center items-center'>
-                    {/* <div className='relative aspect-square p-[22px]'>
+                        <div className='w-full flex justify-center items-center gap-[25px]'>
+                            <div style={{ position: 'relative' }}> <img className='ongoing-users' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender == 'female' ? femalePlaceholder : malePlaceholder} />
+                                <img className='ongoing-rank' src={Crown_1} />
+                            </div>
+                            <div style={{ position: 'relative' }}><img className='ongoing-users' src={rankList[1].user_photo ? rankList[1].user_photo.path : rankList[1].gender == 'female' ? femalePlaceholder : malePlaceholder} />
+                                <img className='ongoing-rank' src={Crown_2} /></div>
+                            <div style={{ position: 'relative' }}> <img className='ongoing-users' src={rankList[2].user_photo ? rankList[2].user_photo.path : rankList[2].gender == 'female' ? femalePlaceholder : malePlaceholder} />
+                                <img className='ongoing-rank' src={Crown_3} /></div>
+                            {/* <div className='relative aspect-square p-[22px]'>
                     <img src={person2} alt="silver medal position" />
                     <img src={silver_crown} alt="1st position person" />
                     <p >Nik</p>
                 </div> */}
 
-                    <div
+                            {/* <div
                         onClick={(e) => {
                             e.stopPropagation()
                             navigate(`/userprofile/$`)
                         }}
-                        className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
-                        <div className='relative flex justify-center items-center'>
+                        className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'> */}
+                            {/* <div className='relative flex justify-center items-center'>
                             <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender=='female'?femalePlaceholder:malePlaceholder} />
                             <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
                         </div>
@@ -450,37 +469,20 @@ const RaceCardHomepage = ({
                             <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
                         </div>
                         <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p>
-                    </div>
+                    </div> */}
 
-                    {/* <div className='relative aspect-square p-[22px]'>
-                    <img src={person2} alt="bronze medal position" />
-                    <img src={bronze_corwn} alt="1st position person" />
-                    <p>dave</p>
-                </div> */}
-
-                    {/* absolute elements */}
+                            {/* absolute elements
                     <div className='absolute right-0 top-1/2'>
                         <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
+                    </div> */}
+                        </div>
                     </div>
-                </div>
-            </div>
-            {data.labels.length > 0 && (
-                <Bar data={data} options={options} plugins={[customPlugin]} />
-            )}
-            {/* <div className='w-full flex-1 mt-3 relative border border-dashed border-black dark:border-white  bg-[#edf7ff] flex justify-between items-center py-[2rem] dark:bg-[#002864]'>
-                <div className='bg-[#edf7ff] z-20 relative -left-2 dark:bg-[#002864]'>
-                    <img src={darkModeEnabled ? startdark : start} alt="" />
-                </div>
-                <RaceTile
-                    stocksData={stocksDataForRace}
-                    stockRankList={stockRankList} />
-                <div className='bg-[#edf7ff] z-20 relative -right-2 dark:bg-[#002864]'>
-                    <img src={darkModeEnabled ? finishdark : finish} alt="" />
-                </div>
-            </div> */}
+                    {data.labels.length > 0 && (
+                        <Bar data={data} options={options} plugins={[customPlugin]} />
+                    )}
 
-        </div>
-        )}
+                </div>
+            )}
         </>
     )
 }

@@ -28,7 +28,7 @@ const OngoingRaces = () => {
         {
           raceList.length > 0 && raceList.slice(0, 4).map((curr, index) => {
             return (
-              <RaceCardHomepage start_Date={curr.start_date} end_date={curr.end_date} raceName={curr.name} raceId={curr.id} key={index + 1} />
+              <RaceCardHomepage start_Date={curr.start_date} end_date={curr.end_date} raceName={curr.name} raceId={curr.id} key={index + 1} onRaceFinished={() => setRaceList([...raceList.slice(0, index), ...raceList.slice(index + 1)])} />
             )
           })
         }
