@@ -13,7 +13,7 @@ const ImageSlider = ({
     // const [images, setImages] = useState(data);
     // const [currentImage1, setCurrentImage1] = useState(currentImage);
 
-    console.log("will of d",data)
+    // console.log("will of d",data)
 
     return (
         <div className="w-full h-full">

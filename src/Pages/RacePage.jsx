@@ -44,6 +44,7 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import RankChart from "../Components/RaceLineChart";
 
 // Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -74,7 +75,8 @@ const RacePage = () => {
     const joinedUsersRef = useRef([])
     const [raceResults, setRaceResults] = useState()
     const [stocksDataForRace, setStocksDataForRace] = useState(null)
-    const [raceStatus, setRaceStatus] = useState('')
+    const [raceStatus, setRaceStatus] = useState('');
+    const [graphType,setGraphType]=useState('Line');
     const [ranks, setRanks] = useState({
         1: Math.floor(Math.random() * 3) + 1,
         2: Math.floor(Math.random() * 3) + 1,
@@ -89,6 +91,9 @@ const RacePage = () => {
     const [currentImage, setCurrentImage] = useState(0)
     const [imageRank, setImageRank] = useState({})
     const [bronzeUser, setBronzeUser] = useState(0)
+    const [chartData,setChartData]=useState();
+    const [labels,setLabels]=useState([]);
+    const [dataset,setDataset]=useState([]);
     const [duration, setDuration] = useState('')
     const flag = useRef(0)
     const userDetails = localStorage.getItem('userDetails')
@@ -121,6 +126,7 @@ const RacePage = () => {
             },
         ],
     });
+    const [stockCount,setStockCount]=useState(0);
 
     const [logos, setLogos] = useState({});
     const [maxValue, setMaxValue] = useState(120);
@@ -445,6 +451,7 @@ const RacePage = () => {
             const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
 
             let stocks = (res.stocks) // this will be the natural position of stocks at first
+            setStockCount(res.stocks);
             let stockNames = stocks.map(curr => (curr.ticker))
             let totalTime = calculateDurationInSeconds(res.start_date, res.end_date)
             let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
@@ -517,7 +524,135 @@ const RacePage = () => {
     }, [raceStatus])
 
 
+// This function transforms socket data for line chart not using it now but maybe needed later
+// const dataTransform = (input) => {
+//     const stockIndexes = {};
+//     const raceResults = input.race_result || {};
+//     const timestamp = input.timestamp || new Date().toISOString(); // Use given timestamp or current time
 
+//     for (const [rank, details] of Object.entries(raceResults)) {
+//         details.stocks.forEach(stock => {
+//             if (!stockIndexes[stock.stock_ticker]) {
+//                 stockIndexes[stock.stock_ticker] = [];
+//             }
+//             stockIndexes[stock.stock_ticker].push({ x: timestamp, y: parseInt(rank) });
+//         });
+//     }
+
+//     // Update labels (keep last 30)
+//     setLabels(prevLabels => {
+//         const newLabels = [...prevLabels, timestamp];
+//         return newLabels.slice(-30); // Keep only the last 30 timestamps
+//     });
+
+//     // Update datasets (keep last 30 points per stock)
+//     setDataset(prevDatasets => {
+//         const updatedDatasets = prevDatasets.map(dataset => {
+//             const newData = stockIndexes[dataset.label] || [];
+//             const updatedData = [...dataset.data, ...newData].slice(-30); // Keep last 30 points
+//             return { ...dataset, data: updatedData };
+//         });
+
+//         // Add new stocks if they didn't exist before
+//         Object.keys(stockIndexes).forEach(ticker => {
+//             if (!prevDatasets.some(dataset => dataset.label === ticker)) {
+//                 updatedDatasets.push({
+//                     label: ticker,
+//                     data: stockIndexes[ticker].slice(-30), // Ensure new stocks also keep max 30
+//                     borderColor: getColor(ticker),
+//                     backgroundColor: getColor(ticker) + "33",
+//                     fill: false,
+//                 });
+//             }
+//         });
+
+//         return updatedDatasets;
+//     });
+// };
+const generateStaticDatasets = (stockCountArray) => {
+    const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
+    const stockCount = stockCountArray.length; // Get the number of stocks
+
+    // Generate unique ranks for each timestamp
+    const generateUniqueRanks = () => {
+        let ranks = Array.from({ length: stockCount }, (_, i) => i + 1);
+        return ranks.sort(() => Math.random() - 0.5); // Shuffle array
+    };
+
+    // Create dataset where each stock gets a unique rank at each timestamp
+    let dataMatrix = Array.from({ length: stockCount }, () => []);
+
+    for (let i = 0; i < 30; i++) {
+        let uniqueRanks = generateUniqueRanks();
+        let timestamp = (i * 5).toString().padStart(2, '0'); // Generates "0", "05", "10", ..., "145"
+        uniqueRanks.forEach((rank, index) => {
+            dataMatrix[index].push({ x: timestamp, y: rank });
+        });
+    }
+
+    return dataMatrix.map((data, index) => ({
+        label: stockCountArray[index], // Use stock name from the array
+        data,
+        borderColor: barColors[index % barColors.length],
+        backgroundColor: barColors[index % barColors.length],
+        fill: false,
+    }));
+};
+
+
+// Example usage inside useEffect:
+useEffect(() => {
+    setDataset(generateStaticDatasets(stockCount));
+}, [stockCount]); // Regenerate datasets whenever stockCount changes
+
+
+
+
+
+// Function to get stock colors
+// const getColor = (ticker) => {
+//     const colors = {
+//         "AAPL": "#00E396",
+//         "NFLX": "#FEB019",
+//         "TSLA": "#FF4560"
+//     };
+//     return colors[ticker] || "#888888"; // Default gray if not found
+// };
+
+useEffect(()=>{
+    console.log("state of data",labels,dataset)
+},[labels,dataset])
+
+const transformSocketData = (raceData) => {
+    if (!raceData || !raceData.stocks || !raceData.start_date) return { labels: [], datasets: [] };
+  
+    const startTime = new Date(raceData.start_date).getTime();
+    
+    const allTimestamps = new Set();
+    const stockData = {};
+  
+    raceData?.stocks?.forEach(stock => {
+      stockData[stock.stock_ticker] = [];
+      stock?.history?.forEach(entry => {
+        const timeElapsed = ((new Date(entry.timestamp).getTime() - startTime) / 60000).toFixed(2);
+        stockData[stock.stock_ticker].push({ x: timeElapsed, y: entry.rank });
+        allTimestamps.add(timeElapsed);
+      });
+    });
+  
+    const sortedTimestamps = [...allTimestamps].sort((a, b) => a - b);
+  
+    const datasets = Object.entries(stockData).map(([ticker, data], index) => ({
+      label: ticker,
+      data,
+      borderColor: ["#00E396", "#FEB019", "#FF4560", "#775DD0"][index % 4], // Rotate colors
+      backgroundColor: ["#00E39633", "#FEB01933", "#FF456033", "#775DD033"][index % 4],
+      fill: false
+    }));
+  
+    return { labels: sortedTimestamps, datasets };
+  };
+  
     // can you try this
 
     useEffect(() => {
@@ -575,7 +710,9 @@ const RacePage = () => {
             }
             if (data.event === 'race-data') {
                 setRaceResults(data.data)
-                // console.log('race data socket', data.data)
+                console.log('race data socket', data.data)
+                console.log("check",transformSocketData(data.data))
+                // dataTransform(data.data)
                 if(data?.data?.status){
                     setRaceStatus(data.data.status)
                 } // somehow this is not reflecting
@@ -946,9 +1083,7 @@ const RacePage = () => {
                                     </div>
 
 
-                                    {data.labels.length > 0 && raceStatus !== 'finished' && (
-                                        <Bar data={data} options={options} plugins={[customPlugin]} />
-                                    )}
+                                    
 
                                     {
                                         raceStatus === 'finished' && <div className="w-full h-full flex justify-center items-center">
@@ -957,7 +1092,21 @@ const RacePage = () => {
                                             </div>
                                         </div>
                                     }
-                                    {raceResults &&
+                                    <div className="border-2 dark:border-[#00387E] dark:text-white flex items-center w-60 rounded-lg py-2 px-3 gap-5 my-2">
+                                        {['Horse','Ticker','Line'].map((item)=>(
+                                            <span
+                                            key={item}
+                                            className={`rounded-md cursor-pointer ${item==graphType?"bg-blue-600":""} p-2`}
+                                            onClick={() => setGraphType(item)}
+                                          >
+                                            {item}
+                                          </span>
+                                        ))}
+                                    </div>
+                                    {graphType=="Ticker" && data.labels.length > 0 && raceStatus !== 'finished' && (
+                                        <Bar data={data} options={options} plugins={[customPlugin]} />
+                                    )}
+                                    {graphType=="Horse" && raceResults &&
                                         <iframe
                                             className="flex-1 w-full h-[500px]"
                                             ref={iframeRef}
@@ -966,6 +1115,10 @@ const RacePage = () => {
                                         // height="832px"
                                         // frameBorder="0"
                                         />}
+
+                                    {graphType=="Line" && data.labels.length > 0 && raceStatus !== 'finished' &&(
+                                        <RankChart labels={labels} dataset={dataset} stocks={stockCount}/>
+                                    )}
                                 </div>
 
 

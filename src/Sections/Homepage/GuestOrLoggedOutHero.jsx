@@ -323,7 +323,7 @@ const GuestOrLoggedOutHero = () => {
   {/* Scrollable Stock Cards */}
   <div
     ref={sliderRef}
-    className="flex gap-2 overflow-x-hidden flex-nowrap p-2 scroll-smooth max-w-[65rem] 2xl:max-w-[81rem]"
+    className="flex gap-2 overflow-x-hidden flex-nowrap p-2 scroll-smooth max-w-[65vw] 2xl:max-w-[81vw]"
   >
     {watchList && watchList.length > 0 ? (
       watchList.map((stockData, index) => (
