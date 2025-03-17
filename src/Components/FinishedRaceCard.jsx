@@ -43,7 +43,7 @@ const FinishedRaceCard = ({
 
 
     return (
-        <div onClick={() => navigate(`/race/${raceData?.id}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]'>
+        <div onClick={() => navigate(`/race/${raceData?.id}`)} className='rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] mt-[20px]'>
             <div className='w-full flex justify-between mb-[14px]'>
                 <div className='flex gap-[0.76rem] flex-1'>
                     <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
@@ -82,7 +82,18 @@ const FinishedRaceCard = ({
                     />
                         <img className='ongoing-rank' src={Crown_3} /></div>
                 </div>
-                <div className='w-full flex justify-center items-center gap-[25px] mt-[40px]'>
+                <div className='w-full flex justify-center items-center gap-[25px] mt-[40px] text-white'>
+                    <div className='flex flex-1 justify-center'>
+                        <p>{raceData?.participants?.[0]?.firstName} {raceData?.participants?.[0]?.lastName}</p>
+                    </div>
+                    <div className='flex flex-1 justify-center'>
+                        <p>{raceData?.participants?.[1]?.firstName} {raceData?.participants?.[1]?.lastName}</p>
+                    </div>
+                    <div className='flex flex-1 justify-center'>
+                        <p>{raceData?.participants?.[2]?.firstName} {raceData?.participants?.[2]?.lastName}</p>
+                    </div>
+                </div>
+                <div className='w-full flex justify-center items-center gap-[25px] mt-[20px]'>
                     <div className='flex flex-1 justify-center'>
                         <img className='finished-stocks'
                             src={raceData?.stocks[0]?.icon_url}
