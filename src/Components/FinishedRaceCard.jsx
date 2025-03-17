@@ -20,7 +20,9 @@ import RaceTile from '../Components/RaceTile'
 import { getStocksDataForRace } from '../Utils/api'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
 import { getRaceList } from '../Utils/api'
-
+import Crown_1 from '../assets/images/Crown_1.png'
+import Crown_2 from '../assets/images/Crown_2.png'
+import Crown_3 from '../assets/images/Crown_3.png'
 import malePlceholder from '../assets/images/manPlaceholder.jpg'
 import femalePlceholder from '../assets/images/womanPlaceholder.jpg'
 
@@ -37,7 +39,7 @@ const FinishedRaceCard = ({
     const [raceList, setRaceList] = useState()
     const navigate = useNavigate()
 
-    console.log("checking here",raceData?.participants?.[0]?.photo?.path)
+    console.log("checking here", raceData?.participants?.[0]?.photo?.path)
 
 
     return (
@@ -62,91 +64,27 @@ const FinishedRaceCard = ({
                     <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
                 </div>
 
-                <div className='w-full flex justify-center items-center'>
-                    {/* <div className='relative aspect-square p-[22px]'>
-                    <img src={person2} alt="silver medal position" />
-                    <img src={silver_crown} alt="1st position person" />
-                    <p >Nik</p>
-                </div> */}
+                <div className='w-full flex justify-center items-center gap-[25px]'>
 
-                    <div
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            if (!raceData?.stocks[1]?.participants[0]?.user) return
-                            navigate(`/userprofile/${raceData?.stocks[1]?.participants[0]?.user?.id}`)
-                        }}
-                        title={raceData?.stocks[1]?.participants[0]?.user && (raceData?.stocks[1]?.participants[0]?.user.firstName + " " + raceData?.stocks[1]?.participants[0]?.user.lastName)}
-                        className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
-                        <div className='relative flex justify-center items-center'>
-                            {/* {raceData?.stocks[1]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[1]?.participants[0]?.user?.photo?.path} />}
-                            {!raceData?.stocks[1]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />} */}
-                            <img 
-                                className='absolute z-[-1] w-[50%] rounded-[50%]' 
-                                src={raceData?.participants?.[1]?.photo?.path 
-                                        || (raceData?.participants?.[1]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
-                                />
-
-                            <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
-                        </div>
-                        {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[0].user_name}</p> */}
+                    <div style={{ position: 'relative' }}>  <img
+                        className='ongoing-users'
+                        src={raceData?.participants?.[0]?.photo?.path
+                            || (raceData?.participants?.[0]?.gender === 'female' ? femalePlceholder : malePlceholder)}
+                    />
+                        <img className='ongoing-rank' src={Crown_1} />
                     </div>
-
-                    <div
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            if (!raceData?.stocks[0]?.participants[0]?.user) return
-                            navigate(`/userprofile/${raceData?.stocks[0]?.participants[0]?.user?.id}`)
-                        }}
-                        title={raceData?.stocks[0]?.participants[0]?.user && (raceData?.stocks[0]?.participants[0]?.user.firstName + " " + raceData?.stocks[0]?.participants[0]?.user.lastName)}
-                        className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
-                        <div className='relative flex justify-center items-center'>
-                            {/* {raceData?.stocks[0]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[0]?.participants[0]?.user?.photo?.path} />}
-                            {!raceData?.stocks[0]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />} */}
-                            {/* {raceData?.participants?.[0].photo?.path} */}
-                            <img 
-                                className='absolute z-[-1] w-[50%] rounded-[50%]' 
-                                src={raceData?.participants?.[0]?.photo?.path 
-                                        || (raceData?.participants?.[0]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
-                                />
-
-                            <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
-                        </div>
-                        {/* <p className='relative text-center font-semibold text-[12px] dark:text-white'>{rankList[1].user_name}</p> */}
-                    </div>
-
-                    <div
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            if (!raceData?.stocks[2]?.participants[0]?.user) return
-                            navigate(`/userprofile/${raceData?.stocks[2]?.participants[0]?.user?.id}`)
-                        }}
-                        title={raceData?.stocks[2]?.participants[0]?.user && (raceData?.stocks[2]?.participants[0]?.user.firstName + " " + raceData?.stocks[2]?.participants[0]?.user.lastName)}
-                        className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
-                        <div className='relative flex justify-center items-center'>
-                            {/* {raceData?.stocks[2]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[2]?.participants[0]?.user?.photo?.path} />}
-                            {!raceData?.stocks[2]?.participants[0]?.user?.photo?.path && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />} */}
-                            <img 
-                                className='absolute z-[-1] w-[50%] rounded-[50%] mt-[0.55rem]' 
-                                src={raceData?.participants?.[2]?.photo?.path 
-                                        || (raceData?.participants?.[2]?.gender === 'female' ? femalePlceholder : malePlceholder)} 
-                                />
-
-                            <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
-                        </div>
-                        
-                        {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p> */}
-                    </div>
-
-                    {/* <div className='relative aspect-square p-[22px]'>
-                    <img src={person2} alt="bronze medal position" />
-                    <img src={bronze_corwn} alt="1st position person" />
-                    <p>dave</p>
-                </div> */}
-
-                    {/* absolute elements */}
-                    <div className='absolute right-0 top-1/2'>
-                        <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
-                    </div>
+                    <div style={{ position: 'relative' }}><img
+                        className='ongoing-users'
+                        src={raceData?.participants?.[1]?.photo?.path
+                            || (raceData?.participants?.[1]?.gender === 'female' ? femalePlceholder : malePlceholder)}
+                    />
+                        <img className='ongoing-rank' src={Crown_2} /></div>
+                    <div style={{ position: 'relative' }}> <img
+                        className='ongoing-users'
+                        src={raceData?.participants?.[2]?.photo?.path
+                            || (raceData?.participants?.[2]?.gender === 'female' ? femalePlceholder : malePlceholder)}
+                    />
+                        <img className='ongoing-rank' src={Crown_3} /></div>
                 </div>
             </div>
 
