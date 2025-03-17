@@ -429,12 +429,12 @@ const RaceCardHomepage = ({
                 </div> */}
 
                         <div className='w-full flex justify-center items-center gap-[25px]'>
-                            <div style={{ position: 'relative' }}> <img className='ongoing-users' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender == 'female' ? femalePlaceholder : malePlaceholder} />
+                            <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender == 'female' ? femalePlaceholder : malePlaceholder} />
                                 <img className='ongoing-rank' src={Crown_1} />
                             </div>
-                            <div style={{ position: 'relative' }}><img className='ongoing-users' src={rankList[1].user_photo ? rankList[1].user_photo.path : rankList[1].gender == 'female' ? femalePlaceholder : malePlaceholder} />
+                            <div style={{ position: 'relative', flex: 1 }}><img className='ongoing-users' src={rankList[1].user_photo ? rankList[1].user_photo.path : rankList[1].gender == 'female' ? femalePlaceholder : malePlaceholder} />
                                 <img className='ongoing-rank' src={Crown_2} /></div>
-                            <div style={{ position: 'relative' }}> <img className='ongoing-users' src={rankList[2].user_photo ? rankList[2].user_photo.path : rankList[2].gender == 'female' ? femalePlaceholder : malePlaceholder} />
+                            <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={rankList[2].user_photo ? rankList[2].user_photo.path : rankList[2].gender == 'female' ? femalePlaceholder : malePlaceholder} />
                                 <img className='ongoing-rank' src={Crown_3} /></div>
                             {/* <div className='relative aspect-square p-[22px]'>
                     <img src={person2} alt="silver medal position" />

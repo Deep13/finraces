@@ -58,80 +58,51 @@ const FinishedRaceCard = ({
                 </div>
             </div>
 
-            <div className='w-full flex justify-center items-center mb-[25px] relative'>
-                {/* absolute elements */}
-                <div className='absolute left-0 top-1/2 -scale-100'>
-                    <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
-                </div>
+            <div className='w-full flex justify-center items-center mb-[25px] relative flex-col'>
 
                 <div className='w-full flex justify-center items-center gap-[25px]'>
 
-                    <div style={{ position: 'relative' }}>  <img
+                    <div style={{ position: 'relative', flex: 1 }}>  <img
                         className='ongoing-users'
                         src={raceData?.participants?.[0]?.photo?.path
                             || (raceData?.participants?.[0]?.gender === 'female' ? femalePlceholder : malePlceholder)}
                     />
                         <img className='ongoing-rank' src={Crown_1} />
                     </div>
-                    <div style={{ position: 'relative' }}><img
+                    <div style={{ position: 'relative', flex: 1 }}><img
                         className='ongoing-users'
                         src={raceData?.participants?.[1]?.photo?.path
                             || (raceData?.participants?.[1]?.gender === 'female' ? femalePlceholder : malePlceholder)}
                     />
                         <img className='ongoing-rank' src={Crown_2} /></div>
-                    <div style={{ position: 'relative' }}> <img
+                    <div style={{ position: 'relative', flex: 1 }}> <img
                         className='ongoing-users'
                         src={raceData?.participants?.[2]?.photo?.path
                             || (raceData?.participants?.[2]?.gender === 'female' ? femalePlceholder : malePlceholder)}
                     />
                         <img className='ongoing-rank' src={Crown_3} /></div>
                 </div>
+                <div className='w-full flex justify-center items-center gap-[25px] mt-[40px]'>
+                    <div className='flex flex-1 justify-center'>
+                        <img className='finished-stocks'
+                            src={raceData?.stocks[0]?.icon_url}
+                        />
+                    </div>
+                    <div className='flex flex-1 justify-center'>
+                        <img className='finished-stocks'
+                            src={raceData?.stocks[1]?.icon_url}
+                        />
+                    </div>
+                    <div className='flex flex-1 justify-center'>
+                        <img className='finished-stocks'
+                            src={raceData?.stocks[2]?.icon_url}
+                        />
+                    </div>
+                </div>
             </div>
 
-            {/* <h3 className='text-[1rem] font-bold dark:text-white text-center'>Stocks</h3> */}
-            <div className='w-full flex-1 mt-3 relative  border-black  bg-[#edf7ff] flex justify-center items-center pb-[1rem] dark:bg-[#002864] gap-6'>
 
-                <div className='relative aspect-square p-[10px] scale-100 z-[5] flex justify-center item-center flex-col'>
-                    <div className='relative flex justify-center items-center'>
-                        {raceData?.stocks[1]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[1]?.icon_url} />}
-                        {!raceData?.stocks[1]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
-                        <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
-                    </div>
-                    {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{raceData?.stocks[0]?.name}</p> */}
-                </div>
 
-                <div className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
-                    <div className='relative flex justify-center items-center'>
-                        {raceData?.stocks[0]?.icon_url && <img className='absolute scale-125 z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[0]?.icon_url} />}
-                        {!raceData?.stocks[0]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
-                        <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
-                    </div>
-                    {/* <p className='relative text-center font-semibold text-[12px] dark:text-white w-[8rem] line-clamp-3'>{raceData?.stocks[0]?.name}</p> */}
-                </div>
-
-                <div className='relative aspect-square p-[10px] scale-100 z-[5] flex justify-center item-center flex-col'>
-                    <div className='relative flex justify-center items-center'>
-                        {raceData?.stocks[2]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={raceData?.stocks[2]?.icon_url} />}
-                        {!raceData?.stocks[2]?.icon_url && <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={placeholder} />}
-                        <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
-                    </div>
-                    {/* <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{raceData?.stocks[2]?.name}</p> */}
-                </div>
-
-                {/* {
-                    raceData?.stocks?.slice(0, 3).map((curr, index) => {
-                        return (
-                            <div key={curr.id} className='flex flex-col gap-3 items-center'>
-                                <div className='h-[6rem] w-[6rem] rounded-full overflow-hidden  bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] grid place-items-center'>
-                                    {curr.icon_url && <img className='w-full h-full object-cover' src={curr?.icon_url} alt="" />}
-                                    {!curr.icon_url && <div className='text-3xl font-bold'>{curr?.name.substring(0, 2)}</div>}
-                                </div>
-                                <p className='dark:text-white text-xs w-[6rem] text-center line-clamp-3'>{curr?.ticker}</p>
-                            </div>
-                        )
-                    })
-                } */}
-            </div>
         </div>
     )
 }
