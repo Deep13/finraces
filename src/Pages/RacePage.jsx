@@ -13,10 +13,13 @@ import silver_king_crown from '../assets/images/silver_king_crown.svg'
 import bronze_king_crown from '../assets/images/bronze_king_crown.svg'
 import Polygon7 from '../assets/images/Polygon7.svg'
 import Person from '../assets/images/person3.png'
+import { HiInformationCircle } from "react-icons/hi";
 import Placeholder from '../assets/images/placeholder.png'
 import malePlaceholder from "../assets/images/manPlaceholder.jpg";
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
 import Person2 from '../assets/images/person23.png'
+import { motion, AnimatePresence } from "motion/react";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 import diamond from '../assets/images/kerechi_diamondo.png'
 import RaceWaitingZone from "../Components/RaceWaitingZone";
 import { useNavigate, useParams } from "react-router-dom";
@@ -30,7 +33,6 @@ import StockRankList from '../Components/StockRankList'
 import UserRankingList from "../Components/UserRankingList";
 import RaceTile from "../Components/RaceTile";
 import ConfettiExplosion from 'react-confetti-explosion';
-import { motion } from "motion/react";
 import Sidebar from "../Components/Sidebar";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import ImageSlider from "../Components/ImageSlider";
@@ -76,13 +78,14 @@ const RacePage = () => {
     const [raceResults, setRaceResults] = useState()
     const [stocksDataForRace, setStocksDataForRace] = useState(null)
     const [raceStatus, setRaceStatus] = useState('');
-    const [graphType,setGraphType]=useState('Line');
+    const [graphType, setGraphType] = useState('Horse');
     const [ranks, setRanks] = useState({
         1: Math.floor(Math.random() * 3) + 1,
         2: Math.floor(Math.random() * 3) + 1,
         3: Math.floor(Math.random() * 3) + 1,
     })
     const [isExploding, setIsExploding] = useState(false)
+    const [showDetails, setshowDetails] = useState(false)
     const { darkModeEnabled } = useContext(DarkModeContext)
     const [tabs, setTabs] = useState('leaderboard')
     const [imageData, setImageData] = useState([Placeholder])
@@ -91,9 +94,9 @@ const RacePage = () => {
     const [currentImage, setCurrentImage] = useState(0)
     const [imageRank, setImageRank] = useState({})
     const [bronzeUser, setBronzeUser] = useState(0)
-    const [chartData,setChartData]=useState();
-    const [labels,setLabels]=useState([]);
-    const [dataset,setDataset]=useState([]);
+    const [chartData, setChartData] = useState();
+    const [labels, setLabels] = useState([]);
+    const [dataset, setDataset] = useState([]);
     const [duration, setDuration] = useState('')
     const flag = useRef(0)
     const userDetails = localStorage.getItem('userDetails')
@@ -126,7 +129,7 @@ const RacePage = () => {
             },
         ],
     });
-    const [stockCount,setStockCount]=useState(0);
+    const [stockCount, setStockCount] = useState(0);
 
     const [logos, setLogos] = useState({});
     const [maxValue, setMaxValue] = useState(120);
@@ -201,11 +204,6 @@ const RacePage = () => {
     };
     // code by deepak
 
-
-
-
-
-
     const fetchParticipantData = (id) => {
         fetchParticipantsData(id, (data) => {
             // console.log("Race Participants data", data)
@@ -214,25 +212,25 @@ const RacePage = () => {
             let obj = {}
             let arr = [Placeholder]
             console.log(window.location.origin)
-            console.log("A",data)
+            console.log("A", data)
             data?.participants?.map((val, index) => {
                 let imgD;
-                if(val?.photo?.path){
-                    imgD=val?.photo?.path
+                if (val?.photo?.path) {
+                    imgD = val?.photo?.path
                 }
-                else{
-                    if(val.gender=="female"){
-                        imgD=femalePlaceholder
+                else {
+                    if (val.gender == "female") {
+                        imgD = femalePlaceholder
                     }
-                    else{
-                        imgD=malePlaceholder
+                    else {
+                        imgD = malePlaceholder
                     }
                 }
                 obj[val.id] = {
                     image: imgD,
                     position: index + 1
                 }
-                
+
                 arr.push(imgD)
             })
             setImageData(arr)
@@ -272,9 +270,6 @@ const RacePage = () => {
         return totalSeconds;
     }
 
-
-
-
     const sortAlphabetically = (stockRankList) => stockRankList?.slice().sort((a, b) =>
         a.localeCompare(b)
     )
@@ -301,7 +296,7 @@ const RacePage = () => {
                 result.push({
                     user_id: participant.user_id,
                     user_name: participant.user_name,
-                    user_photo: participant.user_photo ? participant.user_photo.path : participant.gender=="female"?femalePlaceholder:malePlaceholder,
+                    user_photo: participant.user_photo ? participant.user_photo.path : participant.gender == "female" ? femalePlaceholder : malePlaceholder,
                     rank: rank || "-" // Use the key as rank, or "-" if rank is not found
                 });
             });
@@ -312,7 +307,7 @@ const RacePage = () => {
             result.push({
                 user_id: participant.user_id,
                 user_name: participant.user_name,
-                user_photo: participant.user_photo ? participant.user_photo.path : participant.gender=="female"?femalePlaceholder:malePlaceholder,
+                user_photo: participant.user_photo ? participant.user_photo.path : participant.gender == "female" ? femalePlaceholder : malePlaceholder,
                 rank: "-"
             });
         });
@@ -340,9 +335,6 @@ const RacePage = () => {
         setCurrentImage(1)
     }
 
-    // const sortedStockRankList = (stockRankList) => stockRankList?.slice().sort((a, b) =>
-    //     a.stock_name.localeCompare(b.name)
-    // )
 
     useEffect(() => {
         if (raceResults) {
@@ -524,135 +516,121 @@ const RacePage = () => {
     }, [raceStatus])
 
 
-// This function transforms socket data for line chart not using it now but maybe needed later
-// const dataTransform = (input) => {
-//     const stockIndexes = {};
-//     const raceResults = input.race_result || {};
-//     const timestamp = input.timestamp || new Date().toISOString(); // Use given timestamp or current time
+    // This function transforms socket data for line chart not using it now but maybe needed later
+    // const dataTransform = (input) => {
+    //     const stockIndexes = {};
+    //     const raceResults = input.race_result || {};
+    //     const timestamp = input.timestamp || new Date().toISOString(); // Use given timestamp or current time
 
-//     for (const [rank, details] of Object.entries(raceResults)) {
-//         details.stocks.forEach(stock => {
-//             if (!stockIndexes[stock.stock_ticker]) {
-//                 stockIndexes[stock.stock_ticker] = [];
-//             }
-//             stockIndexes[stock.stock_ticker].push({ x: timestamp, y: parseInt(rank) });
-//         });
-//     }
+    //     for (const [rank, details] of Object.entries(raceResults)) {
+    //         details.stocks.forEach(stock => {
+    //             if (!stockIndexes[stock.stock_ticker]) {
+    //                 stockIndexes[stock.stock_ticker] = [];
+    //             }
+    //             stockIndexes[stock.stock_ticker].push({ x: timestamp, y: parseInt(rank) });
+    //         });
+    //     }
 
-//     // Update labels (keep last 30)
-//     setLabels(prevLabels => {
-//         const newLabels = [...prevLabels, timestamp];
-//         return newLabels.slice(-30); // Keep only the last 30 timestamps
-//     });
+    //     // Update labels (keep last 30)
+    //     setLabels(prevLabels => {
+    //         const newLabels = [...prevLabels, timestamp];
+    //         return newLabels.slice(-30); // Keep only the last 30 timestamps
+    //     });
 
-//     // Update datasets (keep last 30 points per stock)
-//     setDataset(prevDatasets => {
-//         const updatedDatasets = prevDatasets.map(dataset => {
-//             const newData = stockIndexes[dataset.label] || [];
-//             const updatedData = [...dataset.data, ...newData].slice(-30); // Keep last 30 points
-//             return { ...dataset, data: updatedData };
-//         });
+    //     // Update datasets (keep last 30 points per stock)
+    //     setDataset(prevDatasets => {
+    //         const updatedDatasets = prevDatasets.map(dataset => {
+    //             const newData = stockIndexes[dataset.label] || [];
+    //             const updatedData = [...dataset.data, ...newData].slice(-30); // Keep last 30 points
+    //             return { ...dataset, data: updatedData };
+    //         });
 
-//         // Add new stocks if they didn't exist before
-//         Object.keys(stockIndexes).forEach(ticker => {
-//             if (!prevDatasets.some(dataset => dataset.label === ticker)) {
-//                 updatedDatasets.push({
-//                     label: ticker,
-//                     data: stockIndexes[ticker].slice(-30), // Ensure new stocks also keep max 30
-//                     borderColor: getColor(ticker),
-//                     backgroundColor: getColor(ticker) + "33",
-//                     fill: false,
-//                 });
-//             }
-//         });
+    //         // Add new stocks if they didn't exist before
+    //         Object.keys(stockIndexes).forEach(ticker => {
+    //             if (!prevDatasets.some(dataset => dataset.label === ticker)) {
+    //                 updatedDatasets.push({
+    //                     label: ticker,
+    //                     data: stockIndexes[ticker].slice(-30), // Ensure new stocks also keep max 30
+    //                     borderColor: getColor(ticker),
+    //                     backgroundColor: getColor(ticker) + "33",
+    //                     fill: false,
+    //                 });
+    //             }
+    //         });
 
-//         return updatedDatasets;
-//     });
-// };
-const generateStaticDatasets = (stockCountArray) => {
-    const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
-    const stockCount = stockCountArray.length; // Get the number of stocks
+    //         return updatedDatasets;
+    //     });
+    // };
+    const generateStaticDatasets = (stockCountArray) => {
+        const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
+        const stockCount = stockCountArray.length; // Get the number of stocks
 
-    // Generate unique ranks for each timestamp
-    const generateUniqueRanks = () => {
-        let ranks = Array.from({ length: stockCount }, (_, i) => i + 1);
-        return ranks.sort(() => Math.random() - 0.5); // Shuffle array
+        // Generate unique ranks for each timestamp
+        const generateUniqueRanks = () => {
+            let ranks = Array.from({ length: stockCount }, (_, i) => i + 1);
+            return ranks.sort(() => Math.random() - 0.5); // Shuffle array
+        };
+
+        // Create dataset where each stock gets a unique rank at each timestamp
+        let dataMatrix = Array.from({ length: stockCount }, () => []);
+
+        for (let i = 0; i < 30; i++) {
+            let uniqueRanks = generateUniqueRanks();
+            let timestamp = (i * 5).toString().padStart(2, '0'); // Generates "0", "05", "10", ..., "145"
+            uniqueRanks.forEach((rank, index) => {
+                dataMatrix[index].push({ x: timestamp, y: rank });
+            });
+        }
+
+        return dataMatrix.map((data, index) => ({
+            label: stockCountArray[index], // Use stock name from the array
+            data,
+            borderColor: barColors[index % barColors.length],
+            backgroundColor: barColors[index % barColors.length],
+            fill: false,
+        }));
     };
 
-    // Create dataset where each stock gets a unique rank at each timestamp
-    let dataMatrix = Array.from({ length: stockCount }, () => []);
 
-    for (let i = 0; i < 30; i++) {
-        let uniqueRanks = generateUniqueRanks();
-        let timestamp = (i * 5).toString().padStart(2, '0'); // Generates "0", "05", "10", ..., "145"
-        uniqueRanks.forEach((rank, index) => {
-            dataMatrix[index].push({ x: timestamp, y: rank });
+    // Example usage inside useEffect:
+    useEffect(() => {
+        setDataset(generateStaticDatasets(stockCount));
+    }, [stockCount]); // Regenerate datasets whenever stockCount changes
+
+    useEffect(() => {
+        console.log("state of data", labels, dataset)
+    }, [labels, dataset])
+
+    const transformSocketData = (raceData) => {
+        if (!raceData || !raceData.stocks || !raceData.start_date) return { labels: [], datasets: [] };
+
+        const startTime = new Date(raceData.start_date).getTime();
+
+        const allTimestamps = new Set();
+        const stockData = {};
+
+        raceData?.stocks?.forEach(stock => {
+            stockData[stock.stock_ticker] = [];
+            stock?.history?.forEach(entry => {
+                const timeElapsed = ((new Date(entry.timestamp).getTime() - startTime) / 60000).toFixed(2);
+                stockData[stock.stock_ticker].push({ x: timeElapsed, y: entry.rank });
+                allTimestamps.add(timeElapsed);
+            });
         });
-    }
 
-    return dataMatrix.map((data, index) => ({
-        label: stockCountArray[index], // Use stock name from the array
-        data,
-        borderColor: barColors[index % barColors.length],
-        backgroundColor: barColors[index % barColors.length],
-        fill: false,
-    }));
-};
+        const sortedTimestamps = [...allTimestamps].sort((a, b) => a - b);
 
+        const datasets = Object.entries(stockData).map(([ticker, data], index) => ({
+            label: ticker,
+            data,
+            borderColor: ["#00E396", "#FEB019", "#FF4560", "#775DD0"][index % 4], // Rotate colors
+            backgroundColor: ["#00E39633", "#FEB01933", "#FF456033", "#775DD033"][index % 4],
+            fill: false
+        }));
 
-// Example usage inside useEffect:
-useEffect(() => {
-    setDataset(generateStaticDatasets(stockCount));
-}, [stockCount]); // Regenerate datasets whenever stockCount changes
+        return { labels: sortedTimestamps, datasets };
+    };
 
-
-
-
-
-// Function to get stock colors
-// const getColor = (ticker) => {
-//     const colors = {
-//         "AAPL": "#00E396",
-//         "NFLX": "#FEB019",
-//         "TSLA": "#FF4560"
-//     };
-//     return colors[ticker] || "#888888"; // Default gray if not found
-// };
-
-useEffect(()=>{
-    console.log("state of data",labels,dataset)
-},[labels,dataset])
-
-const transformSocketData = (raceData) => {
-    if (!raceData || !raceData.stocks || !raceData.start_date) return { labels: [], datasets: [] };
-  
-    const startTime = new Date(raceData.start_date).getTime();
-    
-    const allTimestamps = new Set();
-    const stockData = {};
-  
-    raceData?.stocks?.forEach(stock => {
-      stockData[stock.stock_ticker] = [];
-      stock?.history?.forEach(entry => {
-        const timeElapsed = ((new Date(entry.timestamp).getTime() - startTime) / 60000).toFixed(2);
-        stockData[stock.stock_ticker].push({ x: timeElapsed, y: entry.rank });
-        allTimestamps.add(timeElapsed);
-      });
-    });
-  
-    const sortedTimestamps = [...allTimestamps].sort((a, b) => a - b);
-  
-    const datasets = Object.entries(stockData).map(([ticker, data], index) => ({
-      label: ticker,
-      data,
-      borderColor: ["#00E396", "#FEB019", "#FF4560", "#775DD0"][index % 4], // Rotate colors
-      backgroundColor: ["#00E39633", "#FEB01933", "#FF456033", "#775DD033"][index % 4],
-      fill: false
-    }));
-  
-    return { labels: sortedTimestamps, datasets };
-  };
-  
     // can you try this
 
     useEffect(() => {
@@ -711,9 +689,9 @@ const transformSocketData = (raceData) => {
             if (data.event === 'race-data') {
                 setRaceResults(data.data)
                 console.log('race data socket', data.data)
-                console.log("check",transformSocketData(data.data))
+                console.log("check", transformSocketData(data.data))
                 // dataTransform(data.data)
-                if(data?.data?.status){
+                if (data?.data?.status) {
                     setRaceStatus(data.data.status)
                 } // somehow this is not reflecting
                 setIsLoadingRaceTile(false)
@@ -771,7 +749,7 @@ const transformSocketData = (raceData) => {
         console.log('Race status this is pain in >>>>>>>>>>>>>', raceDetails?.status)
     }, [raceStatus])
 
-    console.log("data",data)
+    console.log("data", data)
     if (isLoadingRaceTile && raceStatus !== 'finished') {
         return (
             <>
@@ -881,17 +859,26 @@ const transformSocketData = (raceData) => {
                             {/* actual dashboard  */}
                             <div className='flex-1 px-[22px] py-[18px]'>
 
-                                <div className='w-full flex justify-between mb-[3.8rem]'>
+                                <div className='w-full flex justify-between mb-[20px]'>
                                     <div className='flex gap-[0.76rem]'>
                                         <div></div>
                                         <div className='h-full'>
                                             <h3 className='text-[1.05rem] font-bold dark:text-white font-poppins'>{raceDetails?.name}</h3>
-                                            <p className='text-[0.7rem] dark:text-white'>
-                                                Race Duration
-                                                <span className="font-semibold ml-2 font-poppins">
-                                                    {duration}
-                                                </span>
-                                            </p>
+                                            <div className="font-medium text-[0.9rem] dark:text-white flex gap-2 items-center">
+                                                <p>Remaining Time</p>
+                                                <div className="font-semibold font-poppins">
+                                                    {
+                                                        raceDetails && <Countdown
+                                                            date={raceDetails && raceDetails['end_date']}
+                                                            renderer={({ hours, minutes, seconds }) => {
+                                                                const formatTime = (time) => String(time).padStart(2, '0');
+                                                                return `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`
+                                                            }}
+                                                        />
+                                                    }
+                                                </div>
+                                            </div>
+
                                         </div>
                                         {/* <div className='relative top-1'>
                                         <img src={info} alt="info icon" />
@@ -904,295 +891,166 @@ const transformSocketData = (raceData) => {
                                             duration={2800}
                                         />}
                                     </div>
-                                    <div className='h-full flex flex-col justify-between items-end'>
-                                        <h3 className='text-[1.05rem] font-bold dark:text-white flex gap-1 font-poppins'>{participantsCount} <span className="font-sans">{participantsCount === 1 ? 'Participant' : "Participants"}</span> </h3>
+                                    <div className='h-full flex flex-row justify-center items-end'>
+                                        <div className="border-2 dark:border-[#00387E] flex items-center rounded-lg gap-2 mr-4 text-[12px] text-[white]">
+                                            {['Horse', 'Ticker', 'Line'].map((item) => (
+                                                <span
+                                                    key={item}
+                                                    className={`rounded-md cursor-pointer ${item == graphType ? "bg-blue-600" : ""} p-2`}
+                                                    onClick={() => setGraphType(item)}
+                                                >
+                                                    {item}
+                                                </span>
+                                            ))}
+                                        </div>
+                                        <HiInformationCircle className="text-[white] text-[30px] cursor-pointer" onClick={() => setshowDetails(true)} />
                                         {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
                                     </div>
                                 </div>
 
-                                {/* top 3 users  */}
-                                <div className="flex-1 flex justify-center items-center gap-[2rem] mb-[20px]">
-                                    <div className="flex justify-center flex-col items-center">
-                                        <div className="z-[10]">
-                                            <img src={silver_king_crown} alt="" />
-                                            <div className="flex justify-center items-center">
-                                                <img src={Polygon7} alt="" />
-                                            </div>
-                                        </div>
-                                        <div className="relative">
-                                            <img className="z-[5] relative w-[100%] h-[145px]" src={silver_frame} alt="" />
-                                            <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[14px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
-                                                <ImageSlider
-                                                    data={imageData}
-                                                    currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result['2']?.participants?.[0]?.user_id]?.position : 0}
-                                                />
-                                            </div>
-                                        </div>
-                                        <p onClick={() => {
-                                            if (raceResults?.race_result['2']?.participants[0]?.user_id) {
-                                                if (userDetails2.userId === raceResults?.race_result['2']?.participants[0]?.user_id) {
-                                                    navigate(`/profile`)
-                                                }
-                                                else {
-                                                    navigate(`/profile/${raceResults?.race_result['2']?.participants[0]?.user_id}`)
-                                                }
-                                            }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result?.['2']?.participants?.['0']?.user_name ? checkSelf(raceResults?.race_result['2']?.participants?.[0]?.user_id, raceResults?.race_result['2']?.participants?.['0']?.user_name) : ''}</p>
-                                    </div>
 
-                                    <div className="flex justify-center flex-col items-center relative bottom-8 ">
-                                        <div className="mb-[1rem]">
-                                            <img src={golden_king_corwn} alt="" />
-                                            <div className="flex justify-center items-center">
-                                                <img src={Polygon7} alt="" />
-                                            </div>
-                                        </div>
-                                        <div className="relative">
-                                            <img className="z-[5] relative w-[100%] h-[145px]" src={golden_frame} alt="" />
-                                            {/* <img className={`absolute ${darkModeEnabled && 'glow'} w-full h-full object-cover top-0 left-0 z-[4] scale-75`} src={raceResults?.race_result['1']?.participants?.[0]?.user_name ? Person : avatar} alt="" /> */}
-                                            <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[14px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
-                                                <ImageSlider
-                                                    data={imageData}
-                                                    currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[1]?.participants?.[0]?.user_id]?.position : 0}
-                                                />
-                                            </div>
-                                        </div>
-                                        <p onClick={() => {
-                                            if (raceResults?.race_result['1']?.participants[0]?.user_id) {
-                                                if (userDetails2.userId === raceResults?.race_result['1']?.participants[0]?.user_id) {
-                                                    navigate(`/profile`)
-                                                }
-                                                else {
-                                                    navigate(`/profile/${raceResults?.race_result['1']?.participants[0]?.user_id}`)
-                                                }
-                                            }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result['1']?.participants[0]?.user_name ? checkSelf(raceResults?.race_result['1']?.participants[0]?.user_id, raceResults?.race_result['1']?.participants[0]?.user_name) : ''}</p>
-                                    </div>
+                                <div className="flex-1 rounded-[20px]  mb-4 ">
+                                    <div className="flex justify-between w-full items-center mb-[10px] dark:text-white">
 
-                                    <div className="flex justify-center flex-col items-center">
-                                        <div className="z-[10]">
-                                            <img src={bronze_king_crown} alt="" />
-                                            <div className="flex justify-center items-center">
-                                                <img src={Polygon7} alt="" />
-                                            </div>
-                                        </div>
-                                        <div className="relative w-full h-full">
-                                            <img className="z-[5] relative w-[100%] h-[145px]" src={bronze_frame} alt="" />
-                                            <div className={`w-full ${darkModeEnabled && 'glow'} h-[123px] mt-[12px] pr-[2px] absolute top-0 left-0 overflow-hidden`}>
-                                                <ImageSlider
-                                                    data={imageData}
-                                                    currentImage={Object.keys(imageRank).length > 0 && raceResults ? imageRank[raceResults?.race_result[3]?.participants?.[0]?.user_id]?.position : 0}
-                                                />
-                                            </div>
-                                        </div>
-                                        <p onClick={() => {
-                                            if (raceResults?.race_result['3']?.participants[0]?.user_id) {
-                                                if (userDetails2.userId === raceResults?.race_result['3']?.participants[0]?.user_id) {
-                                                    navigate(`/profile`)
-                                                }
-                                                else {
-                                                    navigate(`/profile/${raceResults?.race_result['3']?.participants[0]?.user_id}`)
-                                                }
-                                            }
-                                        }} className="font-medium text-3 mt-[10px] dark:text-white hover:underline cursor-pointer">{raceResults?.race_result?.['3']?.participants?.[0]?.user_name ? checkSelf(raceResults?.race_result?.['3']?.participants?.[0]?.user_id, raceResults?.race_result?.['3']?.participants?.[0]?.user_name) : ''}</p>
-                                    </div>
-                                </div>
 
-                                <div className="flex-1 flex justify-center items-end gap-[2rem]">
-
-                                    <div onClick={()=>{if(localStorage.getItem('token')){navigate(`/stock/${stockRankList['1']?.stock_ticker}/${stockRankList['1']?.stock_id}`);}}} className={`w-[10rem] flex flex-col pt-[16px] pb-[1.5rem] cursor-pointer items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'}`}>
-                                        {
-                                            stockRankList && stockRankList['1'] &&
-                                            <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
-                                                {/* <p className="text-[12px] font-medium">1500</p> */}
-                                                {findImageUrlForStock(stockRankList['1']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['1']?.stock_id)} alt="" />}
-                                                {!findImageUrlForStock(stockRankList['1']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' alt="" >{stockRankList['1']?.stock_name.substring(0, 2)}</div>}
-                                            </div>
-                                        }
-                                        <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
-                                            {
-                                                stockRankList && stockRankList['1']?.stock_name
-                                            }
-                                        </p>
-                                        {stockRankList && stockRankList['1'] && <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
-                                            {
-                                                stockRankList && `(${stockRankList['1']?.stock_ticker})`
-                                            }
-                                        </p>}
-                                    </div>
-                                    <div onClick={()=>{if(localStorage.getItem('token')){navigate(`/stock/${stockRankList['0']?.stock_ticker}/${stockRankList['0']?.stock_id}`);}}} className={`w-[10rem] cursor-pointer flex flex-col pt-[16px] pb-[4rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
-                                        {
-                                            stockRankList &&
-                                            <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
-                                                {/* <p className="text-[12px] font-medium">1500</p> */}
-                                                {findImageUrlForStock(stockRankList['0']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['0']?.stock_id)} alt="" />}
-                                                {!findImageUrlForStock(stockRankList['0']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' >{stockRankList['0']?.stock_name.substring(0, 2)}</div>}
-                                            </div>
-                                        }
-                                        {/* <p className="font-medium text-4">WR: -</p> */}
-                                        <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
-                                            {
-                                                stockRankList && stockRankList['0']?.stock_name
-                                            }
-                                        </p>
-                                        <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
-                                            {
-                                                stockRankList && `(${stockRankList['0']?.stock_ticker})`
-                                            }
-                                        </p>
-                                    </div>
-                                    <div onClick={()=>{if(localStorage.getItem('token')){navigate(`/stock/${stockRankList['2']?.stock_ticker}/${stockRankList['2']?.stock_id}`);}}} className={`w-[10rem] cursor-pointer flex flex-col pt-[16px] pb-[1.5rem] items-center rounded-t-[10px] bg-[#f4f5f4] dark:bg-gradient-to-b from-[#012864] from-10% to-100% to-[#002763] dark:text-white ${darkModeEnabled && 'shadowImperial'} text-center`}>
-                                        {
-                                            stockRankList && stockRankList['2'] &&
-                                            <div className="mb-[0.7rem] rounded-xl w-[2.5rem] h-[2.5rem] overflow-hidden">
-                                                {/* <p className="text-[12px] font-medium">1500</p> */}
-                                                {findImageUrlForStock(stockRankList['2']?.stock_id) && <img className="w-full h-full object-cover" src={findImageUrlForStock(stockRankList['2']?.stock_id)} alt="" />}
-                                                {!findImageUrlForStock(stockRankList['2']?.stock_id) && <div className='w-full h-full bg-gradient-to-l rounded-lg from-[#005BFF] to-[#5B89FF] dark:text-white font-bold grid place-items-center' >{stockRankList['2']?.stock_name.substring(0, 2)}</div>}
-                                            </div>
-                                        }
-                                        <p className="text-xs text-center font-medium px-4 line-clamp-2 text-ellipsis">
-                                            {
-                                                stockRankList && stockRankList['2']?.stock_name
-                                            }
-                                        </p>
-                                        {stockRankList && stockRankList['2'] && <p className="text-xs text-center mt-3 px-4 line-clamp-2 text-ellipsis font-semibold">
-                                            {
-                                                stockRankList && `(${stockRankList['2']?.stock_ticker})`
-                                            }
-                                        </p>}
-                                    </div>
-                                </div>
-
-                                <div className="flex-1 rounded-[20px] bg-[#f5f5f5] py-[13px] px-[16px] mb-4 shadow-md dark:bg-[#002763] dark:border dark:border-[#00387E]">
-                                    <div className="flex justify-between w-full items-center mb-[18px] dark:text-white">
-                                        {raceDetails?.created_by?.firstName && <p className="font-medium text-[0.9rem]">Race created by- {(raceDetails?.created_by?.firstName ? raceResults?.created_by?.firstName : '') + " " + (raceDetails?.created_by?.lastName ? raceResults?.created_by?.lastName : '')}</p>}
-                                        <div className="font-medium text-[0.9rem] flex gap-2 items-center">
-                                            <p>Remaining Time</p>
-                                            <div className="font-semibold font-poppins">
-                                                {
-                                                    raceDetails && <Countdown
-                                                        date={raceDetails && raceDetails['end_date']}
-                                                        renderer={({ hours, minutes, seconds }) => {
-                                                            const formatTime = (time) => String(time).padStart(2, '0');
-                                                            return `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`
-                                                        }}
-                                                    />
-                                                }
-                                            </div>
-                                        </div>
                                     </div>
 
 
-                                    
 
-                                    {
+
+                                    {/* {
                                         raceStatus === 'finished' && <div className="w-full h-full flex justify-center items-center">
                                             <div className='rounded-lg bg-white shadow-xl italic px-8 py-4 w-[50%] z-20 grid place-items-center text-3xl font-bold self-center text-center'>
                                                 Race Finished
                                             </div>
                                         </div>
-                                    }
-                                    <div className="border-2 dark:border-[#00387E] dark:text-white flex items-center w-60 rounded-lg py-2 px-3 gap-5 my-2">
-                                        {['Horse','Ticker','Line'].map((item)=>(
-                                            <span
-                                            key={item}
-                                            className={`rounded-md cursor-pointer ${item==graphType?"bg-blue-600":""} p-2`}
-                                            onClick={() => setGraphType(item)}
-                                          >
-                                            {item}
-                                          </span>
-                                        ))}
-                                    </div>
-                                    {graphType=="Ticker" && data.labels.length > 0 && raceStatus !== 'finished' && (
+                                    } */}
+
+                                    {graphType == "Ticker" && data.labels.length > 0 && raceStatus !== 'finished' && (
                                         <Bar data={data} options={options} plugins={[customPlugin]} />
                                     )}
-                                    {graphType=="Horse" && raceResults &&
+                                    {graphType == "Horse" && raceResults &&
                                         <iframe
-                                            className="flex-1 w-full h-[500px]"
+                                            className="flex-1 w-full h-[700px]"
                                             ref={iframeRef}
-                                            src="/game/game/index.html" // Adjust path based on where you host the game
+                                            src="https://horse-racing-rudra.web.app/" // Adjust path based on where you host the game
                                         // width=""
                                         // height="832px"
                                         // frameBorder="0"
                                         />}
 
-                                    {graphType=="Line" && data.labels.length > 0 && raceStatus !== 'finished' &&(
-                                        <RankChart labels={labels} dataset={dataset} stocks={stockCount}/>
+                                    {graphType == "Line" && data.labels.length > 0 && raceStatus !== 'finished' && (
+                                        <RankChart labels={labels} dataset={dataset} stocks={stockCount} />
                                     )}
                                 </div>
 
 
-                                
+
 
                             </div>
 
-                            {/* leaderboard  */}
-                            <div className='flex flex-col max-w-[295px]'>
-                                <div className='flex gap-[6px] mb-[11px]'>
-                                    <button onClick={() => {
-                                        updateUser();
-                                        updateUser2();
-                                        updateUser3();
-                                        setTabs('leaderboard')
-                                    }} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
-                                    {<button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>}
-                                </div>
-                                {<div className='w-full rounded-[8px] p-[16px] bg-[#f5f5f5] max-h-screen overflow-auto custom-scrollbar dark:bg-[#001A50]'>
-                                    {
-                                        tabs === 'leaderboard' ?
-                                            <>
-                                                <div className='w-full flex justify-between items-center mb-[14px]'>
-                                                    <p className="font-semibold text-4 dark:text-white">View all</p>
-                                                    {/* <CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /> */}
-                                                </div>
-                                                <UserRankingList rankList={rankList} />
-                                            </>
-                                            :
-                                            <div className="w-full flex flex-col gap-4">
-                                                {
-                                                    stockRankList ?
-                                                        stockRankList?.map((curr, index) => {
-                                                            let stock = stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === curr.stock_id)]
-                                                            let imageUrl = stock?.icon_url
-                                                            console.log(curr)
-                                                            return (
-                                                                <YourBetsCard
-                                                                    key={curr?.stock_id}
-                                                                    stocksDataForRace={stocksDataForRace}
-                                                                    stockName={curr?.stock_name}
-                                                                    imageUrl={imageUrl}
-                                                                    participants={curr?.participants}
-                                                                />
-                                                            )
-                                                        }) :
-                                                        <ColorRing
-                                                            visible={true}
-                                                            height="25"
-                                                            width="25"
-                                                            ariaLabel="color-ring-loading"
-                                                            wrapperStyle={{}}
-                                                            wrapperClass="color-ring-wrapper"
-                                                            colors={['#e15b64', '#f47e60',]}
-                                                        />
-                                                }
-                                            </div>
-                                    }
-                                </div>}
-                            </div>
                         </div>
                         {/* other stocks rally  */}
-                        <div className="w-[83.5rem] py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
-                                    <div className="flex justify-between w-full items-center mb-[18px]">
-                                        <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
-                                        {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
-                                    </div>
+                        <div className="w-[100%] py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
+                            <div className="flex justify-between w-full items-center mb-[18px]">
+                                <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
+                                {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
+                            </div>
 
-                                    <StockRankList
-                                        stocksData={stocksDataForRace} // data from api below is data from socket
-                                        stockRankList={stockRankList} />
-                                </div>
+                            <StockRankList
+                                stocksData={stocksDataForRace} // data from api below is data from socket
+                                stockRankList={stockRankList} />
+                        </div>
                     </div>
                 </motion.div>
+                {showDetails &&
+                    <AnimatePresence>
+                        <motion.div
+                            initial={{
+                                opacity: 0
+                            }}
+                            animate={{
+                                opacity: 1
+                            }}
+                            transition={{
+                                duration: 0.4,
+                                ease: 'easeInOut'
+                            }}
+                            exit={{
+                                opacity: 0
+                            }}
+                            className='fixed top-0 left-0 w-full h-screen py-[3%] backdrop-blur-md z-[100] grid place-items-center'>
+
+                            <div className="bg-[#000D38] h-[100%] text-[white] rounded-[8px] ">
+                                <div className="flex justify-end p-[10px]">
+                                    <IoMdCloseCircleOutline className="text-[30px] cursor-pointer" onClick={() => setshowDetails(false)} />
+
+                                </div>
+                                <div className="px-[30px]">
+                                    {raceDetails?.created_by?.firstName && <p className="font-medium text-[1.05rem] ">Race created by- {(raceDetails?.created_by?.firstName ? raceResults?.created_by?.firstName : '') + " " + (raceDetails?.created_by?.lastName ? raceResults?.created_by?.lastName : '')}</p>}
+                                    <p className='text-[0.9rem] dark:text-white'>
+                                        Race Duration:
+                                        <span className="font-semibold ml-2 font-poppins">
+                                            {duration}
+                                        </span>
+                                    </p>
+                                    <h3 className='text-[0.9rem] font-bold dark:text-white flex gap-1 font-poppins pb-[20px]'>{participantsCount} <span className="font-sans">{participantsCount === 1 ? 'Participant' : "Participants"}</span> </h3>
+                                    <div className='flex flex-col max-w-[295px]'>
+                                        <div className='flex gap-[6px] mb-[11px]'>
+                                            <button onClick={() => {
+                                                updateUser();
+                                                updateUser2();
+                                                updateUser3();
+                                                setTabs('leaderboard')
+                                            }} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
+                                            {<button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>}
+                                        </div>
+                                        {<div className='w-full rounded-[8px] max-h-screen overflow-auto custom-scrollbar'>
+                                            {
+                                                tabs === 'leaderboard' ?
+                                                    <>
+                                                        {/* <div className='w-full flex justify-between items-center mb-[14px]'>
+                                                            <p className="font-semibold text-4 dark:text-white">View all</p>
+                                                        </div> */}
+                                                        <UserRankingList rankList={rankList} />
+                                                    </>
+                                                    :
+                                                    <div className="w-full flex flex-col gap-4">
+                                                        {
+                                                            stockRankList ?
+                                                                stockRankList?.map((curr, index) => {
+                                                                    let stock = stocksDataForRace[Object.keys(stocksDataForRace).find(element => element === curr.stock_id)]
+                                                                    let imageUrl = stock?.icon_url
+                                                                    console.log(curr)
+                                                                    return (
+                                                                        <YourBetsCard
+                                                                            key={curr?.stock_id}
+                                                                            stocksDataForRace={stocksDataForRace}
+                                                                            stockName={curr?.stock_name}
+                                                                            imageUrl={imageUrl}
+                                                                            participants={curr?.participants}
+                                                                        />
+                                                                    )
+                                                                }) :
+                                                                <ColorRing
+                                                                    visible={true}
+                                                                    height="25"
+                                                                    width="25"
+                                                                    ariaLabel="color-ring-loading"
+                                                                    wrapperStyle={{}}
+                                                                    wrapperClass="color-ring-wrapper"
+                                                                    colors={['#e15b64', '#f47e60',]}
+                                                                />
+                                                        }
+                                                    </div>
+                                            }
+                                        </div>}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </motion.div>
+                    </AnimatePresence>}
             </>
         )
     }
