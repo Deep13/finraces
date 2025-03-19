@@ -10,7 +10,7 @@ const FriendsLeaderBoard = () => {
 
   const navigate = useNavigate()
   const [leaderboardData, setLeaderboardData] = useState(null)
-  let userId = JSON.parse(atob(localStorage.getItem('userDetails'))).userId
+  let userId = JSON.parse(atob(localStorage.getItem('fin_userDetails'))).userId
 
   useEffect(() => {
     // console.log(userId)

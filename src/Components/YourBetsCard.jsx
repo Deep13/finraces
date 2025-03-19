@@ -7,7 +7,7 @@ const YourBetsCard = ({
     participants
 }) => {
     const findUserRank = () => {
-        let userDetails = localStorage.getItem('userDetails')
+        let userDetails = localStorage.getItem('fin_userDetails')
         if (!userDetails) {
             userDetails = localStorage.getItem('guest_details')
             if (!userDetails) {

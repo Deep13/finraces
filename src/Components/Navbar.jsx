@@ -30,7 +30,7 @@ import io from 'socket.io-client'
 const Navbar = () => {
     const [notifications, setNotifications] = useState([]);
     useEffect(() => {
-        let ud = localStorage.getItem("userDetails");
+        let ud = localStorage.getItem('fin_userDetails');
         let userDetails = ud && JSON.parse(atob(ud));
         let { userId } = userDetails || {}; // Handle possible null values
         let token = localStorage.getItem("token");
@@ -85,7 +85,7 @@ const Navbar = () => {
     const navigate = useNavigate();
     const [unseenNotifications,setUnseenNotifications] = useState([]);
     const token = localStorage.getItem('token')
-    const userDetails = localStorage.getItem('userDetails')
+    const userDetails = localStorage.getItem('fin_userDetails')
     const guestDetails = localStorage.getItem('guest_details')
     const [userDetailsObject, setUserDetailsObject] = useState(null)
     const dropdownRef = useRef(null)
@@ -261,7 +261,7 @@ const Navbar = () => {
                         </AnimatePresence>
                     </div>}
                     {/* <div onClick={() => {
-                        let userDetails = localStorage.getItem('userDetails')
+                        let userDetails = localStorage.getItem('fin_userDetails')
                         if (!userDetails) {
                             // alert('first create a profile')
                             setShowForm(true)
@@ -298,7 +298,7 @@ const Navbar = () => {
                                     <p title="Log out button" onClick={() => {
                                         localStorage.removeItem('token')
                                         localStorage.removeItem('refreshToken')
-                                        localStorage.removeItem('userDetails')
+                                        localStorage.removeItem('fin_userDetails')
                                         setUserDetailsObject(null);
                                         setUnseenNotifications([])
                                         window.dispatchEvent(new Event("storage")); // 🔄 Ensure other tabs update

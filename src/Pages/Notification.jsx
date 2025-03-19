@@ -16,7 +16,7 @@ const Notification = () => {
   const [notificationIds, setNotificationIds] = useState([]);
 
   useEffect(() => {
-    let ud = localStorage.getItem("userDetails");
+    let ud = localStorage.getItem('fin_userDetails');
     let userDetails = ud && JSON.parse(atob(ud));
     let { userId } = userDetails || {}; // Handle possible null values
     let token = localStorage.getItem("token");

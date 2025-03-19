@@ -125,7 +125,7 @@ const Profile = () => {
                 <button onClick={() => {
                   localStorage.removeItem('token')
                   localStorage.removeItem('refreshToken')
-                  localStorage.removeItem('userDetails')
+                  localStorage.removeItem('fin_userDetails')
                   navigate('/auth')
                 }} className='w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white hover:bg-red-500 hover:text-white hover:border-red-500'>Log out</button>
               </div>

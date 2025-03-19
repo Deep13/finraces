@@ -3,7 +3,7 @@ import { RxMixerVertical } from "react-icons/rx";
 import { MdArrowBackIos } from "react-icons/md";
 import { FaPaperPlane } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
-import { getAllChats, getChats, getUser, postChats, searchUsers } from "../Utils/api";
+import { getAllChats, getChats, getUser, markChatsAsRead, postChats, searchUsers } from "../Utils/api";
 import Sidebar from "../Components/Sidebar";
 import { debounce } from "lodash";
 import { globalUrl } from "../Config";
@@ -11,7 +11,7 @@ import { io } from "socket.io-client";
 import { useRef } from "react";
 
 const Chat = () => {
-  const userId = JSON.parse(atob(localStorage.getItem('userDetails'))).userId;
+  const userId = JSON.parse(atob(localStorage.getItem('fin_userDetails'))).userId;
   // const [friends, setFriends] = useState([]);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false); // Track if more messages exist
@@ -24,7 +24,7 @@ const Chat = () => {
   const [selectedUser, setSelectedUser] = useState(null); // Active chat
   const [messages, setMessages] = useState([]); // Chat messages
   const chatContainerRef = useRef(null);
-  const userDetails = JSON.parse(atob(localStorage.getItem("userDetails")));
+  const userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
   
 
   // const [socket, setSocket] = useState(null);
@@ -37,17 +37,22 @@ const Chat = () => {
       console.log(error)
     })
   },[])
+  const scrollToBottom = () => {
+    if (selectedUser) {
+      requestAnimationFrame(() => {
+        if (chatContainerRef.current) {
+          chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+      });
+    }
+  };
 
-  //handle Scrolling
+  // handle Scrolling
   useEffect(() => {
-    const scrollToBottom = () => {
-      if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
-      }
-    };
+    
     
     scrollToBottom();
-  }, [message,selectedUser]);
+  }, [messages,selectedUser]);
 
   // Initialize socket connection
 
@@ -284,6 +289,8 @@ const handleSendMessage = () => {
   
     getChats(
       (res) => {
+        console.log("chats",res)
+        // scrollToBottom()
         const userMessages = res.data.filter(
           (msg) =>
             (msg.sender.id === userDetails.userId && msg.receiver.id === user.id) ||
@@ -299,6 +306,15 @@ const handleSendMessage = () => {
         // setMessage([...userMessages])
 
         setHasNextPage(res.hasNextPage)
+
+        for(let i=0;i<res.data.length;i++){
+          if(!res.data[i].is_read){
+            markChatsAsRead(res.data[i].id,
+              (data)=>{console.log("chat marked as read",data)},
+              (error)=>{console.log("Error marking chat as read",error)}
+            )
+          }
+        }
       },
       (error) => {
         console.error("Error fetching chats:", error);
@@ -313,7 +329,7 @@ const handleSendMessage = () => {
   
     getChats(
       (res) => {
-        console.log("Chats fetched:", res);
+        console.log("Chats fetched:", res.data);
   
         setMessages((prevMessages) => {
           const newMessages = res.data.filter(
@@ -346,22 +362,33 @@ const handleSendMessage = () => {
   const handleScroll = () => {
     if (!chatContainerRef.current || !hasNextPage) return;
   
-    if (chatContainerRef.current.scrollTop === 0) {
+    if (chatContainerRef.current.scrollTop <1) {
       console.log("Fetching older messages...");
       setPage((prevPage) => prevPage + 1);
     }
   };
   
   
-  // Attach scroll listener
-  useEffect(() => {
-    const chatDiv = chatContainerRef.current;
-    if (!chatDiv) return;
+useEffect(() => {
+  const chatDiv = chatContainerRef.current;
+  if (!chatDiv) return;
+
+  const handleScroll = () => {
+    if (!hasNextPage) return; // Stop if there's no more data to load
+
+    if (chatDiv.scrollTop <= 20) {  // Adjusted threshold
+      console.log("Fetching older messages...");
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  chatDiv.addEventListener("scroll", handleScroll);
   
-    chatDiv.addEventListener("scroll", handleScroll);
-    return () => chatDiv.removeEventListener("scroll", handleScroll);
-  }, [hasNextPage]);
-  
+  return () => {
+    chatDiv.removeEventListener("scroll", handleScroll);
+  };
+}, [hasNextPage]);  // Removed chatContainerRef.current from dependencies
+
   // Fetch older messages when `page` increases
   useEffect(() => {
     if (page > 1) {
@@ -412,7 +439,7 @@ const handleSendMessage = () => {
     </div>
   </div>
   
-  <div className="overflow-y-auto h-[20.5rem] pr-3 notificationScrollbar">
+  <div className="overflow-y-auto h-[24rem] pr-3 notificationScrollbar">
   {chatUsers
   .filter((user) => user.user.id !== userDetails.userId) // Exclude the logged-in user
   .map((user) => (
@@ -446,7 +473,7 @@ const handleSendMessage = () => {
         >
           {msg.content}
           <br />
-          <small className="block text-xs mt-1 opacity-75">
+          <small className="text-xs mt-1 opacity-75 flex justify-end">
             {new Date(msg.createdAt).toLocaleTimeString()}
           </small>
         </div>

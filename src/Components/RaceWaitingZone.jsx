@@ -20,7 +20,7 @@ const RaceWaitingZone = ({
 
     const [isTimerFinished, setIsTimerFinished] = useState(false)
 
-    const ud = localStorage.getItem('userDetails')
+    const ud = localStorage.getItem('fin_userDetails')
     const gd = localStorage.getItem('guest_details')
     const userDetails = ud && JSON.parse(atob(ud))
     const guestDetails = gd && JSON.parse(atob(gd))

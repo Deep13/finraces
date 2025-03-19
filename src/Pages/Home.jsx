@@ -13,14 +13,14 @@ import GuestOrLoggedOutHero from '../Sections/Homepage/GuestOrLoggedOutHero'
 const Home = () => {
 
 
-  // const userDetails = localStorage.getItem('userDetails')
+  // const userDetails = localStorage.getItem('fin_userDetails')
   const [userDetails, setUserDetails] = useState(() => {
-    return localStorage.getItem('userDetails');
+    return localStorage.getItem('fin_userDetails');
   });
 
   useEffect(() => {
     const checkUser = () => {
-      setUserDetails(localStorage.getItem('userDetails'));
+      setUserDetails(localStorage.getItem('fin_userDetails'));
     };
 
     window.addEventListener("storage", checkUser);

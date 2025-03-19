@@ -25,7 +25,7 @@ const UpcomingRaceCardHomepage = ({
 
     const navigate = useNavigate()
     const [joinRaceFormVisible, setJoinRaceFormVisible] = useState(false)
-    const userDetails = localStorage.getItem('userDetails')
+    const userDetails = localStorage.getItem('fin_userDetails')
     const guestDetails = localStorage.getItem('guest_details')
     const { setShowLoginForm } = useContext(DarkModeContext)
     const [showModal, setShowModal] = useState(false)

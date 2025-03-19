@@ -8,7 +8,7 @@ import useDarkMode from "../Utils/DarkMode";
 
 const DarkModeProvider = ({ children }) => {
 
-    // const profileImage = JSON.parse(atob(localStorage.getItem('userDetails')))
+    // const profileImage = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
     const { darkModeEnabled, toggle } = useDarkMode() // centralized hook
     const [createRace, setCreateRace] = useState(false)
     const [showLoginForm, setShowLoginForm] = useState(false)
@@ -18,7 +18,7 @@ const DarkModeProvider = ({ children }) => {
     const chartRef = useRef(null);
 
     useEffect(() => {
-        let thisUserData = localStorage.getItem('userDetails')
+        let thisUserData = localStorage.getItem('fin_userDetails')
         let thisUserDetails = thisUserData && JSON.parse(atob(thisUserData))
         thisUserDetails && getUser(thisUserDetails.userId, (data) => {
             setProfileImage(data?.photo?.path)

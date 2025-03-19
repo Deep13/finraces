@@ -77,7 +77,7 @@ const StockComparison = () => {
   
       useEffect(()=>{
           let token=localStorage.getItem('token');
-          // let ud=localStorage.getItem('userDetails');
+          // let ud=localStorage.getItem('fin_userDetails');
   
           if(!token){
               setShowLoginForm(true);
@@ -226,7 +226,7 @@ const StockComparison = () => {
 
   const buttonClick=()=>{
     let token=localStorage.getItem('token');
-    // let ud=localStorage.getItem('userDetails');
+    // let ud=localStorage.getItem('fin_userDetails');
     
     if(!token){
       setShowLoginForm(true);

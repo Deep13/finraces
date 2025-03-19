@@ -47,6 +47,7 @@ import {
     Legend,
 } from "chart.js";
 import RankChart from "../Components/RaceLineChart";
+import StockRaceChart from "../Components/StockRaceChart";
 
 // Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -99,12 +100,12 @@ const RacePage = () => {
     const [dataset, setDataset] = useState([]);
     const [duration, setDuration] = useState('')
     const flag = useRef(0)
-    const userDetails = localStorage.getItem('userDetails')
+    const userDetails = localStorage.getItem('fin_userDetails')
     const navigate = useNavigate()
     const stockChart = useRef()
     const iframeRef = useRef(null);
 
-    const ud = localStorage.getItem('userDetails')
+    const ud = localStorage.getItem('fin_userDetails')
     const userDetails2 = ud && JSON.parse(atob(ud))
 
     const checkSelf = (id, name) => {
@@ -443,7 +444,9 @@ const RacePage = () => {
             const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
 
             let stocks = (res.stocks) // this will be the natural position of stocks at first
-            setStockCount(res.stocks);
+            
+            const stockName = res.stocks.map(stock => stock.name);
+            setStockCount(stockName);
             let stockNames = stocks.map(curr => (curr.ticker))
             let totalTime = calculateDurationInSeconds(res.start_date, res.end_date)
             let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
@@ -911,7 +914,7 @@ const RacePage = () => {
 
                                 <div className="flex-1 rounded-[20px]  mb-4 ">
                                     <div className="flex justify-between w-full items-center mb-[10px] dark:text-white">
-
+                                            
 
                                     </div>
 
@@ -939,8 +942,8 @@ const RacePage = () => {
                                         // frameBorder="0"
                                         />}
 
-                                    {graphType == "Line" && data.labels.length > 0 && raceStatus !== 'finished' && (
-                                        <RankChart labels={labels} dataset={dataset} stocks={stockCount} />
+                                    {graphType == "Line" && (
+                                        <StockRaceChart duration={60} stocks={stockCount}/>
                                     )}
                                 </div>
 

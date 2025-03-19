@@ -14,7 +14,7 @@ const FriendCard = ({
 
     const { darkModeEnabled } = useContext(DarkModeContext)
     const navigate = useNavigate()
-    let userId = JSON.parse(atob(localStorage.getItem('userDetails'))).userId
+    let userId = JSON.parse(atob(localStorage.getItem('fin_userDetails'))).userId
 
     return (
         <div onClick={() => {

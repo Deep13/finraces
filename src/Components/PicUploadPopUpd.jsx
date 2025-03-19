@@ -104,9 +104,9 @@ const PicUploadPopUpd = ({
                                         // set the pic data here
                                         setImageUrl(data?.photo?.path)
                                         setProfileImage(data?.photo?.path)
-                                        let userData = JSON.parse(atob(localStorage.getItem('userDetails')))
+                                        let userData = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
                                         userData.photo.path = data?.data?.path
-                                        localStorage.setItem('userDetails', btoa(JSON.stringify((userData))))
+                                        localStorage.setItem('fin_userDetails', btoa(JSON.stringify((userData))))
                                         setShowPopUp(true);
                                     })
                                     // exit(false)

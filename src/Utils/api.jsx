@@ -58,7 +58,7 @@ export const Login = async (
     console.log('response', response.data);
 
     localStorage.setItem('token', response.data.token);
-    localStorage.removeItem('userDetails')
+    localStorage.removeItem('fin_userDetails')
     localStorage.setItem('refreshToken', response.data.refreshToken);
     // localStorage.setItem('userName', response.data.user.firstName)
     // localStorage.setItem('Photo', response.data.user.photo)
@@ -68,7 +68,7 @@ export const Login = async (
       photo: response.data.user.photo,
       gender: response.data.user.gender
     }
-    localStorage.setItem('userDetails', btoa(JSON.stringify(loginUserDetails)))
+    localStorage.setItem('fin_userDetails', btoa(JSON.stringify(loginUserDetails)))
     localStorage.removeItem('guest_details')
     onSuccess()
 
@@ -558,7 +558,7 @@ export const getUserDetails = async (onSuccess, onError) => {
 export const uploadProfilePicture = async (file, onSuccess, onError) => {
   const UPLOAD_URL = `${GlobalURL}/api/v1/files/upload`; // Replace with your upload endpoint
   const token = localStorage.getItem('token')
-  let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
+  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
   // console.log(JSON.parse(atob(userDetails)))
 
   try {
@@ -587,7 +587,7 @@ export const uploadProfilePicture = async (file, onSuccess, onError) => {
     console.log('File uploaded successfully:', data);
     userDetails.profilePic = data.file
     await console.log(userDetails)
-    await localStorage.setItem('userDetails', btoa(JSON.stringify(userDetails)))
+    await localStorage.setItem('fin_userDetails', btoa(JSON.stringify(userDetails)))
     onSuccess(data)
 
   } catch (error) {
@@ -1922,7 +1922,7 @@ export const getChats=async(onSuccess,onError,id,page=1)=>{
   if(!id)return;
   try{
     let token=localStorage.getItem('token');
-    let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
+    let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
     console.log("user",userDetails)
     let url=`${GlobalURL}/api/v1/messages?receiver=${id}&page=${page}`
 
@@ -1957,6 +1957,7 @@ export const postChats=async(msg,reciever,onSuccess,onError)=>{
       receiver:reciever
      };
     const url = `${GlobalURL}/api/v1/messages`;
+    
 
     const response = await fetch(url, {
       method: "POST",
@@ -1981,11 +1982,43 @@ export const postChats=async(msg,reciever,onSuccess,onError)=>{
   }
 }
 
+export const markChatsAsRead=async(chatId,onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+    const url = `${GlobalURL}/api/v1/messages/${chatId}`;
+    const payload = { 
+      is_read:true,
+     };
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      // If response is not successful, throw an error with response status text
+      const errorData = await response.json();
+      throw new Error(errorData.message);
+    }
+
+    const data = await response.json(); // Parse response JSON
+    onSuccess(data); // Call success callback with API response
+
+  }
+  catch(error){
+    onError(error);
+  }
+}
+
 
 export const getAllChats=async(onSuccess,onError)=>{
   try{
     let token=localStorage.getItem('token');
-    let userDetails = JSON.parse(atob(localStorage.getItem('userDetails')))
+    let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
     console.log("user",userDetails)
     let url=`${GlobalURL}/api/v1/messages/users`
 

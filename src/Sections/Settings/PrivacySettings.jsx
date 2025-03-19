@@ -25,7 +25,7 @@ const PrivacySettings = () => {
         getSettings((data) => {
             setSettings(data)
         })
-        let userData = localStorage.getItem('userDetails')
+        let userData = localStorage.getItem('fin_userDetails')
         let selfId = userData && JSON.parse(atob(userData)).userId
         selfId && getAllblockedUsers(selfId, (data) => {
             console.log('All the blocked Users--------->', data.data)

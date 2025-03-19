@@ -34,7 +34,7 @@ const CreateRace = ({
   const today = new Date().toISOString().split("T")[0];
   const generateRandomStockRaceName = () => {
     // Get user details from localStorage
-    let encodedUserDetails = localStorage.getItem('userDetails');
+    let encodedUserDetails = localStorage.getItem('fin_userDetails');
     if (!encodedUserDetails) {
       // throw new Error("User details not found in localStorage");
       // probably be guest

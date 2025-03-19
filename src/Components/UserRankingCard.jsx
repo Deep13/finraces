@@ -15,7 +15,7 @@ const UserRankingCard = ({
     id
 }) => {
     const navigate = useNavigate()
-    const userData = localStorage.getItem('userDetails')
+    const userData = localStorage.getItem('fin_userDetails')
     const selfId = userData && JSON.parse(atob(userData)).userId
 
     const userDetails = userData && JSON.parse(atob(userData))

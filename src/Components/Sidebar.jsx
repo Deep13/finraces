@@ -22,7 +22,7 @@ const Sidebar = () => {
     const navigate = useNavigate()
 
     const handleNavigation=(nav)=>{
-        let ud=localStorage.getItem('userDetails');
+        let ud=localStorage.getItem('fin_userDetails');
         switch(nav){
             case "Watchlist":
                 navigate('/stockComparison')

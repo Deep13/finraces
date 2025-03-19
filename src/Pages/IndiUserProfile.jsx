@@ -31,7 +31,7 @@ const IndiUserProfile = () => {
     const [noProfilePopup, setNoProfilePopup] = useState(false)
     const navigate = useNavigate()
 
-    const sd = localStorage.getItem('userDetails')
+    const sd = localStorage.getItem('fin_userDetails')
     let selfDetails = sd && JSON.parse(atob(sd))
 
 

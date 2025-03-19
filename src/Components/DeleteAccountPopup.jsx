@@ -20,7 +20,7 @@ const DeleteAccountPopup = ({
                         })
                         localStorage.removeItem('token')
                         localStorage.removeItem('refreshToken')
-                        localStorage.removeItem('userDetails')
+                        localStorage.removeItem('fin_userDetails')
                         navigate('/auth')
                         exit(false)
                     }} className='bg-[#FF0000] text-white text-[14px] font-bold py-[10px] px-[20px] rounded-[10px]'>Delete</button>

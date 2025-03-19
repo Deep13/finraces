@@ -10,7 +10,7 @@ const AllFriends = () => {
   const [friends, setFriends] = useState([]);
   const [filteredFriends, setFilteredFriends] = useState([]);
 
-  let userId = JSON.parse(atob(localStorage.getItem('userDetails'))).userId;
+  let userId = JSON.parse(atob(localStorage.getItem('fin_userDetails'))).userId;
 
   // Fetch friends from the leaderboard
   useEffect(() => {

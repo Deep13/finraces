@@ -10,7 +10,7 @@ const AddFriend = () => {
   const { darkModeEnabled } = useContext(DarkModeContext)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterdResults, setFilterdResults] = useState([])
-  const ud = localStorage.getItem('userDetails')
+  const ud = localStorage.getItem('fin_userDetails')
   const userDetails = ud && JSON.parse(atob(ud))
 
   const updateFilteredResults = useCallback(

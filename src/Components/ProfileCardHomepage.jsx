@@ -23,7 +23,7 @@ const ProfileCardHomepage = ({
 }) => {
     const navigate = useNavigate()
     const [YourDetails, setYourDetails] = useState(null)
-    let userData = localStorage.getItem('userDetails')
+    let userData = localStorage.getItem('fin_userDetails')
     const selfId = userData ? JSON.parse(atob(userData)).userId : undefined
 
 

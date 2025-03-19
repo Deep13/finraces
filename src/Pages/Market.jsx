@@ -77,7 +77,7 @@ const Market = () => {
 
     useEffect(()=>{
         let token=localStorage.getItem('token');
-        // let ud=localStorage.getItem('userDetails');
+        // let ud=localStorage.getItem('fin_userDetails');
 
         if(!token){
             setShowLoginForm(true);
@@ -233,7 +233,7 @@ const Market = () => {
     const updateState = (searchedStock) => {
         // Check if stock is already in the watchlist
         const isAlreadyInWatchlist = watchList.some(item => item.stock.id === searchedStock.id);
-        let userDetails=localStorage.getItem('userDetails');
+        let userDetails=localStorage.getItem('fin_userDetails');
         console.log(atob(userDetails))
       
         if (!isAlreadyInWatchlist) {
@@ -328,7 +328,7 @@ const Market = () => {
             <div className="font-bold text-slate-400 text-center">Your personalized stock tracker. Save your favorite stocks and monitor 
                 their trends effortlessly.<br/>Watch. Track. Grow.</div>
             <div onClick={()=>{
-                if(localStorage.getItem('token') && localStorage.getItem('userDetails')){
+                if(localStorage.getItem('token') && localStorage.getItem('fin_userDetails')){
                     setShowSearch(true)
                 }
                 else{

@@ -7,7 +7,7 @@ const AllRacesHero = () => {
     const { setCreateRace,setShowLoginForm } = useContext(DarkModeContext)
 
     const handleClick=()=>{
-        let ud=localStorage.getItem('userDetails')
+        let ud=localStorage.getItem('fin_userDetails')
         if(!ud){
             setShowLoginForm(true)
         }

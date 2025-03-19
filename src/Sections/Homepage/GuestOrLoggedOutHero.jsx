@@ -42,7 +42,7 @@ const GuestOrLoggedOutHero = () => {
     const [hasNext,setHasNext]=useState(false);
     const token = localStorage.getItem('token')
 
-    const iu = localStorage.getItem('userDetails')
+    const iu = localStorage.getItem('fin_userDetails')
     const imageUrl = iu && JSON.parse(atob(iu))
     const userId = imageUrl && imageUrl?.userId
     const userName = imageUrl && imageUrl?.userName
@@ -75,7 +75,7 @@ const GuestOrLoggedOutHero = () => {
               const updateState = (searchedStock) => {
                 // Check if stock is already in the watchlist
                 const isAlreadyInWatchlist = watchList.some(item => item.stock.id === searchedStock.id);
-                let userDetails=localStorage.getItem('userDetails');
+                let userDetails=localStorage.getItem('fin_userDetails');
                 console.log(atob(userDetails))
               
                 if (!isAlreadyInWatchlist) {
@@ -339,7 +339,7 @@ const GuestOrLoggedOutHero = () => {
             <div className='font-extrabold text-2xl mt-3 dark:text-white'>Watch. Track. Grow.</div>
 
             <div onClick={()=>{
-                if(localStorage.getItem('token') && localStorage.getItem('userDetails')){
+                if(localStorage.getItem('token') && localStorage.getItem('fin_userDetails')){
                     setShowSearch(true)
                 }
                 else{
