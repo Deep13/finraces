@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useRef,useState} from "react";
 import { Line } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 
 Chart.register(...registerables);
 
 const POINTS_INTERVAL = 5;
-const POINTS_PER_TICK = 12;
+const POINTS_PER_TICK = 5;
 const TOTAL_DURATION = 60;
 const TOTAL_POINTS = (TOTAL_DURATION / POINTS_INTERVAL) * POINTS_PER_TICK;
-const INITIAL_POINTS = TOTAL_POINTS / 2;
+// const INITIAL_POINTS = TOTAL_POINTS / 2;
 const ANIMATION_DURATION = 60000; // ⬆️ Increased animation duration (slower)
 const testStocks = ["Apple", "Google", "Netflix", "Amazon","a","b","c","d","e"]
 
@@ -29,9 +29,9 @@ const getRandomColor = () => {
   return color;
 };
 
-const StockRaceChart = ({ duration = TOTAL_DURATION, stocks=testStocks }) => {
+const StockRaceChart = ({ duration = TOTAL_DURATION, stocks=testStocks, type="rank" }) => {
   const chartRef = useRef(null);
-  const [pointCount, setPointCount] = useState(INITIAL_POINTS);
+  // const [pointCount, setPointCount] = useState(INITIAL_POINTS);
   
 
 
@@ -54,6 +54,11 @@ const StockRaceChart = ({ duration = TOTAL_DURATION, stocks=testStocks }) => {
     labels: xLabels, // Use precomputed labels
     datasets: generateDatasets(),
   });
+
+  // let chartData={
+  //   labels: xLabels, // Use precomputed labels
+  //   datasets: generateDatasets(),
+  // }
 
   const delayBetweenPoints = ANIMATION_DURATION / chartData.labels.length; // ⬆️ Increase delay
 
@@ -116,9 +121,6 @@ const StockRaceChart = ({ duration = TOTAL_DURATION, stocks=testStocks }) => {
     },
   };
 
-  useEffect(()=>{
-    console.log("data generated",chartData)
-  },[chartData])
 
   return (
     <div style={{ width: "100%", height: "100vh", display: "flex" }}> {/* ✅ Full height & width */}

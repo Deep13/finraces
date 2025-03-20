@@ -48,6 +48,8 @@ import {
 } from "chart.js";
 import RankChart from "../Components/RaceLineChart";
 import StockRaceChart from "../Components/StockRaceChart";
+import RacePriceChart from "../Components/RacePriceChart";
+import BumpChart from "../Components/BumpChart";
 
 // Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -131,6 +133,7 @@ const RacePage = () => {
         ],
     });
     const [stockCount, setStockCount] = useState(0);
+    const [stopTime, setStopTime] = useState();
 
     const [logos, setLogos] = useState({});
     const [maxValue, setMaxValue] = useState(120);
@@ -447,6 +450,17 @@ const RacePage = () => {
             
             const stockName = res.stocks.map(stock => stock.name);
             setStockCount(stockName);
+            var utcTime = res.end_date; // Assuming UTC time from API
+            var utcDate = new Date(utcTime); // Convert string to Date object
+
+            // Convert UTC to local time
+            var localTime = new Date(utcDate.getTime() - utcDate.getTimezoneOffset() * 60000).toISOString();
+
+            // Debugging
+            console.log("Local Time:", localTime);
+
+            setStopTime(localTime);
+
             let stockNames = stocks.map(curr => (curr.ticker))
             let totalTime = calculateDurationInSeconds(res.start_date, res.end_date)
             let elapsedTime = calculateDurationInSeconds(res.start_date, new Date().toISOString())
@@ -896,7 +910,7 @@ const RacePage = () => {
                                     </div>
                                     <div className='h-full flex flex-row justify-center items-end'>
                                         <div className="border-2 dark:border-[#00387E] flex items-center rounded-lg gap-2 mr-4 text-[12px] text-[white]">
-                                            {['Horse', 'Ticker', 'Line'].map((item) => (
+                                            {['Horse', 'Ticker', 'Rank','Price'].map((item) => (
                                                 <span
                                                     key={item}
                                                     className={`rounded-md cursor-pointer ${item == graphType ? "bg-blue-600" : ""} p-2`}
@@ -942,8 +956,14 @@ const RacePage = () => {
                                         // frameBorder="0"
                                         />}
 
-                                    {graphType == "Line" && (
-                                        <StockRaceChart duration={60} stocks={stockCount}/>
+                                    {graphType == "Price" && (
+                                        // <StockRaceChart duration={60} stocks={stockCount}/>
+                                        <RacePriceChart staticData={true} stocks={stockCount} stopTime={stopTime}/>
+                                    )}
+                                    {graphType == "Rank" && (
+                                        // <StockRaceChart duration={60} stocks={stockCount}/>
+                                        <BumpChart stocks={stockCount}/>
+                                        // <RacePriceChart staticData={true} stocks={stockCount} stopTime={"2025-03-20T12:51:00"}/>
                                     )}
                                 </div>
 
