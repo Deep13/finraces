@@ -447,7 +447,7 @@ const RacePage = () => {
             const barColors = ['red', 'blue', 'yellow', 'rgba(75, 192, 192, 0.8)', 'rgba(153, 102, 255, 0.8)'];
 
             let stocks = (res.stocks) // this will be the natural position of stocks at first
-            
+
             const stockName = res.stocks.map(stock => stock.name);
             setStockCount(stockName);
             var utcTime = res.end_date; // Assuming UTC time from API
@@ -910,7 +910,7 @@ const RacePage = () => {
                                     </div>
                                     <div className='h-full flex flex-row justify-center items-end'>
                                         <div className="border-2 dark:border-[#00387E] flex items-center rounded-lg gap-2 mr-4 text-[12px] text-[white]">
-                                            {['Horse', 'Ticker', 'Rank','Price'].map((item) => (
+                                            {['Horse', 'Ticker', 'Rank', 'Price'].map((item) => (
                                                 <span
                                                     key={item}
                                                     className={`rounded-md cursor-pointer ${item == graphType ? "bg-blue-600" : ""} p-2`}
@@ -928,7 +928,7 @@ const RacePage = () => {
 
                                 <div className="flex-1 rounded-[20px]  mb-4 ">
                                     <div className="flex justify-between w-full items-center mb-[10px] dark:text-white">
-                                            
+
 
                                     </div>
 
@@ -950,7 +950,7 @@ const RacePage = () => {
                                         <iframe
                                             className="flex-1 w-full h-[700px]"
                                             ref={iframeRef}
-                                            src="https://horse-racing-rudra.web.app/" // Adjust path based on where you host the game
+                                            src={`/game/index.html?raceId=${race_id}`} // Adjust path based on where you host the game
                                         // width=""
                                         // height="832px"
                                         // frameBorder="0"
@@ -958,11 +958,11 @@ const RacePage = () => {
 
                                     {graphType == "Price" && (
                                         // <StockRaceChart duration={60} stocks={stockCount}/>
-                                        <RacePriceChart staticData={true} stocks={stockCount} stopTime={stopTime}/>
+                                        <RacePriceChart staticData={true} stocks={stockCount} stopTime={stopTime} />
                                     )}
                                     {graphType == "Rank" && (
                                         // <StockRaceChart duration={60} stocks={stockCount}/>
-                                        <BumpChart stocks={stockCount}/>
+                                        <BumpChart stocks={stockCount} />
                                         // <RacePriceChart staticData={true} stocks={stockCount} stopTime={"2025-03-20T12:51:00"}/>
                                     )}
                                 </div>
