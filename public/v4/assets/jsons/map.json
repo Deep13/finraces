@@ -1,0 +1,29 @@
+{
+  "name": "map",
+  "children": [
+    {
+      "name": "Road",
+      "position": [
+        0,
+        0.1,
+        0
+      ],
+      "scale": [
+        26.79,
+        1,
+        170
+      ],
+      "components": {
+        "model": {
+          "type": "plane",
+          "materialAsset": "mat_road.json"
+        }
+      }
+    }
+  ],
+  "position": [
+    0,
+    0,
+    0
+  ]
+}

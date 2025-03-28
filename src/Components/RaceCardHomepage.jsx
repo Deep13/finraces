@@ -429,13 +429,13 @@ const RaceCardHomepage = ({
                 </div> */}
 
                         <div className='w-full flex justify-center items-center gap-[25px]'>
-                            {/* <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender == 'female' ? femalePlaceholder : malePlaceholder} />
+                            <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender == 'female' ? femalePlaceholder : malePlaceholder} />
                                 <img className='ongoing-rank' src={Crown_1} />
                             </div>
                             <div style={{ position: 'relative', flex: 1 }}><img className='ongoing-users' src={rankList[1].user_photo ? rankList[1].user_photo.path : rankList[1].gender == 'female' ? femalePlaceholder : malePlaceholder} />
                                 <img className='ongoing-rank' src={Crown_2} /></div>
                             <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={rankList[2].user_photo ? rankList[2].user_photo.path : rankList[2].gender == 'female' ? femalePlaceholder : malePlaceholder} />
-                                <img className='ongoing-rank' src={Crown_3} /></div> */}
+                                <img className='ongoing-rank' src={Crown_3} /></div>
 
 
 
@@ -482,7 +482,7 @@ const RaceCardHomepage = ({
                     </div>
                     {data.labels.length > 0 && (
                         // <Bar data={data} options={options} plugins={[customPlugin]} />
-                        <iframe className="w-[100%] h-[400px]" height="832px" src={`/game/index.html?raceId=${raceId}`} />
+                        <iframe className="w-[100%] h-[400px]" height="832px" src={`/v4/index.html?raceId=${raceId}`} />
                     )}
 
                 </div>

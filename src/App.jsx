@@ -6,6 +6,7 @@ import Auth from './Pages/Auth'
 import NavFootWrapper from './Components/layouts/NavFootWrapper'
 import GlobalProvider from './Contexts'
 import RacePage from './Pages/RacePage'
+import RacePage1 from './Pages/RacePage1'
 import Profile from './Pages/Profile'
 import Leaderboard from './Pages/Leaderboard'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -40,6 +41,7 @@ function App() {
               <Route path='/' element={<NavFootWrapper />}>
                 <Route path="" element={<Home />} />
                 <Route path="race/:race_id" element={<RacePage />} />
+                <Route path="race1/:race_id" element={<RacePage1 />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/community" element={<Community />} />
@@ -49,11 +51,11 @@ function App() {
 
                 <Route path="/notifications" element={<Notification />} />
                 <Route path="/chat" element={<Chat />} />
-                <Route path='/learn' element={<Learn/>}/>
-                <Route path='/stockComparison' element={<StockComparison/>}/>
-                <Route path='/market' element={<Market/>}/>
-                <Route path='/stock/:ticker/:id' element={<SingleStock/>}/>
-                <Route path='/stockTable' element={<StockMarketTable/>}/>
+                <Route path='/learn' element={<Learn />} />
+                <Route path='/stockComparison' element={<StockComparison />} />
+                <Route path='/market' element={<Market />} />
+                <Route path='/stock/:ticker/:id' element={<SingleStock />} />
+                <Route path='/stockTable' element={<StockMarketTable />} />
               </Route>
               <Route path="/auth" element={<Auth />} />
               <Route path="/leaderboard" element={<Leaderboard />} />
