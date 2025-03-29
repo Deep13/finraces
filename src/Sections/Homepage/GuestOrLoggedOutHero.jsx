@@ -38,7 +38,7 @@ const GuestOrLoggedOutHero = () => {
     const [totalPoints, setTotalPoints] = useState(0)
     const [winningRate, setWinningRate] = useState(0)
     const [watchList,setWatchList] = useState([]);
-    const [page,setPage]=useState(2);
+    const [page,setPage]=useState(1);
     const [hasNext,setHasNext]=useState(false);
     const token = localStorage.getItem('token')
 
@@ -118,7 +118,7 @@ const GuestOrLoggedOutHero = () => {
     
                 // If scrolled near the right end, fetch more stocks
                 if (scrollLeft + clientWidth >= scrollWidth - 50 && hasNext) {
-                    fetchWatchList(page);
+                    fetchWatchList();
                 }
             }, 500); // Delay to ensure smooth scroll before checking
         }
@@ -159,68 +159,50 @@ const GuestOrLoggedOutHero = () => {
     },[])
 
      // Function to fetch stocks
-  const fetchWatchList = (pageNumber) => {
-    if (!hasNext) return; // Prevent duplicate calls
-
-    
-    getWatchList(
-      (data) => {
-        setWatchList((prev) => [...prev, ...data.data]); // Append new data
-        setHasNext(data.hasNextPage); // Update hasNext flag
-        setPage((prevPage) => prevPage + 1);
- // Increment page number
-      },
-      (error) => {
-        console.log("Error fetching stocks:", error);
-      },
-      pageNumber // Pass page number to API
-    );
+     const fetchWatchList = () => {
+      if (!hasNext) return; // Prevent unnecessary calls
+  
+      setPage((prevPage) => {
+          const nextPage = prevPage + 1; // Increment before API call
+          getWatchList(
+              (data) => {
+                  setWatchList((prev) => [...prev, ...data.data]); // Append new data
+                  setHasNext(data.hasNextPage); // Update hasNext flag
+              },
+              (error) => console.log("Error fetching stocks:", error),
+              nextPage // Pass the incremented page number
+          );
+          return nextPage; // Update the state with new page
+      });
   };
+  
 
   // Detect when user scrolls to the end
   const handleScroll = () => {
-    if (!sliderRef.current) return;
-
+    if (!sliderRef.current || !hasNext) return;
+  
     const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-
+  
     // If user scrolled near the right end, load more
-    if (scrollLeft + clientWidth >= scrollWidth - 20) {
-      fetchWatchList(page+1);
+    if (scrollLeft + clientWidth >= scrollWidth - 10) {
+      fetchWatchList();
     }
   };
+  
 
   useEffect(() => {
     const slider = sliderRef.current;
     if (!slider) return;
-
+  
     slider.addEventListener("scroll", handleScroll);
+    
     return () => slider.removeEventListener("scroll", handleScroll);
-  }, [page, hasNext]);
+  }, [page, hasNext]);  // Added dependencies
+  
 
     return (
         <>
-            {/* <div className='max-w-[1400px] dark:bg-gradient-to-l dark:from-[rgba(0,0,0,0.25)] dark:to-[#0a0d2b] h-auto py-[2.2rem] px-[2.52rem] hero-gradient mb-[3.3rem] grid md:grid-cols-2 grid-cols-1 rounded-lg dark:border dark:border-[#00387E]'>
-                <div className='py-[1.76rem] flex-1 flex flex-col col-span-1 order-2 md:order-1 justify-center gap-4 items-start pl-4'>
-                    <h1 className='md:text-[2.35rem] text-[2rem] font-bold leading-10 mb-[1rem] dark:text-[#5988FF]'>Welcome Back!</h1>
-                    <p className='text-[0.94rem] mb-[1rem] dark:text-white'>Continue where you left</p>
-                    <div className='flex gap-4'>
-                        <button
-                            onClick={() => setCreateRace(true)}
-                            className='w-auto dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-black bg-[#e5f4ff] rounded-[33px]'>
-                            Create Race
-                        </button>
-                        <button
-                            onClick={() => navigate('/allraces', { state: "Upcoming Races" })}
-                            className='w-[8.9rem] bg-transparent dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-[#00387E] bg-[#e5f4ff] rounded-[33px]'>
-                            Join Race
-                        </button>
-                    </div>
-                </div>
-
-                <div className='flex-1 overflow-hidden col-span-2 md:col-span-1 order-1 md:order-2'>
-                    <img className='w-full h-full object-cover' src={stonks2} alt="" />
-                </div>
-            </div> */}
+           
             <Hero />
 
             <div className='max-w-[1400px] rounded-lg mb-[3.3rem] flex justify-between flex-wrap items-start'>

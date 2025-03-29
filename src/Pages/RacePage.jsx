@@ -82,6 +82,7 @@ const RacePage = () => {
     const [stocksDataForRace, setStocksDataForRace] = useState(null)
     const [raceStatus, setRaceStatus] = useState('');
     const [graphType, setGraphType] = useState('Horse');
+    const [tempStocks,setTempStocks]=useState([]);
     const [ranks, setRanks] = useState({
         1: Math.floor(Math.random() * 3) + 1,
         2: Math.floor(Math.random() * 3) + 1,
@@ -118,6 +119,8 @@ const RacePage = () => {
         }
         return name
     }
+
+    useEffect(()=>{console.log("status",raceStatus)},[raceStatus])
 
 
     // code by deepak
@@ -391,7 +394,7 @@ const RacePage = () => {
 
 
         fetchRaceData(race_id, (res) => {
-            // console.log('racedata :', res);
+            console.log('racedata :', res);
             setRaceDetails(res)
             const { hours, minutes } = calculateDuration(res.start_date, res.end_date)
             // setDuration((hours && (hours + " Hours ")) + (minutes && (minutes + " Minutes")))
@@ -491,6 +494,16 @@ const RacePage = () => {
             })
             console.log('New Positions Array', newPosArr);
 
+            setTempStocks(
+                {
+                    name:"",
+                    price:"",
+                    ticker:"",
+                    icon_url:"",
+                    id:"",
+                }
+            )
+
 
             let newData = newPosArr
             setData({
@@ -532,6 +545,7 @@ const RacePage = () => {
         }
     }, [raceStatus])
 
+    useEffect(()=>{console.log("check",stockRankList)},[stockRankList])
 
     // This function transforms socket data for line chart not using it now but maybe needed later
     // const dataTransform = (input) => {
@@ -766,12 +780,16 @@ const RacePage = () => {
         console.log('Race status this is pain in >>>>>>>>>>>>>', raceDetails?.status)
     }, [raceStatus])
 
+    // useEffect(()=>{
+    //     console.log(isRaceStarted)
+    // },[isRaceStarted])
+
     console.log("data", data)
     if (isLoadingRaceTile && raceStatus !== 'finished') {
         return (
             <>
                 {
-                    isLoading ? <div className="fixed bg-black opacity-40 w-full h-screen top-0 left-0 grid place-items-center z-[999]">
+                    (isLoading && isRaceStarted )? <div className="fixed bg-black opacity-40 w-full h-screen top-0 left-0 grid place-items-center z-[999]">
                         <div>
                             {/* <ColorRing
                                 visible={true}
@@ -793,7 +811,10 @@ const RacePage = () => {
                             race_id={race_id}
                             status={raceStatus}
                             // raceEnded = {false}
-                            closeCard={setIsRaceStarted} />
+                            closeCard={()=>{
+                                setIsRaceStarted(true)
+                                setIsLoadingRaceTile(false)
+                            }} />
                 }
                 <motion.div
                     initial={{
@@ -849,7 +870,7 @@ const RacePage = () => {
                             race_id={race_id}
                             status={raceDetails?.status}
                             // raceEnded = {false}
-                            closeCard={setIsRaceStarted} />
+                            closeCard={()=>{setIsRaceStarted(true)}} />
                 }
                 <motion.div
                     initial={{
@@ -882,7 +903,7 @@ const RacePage = () => {
                                         <div className='h-full'>
                                             <h3 className='text-[1.05rem] font-bold dark:text-white font-poppins'>{raceDetails?.name}</h3>
                                             <div className="font-medium text-[0.9rem] dark:text-white flex gap-2 items-center">
-                                                <p>Remaining Time</p>
+                                                <p>{raceStatus!="running"?"Race Starts In:":"Remaining Time"}</p>
                                                 <div className="font-semibold font-poppins">
                                                     {
                                                         raceDetails && <Countdown
@@ -946,7 +967,7 @@ const RacePage = () => {
                                     {graphType == "Ticker" && data.labels.length > 0 && raceStatus !== 'finished' && (
                                         <Bar data={data} options={options} plugins={[customPlugin]} />
                                     )}
-                                    {graphType == "Horse" && raceResults &&
+                                    {graphType == "Horse" && data.labels.length > 0 && raceStatus !== 'finished' && 
                                         <iframe
                                             className="flex-1 w-full h-[700px]"
                                             ref={iframeRef}
@@ -974,7 +995,7 @@ const RacePage = () => {
 
                         </div>
                         {/* other stocks rally  */}
-                        <div className="w-[100%] py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
+                        {(raceStatus=='running' || raceStatus=='finished')&&<div className="w-[100%] py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
                             <div className="flex justify-between w-full items-center mb-[18px]">
                                 <p className="font-medium text-[0.9rem] dark:text-white">Stock Ranking</p>
                                 {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
@@ -983,7 +1004,7 @@ const RacePage = () => {
                             <StockRankList
                                 stocksData={stocksDataForRace} // data from api below is data from socket
                                 stockRankList={stockRankList} />
-                        </div>
+                        </div>}
                     </div>
                 </motion.div>
                 {showDetails &&
@@ -1010,7 +1031,12 @@ const RacePage = () => {
 
                                 </div>
                                 <div className="px-[30px]">
-                                    {raceDetails?.created_by?.firstName && <p className="font-medium text-[1.05rem] ">Race created by- {(raceDetails?.created_by?.firstName ? raceResults?.created_by?.firstName : '') + " " + (raceDetails?.created_by?.lastName ? raceResults?.created_by?.lastName : '')}</p>}
+                                {raceDetails?.created_by?.firstName && (
+  <p className="font-medium text-[1.05rem]">
+    Race created by - {raceDetails?.created_by?.firstName + " " + raceDetails?.created_by?.lastName}
+  </p>
+)}
+
                                     <p className='text-[0.9rem] dark:text-white'>
                                         Race Duration:
                                         <span className="font-semibold ml-2 font-poppins">
@@ -1026,7 +1052,19 @@ const RacePage = () => {
                                                 updateUser3();
                                                 setTabs('leaderboard')
                                             }} className={tabs === 'leaderboard' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'} >Leaderboard</button>
-                                            {<button onClick={() => setTabs('yourbets')} className={tabs === 'yourbets' ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white'}>Your Bets</button>}
+                                            {(raceStatus == "running" || raceStatus == "finished") && (
+  <button
+    onClick={() => setTabs("yourbets")}
+    className={
+      tabs === "yourbets"
+        ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
+        : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
+    }
+  >
+    Your Bets
+  </button>
+)}
+
                                         </div>
                                         {<div className='w-full rounded-[8px] max-h-screen overflow-auto custom-scrollbar'>
                                             {
@@ -1035,10 +1073,10 @@ const RacePage = () => {
                                                         {/* <div className='w-full flex justify-between items-center mb-[14px]'>
                                                             <p className="font-semibold text-4 dark:text-white">View all</p>
                                                         </div> */}
-                                                        <UserRankingList rankList={rankList} />
+                                                        {raceStatus=="running"?<UserRankingList rankList={rankList} />:<UserRankingList rankList={joinedUsers} status="f"/>}
                                                     </>
                                                     :
-                                                    <div className="w-full flex flex-col gap-4">
+                                                    <div className="w-full max-h-96 pr-3 flex flex-col gap-4">
                                                         {
                                                             stockRankList ?
                                                                 stockRankList?.map((curr, index) => {
