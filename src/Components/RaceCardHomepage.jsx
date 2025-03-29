@@ -124,7 +124,7 @@ const RaceCardHomepage = ({
                 label: "Company Growth",
                 data: [], // Initial data
                 backgroundColor: [], // Colors for bars
-                barThickness: 1,
+                barThickness: 0.2,
             },
         ],
     });
@@ -177,7 +177,7 @@ const RaceCardHomepage = ({
                         label: "Company Growth",
                         data: newData, // Initialize with zeros
                         backgroundColor: newColors,
-                        barThickness: 4,
+                        barThickness: 1,
                     },
                 ],
             });
@@ -436,6 +436,9 @@ const RaceCardHomepage = ({
                                 <img className='ongoing-rank' src={Crown_2} /></div>
                             <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={rankList[2].user_photo ? rankList[2].user_photo.path : rankList[2].gender == 'female' ? femalePlaceholder : malePlaceholder} />
                                 <img className='ongoing-rank' src={Crown_3} /></div>
+
+
+
                             {/* <div className='relative aspect-square p-[22px]'>
                     <img src={person2} alt="silver medal position" />
                     <img src={silver_crown} alt="1st position person" />
@@ -478,7 +481,8 @@ const RaceCardHomepage = ({
                         </div>
                     </div>
                     {data.labels.length > 0 && (
-                        <Bar data={data} options={options} plugins={[customPlugin]} />
+                        // <Bar data={data} options={options} plugins={[customPlugin]} />
+                        <iframe className="w-[100%] h-[400px]" height="832px" src={`/v4/index.html?raceId=${raceId}`} />
                     )}
 
                 </div>
