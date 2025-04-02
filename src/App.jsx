@@ -47,6 +47,7 @@ function App() {
                 <Route path="/community" element={<Community />} />
                 <Route path="/screener" element={<Screener />} />
                 <Route path="/watchlist" element={<Watchlistpage />} />
+                <Route path="/community" element={<Community/>} />
                 <Route path="/userprofile/:user_id" element={<IndiUserProfile />} />
 
                 <Route path="/notifications" element={<Notification />} />

@@ -15,7 +15,7 @@ import recent from '../assets/icons/sidebar/recent.svg'
 import recentdark from '../assets/icons/sidebar/recentdark.svg'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
-import { MdCompare } from "react-icons/md";
+import { MdCompare, MdGroups } from "react-icons/md";
 
 const Sidebar = () => {
     const { darkModeEnabled,setShowLoginForm } = useContext(DarkModeContext)
@@ -58,6 +58,11 @@ const Sidebar = () => {
                 <button onClick={() =>handleNavigation('Discover')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
                     <img src={darkModeEnabled ? compassdark : compass} alt="discover" />
                     Discover
+                </button>
+                <button onClick={() => navigate('/community')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
+                    {/* <img src={darkModeEnabled ? livestreamingdark : live_streaming} alt="live races" /> */}
+                    <MdGroups size={24}/>
+                    Community
                 </button>
                 <button onClick={()=>navigate('/market')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
                     <img src={darkModeEnabled ? statsdark : stats} alt="stocks" />
