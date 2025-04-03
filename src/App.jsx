@@ -26,6 +26,7 @@ import StockComparison from './Pages/StockComparison'
 import Market from './Pages/Market'
 import SingleStock from './Pages/SingleStock'
 import StockMarketTable from './Pages/StockMarketTable'
+import PostDetailed from './Pages/PostDetailed'
 // import Lenis from 'lenis'
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/screener" element={<Screener />} />
                 <Route path="/watchlist" element={<Watchlistpage />} />
                 <Route path="/community" element={<Community/>} />
+                <Route path="/post/:post_id" element={<PostDetailed/>} />
                 <Route path="/userprofile/:user_id" element={<IndiUserProfile />} />
 
                 <Route path="/notifications" element={<Notification />} />
