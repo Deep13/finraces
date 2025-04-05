@@ -970,10 +970,11 @@ export const getTop4 = async (
   endDate,
   onSuccess = () => { },
   onError = () => { },
+  limit=4,
 ) => {
   // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/public/race-results/stats?limit=4`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/public/race-results/stats?limit=${limit}`, {
       headers: {
         // 'Authorization': `Bearer ${token}`, // Example for passing a token
       }

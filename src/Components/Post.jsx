@@ -7,6 +7,7 @@ import { useState } from "react";
 import { IoMdCamera } from "react-icons/io";
 import { MdOutlineGifBox } from "react-icons/md";
 import { LucideSticker } from "lucide-react";
+import { data } from "autoprefixer";
 
 const Post = ({ postData, commentVisibility }) => {
   const navigate = useNavigate();
@@ -16,9 +17,21 @@ const Post = ({ postData, commentVisibility }) => {
     { text: "Easily craft all of your Social posts for the whole month in Figma", user: "User Name", level: 10, avatar: postData?.userImg }
   ]);
 
+  
+  // Handle comment submission
   const handleCommentSubmit = () => {
     if (commentInput.trim()) {
-      setComments([...comments, { text: commentInput, user: "You", level: 1, avatar: postData?.userImg }]);
+      setComments([
+        ...comments,
+        {
+          id: comments.length + 1,
+          text: commentInput,
+          user: "You",
+          level: 1,
+          avatar: postData?.userImg,
+          replies: [],
+        },
+      ]);
       setCommentInput("");
     }
   };
