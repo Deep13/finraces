@@ -7,7 +7,7 @@ import { useState } from "react";
 import { IoMdCamera } from "react-icons/io";
 import { MdOutlineGifBox } from "react-icons/md";
 import { LucideSticker } from "lucide-react";
-import { data } from "autoprefixer";
+import EmojiPicker from "emoji-picker-react";
 
 const Post = ({ postData, commentVisibility }) => {
   const navigate = useNavigate();
@@ -35,6 +35,11 @@ const Post = ({ postData, commentVisibility }) => {
       setCommentInput("");
     }
   };
+const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+const handleEmojiClick = (emojiData) => {
+  setCommentInput(prev => prev + emojiData.emoji);
+};
 
   return (
     <div
@@ -87,6 +92,11 @@ const Post = ({ postData, commentVisibility }) => {
       {/* Comment Section */}
       {commentVisibility && (
         <div className="mt-4 p-4 rounded-xl">
+          {showEmojiPicker && (
+              <div className="absolute top-[40rem] right-60 z-50">
+                <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+              </div>
+            )}
           {/* Comment Input */}
           <div className="flex items-center gap-3 bg-[#002763] p-2 rounded-xl relative">
             <input
@@ -97,10 +107,10 @@ const Post = ({ postData, commentVisibility }) => {
               className="w-full px-5 py-3 pr-16 bg-transparent text-white placeholder-gray-400 focus:outline-none"
             />
             <div className="absolute right-16 top-1/2 transform -translate-y-1/2 flex gap-4 text-gray-400">
-              <FaRegSmile className="cursor-pointer" size={26} />
+              <FaRegSmile className="cursor-pointer" size={26}  onClick={() => setShowEmojiPicker(!showEmojiPicker)} />
               <IoMdCamera className="cursor-pointer" size={26} />
               <MdOutlineGifBox className="cursor-pointer" size={26} />
-              <LucideSticker className="cursor-pointer" size={26} />
+              {/* <LucideSticker className="cursor-pointer" size={26} /> */}
             </div>
             <button
               onClick={handleCommentSubmit}

@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { getRaceList, getTop4 } from "../Utils/api";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import JoinRace from "../Components/JoinRace";
+import { FaSmile } from "react-icons/fa";
+import EmojiPicker from "emoji-picker-react";
 
 const Community = () => {
   const tabs = ["Recent", "Following", "Trending", "My posts"];  
@@ -91,6 +93,12 @@ const handleImageUpload = (event) => {
 };
 
 const navigate=useNavigate();
+const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+const handleEmojiClick = (emojiData) => {
+  setPostContent(prev => prev + emojiData.emoji);
+};
+
 
 //fetchData for experts to follow and upcoming races
 
@@ -146,26 +154,57 @@ useEffect(()=>{
               </div>
 
               {/* Input & Actions */}
-              <div className="flex flex-col gap-3 flex-1">
-                <input type="text" value={postContent} onChange={(e)=>{setPostContent(e.target.value)}} className="rounded-xl px-4 py-3 bg-[#001B51] text-white placeholder-gray-400 focus:outline-none" placeholder="Start a post..." />
-                <div onClick={() => document.getElementById("bannerUpload").click()} className="flex items-center justify-evenly dark:text-white">
-                  <button className="hover:text-gray-300 transition-all flex items-center gap-1"><input
-                    type="file"
-                    accept="image/*"
-                    id="bannerUpload"
-                    className="hidden"
-                    onChange={handleImageUpload}
-                  />
-                  {/* Medal icon triggers file input */}
-                  <BiMedal
-                    size={24}
-                    
-                  /> Media</button>
-                  <button className="hover:text-gray-300 transition-all flex items-center gap-1"><CiImageOn size={24}/> Achievement</button>
-                  <button className="hover:text-gray-300 transition-all flex items-center gap-1"><IoDocumentTextOutline size={24}/> Article</button>
-                </div>
-                  
-              </div>
+              <div className="flex flex-col gap-3 flex-1 relative">
+  {/* Input Box */}
+  <input 
+    type="text" 
+    value={postContent} 
+    onChange={(e) => setPostContent(e.target.value)} 
+    className="rounded-xl px-4 py-3 bg-[#001B51] text-white placeholder-gray-400 focus:outline-none" 
+    placeholder="Start a post..." 
+  />
+
+  {/* Actions (Media, Emoji, etc.) */}
+  <div className="flex items-center justify-evenly dark:text-white">
+    <button
+      className="hover:text-gray-300 transition-all flex items-center gap-1"
+      onClick={() => document.getElementById("bannerUpload").click()}
+    >
+      <input
+        type="file"
+        accept="image/*"
+        id="bannerUpload"
+        className="hidden"
+        onChange={handleImageUpload}
+      />
+      <BiMedal size={24} /> Media
+    </button>
+    
+    <button className="hover:text-gray-300 transition-all flex items-center gap-1">
+      <CiImageOn size={24} /> Achievement
+    </button>
+
+    <button className="hover:text-gray-300 transition-all flex items-center gap-1">
+      <IoDocumentTextOutline size={24} /> Article
+    </button>
+
+    {/* Emoji Toggle Button */}
+    <button
+      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+      className="hover:text-gray-300 transition-all flex items-center gap-1"
+    >
+      <FaSmile size={22} /> Emoji
+    </button>
+  </div>
+
+  {/* Emoji Picker */}
+  {showEmojiPicker && (
+    <div className="absolute top-[6rem] left-0 z-50">
+      <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+    </div>
+  )}
+</div>
+
               <button 
                 onClick={() => sendPost()} 
                 disabled={!postContent?.trim()} 
