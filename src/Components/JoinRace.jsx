@@ -16,6 +16,7 @@ const JoinRace = ({
   closeForm = () => { },
   race_id = "fi9eofjisf309oj09rj4fm",
   raceName = 'Any Race',
+  setStatus
 }) => {
 
   // this is join race so here we will only get stocks and their curent values not the 
@@ -74,6 +75,9 @@ const JoinRace = ({
           </div>
           <button className='absolute right-0 top-0' onClick={() => {
             closeForm(false)
+            if(setStatus){
+              setStatus(false)
+            }
           }}>
             <RxCross2 color={darkModeEnabled ? 'white' : 'black'} size={35} />
           </button>

@@ -14,7 +14,7 @@ const PostDetailed = () => {
             <Sidebar />
 
             {/* Main Content */}
-            <div className="flex flex-col w-[70rem] gap-4 bg-[#e5f4ff] dark:bg-[#000D38] py-6 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E] dark:text-white">
+            <div className="flex flex-col w-[70rem] gap-4 dark:bg-[#000D38] py-6 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E] dark:text-white">
                 
                 {/* Back Button */}
                 <button 

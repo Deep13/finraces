@@ -44,7 +44,7 @@ const LeaderTable = ({
                                 <tr style={{
                                     // background: `${userId === curr?.user?.id ? 'yellow' : 'transparent'}`
                                 }} key={index} className="odd:bg-transparent dark:even:bg-[#002760] even:bg-slate-200 group">
-                                    <td className="text-[1.5rem] py-3 px-4 text-center">{index + 5}</td>
+                                    <td className="text-[1.5rem] py-3 px-4 text-center">{index + 1}</td>
                                     <td className="py-3">
                                         <div className="w-full flex gap-3 justify-start items-center cursor-pointer">
                                             {/* image */}

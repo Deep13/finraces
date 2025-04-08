@@ -212,7 +212,7 @@ const GuestOrLoggedOutHero = () => {
 
                 <div onClick={() => {
                     navigate('/profile')
-                }} className='bg-white cursor-pointer rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-transparent dark:border dark:border-[#00387E] justify-center h-[10rem]'>
+                }} className='bg-[#e5f4ff] cursor-pointer rounded-lg p-[1.5rem] flex flex-col gap-[0.75rem] dark:bg-transparent dark:border dark:border-[#00387E] justify-center h-[10rem]'>
                     <p className="font-semibold text-[2rem] dark:text-white">{userName}</p>
                     <div className="self-start flex gap-4">
                         <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">
@@ -225,19 +225,19 @@ const GuestOrLoggedOutHero = () => {
 
                 {lastRaceId ? (
     <div
-        className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center group hover:border-black h-[10rem]"
+        className="col-span-1 row-span-1 bg-[#e5f4ff] rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-center group hover:border-black h-[10rem]"
         onClick={() => navigate(`/race/${lastRaceId}`)}
         title="Visit your last race by clicking on this card"
     >
-        <div className="flex flex-col gap-[8px] cursor-pointer">
+        <div className="flex flex-col gap-[8px] cursor-pointer ">
             <p className="text-[1rem] dark:text-[#D1D1D1]">{capitalize(lastRaceStatus)} Race</p>
-            <p className="text-[1rem] line-clamp-2 max-w-[15rem] dark:text-white font-semibold group-hover:underline font-poppins">
+            <p className="text-[1rem] line-clamp-2 max-w-[15rem]  dark:text-white font-semibold group-hover:underline font-poppins">
                 {lastRaceName}
             </p>
         </div>
     </div>
 ) : (
-    <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex flex-col gap-2 items-center justify-center text-center dark:bg-transparent dark:border dark:border-[#00387E] h-[10rem]">
+    <div className="col-span-1 row-span-1 bg-[#e5f4ff] rounded-lg p-[1.5rem] flex flex-col gap-2 items-center justify-center text-center dark:bg-transparent dark:border dark:border-[#00387E] h-[10rem]">
         <p className="text-[1rem] font-semibold dark:text-white">Start Racing Today!</p>
         <p className="text-sm text-gray-500 dark:text-gray-400">Compete, earn, and grow in the world of stock predictions.</p>
         <button onClick={() => {
@@ -256,7 +256,7 @@ const GuestOrLoggedOutHero = () => {
 )}
 
 
-                <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
+                <div className="col-span-1 row-span-1 bg-[#e5f4ff] rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
                     <div className='h-full p-[10px] w-[100px]'>
                         <img src={diamond} alt="" />
 
@@ -271,7 +271,7 @@ const GuestOrLoggedOutHero = () => {
                     </div>
                 </div>
 
-                <div className="col-span-1 row-span-1 bg-white rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
+                <div className="col-span-1 row-span-1 bg-[#e5f4ff] rounded-lg p-[1.5rem] flex gap-8 dark:bg-transparent dark:border dark:border-[#00387E] items-start h-[10rem]">
                     <div className='flex flex-col gap-[8px] dark:text-white'>
                         <p className='text-[1rem]'>Win Rate</p>
                         <p className='text-[2rem] font-bold font-poppins'>{(winningRate.rate * 100).toFixed(2)}%</p>
@@ -293,11 +293,11 @@ const GuestOrLoggedOutHero = () => {
       Watchlist
     </div>
     <div className="flex gap-2">
-      <button className="rounded-full bg-[#001B51] p-2 cursor-pointer" onClick={scrollLeft}>
-        <MdArrowBackIos className="text-white" />
+      <button className="rounded-full bg-[#e5f4ff] dark:bg-[#001B51] p-2 cursor-pointer" onClick={scrollLeft}>
+        <MdArrowBackIos className="dark:text-white" />
       </button>
-      <button className="rounded-full bg-[#001B51] p-2 cursor-pointer" onClick={scrollRight}>
-        <MdArrowForwardIos className="text-white" />
+      <button className="rounded-full bg-[#e5f4ff] dark:bg-[#001B51] p-2 cursor-pointer" onClick={scrollRight}>
+        <MdArrowForwardIos className="dark:text-white" />
       </button>
     </div>
   </div>

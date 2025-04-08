@@ -93,7 +93,7 @@ const StockEntryRow = ({
         {/* <p>1.</p> */}
         <div className="flex flex-col flex-1">
           <label className="mb-[10px] dark:text-white" htmlFor="race_name">{enabled ? 'Percentage (%)' : 'Target Price ($)'}</label>
-          <input value={prediction_price} onChange={(e) => handleRacePredictionsChange(index, 'prediction_price', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="number" id="race_name" />
+          <input min={0} value={prediction_price} onChange={(e) => handleRacePredictionsChange(index, 'prediction_price', e.target.value)} className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner" type="number" id="race_name" />
         </div>
 
         <button className="p-2 rounded-full bg-red-400 text-white relative top-4" onClick={() => {

@@ -28,6 +28,9 @@ import SingleStock from './Pages/SingleStock'
 import StockMarketTable from './Pages/StockMarketTable'
 import PostDetailed from './Pages/PostDetailed'
 // import Lenis from 'lenis'
+import Policy from './Pages/Policy'
+import Terms from './Pages/Terms'
+import HowToUseFinraces from './Pages/HowToUse'
 
 function App() {
 
@@ -51,6 +54,9 @@ function App() {
                 <Route path="/community" element={<Community/>} />
                 <Route path="/post/:post_id" element={<PostDetailed/>} />
                 <Route path="/userprofile/:user_id" element={<IndiUserProfile />} />
+                <Route path="/policy" element={<Policy/>}/>
+                <Route path="/terms" element={<Terms/>}/>
+                <Route path="/how_to_use_finraces" element={<HowToUseFinraces/>}/>
 
                 <Route path="/notifications" element={<Notification />} />
                 <Route path="/chat" element={<Chat />} />

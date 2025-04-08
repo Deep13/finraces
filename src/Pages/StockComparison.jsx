@@ -466,7 +466,7 @@ const StockComparison = () => {
               </div>
 
               {/* Years Dropdown */}
-              <div className="relative">
+              {/* <div className="relative">
                 <button
                   className="flex py-2 items-center justify-between gap-2 pb-1 rounded-md px-3 border dark:border-[#00387E] cursor-pointer"
                   onClick={() => setYearsOpen(!yearsOpen)}
@@ -489,7 +489,7 @@ const StockComparison = () => {
                     ))}
                   </div>
                 )}
-              </div>
+              </div> */}
 
               {/* Filters Dropdown */}
               {/* <div className="relative">

@@ -125,7 +125,7 @@ useEffect(()=>{
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex flex-col w-[70rem] gap-4 bg-[#e5f4ff] dark:bg-[#000D38] py-6 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E] dark:text-white">
+      <div className="flex flex-col w-[70rem] gap-4 dark:bg-[#000D38] py-6 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E] dark:text-white">
         {
           joinRaceFormVisible && <JoinRace
           raceName={selectedRaceName}
@@ -141,7 +141,7 @@ useEffect(()=>{
         <div className="flex items-start justify-center m-2 w-full gap-5">
           <div className="flex-1 flex flex-col gap-5 px-2">
             {/* Post Creation Box */}
-            <div className="dark:bg-[#002763] rounded-xl flex flex-col gap-4 p-5 w-full">
+            <div className="dark:bg-[#002763] border dark:border-0 rounded-xl flex flex-col gap-4 p-5 w-full">
               <div className="flex gap-4 p-5 w-full">
                 {/* User Avatar */}
               <div className="rounded-full w-16 h-16 bg-gray-300 overflow-hidden">
@@ -160,7 +160,7 @@ useEffect(()=>{
     type="text" 
     value={postContent} 
     onChange={(e) => setPostContent(e.target.value)} 
-    className="rounded-xl px-4 py-3 bg-[#001B51] text-white placeholder-gray-400 focus:outline-none" 
+    className="rounded-xl px-4 py-3 bg-slate-200 dark:bg-[#001B51] text-white placeholder-gray-400 focus:outline-none" 
     placeholder="Start a post..." 
   />
 
@@ -223,12 +223,12 @@ useEffect(()=>{
             </div>
 
             {/* Sticky Navigation Tabs */}
-<div className="sticky top-0 z-10 flex items-center justify-center gap-2 w-full p-3 rounded-xl dark:bg-[#002763] dark:text-white font-semibold">
+<div className="sticky top-0 z-10 flex items-center justify-center gap-2 w-full p-3 rounded-xl border dark:border-0 dark:bg-[#002763] dark:text-white font-semibold">
   {tabs.map((tab, index) => (
     <span
       key={index}
       className={`cursor-pointer transition-all ${
-        activeTab === tab ? "text-blue-400" : "text-gray-300"
+        activeTab === tab ? "text-blue-400" : "dark:text-gray-300"
       }`}
       onClick={() => setActiveTab(tab)}
     >
@@ -254,12 +254,12 @@ useEffect(()=>{
             <div className="dark:bg-[#002763] p-4 rounded-xl w-full dark:text-white overflow-y-auto flex flex-col gap-4">
               
               {/* Section Title */}
-              <h3 className="text-xl font-semibold text-slate-300">Experts to Follow</h3>
+              <h3 className="text-xl font-semibold dark:text-slate-300">Experts to Follow</h3>
               
               {/* Leaders List */}
               <div className="flex-1 flex flex-col gap-1">
                 {expertsToFollow.map((leader) => (
-                  <div key={leader?.user?.id} className="flex items-center justify-between p-3 border border-[#00387E] w-full rounded-xl h-20 bg-[#001B51]">
+                  <div key={leader?.user?.id} className="flex items-center justify-between p-3 border dark:border-[#00387E] w-full rounded-xl h-20 bg-[#e5f4ff] dark:bg-[#001B51]">
                     
                     {/* User Image */}
                     <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-300">
@@ -276,32 +276,32 @@ useEffect(()=>{
                     </div>
 
                     {/* Fllow Button */}
-                    <button className="p-2 ml-3 border-2 border-[#00387E]  rounded-xl hover:bg-[#00387E] transition">
+                    <button className="p-2 ml-3 border-2 border-[#00387E]  rounded-xl dark:hover:bg-[#00387E] transition">
                       Follow
                     </button>
                   </div>
                 ))}
               </div>
 
-              <div onClick={()=>{navigate('/leaderboard')}} className="w-full mx-auto text-slate-400 text-center text-lg font-semibold cursor-pointer">Show More</div>
+              <div onClick={()=>{navigate('/leaderboard')}} className="w-full mx-auto dark:text-slate-300 text-center text-lg font-semibold cursor-pointer">Show More</div>
             </div>
 
             {/* Top Stocks Section */}
             <div className="dark:bg-[#002763] p-3 rounded-xl w-full dark:text-white min-h-[25rem] overflow-y-auto flex flex-col gap-4">
               
               {/* Section Title */}
-              <h3 className="text-xl font-semibold text-slate-300">Upcoming Races</h3>
+              <h3 className="text-xl font-semibold dark:text-slate-300">Upcoming Races</h3>
               
               {/* Stocks List */}
               <div className="flex-1 flex flex-col gap-1">
   {upcomingRaces.slice(0, 5).map((stock) => (
     <div
       key={stock.id}
-      className="flex items-center justify-between p-2 border border-[#00387E] w-full rounded-2xl bg-[#001B51] shadow-md hover:shadow-lg transition"
+      className="flex items-center justify-between p-2 border dark:border-[#00387E] w-full rounded-2xl bg-[#e5f4ff] dark:bg-[#001B51] shadow-md hover:shadow-lg transition"
     >
       {/* Info Section */}
       <div className="flex flex-col flex-1 overflow-hidden">
-        <span className="text-lg font-semibold text-white line-clamp-2">
+        <span className="text-lg font-semibold dark:text-white line-clamp-2">
           {stock.name}
         </span>
         <span className="text-sm text-gray-400 font-semibold">
@@ -326,14 +326,14 @@ useEffect(()=>{
             setShowLoginForm(true)
           } 
       }}
-      className="ml-4 px-4 py-2 bg-[#00387E] text-white text-sm rounded-xl hover:bg-[#0050b3] transition">
+      className="ml-4 px-4 py-2 border-2 border-[#00387E]  dark:bg-[#00387E] dark:text-white text-sm rounded-xl dark:hover:bg-[#0050b3] transition">
         Join
       </button>
     </div>
   ))}
 </div>
 
-              <div onClick={()=>{navigate('/allraces', { state: 'Upcoming Races' })}} className="w-full mx-auto text-slate-400 text-center text-lg font-semibold cursor-pointer">Show More</div>
+              <div onClick={()=>{navigate('/allraces', { state: 'Upcoming Races' })}} className="w-full mx-auto dark:text-slate-400 text-center text-lg font-semibold cursor-pointer">Show More</div>
             </div>
 
           </div>

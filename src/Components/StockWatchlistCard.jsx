@@ -21,7 +21,7 @@ const StockWatchlistCard = ({ data }) => {
                     navigate(`/stock/${data.ticker}/${data.id}`);
                 }
             }} 
-            className='cursor-pointer w-[15rem] h-[10rem] min-w-[15rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between mr-3'
+            className='cursor-pointer bg-[#e5f4ff] w-[15rem] h-[10rem] min-w-[15rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between mr-3'
         >
             {/* Name with icon */}
             <div className='flex justify-between items-center w-full'>

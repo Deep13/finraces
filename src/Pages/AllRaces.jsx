@@ -31,7 +31,7 @@ const AllRaces = () => {
                 <Sidebar />
 
                 <div className="flex-1 px-[2%] md:px-[6%]">
-                    <AllRacesHero />
+                    {/* <AllRacesHero /> */}
                     <div className="w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem]">
                         {Object.keys(tabs).map((tab) => (
                             <button

@@ -1,18 +1,5 @@
-import React, { useContext } from 'react'
-import shape from '../assets/images/Footer/shape.svg'
-import shapedark from '../assets/images/shapedark.svg'
-import fb from '../assets/images/fb.svg'
-import fbdark from '../assets/images/fbdark.svg'
-import g from '../assets/images/g.svg'
-import gdark from '../assets/images/gdark.svg'
-import Youtube from '../assets/images/Youtube.svg'
-// import Youtubedark from '../assets/images/Youtubedark.svg'
-import insta from '../assets/images/insta.svg'
-import instadark from '../assets/images/instadark.svg'
-import whatsapp from '../assets/images/whatsapp.svg'
-import whatsappdark from '../assets/images/whatsappdark.svg'
-import telegram from '../assets/images/telegram.svg'
-import telegramdark from '../assets/images/telegramdark.svg'
+import  { useContext } from 'react'
+
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
 import { useNavigate } from 'react-router-dom'
 
@@ -20,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 
 const Footer = () => {
-  const { darkModeEnabled } = useContext(DarkModeContext)
+  const { setReport } = useContext(DarkModeContext)
   const navigate=useNavigate();
   return (
     <footer className="bg-[#e5f4ff] dark:bg-[#002763] dark:text-white py-4 px-6 text-center h-28">
@@ -41,6 +28,13 @@ const Footer = () => {
         <div onClick={()=>{navigate('/')}} className="hover:underline">Game Reviews</div> */}
         <div onClick={()=>{navigate('/auth')}} className="hover:underline cursor-pointer">Log In</div>
         {/* <a onClick={()=>{navigate('/')}} className="hover:underline">Consent Choices</div> */}
+    </div>
+    <div className="flex flex-wrap justify-center gap-4 mt-2 text-sm">
+        <div onClick={()=>{navigate('/terms')}} className="hover:underline cursor-pointer">Terms and Conditions</div>
+        <div onClick={()=>{navigate('/policy')}} className="hover:underline cursor-pointer">Privacy Policy</div>
+        <div onClick={()=>{navigate('/how_to_use_finraces')}} className="hover:underline cursor-pointer">How to use Finraces</div>
+        <div onClick={()=>{setReport(true)}} className="hover:underline cursor-pointer">Report an Issue</div>
+        
     </div>
 </footer>
 

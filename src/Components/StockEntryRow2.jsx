@@ -23,6 +23,7 @@ const StockEntryRow2 = ({
           <label className="mb-[10px] dark:text-white text-center" htmlFor="race_name">Rank</label>
           <input
             value={prediction_rank}
+            min={1}
             onChange={(e) => handleRacePredictionsChange(index, 'prediction_rank', e.target.value)}
             className="px-[0.7rem] rounded-[4px] py-[8px] shadow-inner" type="number" id="race_name" />
           {/* <p>1.</p> */}
@@ -60,6 +61,7 @@ const StockEntryRow2 = ({
           <label className="mb-[10px] dark:text-white" htmlFor="race_name">{enabled ? 'Percentage (%)' : 'Price value (₹)'}</label>
           <input
             value={prediction_price}
+            min={0}
             onChange={(e) => handleRacePredictionsChange(index, 'prediction_price', e.target.value)}
             className="px-[1.1rem] rounded-[4px] py-[8px]" type="number" id="race_name" />
         </div>

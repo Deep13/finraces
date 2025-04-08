@@ -431,6 +431,13 @@ const CreateRace = ({
                   alert('You should select the stock for an Entry')
                   return
                 }
+
+                if(element.prediction_price<0 || element.prediction_rank<=0){
+                  alert("Predicted price can't be negative. Please verify your values.")
+                  return;
+                }
+
+                
               })
             }
 

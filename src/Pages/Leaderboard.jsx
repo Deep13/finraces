@@ -9,6 +9,12 @@ import baggybro from '../assets/images/baggybro.png'
 import kirayoshikage from '../assets/images/kirayoshikage.png'
 import gillbates2 from '../assets/images/gillbates2.png'
 
+import Crown_1 from '../assets/images/Crown_1.png'
+import Crown_2 from '../assets/images/Crown_2.png'
+import Crown_3 from '../assets/images/Crown_3.png'
+import malePlceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlceholder from '../assets/images/womanPlaceholder.jpg'
+
 import { getTopRankers } from '../Utils/api'
 import Pagination from '../Components/Pagination'
 
@@ -175,6 +181,8 @@ const Leaderboard = () => {
     })
   }, [activeTab])
 
+  console.log("l",leaderboard)
+
   return (
     <>
       <Navbar />
@@ -222,7 +230,7 @@ const Leaderboard = () => {
               activeTab={activeTab}
               gender={"female"}
               /> */}
-              {
+              {/* {
                 leaderboard &&
                 leaderboard?.slice(0, 4)?.map((curr, index) => {
                   return (
@@ -239,9 +247,51 @@ const Leaderboard = () => {
                     />
                   )
                 })
-              }
+              } */}
+         {leaderboard && leaderboard.length >= 3 && (
+  <div className='col-span-full w-full flex flex-col items-center justify-center'>
+    
+    {/* Profile Pictures with Crowns */}
+    <div className='w-full flex justify-center items-center gap-6'>
+      {leaderboard.slice(0, 3).map((entry, index) => {
+        const user = entry.user;
+        const image = user?.photo?.path || (user?.gender === 'female' ? femalePlceholder : malePlceholder);
+        const crown = index === 0 ? Crown_1 : index === 1 ? Crown_2 : Crown_3;
+
+        return (
+          <div key={user.id} className='relative flex-1 flex justify-center'>
+            <img
+              src={image}
+              alt={`Rank ${index + 1}`}
+              className='w-64 h-64 md:w-72 md:h-72 rounded-xl object-cover shadow-lg border-2 border-white'
+            />
+            <img
+              src={crown}
+              alt={`Crown ${index + 1}`}
+              className='w-64 h-24 md:w-72 md:h-32 absolute -bottom-12 left-1/2 transform -translate-x-1/2'
+            />
+          </div>
+        );
+      })}
+    </div>
+
+    {/* Names Below */}
+    <div className='w-full flex justify-center items-center gap-6 mt-16 text-white'>
+      {leaderboard.slice(0, 3).map((entry) => {
+        const user = entry.user;
+        return (
+          <div key={user.id} className='flex flex-1 justify-center'>
+            <p className='text-center font-semibold text-xl'>{user.firstName} {user.lastName}</p>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
+
             </div>
-            <LeaderTable data={leaderboard?.slice(4)} />
+            <LeaderTable data={leaderboard} />
             {hasNextPage && <Pagination />}
 
             <br /><br /><br />

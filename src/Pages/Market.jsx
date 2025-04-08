@@ -267,7 +267,7 @@ const Market = () => {
     {/* Ensure sidebar is inside a container with sufficient height */}
         <Sidebar />
         
-        <div className='flex flex-col w-[70rem] gap-2 bg-[#e5f4ff] dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E]  dark:text-white'>
+        <div className='flex flex-col w-[70rem] gap-2 dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E]  dark:text-white'>
             <span className='font-semibold text-[1.5rem] font-poppins flex flex-row items-center'>
                
                Market Research
@@ -339,12 +339,12 @@ const Market = () => {
          </div> 
         }
 
-            <div className="bg-[#001B51] rounded-lg p-3 border border-[#00387E]">
+            <div className="dark:bg-[#001B51] bg-[#e5f4ff] rounded-lg p-3 border dark:border-[#00387E]">
                 <div className="flex justify-between items-center">
-                <div className="font-bold text-xl text-white">Market Trend</div>
+                <div className="font-bold text-xl dark:text-white">Market Trend</div>
 
                 {/* Filter & Sort Dropdowns */}
-                <div className="flex gap-2 text-white relative">
+                <div className="flex gap-2 dark:text-white relative">
                     
                     {/* Filter Dropdown */}
                     {/* <div className="relative">
@@ -395,7 +395,7 @@ const Market = () => {
                 </div>
             </div>
                 <div className="w-full">
-                    <table className="w-full text-white">
+                    <table className="w-full dark:text-white">
                     <thead>
                 <tr className="text-left text-slate-400 border-b border-[#00387E]">
                     <th className="py-3 px-4">Stock</th>
@@ -443,16 +443,16 @@ const Market = () => {
                 <div className="font-semibold">Top Gainers</div>
                 <div className="flex gap-2">
                     <button
-                        className="rounded-full bg-[#001B51] p-2 cursor-pointer"
+                        className="rounded-full dark:bg-[#001B51] bg-[#e5f4ff] p-2 cursor-pointer"
                         onClick={scrollLeft}
                     >
-                        <MdArrowBackIos className="text-white" />
+                        <MdArrowBackIos className="dark:text-white" />
                     </button>
                     <button
-                        className="rounded-full bg-[#001B51] p-2 cursor-pointer"
+                        className="rounded-full dark:bg-[#001B51] bg-[#e5f4ff] p-2 cursor-pointer"
                         onClick={scrollRight}
                     >
-                        <MdArrowForwardIos className="text-white" />
+                        <MdArrowForwardIos className="dark:text-white" />
                     </button>
                 </div>
             </div>
@@ -481,16 +481,16 @@ const Market = () => {
                 <div className="font-semibold">Top Losers</div>
                 <div className="flex gap-2">
                     <button
-                        className="rounded-full bg-[#001B51] p-2 cursor-pointer"
+                        className="rounded-full dark:bg-[#001B51] bg-[#e5f4ff] p-2 cursor-pointer"
                         onClick={scrollLeft2}
                     >
-                        <MdArrowBackIos className="text-white" />
+                        <MdArrowBackIos className="dark:text-white" />
                     </button>
                     <button
-                        className="rounded-full bg-[#001B51] p-2 cursor-pointer"
+                        className="rounded-full dark:bg-[#001B51] bg-[#e5f4ff] p-2 cursor-pointer"
                         onClick={scrollRight2}
                     >
-                        <MdArrowForwardIos className="text-white" />
+                        <MdArrowForwardIos className="dark:text-white" />
                     </button>
                 </div>
             </div>

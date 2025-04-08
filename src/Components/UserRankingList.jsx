@@ -6,7 +6,7 @@ const UserRankingList = ({
     rankList,status=""
 }) => {
     
-    console.log('Ranklist item structure', rankList?.[0])
+    console.log('Ranklist item structure', rankList)
 
 
     return (

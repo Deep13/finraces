@@ -410,12 +410,12 @@ useEffect(() => {
   <div className="flex relative flex-row justify-between text-slate-400 mb-5">
     <div className="relative w-[67%]">
       <input
-        className="w-full h-8 pl-10 px-4 font-poppins text-sm dark:bg-[#001a50] rounded-xl text-white"
+        className="w-full h-8 pl-10 px-4 font-poppins text-sm dark:bg-[#001a50] rounded-xl dark:text-white"
         placeholder="Search..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
-      <AiOutlineSearch className="absolute left-3 top-[0.5rem] text-gray-400 text-lg" />
+      <AiOutlineSearch className="absolute left-3 top-[0.5rem] dark:text-gray-400 text-lg" />
       
       {/* Dropdown for filtered users */}
       {filteredFriends.length > 0 && (
@@ -433,7 +433,7 @@ useEffect(() => {
       )}
     </div>
     
-    <div className="w-[31%] flex flex-row justify-center items-center dark:bg-[#001a50] rounded-xl py-2 cursor-pointer">
+    <div className="w-[31%] flex flex-row justify-center items-center bg-[#e5f4ff] dark:bg-[#001a50] rounded-xl py-2 cursor-pointer">
       <span className="mr-2 text-sm">Filter By</span>
       <RxMixerVertical />
     </div>
@@ -445,11 +445,11 @@ useEffect(() => {
   .map((user) => (
     <div
       key={user.user.id}
-      className="flex flex-row items-center justify-between px-3 py-4 mb-2 rounded-lg bg-slate-200 dark:bg-[#002763] cursor-pointer"
+      className="flex flex-row items-center justify-between px-3 py-4 mb-2 rounded-lg bg-[#e5f4ff] dark:bg-[#002763] cursor-pointer"
       onClick={() => handleSelectUser(user.user)}
     >
       <div>{user.user.firstName} {user.user.lastName}</div>
-      {user.unreadCount!="0"  &&<div className="rounded-full bg-red-600 w-6 text-center">{user.unreadCount}</div>}
+      {user.unreadCount!="0"  &&<div className="rounded-full bg-slate-300 dark:bg-red-600 w-6 text-center">{user.unreadCount}</div>}
     </div>
   ))}
 

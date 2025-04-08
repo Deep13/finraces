@@ -50,6 +50,7 @@ import RankChart from "../Components/RaceLineChart";
 import StockRaceChart from "../Components/StockRaceChart";
 import RacePriceChart from "../Components/RacePriceChart";
 import BumpChart from "../Components/BumpChart";
+import JoinRace from "../Components/JoinRace";
 
 // Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -783,6 +784,38 @@ const RacePage = () => {
     // useEffect(()=>{
     //     console.log(isRaceStarted)
     // },[isRaceStarted])
+    
+    const canUserJoin = () => {
+        let encodedUserDetails = localStorage.getItem('fin_userDetails') || localStorage.getItem('guest_details');
+      
+        if (!encodedUserDetails) {
+          throw new Error("User details not found in localStorage");
+        }
+      
+        const currentUser = JSON.parse(atob(encodedUserDetails));
+        if (!currentUser || !raceDetails) return false;
+      
+        const raceStartTime = new Date(raceDetails['start_date']);
+        const now = new Date();
+      
+        const timeDiffInMinutes = (raceStartTime - now) / 60000;
+      
+        const userHasJoined = rankList?.some(entry => entry?.user?.id === currentUser.id);
+        
+        console.log("Time until race (in minutes):", timeDiffInMinutes);
+        console.log("Has user joined:", userHasJoined);
+      
+        return !userHasJoined && timeDiffInMinutes > 15;
+      };
+      
+      const [showJoin,setShowJoin]=useState(false);
+      const [canJoinButton,setCanJoinButton]=useState(false);
+
+    useEffect(()=>{
+        let c= canUserJoin();
+        console.log(c);
+        setCanJoinButton(c);
+    },[])
 
     console.log("data", data)
     if (isLoadingRaceTile && raceStatus !== 'finished') {
@@ -894,6 +927,13 @@ const RacePage = () => {
                         {/* this is full width container cuz we need the sidebar to remain at correct place */}
                         <div className='max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-t-[24px] dark:bg-[#000D38] bg-[#EDF7FF]'>
 
+                            {
+                                      showJoin && <JoinRace
+                                      raceName={raceDetails?.name}
+                                      closeForm={setShowJoin}
+                                      race_id={race_id}
+                                      setStatus={setShowJoin} />
+                                  }
                             {/* actual dashboard  */}
                             <div className='flex-1 px-[22px] py-[18px]'>
 
@@ -914,8 +954,15 @@ const RacePage = () => {
                                                             }}
                                                         />
                                                     }
+
+                                            
                                                 </div>
+                                                {canJoinButton && <div onClick={()=>{setShowJoin(true)}} className="font-semibold text-lg dark:text-white bg-blue-600 px-5 cursor-pointer py-1 rounded-xl">
+                                                Join
+                                            </div>}
                                             </div>
+
+                                            
 
                                         </div>
                                         {/* <div className='relative top-1'>

@@ -247,7 +247,7 @@ const Navbar = () => {
                                     <p className="text-[0.8rem] dark:text-white">You have won the 'High Stakes Hustle' race! 🚀</p>
                                 </div> */}
                                 {unseenNotifications.length==0&&
-                                    <div className="text-white font-semibold text-lg">No new notifications</div>
+                                    <div className="dark:text-white font-semibold text-lg">No new notifications</div>
                                 }
                                 <button onClick={()=>{
                                     navigate('/notifications')
