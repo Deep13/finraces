@@ -51,6 +51,14 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
 
   const staticChartData = useMemo(() => (staticData ? generateStaticData(filter,num) : { labels, datasets }), [staticData, filter, labels, datasets]);
 
+  const handleDownload = () => {
+    if (chartRef?.current) {
+      const link = document.createElement("a");
+      link.href = chartRef.current.toBase64Image();
+      link.download = "chart.png";
+      link.click();
+    }
+  };
 
 
   // useEffect(() => {
@@ -168,6 +176,7 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
       <Line ref={chartRef} data={data} options={options} />
       <div style={{ display: "flex", justifyContent: "center", marginTop: "10px", gap: "10px" }}>
         {/* <button onClick={handleResetSelection} style={buttonStyle}>Reset</button> */}
+        <button onClick={handleDownload} style={buttonStyle}>Download </button>
       </div>
       {selectedPoints.start !== null && selectedPoints.end !== null && (
         <div style={{ textAlign: "center", marginTop: "10px", color: darkModeEnabled ? "#fff" : "#000" }}>
