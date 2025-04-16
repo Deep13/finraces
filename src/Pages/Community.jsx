@@ -14,6 +14,7 @@ import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import JoinRace from "../Components/JoinRace";
 import { FaSmile } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
+import { giphyKey } from "../Config";
 
 const Community = () => {
   const tabs = ["Recent", "Following", "Trending", "My posts"];  
@@ -66,6 +67,10 @@ const [expertsToFollow, setExpertsToFollow] = useState([]);
 
 // State for Upcoming Races
 const [upcomingRaces, setUpcomingRaces] = useState([]);
+// const [showGifPicker, setShowGifPicker] = useState(false);
+// const [gifSearch, setGifSearch] = useState("");
+// const [gifResults, setGifResults] = useState([]);
+const [selectedMedia, setSelectedMedia] = useState([]);
 
 // console.log("ud",userDetails)
 
@@ -97,6 +102,19 @@ const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
 const handleEmojiClick = (emojiData) => {
   setPostContent(prev => prev + emojiData.emoji);
+};
+
+const fetchGifs = async (query) => {
+  if (!query) return;
+  try {
+    const res = await fetch(
+      `https://api.giphy.com/v1/gifs/search?api_key=${giphyKey}&q=${query}&limit=20`
+    );
+    const data = await res.json();
+    setGifResults(data.data);
+  } catch (err) {
+    console.error("Failed to fetch GIFs", err);
+  }
 };
 
 
@@ -177,16 +195,16 @@ useEffect(()=>{
         className="hidden"
         onChange={handleImageUpload}
       />
-      <BiMedal size={24} /> Media
+      <CiImageOn size={24} /> Image
     </button>
     
-    <button className="hover:text-gray-300 transition-all flex items-center gap-1">
-      <CiImageOn size={24} /> Achievement
-    </button>
+    {/* <button onClick={()=>{setShowGifPicker(true)}} className="hover:text-gray-300 transition-all flex items-center gap-1">
+      <CiImageOn size={24} /> GIF
+    </button> */}
 
-    <button className="hover:text-gray-300 transition-all flex items-center gap-1">
+    {/* <button className="hover:text-gray-300 transition-all flex items-center gap-1">
       <IoDocumentTextOutline size={24} /> Article
-    </button>
+    </button> */}
 
     {/* Emoji Toggle Button */}
     <button
@@ -203,6 +221,7 @@ useEffect(()=>{
       <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
     </div>
   )}
+  
 </div>
 
               <button 
@@ -287,51 +306,60 @@ useEffect(()=>{
             </div>
 
             {/* Top Stocks Section */}
-            <div className="dark:bg-[#002763] p-3 rounded-xl w-full dark:text-white min-h-[25rem] overflow-y-auto flex flex-col gap-4">
+            <div className="dark:bg-[#002763] p-3 rounded-xl w-full dark:text-white overflow-y-auto flex flex-col gap-4">
               
               {/* Section Title */}
               <h3 className="text-xl font-semibold dark:text-slate-300">Upcoming Races</h3>
               
               {/* Stocks List */}
               <div className="flex-1 flex flex-col gap-1">
-  {upcomingRaces.slice(0, 5).map((stock) => (
-    <div
-      key={stock.id}
-      className="flex items-center justify-between p-2 border dark:border-[#00387E] w-full rounded-2xl bg-[#e5f4ff] dark:bg-[#001B51] shadow-md hover:shadow-lg transition"
-    >
-      {/* Info Section */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <span className="text-lg font-semibold dark:text-white line-clamp-2">
-          {stock.name}
-        </span>
-        <span className="text-sm text-gray-400 font-semibold">
-          Starts: {new Intl.DateTimeFormat('en-IN', {
-            dateStyle: 'medium',
-            timeStyle: 'short',
-          }).format(new Date(stock.start_date))}
-        </span>
-        <span className="text-sm text-gray-400 font-semibold">
-          Participants: {stock.participants.length}
-        </span>
-      </div>
+                {upcomingRaces.length === 0 ? (
+                  <div className="text-center text-gray-500 dark:text-gray-400 py-4">
+                    No upcoming races right now.
+                  </div>
+                ) : (
+                  upcomingRaces.slice(0, 5).map((stock) => (
+                    <div
+                      key={stock.id}
+                      className="flex items-center justify-between p-2 border dark:border-[#00387E] w-full rounded-2xl bg-[#e5f4ff] dark:bg-[#001B51] shadow-md hover:shadow-lg transition"
+                    >
+                      {/* Info Section */}
+                      <div className="flex flex-col flex-1 overflow-hidden">
+                        <span className="text-lg font-semibold dark:text-white line-clamp-2">
+                          {stock.name}
+                        </span>
+                        <span className="text-sm text-gray-400 font-semibold">
+                          Starts:{" "}
+                          {new Intl.DateTimeFormat("en-IN", {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                          }).format(new Date(stock.start_date))}
+                        </span>
+                        <span className="text-sm text-gray-400 font-semibold">
+                          Participants: {stock.participants.length}
+                        </span>
+                      </div>
 
-      {/* Join Button */}
-      <button 
-      onClick={()=>{
-        if ((userDetails || guestDetails)) {
-          setSelectedRaceId(stock.id);
-          setSelectedRaceName(stock.name)
-          setJoinRaceFormVisible(true)
-          } else {
-            setShowLoginForm(true)
-          } 
-      }}
-      className="ml-4 px-4 py-2 border-2 border-[#00387E]  dark:bg-[#00387E] dark:text-white text-sm rounded-xl dark:hover:bg-[#0050b3] transition">
-        Join
-      </button>
-    </div>
-  ))}
-</div>
+                      {/* Join Button */}
+                      <button
+                        onClick={() => {
+                          if (userDetails || guestDetails) {
+                            setSelectedRaceId(stock.id);
+                            setSelectedRaceName(stock.name);
+                            setJoinRaceFormVisible(true);
+                          } else {
+                            setShowLoginForm(true);
+                          }
+                        }}
+                        className="ml-4 px-4 py-2 border-2 border-[#00387E] dark:bg-[#00387E] dark:text-white text-sm rounded-xl dark:hover:bg-[#0050b3] transition"
+                      >
+                        Join
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
+
 
               <div onClick={()=>{navigate('/allraces', { state: 'Upcoming Races' })}} className="w-full mx-auto dark:text-slate-400 text-center text-lg font-semibold cursor-pointer">Show More</div>
             </div>

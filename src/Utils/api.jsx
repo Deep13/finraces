@@ -1190,13 +1190,16 @@ export const fuzzySearch = async (prefix) => {
 };
 
 
-export const searchUsers = async (prefix) => {
+export const searchUsers = async (prefix,limit="") => {
 
 
   try {
 
 
-    const url = `${GlobalURL}/api/v1/public/search/users?nameContains=${prefix}`
+    let url = `${GlobalURL}/api/v1/public/search/users?nameContains=${prefix}`
+    if(limit!=""){
+      url+=`&limit=${limit}`
+    }
 
     // Make the PATCH request
     const response = await fetch(url, {
