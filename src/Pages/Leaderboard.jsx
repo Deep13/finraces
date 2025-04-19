@@ -17,6 +17,7 @@ import femalePlceholder from '../assets/images/womanPlaceholder.jpg'
 
 import { getTopRankers } from '../Utils/api'
 import Pagination from '../Components/Pagination'
+import {useNavigate} from "react-router-dom";
 
 
 const Leaderboard = () => {
@@ -148,6 +149,11 @@ const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState("Today");
   const [leaderboard, setLeaderboard] = useState([])
   const [hasNextPage, setHasNextPage] = useState(false)
+  const [searchQuery,setSearchQuery]=useState("");
+  const [startDate,setStartDate]=useState("");
+  const [endDate,setEndDate]=useState("");
+  const [page,setPage]=useState(1);
+  const navigate=useNavigate();
 
 
   const handleTabClick = (tabName) => {
@@ -174,7 +180,7 @@ const Leaderboard = () => {
     if (activeTab === 'This Month') {
       startDate = monthAgo
     }
-    getTopRankers(startDate, today, 20, 1, (data) => {
+    getTopRankers(startDate, today, 20, 1,searchQuery, (data) => {
       console.log('Top 4 fetched', data)
       setLeaderboard(data.data)
       setHasNextPage(data.hasNextPage)
@@ -182,6 +188,15 @@ const Leaderboard = () => {
   }, [activeTab])
 
   console.log("l",leaderboard)
+
+  useEffect(()=>{
+    console.log(startDate,endDate,searchQuery)
+    getTopRankers(startDate, endDate, 20, page,searchQuery, (data) => {
+      console.log('Top 4 fetched', data)
+      setLeaderboard(data.data)
+      setHasNextPage(data.hasNextPage)
+    })
+  },[searchQuery,startDate,endDate,page])
 
   return (
     <>
@@ -259,7 +274,7 @@ const Leaderboard = () => {
         const crown = index === 0 ? Crown_1 : index === 1 ? Crown_2 : Crown_3;
 
         return (
-          <div key={user.id} className='relative flex-1 flex justify-center'>
+          <div onClick={()=>{navigate(`/userprofile/${user.id}`)}} key={user.id} className='relative flex-1 flex justify-center cursor-pointer'>
             <img
               src={image}
               alt={`Rank ${index + 1}`}
@@ -276,7 +291,7 @@ const Leaderboard = () => {
     </div>
 
     {/* Names Below */}
-    <div className='w-full flex justify-center items-center gap-6 mt-16 text-white'>
+    <div className='w-full flex justify-center items-center gap-6 mt-16 dark:text-white'>
       {leaderboard.slice(0, 3).map((entry) => {
         const user = entry.user;
         return (
@@ -291,11 +306,68 @@ const Leaderboard = () => {
 
 
             </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-4 px-6 md:px-20 py-5 mt-5 dark:text-white">
+              {/* Search Input */}
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e)=>{setSearchQuery(e.target.value)}}
+                placeholder="Search users..."
+                className="rounded-xl px-4 w-full md:w-64 h-10 border dark:border-slate-300 dark:bg-[#002760] bg-slate-200 focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+
+              {/* Date Filters */}
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col">
+                  <label htmlFor="start-date" className="text-sm mb-1">Start Date</label>
+                  <input
+                    type="date"
+                    id="start-date"
+                    className="rounded-md px-2 py-1 border dark:border-slate-300 dark:bg-[#002760] bg-slate-200 focus:outline-none"
+                    value={startDate}
+                    onChange={(e)=>{setStartDate(e.target.value)}}
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label htmlFor="end-date" className="text-sm mb-1">End Date</label>
+                  <input
+                    type="date"
+                    id="end-date"
+                    className="rounded-md px-2 py-1 border dark:border-slate-300 dark:bg-[#002760] bg-slate-200 focus:outline-none"
+                    value={endDate}
+                    onChange={(e)=>{setEndDate(e.target.value)}}
+                  />
+                </div>
+              </div>
+            </div>
+
             <LeaderTable data={leaderboard} />
-            {hasNextPage && <Pagination />}
+            {/* {hasNextPage && <Pagination />} */}
 
             <br /><br /><br />
 
+            <div className='flex items-center justify-center gap-5 px-20 py-5'>
+            {page > 1 && (
+              <div
+                onClick={() => setPage(page - 1)}
+                className="border px-3 py-2 dark:text-white cursor-pointer rounded-xl dark:bg-[#002760] bg-[#e5f4ff]"
+              >
+                Previous
+              </div>
+            )}
+
+            {hasNextPage && (
+              <div
+                onClick={() => setPage(page + 1)}
+                className="border px-3 py-2 dark:text-white cursor-pointer rounded-xl dark:bg-[#002760] bg-[#e5f4ff]"
+              >
+                Next
+              </div>
+            )}
+
+            </div>
             {/* <h1 className='text-[2.2rem] font-bold text-black text-center mb-4 dark:text-white'>NASDAQ Leaderboard</h1>
             <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem] mb-6'>
             </div> */}

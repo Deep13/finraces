@@ -32,8 +32,8 @@ const LeaderTable = ({
                     <tr>
                         <th className="font-semibold py-4 dark:text-white text-[1.1rem] px-4 text-center">Rank</th>
                         <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Player</th>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Most Races Won</th>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Total Points</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center">Total Races</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center">Total Points</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -66,8 +66,8 @@ const LeaderTable = ({
                                             </div>
                                         </div>
                                     </td>
-                                    <td className="text-[1.1rem] py-3">{curr.num_races_won}</td>
-                                    <td className="text-[1.1rem] py-3">{!curr?.total_points ? 0 : curr.total_points}</td>
+                                    <td className="text-[1.1rem] py-3 text-center">{curr?.races_played}</td>
+                                    <td className="text-[1.1rem] py-3 text-center">{!curr?.total_points ? 0 : curr.total_points}</td>
                                 </tr>
                             )
                         })

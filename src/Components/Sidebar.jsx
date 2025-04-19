@@ -7,91 +7,108 @@ import stats from '../assets/icons/sidebar/stats.svg'
 import statsdark from '../assets/icons/sidebar/statsdark.svg'
 import live_streaming from '../assets/icons/sidebar/live_streaming.svg'
 import livestreamingdark from '../assets/icons/sidebar/livestreamingdark.svg'
-import forward from '../assets/icons/sidebar/forward.svg'
-import forwarddark from '../assets/icons/sidebar/forwarddark.svg'
-import eth from '../assets/icons/sidebar/eth.svg'
-import ethdark from '../assets/icons/sidebar/ethdark.svg'
 import recent from '../assets/icons/sidebar/recent.svg'
 import recentdark from '../assets/icons/sidebar/recentdark.svg'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { MdCompare, MdGroups } from "react-icons/md";
 
 const Sidebar = () => {
-    const { darkModeEnabled,setShowLoginForm } = useContext(DarkModeContext)
-    const navigate = useNavigate()
+  const { darkModeEnabled, setShowLoginForm } = useContext(DarkModeContext)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const pathname = location.pathname
+  const searchParams = new URLSearchParams(location.search)
 
-    const handleNavigation=(nav)=>{
-        let ud=localStorage.getItem('fin_userDetails');
-        switch(nav){
-            case "Watchlist":
-                navigate('/stockComparison')
-                break;
-            
-            case "My Races":
-                if(!ud){
-                    setShowLoginForm(true)
-                }
-                else{
-                    navigate('/profile')
-                }
-                break;
-            
-            case "Ongoing":
-                navigate('/allraces', { state: 'Ongoing Races' })
-                break;
-            
-            case "Upcoming":
-                navigate('/allraces', { state: 'Upcoming Races' })
-                break;
-            
-            case "Discover":
-                navigate('/')
-                break; 
-        }
+  const isExactActive = (route) => pathname === route
+  const getAllRacesType = () => searchParams.get('type')
+  const isAllRacesType = (type) => pathname === '/allraces' && getAllRacesType() === type
 
-        return ;
+  const inactiveClass = "text-black dark:text-white bg-[#e5f4ff] dark:bg-[#001a50]"
+  const activeGlow = "dark:text-white drop-shadow-[0_0_0.4rem_#e5f4ff] bg-[#e5f4ff] dark:bg-[#001a50] dark:text-white font-bold"
+  const baseClass = "w-[3.35rem] h-[4.1rem] rounded-[10px] gap-[5px] text-[0.6rem] flex flex-col justify-center items-center transition-all duration-300"
+
+  const handleNavigation = (nav) => {
+    const ud = localStorage.getItem('fin_userDetails')
+    switch (nav) {
+      case "Watchlist":
+        navigate('/stockComparison')
+        break;
+
+      case "My Races":
+        if (!ud) setShowLoginForm(true)
+        else navigate('/profile')
+        break;
+
+      case "Ongoing":
+        navigate('/allraces?type=Ongoing', { state: 'Ongoing Races' })
+        break;
+
+      case "Upcoming":
+        navigate('/allraces?type=Upcoming', { state: 'Upcoming Races' })
+        break;
+
+      case "Discover":
+        navigate('/')
+        break;
     }
-    return (
-        <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]"> {/* Prevent sidebar from flexing */}
-            <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
-                <button onClick={() =>handleNavigation('Discover')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    <img src={darkModeEnabled ? compassdark : compass} alt="discover" />
-                    Discover
-                </button>
-                <button onClick={() => navigate('/community')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    {/* <img src={darkModeEnabled ? livestreamingdark : live_streaming} alt="live races" /> */}
-                    <MdGroups size={24}/>
-                    Community
-                </button>
-                <button onClick={()=>navigate('/market')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    <img src={darkModeEnabled ? statsdark : stats} alt="stocks" />
-                    Stocks
-                </button>
-                {/* <button className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    <img src={darkModeEnabled ? ethdark : eth} alt="crypto" />
-                    Crypto
-                </button> */}
-                <button onClick={() => handleNavigation('Ongoing')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    <img src={darkModeEnabled ? livestreamingdark : live_streaming} alt="live races" />
-                    Live Races
-                </button>
-                <button onClick={() => handleNavigation('Upcoming')} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    <img src={darkModeEnabled ? recentdark : recent} alt="upcoming races" />
-                    Upcoming Races
-                </button>
-                <button onClick={()=>handleNavigation("My Races")} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    <img src={darkModeEnabled ? finance_ideadark : finance_idea} alt="my races" />
-                    My Races
-                </button>
-                <button onClick={()=>handleNavigation("Watchlist")} className="w-[3.35rem] dark:bg-[#001a50] dark:text-white h-[4.1rem] rounded-[10px] bg-[#e5f4ff] gap-[5px] text-[0.6rem] font-bold flex flex-col justify-center items-center">
-                    {/* <img src={darkModeEnabled ? forwarddark : forward} alt="my watchlist" /> */}
-                    <MdCompare size={24}/>
-                   Compare Stocks
-                </button>
-            </div>
-        </div>
-    )
+  }
+
+  return (
+    <div className="w-[4rem] flex-shrink-0 relative left-4 z-[9]">
+      <div className={`sticky top-24 left-6 transition-transform ease-out duration-300 flex flex-col gap-[0.7rem] z-[10]`}>
+
+        {/* Discover */}
+        <button onClick={() => handleNavigation('Discover')}
+          className={`${baseClass} ${isExactActive('/') ? activeGlow : inactiveClass}`}>
+          <img src={darkModeEnabled ? compassdark : compass} alt="discover" />
+          Discover
+        </button>
+
+        {/* Community */}
+        <button onClick={() => navigate('/community')}
+          className={`${baseClass} ${isExactActive('/community') ? activeGlow : inactiveClass}`}>
+          <MdGroups size={24} />
+          Community
+        </button>
+
+        {/* Stocks */}
+        <button onClick={() => navigate('/market')}
+          className={`${baseClass} ${isExactActive('/market') ? activeGlow : inactiveClass}`}>
+          <img src={darkModeEnabled ? statsdark : stats} alt="stocks" />
+          Stocks
+        </button>
+
+        {/* Live Races */}
+        <button onClick={() => handleNavigation('Ongoing')}
+          className={`${baseClass} ${isAllRacesType('Ongoing') ? activeGlow : inactiveClass}`}>
+          <img src={darkModeEnabled ? livestreamingdark : live_streaming} alt="live races" />
+          Live Races
+        </button>
+
+        {/* Upcoming Races */}
+        <button onClick={() => handleNavigation('Upcoming')}
+          className={`${baseClass} ${isAllRacesType('Upcoming') ? activeGlow : inactiveClass}`}>
+          <img src={darkModeEnabled ? recentdark : recent} alt="upcoming races" />
+          Upcoming Races
+        </button>
+
+        {/* My Races */}
+        <button onClick={() => handleNavigation('My Races')}
+          className={`${baseClass} ${isExactActive('/profile') ? activeGlow : inactiveClass}`}>
+          <img src={darkModeEnabled ? finance_ideadark : finance_idea} alt="my races" />
+          My Races
+        </button>
+
+        {/* Compare Stocks */}
+        <button onClick={() => handleNavigation('Watchlist')}
+          className={`${baseClass} ${isExactActive('/stockComparison') ? activeGlow : inactiveClass}`}>
+          <MdCompare size={24} />
+          Compare Stocks
+        </button>
+      </div>
+    </div>
+  )
 }
 
 export default Sidebar

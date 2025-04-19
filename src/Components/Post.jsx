@@ -128,7 +128,7 @@ const Post = ({ postData, commentVisibility }) => {
   
         if (segment === ref) {
           // Found a match in references
-          const colorClass = ref.startsWith("@") ? "text-blue-500" : "text-teal-500";
+          const colorClass = ref.startsWith("@") ? "text-blue-500 font-smibold" : "text-teal-500 font-semibold";
           formatted.push(
             <span key={i} className={colorClass}>
               {segment + " "}
@@ -184,6 +184,7 @@ const Post = ({ postData, commentVisibility }) => {
       ]);
       setCommentInput("");
       setSelectedMedia([]);
+      setReferences([]);
     }
   };
 
@@ -198,13 +199,13 @@ const Post = ({ postData, commentVisibility }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 flex-1">
           <img
-            src={postData?.userImg}
+            src={postData?.user?.photo?.path}
             alt="User Avatar"
             className="w-12 h-12 rounded-full dark:bg-gray-300 object-cover"
           />
           <div>
-            <div className="font-semibold dark:text-white">{postData?.userName}</div>
-            <div className="text-sm dark:text-gray-400">{postData?.time}</div>
+            <div className="font-semibold dark:text-white">{postData?.user?.firstName} {postData?.user?.lastName}</div>
+            <div className="text-sm dark:text-gray-400">{postData?.createdAt}</div>
           </div>
         </div>
         <BsThreeDots className="dark:text-gray-400 cursor-pointer" size={20} />
@@ -213,9 +214,9 @@ const Post = ({ postData, commentVisibility }) => {
       {/* Content */}
       <div className="flex flex-col flex-1 gap-3">
         <p className="dark:text-white">{postData?.content}</p>
-        {postData?.coverImg && (
+        {postData?.image?.path && (
           <img
-            src={postData?.coverImg}
+            src={postData?.image?.path}
             alt="Post"
             className="rounded-xl h-60 w-full object-cover bg-gray-300"
           />
@@ -225,7 +226,7 @@ const Post = ({ postData, commentVisibility }) => {
       {/* Actions */}
       <div className="flex justify-around dark:text-gray-300 font-semibold border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
-          <AiOutlineLike size={22} /> <span>{postData?.likes || 0}</span>
+          <AiOutlineLike size={22} /> <span>{postData?.like_count || 0}</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
           <FaRegCommentAlt size={20} /> <span>Comment</span>

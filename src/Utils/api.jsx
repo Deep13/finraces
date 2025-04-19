@@ -993,33 +993,45 @@ export const getTop4 = async (
 }
 
 
+const formatLocalDateTime = (dateStr) => {
+  const date = new Date(dateStr)
+  const pad = (n) => n.toString().padStart(2, '0')
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`
+}
+
 export const getTopRankers = async (
   startDate,
   endDate,
-  limit,
-  page,
-  onSuccess = () => { },
-  onError = () => { },
+  limit = 10,
+  page = 1,
+  searchQuery = '',
+  onSuccess = () => {},
+  onError = () => {},
 ) => {
-  // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/public/race-results/stats?limit=${limit}`, {
-      headers: {
-        // 'Authorization': `Bearer ${token}`, // Example for passing a token
-      }
-    })
-    let result = await response.data
-    // console.log('result success', result)
-    onSuccess(result)
-    // setStocks(result.data)
+    let url = `${GlobalURL}/api/v1/public/race-results/stats?limit=${limit}&page=${page}`;
+
+    if (startDate) url += `&from=${formatLocalDateTime(startDate)}`
+    if (endDate) url += `&to=${formatLocalDateTime(endDate)}`
+    if (searchQuery) url += `&nameContains=${searchQuery}`
+
+    console.log("Final URL:", JSON.stringify(url))
+
+    const response = await axios.get(url)
+    onSuccess(response.data)
   } catch (e) {
-    console.error('stock error', e.response.data.message)
-    if (e.response.data.message === 'Unauthorized') {
-      alert('You are not Authorized')
-      onError()
+    const errorMsg = e?.response?.data?.message || e.message || 'Unknown error'
+    console.error('getTopRankers error:', errorMsg)
+
+    if (errorMsg === 'Unauthorized') {
+      alert('You are not authorized')
     }
+
+    onError(errorMsg)
   }
 }
+
 
 
 export const getUser = async (
@@ -2100,4 +2112,106 @@ export const getStockChartData=async(ticker,startDate,endDate,units,onSuccess,on
   catch(error){
     onError(error);
   }
+}
+
+
+export const uploadImage = async (file, onSuccess, onError) => {
+  const UPLOAD_URL = `${GlobalURL}/api/v1/files/upload`;
+  const token = localStorage.getItem('token');
+  
+  try {
+    if (!file) throw new Error("No file provided");
+    if (!token) throw new Error("Missing token in localStorage");
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch(UPLOAD_URL, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // Do NOT set Content-Type manually when using FormData.
+        // The browser will set it along with the boundary
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Upload failed:", errorText);
+      throw new Error(`Upload failed with status ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("Upload successful:", data);
+    onSuccess(data);
+  } catch (error) {
+    console.error("Error in uploadImage:", error);
+    onError(error);
+  }
+};
+
+
+export const postCommunityPost = async (title, content, img, onSuccess, onError) => {
+  try {
+    const token = localStorage.getItem('token');
+    const url = `${GlobalURL}/api/v1/community-posts`;
+
+    const reqBody = {
+      seo: {
+        id: "eda4717e-36f6-43ad-8f1a-6630b3e93a9c"
+      },
+      title: title,        // Make sure this is a plain string
+      content: content,    // Make sure this is a plain string
+      image: {
+        id: img            // Must be a string too
+      }
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(reqBody)           // ✅ MUST be stringified
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Community post created successfully:', data);
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};
+
+
+export const getPosts=async(filterType,onSuccess,onError)=>{
+  const token = localStorage.getItem('token');
+  const url = `${GlobalURL}/api/v1/community-posts`;
+  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+      Authorization: `Bearer ${token}`
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Server error:', errorText);
+    throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  onSuccess(data);
+
 }

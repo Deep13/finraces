@@ -15,6 +15,7 @@ import JoinRace from "../Components/JoinRace";
 import { FaSmile } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
 import { giphyKey } from "../Config";
+import {uploadImage, postCommunityPost,getPosts} from "../Utils/api";
 
 const Community = () => {
   const tabs = ["Recent", "Following", "Trending", "My posts"];  
@@ -32,35 +33,34 @@ const Community = () => {
   const [selectedRaceName,setSelectedRaceName]=useState("");
 
   // Proper Post Data
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      userName: "John Doe",
-      userImg: "https://randomuser.me/api/portraits/men/1.jpg",
-      time: "2h ago",
-      content: "Exploring new AI advancements in tech!",
-      coverImg: "https://cdn.pixabay.com/photo/2023/08/15/14/05/banner-8192025_1280.png",
-      likes: 32,
-    },
-    {
-      id: 2,
-      userName: "Jane Smith",
-      userImg: "https://randomuser.me/api/portraits/women/2.jpg",
-      time: "5h ago",
-      content: "Just hit a new milestone in my project!",
-      coverImg: "https://img.freepik.com/free-vector/high-tech-futuristic-lines-technology-banner_1017-23966.jpg",
-      likes: 20,
-    },
-    {
-      id: 3,
-      userName: "Alex Johnson",
-      userImg: "https://randomuser.me/api/portraits/men/3.jpg",
-      time: "1 day ago",
-      content: "Blockchain is the future. What do you think?",
-      coverImg: "https://img.freepik.com/free-vector/vector-blockchain-poster_1441-1999.jpg",
-      likes: 15,
-    },
-  ]);
+  const [posts, setPosts] = useState([]);
+  // {
+  //   id: 1,
+  //   userName: "John Doe",
+  //   userImg: "https://randomuser.me/api/portraits/men/1.jpg",
+  //   time: "2h ago",
+  //   content: "Exploring new AI advancements in tech!",
+  //   coverImg: "https://cdn.pixabay.com/photo/2023/08/15/14/05/banner-8192025_1280.png",
+  //   likes: 32,
+  // },
+  // {
+  //   id: 2,
+  //   userName: "Jane Smith",
+  //   userImg: "https://randomuser.me/api/portraits/women/2.jpg",
+  //   time: "5h ago",
+  //   content: "Just hit a new milestone in my project!",
+  //   coverImg: "https://img.freepik.com/free-vector/high-tech-futuristic-lines-technology-banner_1017-23966.jpg",
+  //   likes: 20,
+  // },
+  // {
+  //   id: 3,
+  //   userName: "Alex Johnson",
+  //   userImg: "https://randomuser.me/api/portraits/men/3.jpg",
+  //   time: "1 day ago",
+  //   content: "Blockchain is the future. What do you think?",
+  //   coverImg: "https://img.freepik.com/free-vector/vector-blockchain-poster_1441-1999.jpg",
+  //   likes: 15,
+  // },
 
 // State for Experts to follow
 const [expertsToFollow, setExpertsToFollow] = useState([]);
@@ -71,10 +71,23 @@ const [upcomingRaces, setUpcomingRaces] = useState([]);
 // const [gifSearch, setGifSearch] = useState("");
 // const [gifResults, setGifResults] = useState([]);
 const [selectedMedia, setSelectedMedia] = useState([]);
+const [selectedFile,setSelectedFile]=useState();
 
 // console.log("ud",userDetails)
 
 const sendPost = () => {
+  if(selectedFile){
+    uploadImage(selectedFile,(data)=>{
+      postCommunityPost("title test",postContent,data.file.id,(data)=>{
+        console.log("posted successfully",data)
+      },(error)=>{
+        console.log("error in posting",error)
+      })
+    },(error)=>{
+      console.log("Error in uploading image to server",error)
+    })
+  }
+  
   const newPost = {
     id: posts.length + 1,
     userName: userDetails?.userName,
@@ -91,6 +104,7 @@ const sendPost = () => {
 
 const handleImageUpload = (event) => {
   const file = event.target.files[0];
+  setSelectedFile(file)
   if (file) {
     const imgUrl = URL.createObjectURL(file);
     setBannerImg(imgUrl);
@@ -135,6 +149,10 @@ useEffect(()=>{
   (error)=>{
     console.log("Error",error)
   })
+
+  getPosts("None",(data)=>{
+    setPosts(data.data);
+  });
 },[])
 
   return (
@@ -259,7 +277,7 @@ useEffect(()=>{
 
             {/* Posts Section (Scrollable) */}
             <div className="max-h-[55rem] p-2 overflow-y-auto flex flex-col gap-5 notificationScrollbar">
-              {posts.map((post) => (
+              {posts?.map((post) => (
                 <Post key={post.id} postData={post} commentVisibility={false} />
               ))}
             </div>

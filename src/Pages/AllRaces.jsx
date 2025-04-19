@@ -26,7 +26,7 @@ const AllRaces = () => {
     return (
         <>
             <Navbar />
-            <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
+            <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924] min-h-[100vh]">
                 {/* Ensure sidebar is inside a container with sufficient height */}
                 <Sidebar />
 
