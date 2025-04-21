@@ -18,13 +18,13 @@ import { giphyKey } from "../Config";
 import {uploadImage, postCommunityPost,getPosts} from "../Utils/api";
 
 const Community = () => {
-  const tabs = ["Recent", "Following", "Trending", "My posts"];  
+  const tabs = ["All", "Following", "My posts"];  
   const { setShowLoginForm } = useContext(DarkModeContext)
   const guestDetails = localStorage.getItem('guest_details')
   //grab userDetails for posting
   let userDetails=JSON.parse(atob(localStorage.getItem("fin_userDetails")))
 
-  const [activeTab,setActiveTab]=useState("Recent");
+  const [activeTab,setActiveTab]=useState("All");
   const [postContent,setPostContent]=useState("");
   const [bannerImg,setBannerImg]=useState("");
 
@@ -154,6 +154,12 @@ useEffect(()=>{
     setPosts(data.data);
   });
 },[])
+
+useEffect(()=>{
+  getPosts(activeTab,(data)=>{
+    setPosts(data.data);
+  });
+},[activeTab])
 
   return (
     <div className="w-full relative min-h-screen flex pb-8 pt-8 dark:bg-[#000924]">

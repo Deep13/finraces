@@ -2191,11 +2191,24 @@ export const postCommunityPost = async (title, content, img, onSuccess, onError)
   }
 };
 
-
 export const getPosts=async(filterType,onSuccess,onError)=>{
-  const token = localStorage.getItem('token');
-  const url = `${GlobalURL}/api/v1/community-posts`;
+  try{
+    const token = localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/community-posts`;
   let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  if(filterType!="All"){
+    url+="?";
+  }
+  const params = new URLSearchParams();
+
+  if (filterType === "My posts") {
+    params.append("userId", userDetails.userId);
+  }
+
+  if (filterType === "Following") {
+    params.append("filterByFollowing", "true"); // still a string in URL, but can be parsed to boolean on backend
+  }
 
   const response = await fetch(url, {
     method: 'GET',
@@ -2213,5 +2226,239 @@ export const getPosts=async(filterType,onSuccess,onError)=>{
 
   const data = await response.json();
   onSuccess(data);
+  }
+  catch(error){
+    onError(error)
+  }
+
+}
+
+export const getPostDetailed=async(postId,onSuccess,onError)=>{
+  const token = localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/community-posts/${postId}`;
+  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  try{
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+
+  }
+  catch(error){
+    onError(error)
+  }
+}
+
+export const likePost = async(postId,onSuccess,onError)=>{
+  try{ 
+    const token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/community-posts-likes`;
+    const reqBody={
+      post:{
+        id:postId
+      }
+    }
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(reqBody)           // ✅ MUST be stringified
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Community post created successfully:', data);
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+}
+
+export const getPostComments=async(postId,onSuccess,onError)=>{
+  const token = localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/community-post-comments/${postId}`;
+  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  try{
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+
+  }
+  catch(error){
+    onError(error)
+  }
+}
+
+export const postComments=async(postId,title,content,onSuccess,onError)=>{
+  try {
+    const token = localStorage.getItem('token');
+    const url = `${GlobalURL}/api/v1/community-posts`;
+
+    const reqBody = {
+      title: title,        // Make sure this is a plain string
+      content: content,    // Make sure this is a plain string
+      post: {
+        id: postId            // Must be a string too
+      }
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(reqBody)           // ✅ MUST be stringified
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Community post created successfully:', data);
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  } 
+}
+
+export const postBlog=async(seoId,category,title,content,img,onSuccess,onError)=>{
+  try {
+    const token = localStorage.getItem('token');
+    const url = `${GlobalURL}/api/v1/blogs`;
+
+    const reqBody = {
+      title: title,        // Make sure this is a plain string
+      content: content,    // Make sure this is a plain string
+      seo: {
+        id: seoId            // Must be a string too
+      },
+      category:{
+        id:category
+      },
+      image:{
+        id:img
+      }
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(reqBody)           // ✅ MUST be stringified
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Community post created successfully:', data);
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  } 
+}
+
+export const getBlogs=async(onSuccess,onError)=>{
+  try{
+    const token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/blogs`;
+    let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+      Authorization: `Bearer ${token}`
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Server error:', errorText);
+    throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  onSuccess(data);
+  }
+  catch(error){
+    onError(error)
+  }
+
+}
+
+export const getBlogDetailed=async(blogId,onSuccess,onError)=>{
+  const token = localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/blogs/${blogId}`;
+  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  try{
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+
+  }
+  catch(error){
+    onError(error)
+  }
 
 }

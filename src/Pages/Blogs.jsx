@@ -1,18 +1,26 @@
 import Sidebar from "../Components/Sidebar"
 import blogImg from "../assets/images/blogImg1.png"
+import {useState} from "react";
+import CreateBlog from "../Components/CreateBlog"
 
 const Blogs = () => {
+    const [showModal,setShowModal]=useState(false);
   return (
     <div className='w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]'>
         {/* Ensure sidebar is inside a container with sufficient height */}
             <Sidebar />
             
+            {
+                showModal &&<CreateBlog onClose={()=>{setShowModal(false)}}/>
+            }
             <div className='flex flex-col w-[70rem] gap-2 dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E]  dark:text-white'>
                <div className="flex items-center justify-between">
                     <span className='font-semibold text-[1.5rem] font-poppins flex flex-row items-center'>
                         Blogs
                     </span>
-                    <div className="px-3 py-1 cursor-pointer rounded-xl border dark:border-slate-300 dark:text-white dark:bg-[#001B51]">
+                    <div onClick={()=>{
+                        setShowModal((prev) => !prev);
+                    }} className="px-3 py-1 cursor-pointer rounded-xl border dark:border-slate-300 dark:text-white dark:bg-[#001B51]">
                         Create Blog
                     </div>
                </div>
