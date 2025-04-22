@@ -2236,7 +2236,7 @@ export const getPosts=async(filterType,onSuccess,onError)=>{
 export const getPostDetailed=async(postId,onSuccess,onError)=>{
   const token = localStorage.getItem('token');
   let url = `${GlobalURL}/api/v1/community-posts/${postId}`;
-  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+  // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
 
   try{
     const response = await fetch(url, {
@@ -2436,7 +2436,7 @@ export const getBlogs=async(onSuccess,onError)=>{
 export const getBlogDetailed=async(blogId,onSuccess,onError)=>{
   const token = localStorage.getItem('token');
   let url = `${GlobalURL}/api/v1/blogs/${blogId}`;
-  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+  // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
 
   try{
     const response = await fetch(url, {

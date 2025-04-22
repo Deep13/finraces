@@ -10,6 +10,8 @@ import EmojiPicker from "emoji-picker-react";
 import { giphyKey } from "../Config";
 import {searchUsers,debounceStockSearchj} from "../Utils/api"
 import {debounce} from "lodash"
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Make sure this is imported
 
 const Post = ({ postData, commentVisibility }) => {
   const navigate = useNavigate();
@@ -34,6 +36,17 @@ const Post = ({ postData, commentVisibility }) => {
 
   const dummyUsers = ["john_doe", "jane_smith", "elon_musk"];
   const dummyStocks = ["AAPL", "TSLA", "GOOGL"];
+  const modules = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      ['link'],
+      ['clean'],
+    ],
+  };
+  
+
+  // console.log(postData)
 
   const fetchGifs = async (query) => {
     if (!query) return;
@@ -205,7 +218,7 @@ const Post = ({ postData, commentVisibility }) => {
           />
           <div>
             <div className="font-semibold dark:text-white">{postData?.user?.firstName} {postData?.user?.lastName}</div>
-            <div className="text-sm dark:text-gray-400">{postData?.createdAt}</div>
+            <div className="text-sm dark:text-gray-400 font-poppins">{new Date(postData?.createdAt).toLocaleString()}</div>
           </div>
         </div>
         <BsThreeDots className="dark:text-gray-400 cursor-pointer" size={20} />
@@ -248,7 +261,7 @@ const Post = ({ postData, commentVisibility }) => {
 
           {/* GIF Picker */}
           {showGifPicker && (
-            <div className="absolute top-[40rem] right-60 bg-[#232223] rounded-xl p-4 shadow-lg z-50 w-[400px]">
+            <div className="absolute top-[25rem] right-60 bg-[#232223] rounded-xl p-4 shadow-lg z-50 w-[400px]">
               <input
                 type="text"
                 placeholder="Search GIFs"
@@ -281,13 +294,20 @@ const Post = ({ postData, commentVisibility }) => {
 
           {/* Comment Input */}
           <div className="flex items-center gap-3 bg-slate-300 border dark:border-0 dark:bg-[#002763] p-2 rounded-xl relative">
-            <input
-              type="text"
-              value={commentInput}
-              onChange={handleCommentChange} // Ensure this is set correctly
-              placeholder="Write a comment..."
-              className="w-full px-5 py-3 pr-16 bg-transparent dark:text-white placeholder-gray-400 focus:outline-none"
-            />
+          <ReactQuill
+            value={commentInput}
+            onChange={handleCommentChange}
+            placeholder="Write a comment..."
+            className="
+            dark:text-white 
+            dark:[&_.ql-container]:bg-[#001B51] 
+            dark:[&_.ql-editor]:text-white 
+            dark:[&_.ql-editor]:bg-[#001B51] 
+            min-h-[200px] max-h-[400px] overflow-y-auto rounded-xl border-0 w-full"
+            theme="snow"
+            modules={modules}
+          />
+
 
 {showSuggestions && tagSuggestions.length > 0 && (
   <ul className="absolute left-4 bottom-[110%] bg-white dark:bg-[#1c1c1c] text-black dark:text-white border border-gray-300 dark:border-gray-700 rounded-md shadow-lg w-64 max-h-40 overflow-y-auto z-50">
@@ -425,17 +445,17 @@ const Post = ({ postData, commentVisibility }) => {
 };
 
 // Prop Validation
-Post.propTypes = {
-  postData: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    userImg: PropTypes.string.isRequired,
-    userName: PropTypes.string.isRequired,
-    time: PropTypes.string.isRequired,
-    content: PropTypes.string.isRequired,
-    coverImg: PropTypes.string,
-    likes: PropTypes.number,
-  }).isRequired,
-  commentVisibility: PropTypes.bool,
-};
+// Post.propTypes = {
+//   postData: PropTypes.shape({
+//     id: PropTypes.string.isRequired,
+//     userImg: PropTypes.string.isRequired,
+//     userName: PropTypes.string.isRequired,
+//     time: PropTypes.string.isRequired,
+//     content: PropTypes.string.isRequired,
+//     coverImg: PropTypes.string,
+//     likes: PropTypes.number,
+//   }).isRequired,
+//   commentVisibility: PropTypes.bool,
+// };
 
 export default Post;

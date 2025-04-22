@@ -67,9 +67,9 @@ const [expertsToFollow, setExpertsToFollow] = useState([]);
 
 // State for Upcoming Races
 const [upcomingRaces, setUpcomingRaces] = useState([]);
-// const [showGifPicker, setShowGifPicker] = useState(false);
-// const [gifSearch, setGifSearch] = useState("");
-// const [gifResults, setGifResults] = useState([]);
+const [showGifPicker, setShowGifPicker] = useState(false);
+const [gifSearch, setGifSearch] = useState("");
+const [gifResults, setGifResults] = useState([]);
 const [selectedMedia, setSelectedMedia] = useState([]);
 const [selectedFile,setSelectedFile]=useState();
 
@@ -222,9 +222,9 @@ useEffect(()=>{
       <CiImageOn size={24} /> Image
     </button>
     
-    {/* <button onClick={()=>{setShowGifPicker(true)}} className="hover:text-gray-300 transition-all flex items-center gap-1">
+    <button onClick={()=>{setShowGifPicker(true)}} className="hover:text-gray-300 transition-all flex items-center gap-1">
       <CiImageOn size={24} /> GIF
-    </button> */}
+    </button>
 
     {/* <button className="hover:text-gray-300 transition-all flex items-center gap-1">
       <IoDocumentTextOutline size={24} /> Article
@@ -245,6 +245,36 @@ useEffect(()=>{
       <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
     </div>
   )}
+
+{showGifPicker && (
+  <div className="absolute top-[12rem] left-0 z-50 w-96 bg-white dark:bg-[#001B51] p-3 rounded-xl shadow-xl">
+    <input 
+      type="text" 
+      value={gifSearch} 
+      onChange={(e) => {
+        setGifSearch(e.target.value); 
+        fetchGifs(e.target.value);
+      }} 
+      placeholder="Search GIFs..." 
+      className="w-full mb-3 p-2 rounded-md dark:bg-[#002763] dark:text-white"
+    />
+    <div className="grid grid-cols-3 gap-2 max-h-60 overflow-y-auto">
+      {gifResults?.map(gif => (
+        <img 
+          key={gif.id} 
+          src={gif.images.fixed_height_small.url} 
+          alt={gif.title}
+          className="cursor-pointer rounded-md hover:scale-105 transition-all"
+          onClick={() => {
+            setBannerImg(gif.images.fixed_height.url); // Set as post media
+            setShowGifPicker(false);
+          }}
+        />
+      ))}
+    </div>
+  </div>
+)}
+
   
 </div>
 

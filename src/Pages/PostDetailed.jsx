@@ -2,11 +2,22 @@ import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../Components/Sidebar";
 import Post from "../Components/Post";
 import { IoArrowBackCircle } from "react-icons/io5";
+import { useEffect, useState } from "react";
+import { getPostDetailed } from "../Utils/api";
 
 const PostDetailed = () => {
     const { post_id } = useParams();
-    console.log(post_id)
     const navigate = useNavigate();
+    const [postData,setPostData]=useState({});
+
+    useEffect(()=>{
+        getPostDetailed(post_id,(data)=>{
+            setPostData(data);
+            console.log(data)
+        },(error)=>{
+            console.log("Error fetching post details",error)
+        })
+    },[])
 
     return (
         <div className="w-full relative min-h-screen flex pb-8 pt-8 dark:bg-[#000924]">
@@ -24,15 +35,7 @@ const PostDetailed = () => {
                     <IoArrowBackCircle size={32}/>
                 </button>
 
-                <Post postData={{
-                    id: 1,
-                    userName: "John Doe",
-                    userImg: "https://randomuser.me/api/portraits/men/1.jpg",
-                    time: "2h ago",
-                    content: "Exploring new AI advancements in tech!",
-                    coverImg: "https://cdn.pixabay.com/photo/2023/08/15/14/05/banner-8192025_1280.png",
-                    likes: 32,
-                }} commentVisibility={true} />
+                <Post postData={postData} commentVisibility={true} />
 
             </div>
         </div>
