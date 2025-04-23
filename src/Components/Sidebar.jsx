@@ -25,8 +25,8 @@ const Sidebar = () => {
   const isAllRacesType = (type) => pathname === '/allraces' && getAllRacesType() === type
 
   const inactiveClass = "text-black dark:text-white bg-[#e5f4ff] dark:bg-[#001a50]"
-  const activeGlow = "dark:text-white drop-shadow-[0_0_0.4rem_#e5f4ff] bg-[#e5f4ff] dark:bg-[#001a50] dark:text-white font-bold"
-  const baseClass = "w-[3.35rem] h-[4.1rem] rounded-[10px] gap-[5px] text-[0.6rem] flex flex-col justify-center items-center transition-all duration-300"
+  const activeGlow = "dark:text-white drop-shadow-[0_0_0.4rem_#e5f4ff] bg-[#e5f4ff] dark:bg-[#001a50] dark:text-white"
+  const baseClass = "w-[3.35rem] h-[4.1rem] rounded-[10px] gap-[5px] text-[0.545rem] flex flex-col justify-center items-center transition-all duration-300"
 
   const handleNavigation = (nav) => {
     const ud = localStorage.getItem('fin_userDetails')
@@ -69,7 +69,7 @@ const Sidebar = () => {
         <button onClick={() => navigate('/community')}
           className={`${baseClass} ${isExactActive('/community') ? activeGlow : inactiveClass}`}>
           <MdGroups size={24} />
-          Community
+          Engage
         </button>
 
         {/* Stocks */}

@@ -4,16 +4,19 @@ import Post from "../Components/Post";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { getPostDetailed } from "../Utils/api";
+import { ColorRing } from "react-loader-spinner";
 
 const PostDetailed = () => {
     const { post_id } = useParams();
     const navigate = useNavigate();
     const [postData,setPostData]=useState({});
+    const [loading,setLoading]=useState(true);
 
     useEffect(()=>{
         getPostDetailed(post_id,(data)=>{
             setPostData(data);
-            console.log(data)
+            console.log(data);
+            setLoading(false)
         },(error)=>{
             console.log("Error fetching post details",error)
         })
@@ -35,7 +38,21 @@ const PostDetailed = () => {
                     <IoArrowBackCircle size={32}/>
                 </button>
 
-                <Post postData={postData} commentVisibility={true} />
+                {loading?(
+                    <div className="w-full h-full flex items-center justify-center">
+                        <ColorRing
+                    visible={true}
+                    height="85"
+                    width="85"
+                    ariaLabel="color-ring-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="color-ring-wrapper"
+                    colors={['#e15b64', '#f47e60',]}
+                    />
+                    </div>
+                ):(
+                    <Post postData={postData} commentVisibility={true} />
+                )}
 
             </div>
         </div>

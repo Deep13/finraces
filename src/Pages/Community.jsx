@@ -15,8 +15,9 @@ import JoinRace from "../Components/JoinRace";
 import { FaSmile } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
 import { giphyKey } from "../Config";
-import {uploadImage, postCommunityPost,getPosts} from "../Utils/api";
-import { FaPlusCircle } from "react-icons/fa";
+import {uploadImage, postCommunityPost,getPosts,getFollowees,followUser,unFollowUser} from "../Utils/api";
+import { FaPlusCircle,FaMinusCircle } from "react-icons/fa";
+import { ColorRing } from "react-loader-spinner";
 
 const Community = () => {
   const tabs = ["All", "Following", "My posts"];  
@@ -29,9 +30,15 @@ const Community = () => {
   const [postContent,setPostContent]=useState("");
   const [bannerImg,setBannerImg]=useState("");
 
+  const [loadingPosts,setLoadingPosts]=useState(true);
+  const [loadingExperts,setLoadingExperts]=useState(true);
+  const [loadingRaces,setLoadingRaces]=useState(true);
+  
+
   const [joinRaceFormVisible,setJoinRaceFormVisible]=useState(false);
   const [selectedRaceId,setSelectedRaceId]=useState();
   const [selectedRaceName,setSelectedRaceName]=useState("");
+  const [followees,setFollowees]=useState([]);
 
   // Proper Post Data
   const [posts, setPosts] = useState([]);
@@ -139,12 +146,14 @@ useEffect(()=>{
   getTop4(1,2,
     (data)=>{
       setExpertsToFollow(data.data)
+      setLoadingExperts(false)
     },(error)=>{
       console.log("error",error)
     },10)
 
   getRaceList('scheduled',
     (data)=>{
+      setLoadingRaces(false)
       setUpcomingRaces(data)
     },
   (error)=>{
@@ -152,15 +161,74 @@ useEffect(()=>{
   })
 
   getPosts("None",(data)=>{
+    setLoadingPosts(false)
     setPosts(data.data);
   });
+
+  getFollowees((data)=>{
+    setFollowees(data)
+    console.log(data.data)
+  },(error)=>{
+    console.log(error)
+  })
 },[])
 
 useEffect(()=>{
+  setLoadingPosts(true)
   getPosts(activeTab,(data)=>{
     setPosts(data.data);
+    setLoadingPosts(false)
+  },(error)=>{
+    console.log(error)
   });
 },[activeTab])
+
+const handleFollow = async (isFollowed, leader) => {
+  const leaderId = leader?.user?.id;
+
+  if (!leaderId) return; // safety check
+
+  if(isFollowed){
+   unFollowUser(leaderId,(data)=>{
+    setFollowees((prev)=>{
+      const safePrev = Array.isArray(prev) ? prev : [];
+      return safePrev.filter((f) => f?.followee?.id !== leaderId);
+    })
+   },(error)=>{
+    console.log(error)
+   })
+  }
+  else{
+    followUser(leaderId,(data)=>{
+      setFollowees((prev)=>{
+        const safePrev = Array.isArray(prev) ? prev : [];
+        return safePrev.filter((f) => f?.followee?.id !== leaderId);
+      })
+    },(error)=>{
+      console.log(error)
+    })
+  }
+  // setFollowees((prev) => {
+  //   const safePrev = Array.isArray(prev) ? prev : [];
+
+  //   if (isFollowed) {
+  //     // Unfollow logic
+  //     return safePrev.filter((f) => f?.followee?.id !== leaderId);
+  //   } else {
+  //     // Follow logic
+      
+  //     return [
+  //       ...safePrev,
+  //       {
+  //         followee: leader.user,
+  //         id: leader.user.id,
+  //         createdAt: new Date().toISOString(),
+  //       },
+  //     ];
+  //   }
+  // });
+};
+
 
   return (
     <div className="w-full relative min-h-screen flex pb-8 pt-8 dark:bg-[#000924]">
@@ -176,8 +244,7 @@ useEffect(()=>{
           race_id={selectedRaceId} />
       }
         {/* Title */}
-        <h2 className="font-semibold text-[1.5rem] font-poppins">Community</h2>
-
+        <h2 className="font-semibold text-[1.5rem] font-poppins">Engage</h2>
         {/* Content Section */}
         <div className="flex items-start justify-center m-2 w-full gap-5">
           {/* Left Section - Post Creation + Posts */}
@@ -313,11 +380,31 @@ useEffect(()=>{
 
 
             {/* Posts Section (Scrollable) */}
-            <div className="max-h-[55rem] p-2 overflow-y-auto flex flex-col gap-5 notificationScrollbar">
-              {posts?.map((post) => (
-                <Post key={post.id} postData={post} commentVisibility={false} />
-              ))}
-            </div>
+            <div className="p-2 overflow-y-auto flex flex-col gap-5">
+  {loadingPosts ? (
+    <div className="flex items-center justify-center">
+      <ColorRing
+        visible={true}
+        height="65"
+        width="65"
+        ariaLabel="color-ring-loading"
+        wrapperStyle={{}}
+        wrapperClass="color-ring-wrapper"
+        colors={['#e15b64', '#f47e60']}
+      />
+    </div>
+  ) : posts && posts.length > 0 ? (
+    posts.map((post) => (
+      <Post key={post.id} postData={post} commentVisibility={false} />
+    ))
+  ) : (
+    <div className="text-center text-gray-500 mt-10">
+      No posts yet. Be the first one to post!
+    </div>
+  )}
+</div>
+
+
           </div>
         </div>
 
@@ -331,31 +418,67 @@ useEffect(()=>{
               <h3 className="text-xl font-semibold dark:text-slate-300">Experts</h3>
               
               {/* Leaders List */}
-              <div className="flex-1 flex flex-col gap-1">
-                {expertsToFollow.map((leader) => (
-                  <div key={leader?.user?.id} className="flex items-center justify-between p-3 border dark:border-[#00387E] w-full rounded-xl h-20 bg-[#e5f4ff] dark:bg-[#001B51]">
-                    
-                    {/* User Image */}
-                    <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-300">
-                      <img src={leader?.user?.photo?.path} alt={leader?.user?.firstName} className="w-full h-full object-cover"/>
+              {loadingExperts?(
+                <div className="flex items-center justify-center">
+                  <ColorRing
+                visible={true}
+                height="65"
+                width="65"
+                ariaLabel="color-ring-loading"
+                wrapperStyle={{}}
+                wrapperClass="color-ring-wrapper"
+                colors={['#e15b64', '#f47e60',]}
+                />
+                </div>
+              ):(
+                <div className="flex-1 flex flex-col gap-1">
+                {expertsToFollow.map((leader) => {
+                  const leaderId = leader?.user?.id;
+              
+                  const isFollowed =
+                    Array.isArray(followees) &&
+                    followees.some((f) => f?.followee?.id === leaderId);
+              
+                  return (
+                    <div
+                      key={leaderId}
+                      onClick={()=>{navigate(`/userprofile/${leaderId}`)}}
+                      className="flex cursor-pointer items-center justify-between p-3 border dark:border-[#00387E] w-full rounded-xl h-20 bg-[#e5f4ff] dark:bg-[#001B51]"
+                    >
+                      {/* User Image */}
+                      <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-300">
+                        <img
+                          src={leader?.user?.photo?.path}
+                          alt={leader?.user?.firstName}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+              
+                      {/* User Info */}
+                      <div className="flex flex-col flex-1 ml-3">
+                        <span className="text-md font-semibold">
+                          {leader?.user?.firstName} {leader?.user?.lastName}
+                        </span>
+                      </div>
+              
+                      {/* Follow/Unfollow Button */}
+                      <button
+                        className="p-2 z-10 ml-3 border-2 border-[#00387E] rounded-xl dark:hover:bg-[#00387E] transition"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFollow(isFollowed,leader)
+                        }}
+                      >
+                        {isFollowed ? <FaMinusCircle /> : <FaPlusCircle />}
+                      </button>
                     </div>
-
-                    {/* User Info */}
-                    <div className="flex flex-col flex-1 ml-3">
-                      <span className="text-md font-semibold">{leader?.user?.firstName}  {leader?.user?.lastName}</span>
-                      {/* <div className="flex gap-2 items-center">
-                        <span className={`h-2 w-2 rounded-full ${leader.status === "Online" ? "bg-green-400" : "bg-red-400"}`}></span>
-                        <span className={`text-sm ${leader.status === "Online" ? "text-green-400" : "text-red-400"}`}>{leader.status}</span>
-                      </div>  */}
-                    </div>
-
-                    {/* Fllow Button */}
-                    <button className="p-2 ml-3 border-2 border-[#00387E]  rounded-xl dark:hover:bg-[#00387E] transition">
-                    <FaPlusCircle />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
+              )}
+
+
+
 
               <div onClick={()=>{navigate('/leaderboard')}} className="w-full mx-auto dark:text-slate-300 text-center text-lg font-semibold cursor-pointer">Show More</div>
             </div>
@@ -367,7 +490,20 @@ useEffect(()=>{
               <h3 className="text-xl font-semibold dark:text-slate-300">Upcoming Races</h3>
               
               {/* Stocks List */}
-              <div className="flex-1 flex flex-col gap-1">
+              {loadingRaces?(
+                <div className="flex items-center justify-center">
+                  <ColorRing
+                visible={true}
+                height="65"
+                width="65"
+                ariaLabel="color-ring-loading"
+                wrapperStyle={{}}
+                wrapperClass="color-ring-wrapper"
+                colors={['#e15b64', '#f47e60',]}
+                />
+                </div>
+              ):(
+                <div className="flex-1 flex flex-col gap-1">
                 {upcomingRaces.length === 0 ? (
                   <div className="text-center text-gray-500 dark:text-gray-400 py-4">
                     No upcoming races right now.
@@ -414,6 +550,7 @@ useEffect(()=>{
                   ))
                 )}
               </div>
+              )}
 
 
               <div onClick={()=>{navigate('/allraces', { state: 'Upcoming Races' })}} className="w-full mx-auto dark:text-slate-400 text-center text-lg font-semibold cursor-pointer">Show More</div>

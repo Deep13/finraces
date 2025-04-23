@@ -25,8 +25,53 @@ const Blogs = () => {
                     </div>
                </div>
 
-               <div className="grid grid-cols-2 grid-rows-2 gap-4 w-full h-[80rem]">
-                    <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
+               <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
+                    <div className="font-semibold text-xl">
+                        Featured Blogs
+                    </div>
+                    <div className="w-full grid grid-cols-4 gap-5">
+                        {[1, 2, 3, 4].map((_, idx) => (
+                            <div key={idx} className="flex flex-col gap-3 rounded-2xl">
+                            <div className="h-40 w-full">
+                                <img src={blogImg} className="w-full h-full object-cover rounded-2xl" />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <div className="font-semibold text-lg">Title</div>
+                                <div className="text-slate-600 dark:text-slate-300 line-clamp-2">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque...
+                                </div>
+                                <div className="cursor-pointer font-semibold">Read Now</div>
+                            </div>
+                            </div>
+                        ))}
+                        </div>
+
+                </div>
+                <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
+                    <div className="font-semibold text-xl">
+                        My Blogs
+                    </div>
+                    <div className="w-full grid grid-cols-4 gap-5">
+                        {[1, 2, 3, 4].map((_, idx) => (
+                            <div key={idx} className="flex flex-col gap-3 rounded-2xl">
+                            <div className="h-40 w-full">
+                                <img src={blogImg} className="w-full h-full object-cover rounded-2xl" />
+                            </div>
+                            <div className="flex flex-col gap-1">
+                                <div className="font-semibold text-lg">Title</div>
+                                <div className="text-slate-600 dark:text-slate-300 line-clamp-2">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque...
+                                </div>
+                                <div className="cursor-pointer font-semibold">Read Now</div>
+                            </div>
+                            </div>
+                        ))}
+                        </div>
+
+                </div>
+
+               <div className="grid grid-cols-2 grid-rows-1 gap-4 w-full h-[30rem]">
+                    {/* <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
                         <img src={blogImg} className="w-full rounded-2xl"/>
                         <div className="flex flex-col justify-center gap-4">
                             <div className="font-semibold text-lg">Title</div>
@@ -41,7 +86,7 @@ const Blogs = () => {
                             <div className="text-slate-300 h-10">Random stuff jknjdcnkdsmcklsmcklsdm cklds clds cjsnjn</div>
                             <div className="font-semibold cursor-pointer">Read Now</div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
                         <img src={blogImg} className="w-full rounded-2xl"/>
                         <div className="flex flex-col justify-center gap-4">

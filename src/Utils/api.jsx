@@ -2203,11 +2203,15 @@ export const getPosts=async(filterType,onSuccess,onError)=>{
   const params = new URLSearchParams();
 
   if (filterType === "My posts") {
-    params.append("userId", userDetails.userId);
+    // params.append("userId", userDetails.userId);
+    url+=`userId=${userDetails.userId}`
   }
 
   if (filterType === "Following") {
-    params.append("filterByFollowing", "true"); // still a string in URL, but can be parsed to boolean on backend
+    params.append("filterByFollowing", "true"); // stringified boolean
+  }
+  if ([...params].length > 0) {
+    url += `${params.toString()}`;
   }
 
   const response = await fetch(url, {
@@ -2460,6 +2464,92 @@ export const getBlogDetailed=async(blogId,onSuccess,onError)=>{
   }
   catch(error){
     onError(error)
+  }
+
+}
+
+export const getFollowees=async(onSuccess,onError)=>{
+  let token=localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/follows/followees`;
+
+  try{
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+
+  }
+  catch(error){
+    onError(error);
+  }
+}
+
+export const followUser=async(followeeId,onSuccess,onError)=>{
+  let token=localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/follows`;
+
+  try{
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ followee: String(followeeId) })
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+
+  }
+  catch(error){
+    onError(error);
+  }
+}
+
+export const unFollowUser=async(followeeId,onSuccess,onError)=>{
+  let token=localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/follows/${followeeId}`;
+
+  try{
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+
+  }
+  catch(error){
+    onError(error);
   }
 
 }

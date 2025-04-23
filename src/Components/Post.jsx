@@ -246,6 +246,10 @@ const Post = ({ postData, commentVisibility }) => {
     }
   },[postData])
 
+  const handleLike=()=>{
+    console.log("liked")
+  }
+
   return (
     <div
       onClick={() => {
@@ -284,7 +288,7 @@ const Post = ({ postData, commentVisibility }) => {
       {/* Actions */}
       <div className="flex justify-around dark:text-gray-300 font-semibold border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
-          <AiOutlineLike size={22} /> <span>{postData?.like_count || 0}</span>
+          <AiOutlineLike size={22} onClick={()=>{handleLike()}} /> <span>{postData?.like_count || 0}</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
           <FaRegCommentAlt size={20} /> <span>Comment</span>
@@ -458,7 +462,7 @@ const Post = ({ postData, commentVisibility }) => {
                         <strong>{comment.user}</strong>
                         <span className="dark:text-gray-400 text-sm ml-2">Level {comment.level}</span>
                       </div>
-                      <BsThreeDots className="dark:text-gray-400 cursor-pointer" size={18} />
+                      {/* <BsThreeDots className="dark:text-gray-400 cursor-pointer" size={18} /> */}
                     </div>
                     <span className="dark:text-gray-400 text-sm">Ambassador</span>
                     <div className="mt-3 flex items-center justify-between w-full">
@@ -478,9 +482,9 @@ const Post = ({ postData, commentVisibility }) => {
                         <div className="flex items-center gap-1 hover:text-white">
                           <AiOutlineLike size={18} /> <span>Like</span>
                         </div>
-                        <div className="flex items-center gap-1 hover:text-white">
+                        {/* <div className="flex items-center gap-1 hover:text-white">
                           <FaReply size={18} /> <span>Reply</span>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </div>

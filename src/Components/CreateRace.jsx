@@ -235,6 +235,12 @@ const CreateRace = ({
     console.log(raceDetails)
   }, [raceDetails])
 
+
+  //refs for automatic focus
+  const startTimeRef=useRef(null);
+  const endDateRef=useRef(null);
+  const endTimeRef=useRef(null);
+
   return (
     <div className='w-screen h-screen fixed top-0 left-0 z-50 grid place-items-center backdrop-blur-lg bg-transparent py-[3%] overflow-auto'>
       <div className='rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem] dark:bg-[#002763]'>
@@ -276,6 +282,7 @@ const CreateRace = ({
                 placeholder="Race Starting Date"
                 value={raceDetails.start_date}
                 onChange={e => handleRaceDetails('start_date', e.target.value)}
+                onSelect={()=>{startTimeRef.current.focus()}}
                 className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner"
                 type="date"
                 min={today}
@@ -291,6 +298,7 @@ const CreateRace = ({
                 id="race-start-time"
                 className="px-[1.1rem] rounded-[4px] py-[8px] shadow-inner"
                 type="time"
+                ref={startTimeRef}
               // step="1"
               />
               {!validation.start_time && <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1"><span><BiError size={15} /></span>Start time is Required</p>}
