@@ -16,6 +16,7 @@ import { FaSmile } from "react-icons/fa";
 import EmojiPicker from "emoji-picker-react";
 import { giphyKey } from "../Config";
 import {uploadImage, postCommunityPost,getPosts} from "../Utils/api";
+import { FaPlusCircle } from "react-icons/fa";
 
 const Community = () => {
   const tabs = ["All", "Following", "My posts"];  
@@ -140,7 +141,7 @@ useEffect(()=>{
       setExpertsToFollow(data.data)
     },(error)=>{
       console.log("error",error)
-    },5)
+    },10)
 
   getRaceList('scheduled',
     (data)=>{
@@ -327,7 +328,7 @@ useEffect(()=>{
             <div className="dark:bg-[#002763] p-4 rounded-xl w-full dark:text-white overflow-y-auto flex flex-col gap-4">
               
               {/* Section Title */}
-              <h3 className="text-xl font-semibold dark:text-slate-300">Experts to Follow</h3>
+              <h3 className="text-xl font-semibold dark:text-slate-300">Experts</h3>
               
               {/* Leaders List */}
               <div className="flex-1 flex flex-col gap-1">
@@ -341,7 +342,7 @@ useEffect(()=>{
 
                     {/* User Info */}
                     <div className="flex flex-col flex-1 ml-3">
-                      <span className="text-lg font-semibold">{leader?.user?.firstName}  {leader?.user?.lastName}</span>
+                      <span className="text-md font-semibold">{leader?.user?.firstName}  {leader?.user?.lastName}</span>
                       {/* <div className="flex gap-2 items-center">
                         <span className={`h-2 w-2 rounded-full ${leader.status === "Online" ? "bg-green-400" : "bg-red-400"}`}></span>
                         <span className={`text-sm ${leader.status === "Online" ? "text-green-400" : "text-red-400"}`}>{leader.status}</span>
@@ -350,7 +351,7 @@ useEffect(()=>{
 
                     {/* Fllow Button */}
                     <button className="p-2 ml-3 border-2 border-[#00387E]  rounded-xl dark:hover:bg-[#00387E] transition">
-                      Follow
+                    <FaPlusCircle />
                     </button>
                   </div>
                 ))}

@@ -2315,6 +2315,7 @@ export const getPostComments=async(postId,onSuccess,onError)=>{
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
   
+    const text = await response.text();
     const data = await response.json();
     onSuccess(data);
 
@@ -2327,7 +2328,7 @@ export const getPostComments=async(postId,onSuccess,onError)=>{
 export const postComments=async(postId,title,content,onSuccess,onError)=>{
   try {
     const token = localStorage.getItem('token');
-    const url = `${GlobalURL}/api/v1/community-posts`;
+    const url = `${GlobalURL}/api/v1/community-post-comments`;
 
     const reqBody = {
       title: title,        // Make sure this is a plain string

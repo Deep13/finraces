@@ -3,12 +3,12 @@ import { AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentAlt, FaShare, FaRegSmile, FaReply } from "react-icons/fa";
 import { BsThreeDots, BsFillSendFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { useState,useCallback } from "react";
+import { useState,useCallback, useEffect } from "react";
 import { IoMdCamera } from "react-icons/io";
 import { MdOutlineGifBox } from "react-icons/md";
 import EmojiPicker from "emoji-picker-react";
 import { giphyKey } from "../Config";
-import {searchUsers,debounceStockSearchj} from "../Utils/api"
+import {searchUsers,debounceStockSearchj, getPostComments,postComments,likePost} from "../Utils/api"
 import {debounce} from "lodash"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Make sure this is imported
@@ -183,23 +183,68 @@ const Post = ({ postData, commentVisibility }) => {
 
   const handleCommentSubmit = () => {
     if (commentInput.trim() || selectedMedia.length > 0) {
-      setComments([
-        ...comments,
-        {
-          id: comments.length + 1,
-          text: commentInput,
-          user: "You",
-          level: 1,
-          avatar: postData?.userImg,
-          replies: [],
-          media: selectedMedia, // Store media separately
-        },
-      ]);
+      // setComments([
+      //   ...comments,
+      //   {
+      //     id: comments.length + 1,
+      //     text: commentInput,
+      //     user: "You",
+      //     level: 1,
+      //     avatar: postData?.userImg,
+      //     replies: [],
+      //     media: selectedMedia, // Store media separately
+      //   },
+      // ]);
       setCommentInput("");
       setSelectedMedia([]);
       setReferences([]);
     }
+
+    function formatter(comment, references) {
+      // Escape special regex characters in references
+      const escapedRefs = references.map(ref =>
+        ref.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")
+      );
+    
+      // Sort longer refs first to avoid substring mismatches (e.g., @don and @donald)
+      escapedRefs.sort((a, b) => b.length - a.length);
+    
+      const regex = new RegExp(`(${escapedRefs.join("|")})`, "gi");
+    
+      const formatted = comment.replace(regex, (match) => {
+        if (match.startsWith("@")) {
+          return `<span class="text-blue-300 font-semibold">${match}</span>`;
+        } else if (match.startsWith("$")) {
+          return `<span class="text-teal-300 font-semibold">${match}</span>`;
+        }
+        return match;
+      });
+    
+      return `<p>${formatted}</p>`;
+    }
+    
+    let mediaTags=selectedMedia.map(src => `<img src="${src}" />`).join("");
+    let formattedText=formatter(commentInput,references);
+    console.log(formattedText+mediaTags)
+    let finalContent=formattedText+mediaTags;
+
+    postComments(postData.id,"",finalContent,(data)=>{
+      setComments(...comments,data);
+      console.log("Success ",data)
+    },(error)=>{
+      console.log(error)
+    })
   };
+
+  useEffect(()=>{
+    if(postData && postData.id && commentVisibility){
+      getPostComments(postData.id,(data)=>{
+        console.log(data)
+      },(error)=>{
+        console.log(error)
+      })
+    }
+  },[postData])
 
   return (
     <div
@@ -221,7 +266,7 @@ const Post = ({ postData, commentVisibility }) => {
             <div className="text-sm dark:text-gray-400 font-poppins">{new Date(postData?.createdAt).toLocaleString()}</div>
           </div>
         </div>
-        <BsThreeDots className="dark:text-gray-400 cursor-pointer" size={20} />
+        {/* <BsThreeDots className="dark:text-gray-400 cursor-pointer" size={20} /> */}
       </div>
 
       {/* Content */}
@@ -294,7 +339,7 @@ const Post = ({ postData, commentVisibility }) => {
 
           {/* Comment Input */}
           <div className="flex items-center gap-3 bg-slate-300 border dark:border-0 dark:bg-[#002763] p-2 rounded-xl relative">
-          <ReactQuill
+          {/* <ReactQuill
             value={commentInput}
             onChange={handleCommentChange}
             placeholder="Write a comment..."
@@ -306,7 +351,14 @@ const Post = ({ postData, commentVisibility }) => {
             min-h-[200px] max-h-[400px] overflow-y-auto rounded-xl border-0 w-full"
             theme="snow"
             modules={modules}
-          />
+          /> */}
+          <input
+              type="text"
+              value={commentInput}
+              onChange={handleCommentChange} // Ensure this is set correctly
+              placeholder="Write a comment..."
+              className="w-full px-5 py-3 pr-16 bg-transparent dark:text-white placeholder-gray-400 focus:outline-none"
+            />
 
 
 {showSuggestions && tagSuggestions.length > 0 && (
