@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { AiOutlineLike } from "react-icons/ai";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentAlt, FaShare, FaRegSmile, FaReply } from "react-icons/fa";
 import { BsThreeDots, BsFillSendFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
@@ -8,22 +8,15 @@ import { IoMdCamera } from "react-icons/io";
 import { MdOutlineGifBox } from "react-icons/md";
 import EmojiPicker from "emoji-picker-react";
 import { giphyKey } from "../Config";
-import {searchUsers,debounceStockSearchj, getPostComments,postComments,likePost} from "../Utils/api"
+import {searchUsers,debounceStockSearchj, getPostComments,postComments,likePost, dislikePost} from "../Utils/api"
 import {debounce} from "lodash"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Make sure this is imported
 
-const Post = ({ postData, commentVisibility }) => {
+const Post = ({ postData, commentVisibility,likesArray=[],setLikesArray }) => {
   const navigate = useNavigate();
   const [commentInput, setCommentInput] = useState("");
-  const [comments, setComments] = useState([
-    {
-      text: "Easily craft all of your Social posts for the whole month in Figma",
-      user: "User Name",
-      level: 10,
-      avatar: postData?.userImg,
-    },
-  ]);
+  const [comments, setComments] = useState([]);
 
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showGifPicker, setShowGifPicker] = useState(false);
@@ -46,7 +39,7 @@ const Post = ({ postData, commentVisibility }) => {
   };
   
 
-  // console.log(postData)
+  // console.log(likesArray)
 
   const fetchGifs = async (query) => {
     if (!query) return;
@@ -128,16 +121,18 @@ const Post = ({ postData, commentVisibility }) => {
 
   // Function to highlight tags
   const formatCommentText = (text) => {
-    const words = text.split(" ");
+    if(!text)return;
+
+    const words = text?.split(" ");
     const formatted = [];
     let i = 0;
   
-    while (i < words.length) {
+    while (i < words?.length) {
       let matched = false;
   
       for (let ref of references) {
-        const refWords = ref.split(" ");
-        const segment = words.slice(i, i + refWords.length).join(" ");
+        const refWords = ref?.split(" ");
+        const segment = words?.slice(i, i + refWords?.length).join(" ");
   
         if (segment === ref) {
           // Found a match in references
@@ -181,36 +176,16 @@ const Post = ({ postData, commentVisibility }) => {
 };
 
 
-  const handleCommentSubmit = () => {
-    if (commentInput.trim() || selectedMedia.length > 0) {
-      // setComments([
-      //   ...comments,
-      //   {
-      //     id: comments.length + 1,
-      //     text: commentInput,
-      //     user: "You",
-      //     level: 1,
-      //     avatar: postData?.userImg,
-      //     replies: [],
-      //     media: selectedMedia, // Store media separately
-      //   },
-      // ]);
-      setCommentInput("");
-      setSelectedMedia([]);
-      setReferences([]);
-    }
-
+const handleCommentSubmit = () => {
+  if (commentInput.trim() || selectedMedia.length > 0) {
     function formatter(comment, references) {
-      // Escape special regex characters in references
       const escapedRefs = references.map(ref =>
         ref.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")
       );
-    
-      // Sort longer refs first to avoid substring mismatches (e.g., @don and @donald)
       escapedRefs.sort((a, b) => b.length - a.length);
-    
+
       const regex = new RegExp(`(${escapedRefs.join("|")})`, "gi");
-    
+
       const formatted = comment.replace(regex, (match) => {
         if (match.startsWith("@")) {
           return `<span class="text-blue-300 font-semibold">${match}</span>`;
@@ -219,36 +194,75 @@ const Post = ({ postData, commentVisibility }) => {
         }
         return match;
       });
-    
+
       return `<p>${formatted}</p>`;
     }
-    
-    let mediaTags=selectedMedia.map(src => `<img src="${src}" />`).join("");
-    let formattedText=formatter(commentInput,references);
-    console.log(formattedText+mediaTags)
-    let finalContent=formattedText+mediaTags;
 
-    postComments(postData.id,"",finalContent,(data)=>{
-      setComments(...comments,data);
-      console.log("Success ",data)
-    },(error)=>{
-      console.log(error)
-    })
-  };
+    const mediaTags = selectedMedia.map(src => `<img src="${src}" />`).join("");
+    const formattedText = formatter(commentInput, references);
+    const finalContent = formattedText + mediaTags;
+
+    postComments(postData.id, "", finalContent, (data) => {
+      // Append new comment to existing list
+      setComments(prev => [data, ...prev]);
+
+      // Clear input
+      setCommentInput("");
+      setSelectedMedia([]);
+      setReferences([]);
+
+      console.log("Success", data);
+    }, (error) => {
+      console.log("Post failed", error);
+    });
+  }
+};
+
 
   useEffect(()=>{
     if(postData && postData.id && commentVisibility){
       getPostComments(postData.id,(data)=>{
         console.log(data)
+        setComments(data.data)
       },(error)=>{
         console.log(error)
       })
     }
   },[postData])
 
-  const handleLike=()=>{
-    console.log("liked")
-  }
+  const handleLike = (flag) => {
+    if (!postData?.id) return;
+  
+    if (!flag) {
+      // Add postData.id to likesArray (if not already present)
+      likePost(postData.id,()=>{
+        postData.like_count=postData.like_count+1;
+        setLikesArray(prev => {
+          const safePrev = Array.isArray(prev) ? prev : [];
+          return [...new Set([...safePrev, postData.id])]; // ✅ return here
+        });
+      },(error)=>{
+        console.log(error)
+      })
+    } else {
+      // Remove postData.id from likesArray
+      dislikePost(postData.id,()=>{
+        postData.like_count=postData.like_count-1;
+        setLikesArray(prev => {
+          const safePrev = Array.isArray(prev) ? prev : [];
+          return safePrev.filter(id => id !== postData.id); // ✅ return here
+        })
+      },(error)=>{
+        console.log(error)
+      })
+    }
+  
+    console.log("liked:", flag ? "removed" : "added");
+  };
+  
+
+  
+  
 
   return (
     <div
@@ -275,12 +289,16 @@ const Post = ({ postData, commentVisibility }) => {
 
       {/* Content */}
       <div className="flex flex-col flex-1 gap-3">
-        <p className="dark:text-white">{postData?.content}</p>
+        {/* <p className="dark:text-white">{postData?.content}</p> */}
+        <div
+            className="prose dark:prose-invert"
+            dangerouslySetInnerHTML={{ __html: postData?.content }}
+          />
         {postData?.image?.path && (
           <img
-            src={postData?.image?.path}
+            src={postData.image.path}
             alt="Post"
-            className="rounded-xl h-60 w-full object-cover bg-gray-300"
+            className="rounded-xl h-60 w-full bg-gray-300"
           />
         )}
       </div>
@@ -288,7 +306,16 @@ const Post = ({ postData, commentVisibility }) => {
       {/* Actions */}
       <div className="flex justify-around dark:text-gray-300 font-semibold border-t border-gray-600 pt-2">
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
-          <AiOutlineLike size={22} onClick={()=>{handleLike()}} /> <span>{postData?.like_count || 0}</span>
+        {likesArray?.includes(postData?.id) ? (
+          <AiFillLike size={22} className="text-blue-500" onClick={(e) => {
+            e.stopPropagation()
+            handleLike(true)}
+          } />
+        ) : (
+          <AiOutlineLike size={22} onClick={(e) => {
+            e.stopPropagation()
+            handleLike(false)}} />
+        )} <span>{postData?.like_count || 0}</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
           <FaRegCommentAlt size={20} /> <span>Comment</span>
@@ -365,19 +392,19 @@ const Post = ({ postData, commentVisibility }) => {
             />
 
 
-{showSuggestions && tagSuggestions.length > 0 && (
-  <ul className="absolute left-4 bottom-[110%] bg-white dark:bg-[#1c1c1c] text-black dark:text-white border border-gray-300 dark:border-gray-700 rounded-md shadow-lg w-64 max-h-40 overflow-y-auto z-50">
-    {tagSuggestions.map((tag, idx) => (
-      <li
-        key={idx}
-        onClick={() => insertTag(tag)}
-        className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
-      >
-        {tag}
-      </li>
-    ))}
-  </ul>
-)}
+          {showSuggestions && tagSuggestions.length > 0 && (
+            <ul className="absolute left-4 bottom-[110%] bg-white dark:bg-[#1c1c1c] text-black dark:text-white border border-gray-300 dark:border-gray-700 rounded-md shadow-lg w-64 max-h-40 overflow-y-auto z-50">
+              {tagSuggestions.map((tag, idx) => (
+                <li
+                  key={idx}
+                  onClick={() => insertTag(tag)}
+                  className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
+          )}
 
 
             <div className="absolute right-16 top-1/2 transform -translate-y-1/2 flex gap-4 dark:text-gray-400">
@@ -445,55 +472,51 @@ const Post = ({ postData, commentVisibility }) => {
 
           {/* Comments List */}
           <div className="mt-4 flex flex-col gap-3 max-h-[40rem] w-full overflow-y-auto notificationScrollbar">
-            {comments.length > 0 ? (
-              comments.map((comment, index) => (
-                <div
-                  key={index}
-                  className="flex gap-3 w-full items-start bg-slate-300 dark:bg-[#002763] p-3 rounded-lg"
-                >
-                  <img
-                    src={comment.avatar}
-                    alt="User Avatar"
-                    className="w-12 h-12 rounded-full bg-gray-400 object-cover"
-                  />
-                  <div className="dark:text-white w-full">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <strong>{comment.user}</strong>
-                        <span className="dark:text-gray-400 text-sm ml-2">Level {comment.level}</span>
-                      </div>
-                      {/* <BsThreeDots className="dark:text-gray-400 cursor-pointer" size={18} /> */}
-                    </div>
-                    <span className="dark:text-gray-400 text-sm">Ambassador</span>
-                    <div className="mt-3 flex items-center justify-between w-full">
-                      <div className="flex-1 mr-5 max-w-[40rem] flex flex-col gap-2">
-                      <p>{formatCommentText(comment.text)}</p>
-                        {/* Render attached media if present */}
-                        {comment.media?.map((url, i) => (
-                          <img
-                            key={i}
-                            src={url}
-                            alt="attached"
-                            className="rounded-xl max-w-[300px] object-cover"
-                          />
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-5 dark:text-gray-400 cursor-pointer">
-                        <div className="flex items-center gap-1 hover:text-white">
-                          <AiOutlineLike size={18} /> <span>Like</span>
-                        </div>
-                        {/* <div className="flex items-center gap-1 hover:text-white">
-                          <FaReply size={18} /> <span>Reply</span>
-                        </div> */}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-400 text-center">No comments yet.</p>
-            )}
+          {comments.length > 0 ? (
+  comments.map((comment, index) => (
+    <div
+      key={index}
+      className="flex gap-3 w-full items-start bg-slate-300 dark:bg-[#002763] p-3 rounded-lg"
+    >
+      <img
+        src={comment.user?.photo?.path || '/default-avatar.png'}
+        alt="User Avatar"
+        className="w-12 h-12 rounded-full bg-gray-400 object-cover"
+      />
+
+      <div className="dark:text-white w-full flex flex-col justify-between">
+        {/* Top Section: Name and Role */}
+        <div>
+          <strong>
+            {comment.user?.firstName} {comment.user?.lastName}
+          </strong>
+          <div className="dark:text-gray-400 text-sm">User</div>
+        </div>
+
+        {/* Comment Content */}
+        <div className="mt-2 flex-1">
+          <div
+            className="prose dark:prose-invert"
+            dangerouslySetInnerHTML={{ __html: comment.content }}
+          />
+        </div>
+
+        {/* Bottom Right Like Button */}
+        <div className="flex justify-end mt-3">
+          <div className="flex items-center gap-1 text-sm dark:text-gray-400 hover:text-white cursor-pointer">
+            <AiOutlineLike size={18} />
+            <span>{comment.like_count || 0}</span>
           </div>
+        </div>
+      </div>
+    </div>
+  ))
+) : (
+  <p className="text-gray-400 text-center">No comments yet.</p>
+)}
+
+</div>
+
         </div>
       )}
     </div>

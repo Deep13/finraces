@@ -9,7 +9,7 @@ import { CiImageOn } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BsFillSendFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { getRaceList, getTop4 } from "../Utils/api";
+import { fetchStocks, getRaceList, getTop4, getUserLikes, searchUsers } from "../Utils/api";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import JoinRace from "../Components/JoinRace";
 import { FaSmile } from "react-icons/fa";
@@ -78,37 +78,75 @@ const [upcomingRaces, setUpcomingRaces] = useState([]);
 const [showGifPicker, setShowGifPicker] = useState(false);
 const [gifSearch, setGifSearch] = useState("");
 const [gifResults, setGifResults] = useState([]);
-const [selectedMedia, setSelectedMedia] = useState([]);
+const [userLikes, setUserLikes] = useState([]);
 const [selectedFile,setSelectedFile]=useState();
 
 // console.log("ud",userDetails)
 
-const sendPost = () => {
-  if(selectedFile){
-    uploadImage(selectedFile,(data)=>{
-      postCommunityPost("title test",postContent,data.file.id,(data)=>{
-        console.log("posted successfully",data)
-      },(error)=>{
-        console.log("error in posting",error)
-      })
-    },(error)=>{
-      console.log("Error in uploading image to server",error)
-    })
-  }
-  
-  const newPost = {
-    id: posts.length + 1,
-    userName: userDetails?.userName,
-    userImg: userDetails?.photo?.path,
-    time: "Now",
-    content: postContent,
-    coverImg: bannerImg,
-    likes: 0,
-  };
-  setPosts([newPost, ...posts]);
-  setPostContent("");
-  setBannerImg("");
+const formatter = (text, references) => {
+  const escapedRefs = references.map(ref =>
+    ref.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")
+  );
+  escapedRefs.sort((a, b) => b.length - a.length);
+
+  const regex = new RegExp(`(${escapedRefs.join("|")})`, "gi");
+
+  const formatted = text.replace(regex, (match) => {
+    if (match.startsWith("@")) {
+      return `<span class="text-blue-300 font-semibold">${match}</span>`;
+    } else if (match.startsWith("$")) {
+      return `<span class="text-teal-300 font-semibold">${match}</span>`;
+    }
+    return match;
+  });
+
+  return `<p>${formatted}</p>`;
 };
+
+
+const sendPost = () => {
+  const formattedText = formatter(postContent, references);
+  const resetState = () => {
+    setPostContent("");
+    setBannerImg("");
+    setReferences([]);
+  };
+
+  if (selectedFile) {
+    uploadImage(selectedFile, (data) => {
+      const mediaTag = `<img src="${data.file.url}" class="rounded-md my-4" />`;
+      const finalContent = formattedText + mediaTag;
+
+      postCommunityPost("", finalContent, data.file.id, (data) => {
+        console.log("posted successfully", data);
+        setPosts([data, ...posts]);
+        resetState();
+      }, (error) => {
+        console.log("error in posting", error);
+      });
+    }, (error) => {
+      console.log("Error in uploading image to server", error);
+    });
+  } else {
+    // 🟡 This handles GIF image embed
+    let gifTag = "";
+    if (bannerImg && bannerImg.includes("giphy")) {
+      gifTag = `<img src="${bannerImg}" class="rounded-md my-4" />`;
+    }
+
+    const finalContent = formattedText + gifTag;
+
+    postCommunityPost("", finalContent, "", (data) => {
+      console.log("posted successfully", data);
+      setPosts([data, ...posts]);
+      resetState();
+    }, (error) => {
+      console.log("error in posting", error);
+    });
+  }
+};
+
+
 
 const handleImageUpload = (event) => {
   const file = event.target.files[0];
@@ -121,6 +159,9 @@ const handleImageUpload = (event) => {
 
 const navigate=useNavigate();
 const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+const [tagSuggestions, setTagSuggestions] = useState([]);
+const [showSuggestions, setShowSuggestions] = useState(false);
+const [references,setReferences] = useState([]);
 
 const handleEmojiClick = (emojiData) => {
   setPostContent(prev => prev + emojiData.emoji);
@@ -160,14 +201,24 @@ useEffect(()=>{
     console.log("Error",error)
   })
 
-  getPosts("None",(data)=>{
+  getPosts("All",(data)=>{
+    console.log(data)
     setLoadingPosts(false)
     setPosts(data.data);
   });
 
   getFollowees((data)=>{
-    setFollowees(data)
-    console.log(data.data)
+    
+    const followeeIds = data.data.map(item => item?.followee?.id); 
+    setFollowees(followeeIds)
+    console.log("followees",followeeIds)
+  },(error)=>{
+    console.log(error)
+  })
+
+  getUserLikes((data)=>{
+    setUserLikes(data.data.map(item => item.post.id))
+    console.log(data.data.map(item => item.post.id),data)
   },(error)=>{
     console.log(error)
   })
@@ -189,10 +240,10 @@ const handleFollow = async (isFollowed, leader) => {
   if (!leaderId) return; // safety check
 
   if(isFollowed){
-   unFollowUser(leaderId,(data)=>{
+   unFollowUser(leaderId,()=>{
     setFollowees((prev)=>{
       const safePrev = Array.isArray(prev) ? prev : [];
-      return safePrev.filter((f) => f?.followee?.id !== leaderId);
+      return safePrev.filter((f) => f !== leaderId);
     })
    },(error)=>{
     console.log(error)
@@ -202,33 +253,55 @@ const handleFollow = async (isFollowed, leader) => {
     followUser(leaderId,(data)=>{
       setFollowees((prev)=>{
         const safePrev = Array.isArray(prev) ? prev : [];
-        return safePrev.filter((f) => f?.followee?.id !== leaderId);
+        return [...safePrev, leaderId];
       })
     },(error)=>{
       console.log(error)
     })
   }
-  // setFollowees((prev) => {
-  //   const safePrev = Array.isArray(prev) ? prev : [];
-
-  //   if (isFollowed) {
-  //     // Unfollow logic
-  //     return safePrev.filter((f) => f?.followee?.id !== leaderId);
-  //   } else {
-  //     // Follow logic
-      
-  //     return [
-  //       ...safePrev,
-  //       {
-  //         followee: leader.user,
-  //         id: leader.user.id,
-  //         createdAt: new Date().toISOString(),
-  //       },
-  //     ];
-  //   }
-  // });
 };
 
+const handleCommentChange = async(e) => {
+  const value = e.target.value;
+  setPostContent(value);
+
+  // Regex to find the last @username or $stock symbol before the cursor
+  const atMatch = value.match(/@(\w*)$/);
+  const dollarMatch = value.match(/\$(\w*)$/);
+
+  if (atMatch) {
+    const query = atMatch[1].toLowerCase(); // Extract everything after @
+    const data = await searchUsers(query, 5); // API call (adjust as needed)
+    const extractedUsernames = data.data.map(
+      (user) => `${user.firstName} ${user.lastName}`.trim()
+    );
+    setTagSuggestions(extractedUsernames);
+    setShowSuggestions(true);
+  } else if (dollarMatch) {
+    const query = dollarMatch[1].toLowerCase(); // Extract everything after $
+    fetchStocks(query);
+    
+  } else {
+    setShowSuggestions(false);
+  }
+};
+
+
+const insertTag = (tag) => {
+  const words = postContent.split(" ");
+  const lastWord = words[words.length - 1];
+  const formattedTag = lastWord.startsWith("@") ? `@${tag}` : `$${tag}`;
+  
+  // Replace the last word with the selected tag
+  words[words.length - 1] = formattedTag;
+  setPostContent(words.join(" ") + " ");
+
+  // Update the references array
+  setReferences((prev) => [...prev, formattedTag]);
+
+  // Hide suggestions
+  setShowSuggestions(false);
+};
 
   return (
     <div className="w-full relative min-h-screen flex pb-8 pt-8 dark:bg-[#000924]">
@@ -265,14 +338,28 @@ const handleFollow = async (isFollowed, leader) => {
 
               {/* Input & Actions */}
               <div className="flex flex-col gap-3 flex-1 relative">
-  {/* Input Box */}
-  <input 
-    type="text" 
-    value={postContent} 
-    onChange={(e) => setPostContent(e.target.value)} 
-    className="rounded-xl px-4 py-3 bg-slate-200 dark:bg-[#001B51] text-white placeholder-gray-400 focus:outline-none" 
-    placeholder="Start a post..." 
-  />
+                {/* Input Box */}
+                <input 
+                  type="text" 
+                  value={postContent} 
+                  onChange={handleCommentChange} 
+                  className="rounded-xl px-4 py-3 bg-slate-200 dark:bg-[#001B51] text-white placeholder-gray-400 focus:outline-none" 
+                  placeholder="Start a post..." 
+                />
+
+              {showSuggestions && tagSuggestions.length > 0 && (
+              <ul className="absolute left-4 bottom-[110%] bg-white dark:bg-[#1c1c1c] text-black dark:text-white border border-gray-300 dark:border-gray-700 rounded-md shadow-lg w-64 max-h-40 overflow-y-auto z-50">
+                {tagSuggestions.map((tag, idx) => (
+                  <li
+                    key={idx}
+                    onClick={() => insertTag(tag)}
+                    className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
+                  >
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            )}
 
   {/* Actions (Media, Emoji, etc.) */}
   <div className="flex items-center justify-evenly dark:text-white">
@@ -290,7 +377,7 @@ const handleFollow = async (isFollowed, leader) => {
       <CiImageOn size={24} /> Image
     </button>
     
-    <button onClick={()=>{setShowGifPicker(true)}} className="hover:text-gray-300 transition-all flex items-center gap-1">
+    <button onClick={()=>{setShowGifPicker(!showGifPicker)}} className="hover:text-gray-300 transition-all flex items-center gap-1">
       <CiImageOn size={24} /> GIF
     </button>
 
@@ -309,13 +396,13 @@ const handleFollow = async (isFollowed, leader) => {
 
   {/* Emoji Picker */}
   {showEmojiPicker && (
-    <div className="absolute top-[6rem] left-0 z-50">
+    <div className="absolute top-[6rem] right-10 z-50">
       <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
     </div>
   )}
 
 {showGifPicker && (
-  <div className="absolute top-[12rem] left-0 z-50 w-96 bg-white dark:bg-[#001B51] p-3 rounded-xl shadow-xl">
+  <div className="absolute top-[6rem] left-28 z-50 w-96 bg-white dark:bg-[#001B51] p-3 rounded-xl shadow-xl">
     <input 
       type="text" 
       value={gifSearch} 
@@ -334,8 +421,10 @@ const handleFollow = async (isFollowed, leader) => {
           alt={gif.title}
           className="cursor-pointer rounded-md hover:scale-105 transition-all"
           onClick={() => {
-            setBannerImg(gif.images.fixed_height.url); // Set as post media
+            setBannerImg(gif.images.original.url);
             setShowGifPicker(false);
+            setGifSearch("");
+            setGifResults([]);
           }}
         />
       ))}
@@ -395,7 +484,7 @@ const handleFollow = async (isFollowed, leader) => {
     </div>
   ) : posts && posts.length > 0 ? (
     posts.map((post) => (
-      <Post key={post.id} postData={post} commentVisibility={false} />
+      <Post key={post.id} postData={post} commentVisibility={false} likesArray={userLikes} setLikesArray={setUserLikes}/>
     ))
   ) : (
     <div className="text-center text-gray-500 mt-10">
@@ -437,7 +526,7 @@ const handleFollow = async (isFollowed, leader) => {
               
                   const isFollowed =
                     Array.isArray(followees) &&
-                    followees.some((f) => f?.followee?.id === leaderId);
+                    followees.includes(leaderId);
               
                   return (
                     <div

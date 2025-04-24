@@ -2157,16 +2157,23 @@ export const postCommunityPost = async (title, content, img, onSuccess, onError)
     const token = localStorage.getItem('token');
     const url = `${GlobalURL}/api/v1/community-posts`;
 
-    const reqBody = {
+    const commonData = {
       seo: {
         id: "eda4717e-36f6-43ad-8f1a-6630b3e93a9c"
       },
-      title: title,        // Make sure this is a plain string
-      content: content,    // Make sure this is a plain string
-      image: {
-        id: img            // Must be a string too
-      }
+      title,
+      content
     };
+
+    const reqBody = img
+      ? {
+          ...commonData,
+          image: {
+            id: img
+          }
+        }
+      : commonData;
+
 
     const response = await fetch(url, {
       method: 'POST',
@@ -2269,7 +2276,7 @@ export const getPostDetailed=async(postId,onSuccess,onError)=>{
 export const likePost = async(postId,onSuccess,onError)=>{
   try{ 
     const token = localStorage.getItem('token');
-    let url = `${GlobalURL}/api/v1/community-posts-likes`;
+    let url = `${GlobalURL}/api/v1/community-post-likes`;
     const reqBody={
       post:{
         id:postId
@@ -2298,11 +2305,38 @@ export const likePost = async(postId,onSuccess,onError)=>{
     onError(error);
   }
 }
+export const dislikePost = async(postId,onSuccess,onError)=>{
+  try{ 
+    const token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/community-post-likes/${postId}`;
+    
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-export const getPostComments=async(postId,onSuccess,onError)=>{
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    // const data = await response.json();
+    // console.log('Community post created successfully:', data);
+    onSuccess();
+  } catch (error) {
+    onError(error);
+  }
+}
+
+export const getUserLikes=async(onSuccess,onError)=>{
   const token = localStorage.getItem('token');
-  let url = `${GlobalURL}/api/v1/community-post-comments/${postId}`;
+ 
   let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+  let url = `${GlobalURL}/api/v1/community-post-likes?userId=${userDetails.userId}`;
 
   try{
     const response = await fetch(url, {
@@ -2319,10 +2353,40 @@ export const getPostComments=async(postId,onSuccess,onError)=>{
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
   
-    const text = await response.text();
     const data = await response.json();
     onSuccess(data);
 
+  }
+  catch(error){
+    onError(error)
+  }
+
+}
+
+export const getPostComments=async(postId,onSuccess,onError)=>{
+  const token = localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/community-post-comments?postId=${postId}`; 
+  // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  try{
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+  
+    const text = await response.text(); // Get raw response
+
+    if (!response.ok) {
+      console.error('Server error response:', text);
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    // ✅ Safely parse JSON if there is content
+    const data = text ? JSON.parse(text) : null;
+    onSuccess(data);
   }
   catch(error){
     onError(error)
@@ -2544,8 +2608,8 @@ export const unFollowUser=async(followeeId,onSuccess,onError)=>{
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
   
-    const data = await response.json();
-    onSuccess(data);
+    // const data = await response.json();
+    onSuccess();
 
   }
   catch(error){

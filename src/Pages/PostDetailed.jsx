@@ -3,7 +3,7 @@ import Sidebar from "../Components/Sidebar";
 import Post from "../Components/Post";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useEffect, useState } from "react";
-import { getPostDetailed } from "../Utils/api";
+import { getPostDetailed, getUserLikes } from "../Utils/api";
 import { ColorRing } from "react-loader-spinner";
 
 const PostDetailed = () => {
@@ -11,6 +11,7 @@ const PostDetailed = () => {
     const navigate = useNavigate();
     const [postData,setPostData]=useState({});
     const [loading,setLoading]=useState(true);
+    const [userLikes,setUserLikes]=useState([]);
 
     useEffect(()=>{
         getPostDetailed(post_id,(data)=>{
@@ -20,6 +21,13 @@ const PostDetailed = () => {
         },(error)=>{
             console.log("Error fetching post details",error)
         })
+
+        getUserLikes((data)=>{
+            setUserLikes(data.data.map(item => item.post.id))
+            console.log(data.data.map(item => item.post.id),data)
+          },(error)=>{
+            console.log(error)
+          })
     },[])
 
     return (
@@ -51,7 +59,7 @@ const PostDetailed = () => {
                     />
                     </div>
                 ):(
-                    <Post postData={postData} commentVisibility={true} />
+                    <Post postData={postData} commentVisibility={true} likesArray={userLikes} setLikesArray={setUserLikes} />
                 )}
 
             </div>
