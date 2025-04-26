@@ -4,7 +4,7 @@ import Pagination from '../../Components/Pagination'
 import { getRaceList } from '../../Utils/api'
 import { ColorRing } from 'react-loader-spinner'
 
-const OngoingRacesAllRaces = () => {
+const OngoingRacesAllRaces = ({filters}) => {
     const [raceList, setRaceList] = useState([])
     const [loading,setLoading]=useState(false);
 
@@ -19,8 +19,8 @@ const OngoingRacesAllRaces = () => {
             // alert('failure')
             console.log("error",error)
             setLoading(false);
-        })
-    }, [])
+        },filters)
+    }, [filters])
     return (
         <div className='max-w-[1400px] relative mb-[3.3rem]'>
             <div className='w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2 min-h-[200px] relative'>

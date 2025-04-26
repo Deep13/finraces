@@ -14,10 +14,12 @@ import Crown_2 from '../assets/images/Crown_2.png'
 import Crown_3 from '../assets/images/Crown_3.png'
 import malePlceholder from '../assets/images/manPlaceholder.jpg'
 import femalePlceholder from '../assets/images/womanPlaceholder.jpg'
+import { CgSearch } from "react-icons/cg";
 
 import { getTopRankers } from '../Utils/api'
 import Pagination from '../Components/Pagination'
 import {useNavigate} from "react-router-dom";
+import DateRangePicker from "../Components/DateRangePicker"
 
 
 const Leaderboard = () => {
@@ -146,11 +148,13 @@ const Leaderboard = () => {
 
 
 
-  const [activeTab, setActiveTab] = useState("Today");
-  const [leaderboard, setLeaderboard] = useState([])
+  const [activeTab, setActiveTab] = useState("");
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [top3,setTop3]=useState([]);
   const [hasNextPage, setHasNextPage] = useState(false)
   const [searchQuery,setSearchQuery]=useState("");
   const [startDate,setStartDate]=useState("");
+  const [sortType,setSortType]=useState("Rank");
   const [endDate,setEndDate]=useState("");
   const [page,setPage]=useState(1);
   const navigate=useNavigate();
@@ -163,6 +167,17 @@ const Leaderboard = () => {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
+
+  useEffect(()=>{
+    console.log(sortType)
+
+    getTopRankers(startDate, endDate, 20, 1,searchQuery,(data) => {
+      // console.log('Top 4 fetched', data)
+      setLeaderboard(data.data)
+      // setTop3(data.data.slice(0,3));
+      setHasNextPage(data.hasNextPage)
+    },(error)=>{console.log(error)},sortType )
+  },[sortType])
 
   useEffect(() => {
     let today = new Date()
@@ -182,21 +197,41 @@ const Leaderboard = () => {
     }
     getTopRankers(startDate, today, 20, 1,searchQuery, (data) => {
       console.log('Top 4 fetched', data)
-      setLeaderboard(data.data)
+      setLeaderboard(data.data);
+      setTop3(data.data.slice(0,3));
       setHasNextPage(data.hasNextPage)
     })
   }, [activeTab])
 
-  console.log("l",leaderboard)
+  console.log("l",leaderboard,top3)
 
   useEffect(()=>{
     console.log(startDate,endDate,searchQuery)
     getTopRankers(startDate, endDate, 20, page,searchQuery, (data) => {
       console.log('Top 4 fetched', data)
       setLeaderboard(data.data)
+      // setTop3(data.data.slice(0,3));
       setHasNextPage(data.hasNextPage)
     })
   },[searchQuery,startDate,endDate,page])
+
+  useEffect(()=>{
+    getTopRankers(startDate, endDate, 20, page,searchQuery, (data) => {
+      // console.log('Top 4 fetched', data)
+      setLeaderboard(data.data)
+      setTop3(data.data.slice(0,3));
+      setHasNextPage(data.hasNextPage)
+    })
+  },[])
+
+  useEffect(()=>{
+    getTopRankers(startDate, endDate, 20, 1,searchQuery, (data) => {
+      // console.log('Top 4 fetched', data)
+      setLeaderboard(data.data)
+      setTop3(data.data.slice(0,3));
+      setHasNextPage(data.hasNextPage)
+    })
+  },[startDate,endDate])
 
   return (
     <>
@@ -208,67 +243,41 @@ const Leaderboard = () => {
         <div className='flex-1 px-[2%] md:px-[6%]'>
           <div className='w-full rounded-lg py-8 dark:bg-[#000D38]'>
             <h1 className='text-[2.2rem] font-bold text-black text-center mb-4 dark:text-white'>Global Leaderboard</h1>
-            <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem] mb-6'>
-              {Object.keys(leaderboardData).map((tab, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleTabClick(tab)}
-                  className={`flex dark:text-white justify-center items-center px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
-              ${activeTab === tab ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]' : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'}`}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
+            <div className="w-full px-20 flex flex-wrap justify-between items-center gap-4 md:gap-6 mb-6 dark:text-white">
+              {/* Tab Buttons */}
+              <div className="flex gap-[0.7rem]">
+                {Object.keys(leaderboardData).map((tab, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleTabClick(tab)}
+                    className={`flex dark:text-white justify-center items-center px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
+                      ${activeTab === tab ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]' : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'}`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+
+  {/* Date Range Picker */}
+  <div className="flex items-center gap-2 md:gap-4">
+    <label htmlFor="start-date" className="text-sm">Range:</label>
+    <DateRangePicker
+      startDate={startDate}
+      endDate={endDate}
+      setStartDate={setStartDate}
+      setEndDate={setEndDate}
+    />
+  </div>
+</div>
+
             <div className='w-full rounded-[20px] grid lg:grid-cols-4 md:grid-cols-2 gap-[1.3rem] md:px-[1.3rem] px-[0.7rem] py-[1.11rem]'>
-            {/* <ProfileCardHomepage
-              key={71}
-              fullName={"Test Man"}
-              rank={71}
-              image={""}
-              points={0}
-              index={71}
-              id={71}
-              email={"testMan@testing.com"}
-              activeTab={activeTab}
-              gender={"male"}
-              />
-              <ProfileCardHomepage
-              key={72}
-              fullName={"Test Woman"}
-              rank={72}
-              image={""}
-              points={0}
-              index={72}
-              id={72}
-              email={"testWoman@testing.com"}
-              activeTab={activeTab}
-              gender={"female"}
-              /> */}
-              {/* {
-                leaderboard &&
-                leaderboard?.slice(0, 4)?.map((curr, index) => {
-                  return (
-                    <ProfileCardHomepage
-                      key={index}
-                      fullName={curr.user.firstName + " " + curr.user.lastName}
-                      rank={index + 1}
-                      image={curr?.user?.photo?.path}
-                      points={curr?.total_points == null ? 0 : curr.total_points}
-                      index={index}
-                      id={curr.user.id}
-                      email={curr.email}
-                      activeTab={activeTab}
-                    />
-                  )
-                })
-              } */}
-         {leaderboard && leaderboard.length >= 3 && (
+            
+         {top3 && top3.length >= 3 && (
   <div className='col-span-full w-full flex flex-col items-center justify-center'>
     
     {/* Profile Pictures with Crowns */}
     <div className='w-full flex justify-center items-center gap-6'>
-      {leaderboard.slice(0, 3).map((entry, index) => {
+      {top3.map((entry, index) => {
         const user = entry.user;
         const image = user?.photo?.path || (user?.gender === 'female' ? femalePlceholder : malePlceholder);
         const crown = index === 0 ? Crown_1 : index === 1 ? Crown_2 : Crown_3;
@@ -292,7 +301,7 @@ const Leaderboard = () => {
 
     {/* Names Below */}
     <div className='w-full flex justify-center items-center gap-6 mt-16 dark:text-white'>
-      {leaderboard.slice(0, 3).map((entry) => {
+      {top3.map((entry) => {
         const user = entry.user;
         return (
           <div key={user.id} className='flex flex-1 justify-center'>
@@ -307,43 +316,21 @@ const Leaderboard = () => {
 
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-4 px-6 md:px-20 py-5 mt-5 dark:text-white">
+            <div className="flex flex-wrap items-center gap-4 px-6 md:px-20 py-5 mt-5 dark:text-white w-full">
               {/* Search Input */}
+              <CgSearch size={32} className='text-slate-300 font-semibold'/>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e)=>{setSearchQuery(e.target.value)}}
                 placeholder="Search users..."
-                className="rounded-xl px-4 w-full md:w-64 h-10 border dark:border-slate-300 dark:bg-[#002760] bg-slate-200 focus:outline-none focus:ring-2 focus:ring-primary"
+                className="rounded-xl px-4 w-2/3 h-10 border dark:border-slate-300 dark:bg-[#002760] bg-slate-200 focus:outline-none focus:ring-2 focus:ring-primary"
               />
 
-              {/* Date Filters */}
-              <div className="flex items-center gap-4">
-                <div className="flex flex-col">
-                  <label htmlFor="start-date" className="text-sm mb-1">Start Date</label>
-                  <input
-                    type="date"
-                    id="start-date"
-                    className="rounded-md px-2 py-1 border dark:border-slate-300 dark:bg-[#002760] bg-slate-200 focus:outline-none"
-                    value={startDate}
-                    onChange={(e)=>{setStartDate(e.target.value)}}
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label htmlFor="end-date" className="text-sm mb-1">End Date</label>
-                  <input
-                    type="date"
-                    id="end-date"
-                    className="rounded-md px-2 py-1 border dark:border-slate-300 dark:bg-[#002760] bg-slate-200 focus:outline-none"
-                    value={endDate}
-                    onChange={(e)=>{setEndDate(e.target.value)}}
-                  />
-                </div>
-              </div>
+              
             </div>
 
-            <LeaderTable data={leaderboard} />
+            <LeaderTable data={leaderboard} setSortType={setSortType} />
             {/* {hasNextPage && <Pagination />} */}
 
             <br /><br /><br />

@@ -4,7 +4,7 @@ import Pagination from '../../Components/Pagination'
 import { getRaceList } from '../../Utils/api'
 import { ColorRing } from 'react-loader-spinner'
 
-const UpcomingRacesAllRaces = () => {
+const UpcomingRacesAllRaces = ({filters}) => {
 
     const [raceList, setRaceList] = useState([]);
     const [loading,setLoading]=useState(false);
@@ -19,7 +19,7 @@ const UpcomingRacesAllRaces = () => {
             console.error('Failed to fetch race list');
             setLoading(false)
         });
-    }, []);
+    }, [filters]);
 
     return (
         <div className='max-w-[1400px] relative mb-[3.3rem]'>

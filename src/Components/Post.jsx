@@ -8,10 +8,13 @@ import { IoMdCamera } from "react-icons/io";
 import { MdOutlineGifBox } from "react-icons/md";
 import EmojiPicker from "emoji-picker-react";
 import { giphyKey } from "../Config";
-import {searchUsers,debounceStockSearchj, getPostComments,postComments,likePost, dislikePost} from "../Utils/api"
+import {searchUsers,debounceStockSearchj, getPostComments,postComments,likePost, dislikePost, getUserLikedComments, likeComment, dislikeComment} from "../Utils/api"
 import {debounce} from "lodash"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Make sure this is imported
+import malePlaceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
+import { GrFormView } from "react-icons/gr";
 
 const Post = ({ postData, commentVisibility,likesArray=[],setLikesArray }) => {
   const navigate = useNavigate();
@@ -118,44 +121,35 @@ const Post = ({ postData, commentVisibility,likesArray=[],setLikesArray }) => {
     }
   };
   
-
-  // Function to highlight tags
-  const formatCommentText = (text) => {
-    if(!text)return;
-
-    const words = text?.split(" ");
-    const formatted = [];
-    let i = 0;
+  const handleCommentLikes=(flag,comment)=>{
+    if (!comment?.id) return;
   
-    while (i < words?.length) {
-      let matched = false;
-  
-      for (let ref of references) {
-        const refWords = ref?.split(" ");
-        const segment = words?.slice(i, i + refWords?.length).join(" ");
-  
-        if (segment === ref) {
-          // Found a match in references
-          const colorClass = ref.startsWith("@") ? "text-blue-500 font-smibold" : "text-teal-500 font-semibold";
-          formatted.push(
-            <span key={i} className={colorClass}>
-              {segment + " "}
-            </span>
-          );
-          i += refWords.length;
-          matched = true;
-          break;
-        }
-      }
-  
-      if (!matched) {
-        formatted.push(words[i] + " ");
-        i++;
-      }
+    if (!flag) {
+      // Add comment.id to likesArray (if not already present)
+      likeComment(comment.id,()=>{
+        comment.post.like_count=comment.post.like_count+1;
+        setLikedComments(prev => {
+          const safePrev = Array.isArray(prev) ? prev : [];
+          return [...new Set([...safePrev, comment.id])]; // ✅ return here
+        });
+      },(error)=>{
+        console.log(error)
+      })
+    } else {
+      // Remove comment.id from likesArray
+      dislikeComment(comment.id,()=>{
+        comment.post.like_count=comment.post.like_count-1;
+        setLikedComments(prev => {
+          const safePrev = Array.isArray(prev) ? prev : [];
+          return safePrev.filter(id => id !== comment.id); // ✅ return here
+        })
+      },(error)=>{
+        console.log(error)
+      })
     }
   
-    return formatted;
-  };
+    console.log("liked:", flag ? "removed" : "added");
+  }
   
   
 
@@ -218,12 +212,20 @@ const handleCommentSubmit = () => {
   }
 };
 
-
+const [likedComments,setLikedComments]=useState([]);
   useEffect(()=>{
     if(postData && postData.id && commentVisibility){
       getPostComments(postData.id,(data)=>{
         console.log(data)
         setComments(data.data)
+      },(error)=>{
+        console.log(error)
+      })
+
+      getUserLikedComments((data)=>{
+        console.log("userlikes these",data)
+        const commentIds = data.data.map(item => item.comment.id);
+        setLikedComments(commentIds);
       },(error)=>{
         console.log(error)
       })
@@ -275,7 +277,7 @@ const handleCommentSubmit = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4 flex-1">
           <img
-            src={postData?.user?.photo?.path}
+            src={postData?.user?.photo?.path || (postData?.user?.gender=='female'?femalePlaceholder:malePlaceholder)}
             alt="User Avatar"
             className="w-12 h-12 rounded-full dark:bg-gray-300 object-cover"
           />
@@ -321,7 +323,7 @@ const handleCommentSubmit = () => {
           <FaRegCommentAlt size={20} /> <span>Comment</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
-          <FaShare size={20} /> <span>Share</span>
+          <GrFormView size={28} /> <span>Views {postData?.view_count ||0}</span>
         </div>
       </div>
 
@@ -504,7 +506,16 @@ const handleCommentSubmit = () => {
         {/* Bottom Right Like Button */}
         <div className="flex justify-end mt-3">
           <div className="flex items-center gap-1 text-sm dark:text-gray-400 hover:text-white cursor-pointer">
-            <AiOutlineLike size={18} />
+          {likedComments?.includes(comment?.id) ? (
+          <AiFillLike size={22} className="text-blue-500" onClick={(e) => {
+            e.stopPropagation()
+            handleCommentLikes(true,comment)}
+          } />
+        ) : (
+          <AiOutlineLike size={22} onClick={(e) => {
+            e.stopPropagation()
+            handleCommentLikes(false,comment)}} />
+        )}
             <span>{comment.like_count || 0}</span>
           </div>
         </div>

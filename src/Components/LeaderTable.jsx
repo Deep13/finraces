@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { getUserDetails } from '../Utils/api'
 
 const LeaderTable = ({
-    data
+    data,setSortType
 }) => {
 
     const navigate = useNavigate()
@@ -30,10 +30,10 @@ const LeaderTable = ({
                 {/* head */}
                 <thead>
                     <tr>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] px-4 text-center">Rank</th>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Player</th>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center">Total Races</th>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center">Total Points</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] px-4 text-center cursor-pointer" onClick={()=>{setSortType("Rank")}}>Rank</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] cursor-pointer" onClick={()=>{setSortType("Name")}}>Player</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center cursor-pointer" onClick={()=>{setSortType("Races")}}>Total Races</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center cursor-pointer" onClick={()=>{setSortType("Points")}}>Total Points</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +44,7 @@ const LeaderTable = ({
                                 <tr style={{
                                     // background: `${userId === curr?.user?.id ? 'yellow' : 'transparent'}`
                                 }} key={index} className="odd:bg-transparent dark:even:bg-[#002760] even:bg-slate-200 group">
-                                    <td className="text-[1.5rem] py-3 px-4 text-center">{index + 1}</td>
+                                    <td className="text-[1.5rem] py-3 px-4 text-center">{curr.rank}</td>
                                     <td className="py-3">
                                         <div className="w-full flex gap-3 justify-start items-center cursor-pointer">
                                             {/* image */}

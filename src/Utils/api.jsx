@@ -1,6 +1,7 @@
 import { data } from "autoprefixer";
 import axios from "axios";
 import { globalUrl } from "../Config";
+import { MdCommentsDisabled } from "react-icons/md";
 
 let GlobalURL = globalUrl
 
@@ -165,12 +166,25 @@ export const createRaceAndJoinUser = async (
 export const getRaceList = async (
   status = 'scheduled',
   onSuccess = () => { },
-  onError = () => { }
+  onError = () => { },
+  filters={endDate:"",selectedStocks:[]}
 ) => {
 
   let token = localStorage.getItem('token')
+  let url=`${GlobalURL}/api/v1/public/races/detailed?limit=10&statuses=${status}`
+
+  if(filters.endDate!=""){
+    let formatttedDate=new Date(filters.endDate).toISOString();
+    url+=`&endDateLessThanEqual=${formatttedDate}`
+  }
+
+  if (filters.selectedStocks.length > 0) {
+    filters.selectedStocks.forEach((stock) => {
+        url += `&tickersContains=${stock}`;
+    });
+}
   try {
-    const response = await fetch(`${GlobalURL}/api/v1/public/races/detailed?limit=10&statuses=${status}`, {
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -1008,9 +1022,20 @@ export const getTopRankers = async (
   searchQuery = '',
   onSuccess = () => {},
   onError = () => {},
+  filterType="rank",
 ) => {
   try {
     let url = `${GlobalURL}/api/v1/public/race-results/stats?limit=${limit}&page=${page}`;
+
+    if(filterType=="Points"){
+      url+=`&sortBy=points`
+    }
+    if(filterType=="Name"){
+      url+=`&sortBy=name`
+    }
+    if(filterType=="Races"){
+      url+=`&sortBy=races_won`
+    }
 
     if (startDate) url += `&from=${formatLocalDateTime(startDate)}`
     if (endDate) url += `&to=${formatLocalDateTime(endDate)}`
@@ -2614,6 +2639,98 @@ export const unFollowUser=async(followeeId,onSuccess,onError)=>{
   }
   catch(error){
     onError(error);
+  }
+
+}
+
+export const likeComment=async(commentId,onSuccess,onError)=>{
+  try{
+    const token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/community-comment-likes`;
+    const reqBody={
+      post:{
+        id:commentId
+      }
+    }
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(reqBody)           // ✅ MUST be stringified
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log('Community post created successfully:', data);
+    onSuccess(data);
+  }
+  catch(error){
+    onError(error)
+  }
+}
+
+export const dislikeComment = async(commentId,onSuccess,onError)=>{
+  try{ 
+    const token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/community-comment-likes/${commentId}`;
+    
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    // const data = await response.json();
+    // console.log('Community post created successfully:', data);
+    onSuccess();
+  } catch (error) {
+    onError(error);
+  }
+}
+
+export const getUserLikedComments=async(onSuccess,onError)=>{
+  const token = localStorage.getItem('token');
+ 
+  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+  let url = `${GlobalURL}/api/v1/community-comment-likes?userId=${userDetails.userId}`;
+
+  try{
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+
+  }
+  catch(error){
+    onError(error)
   }
 
 }

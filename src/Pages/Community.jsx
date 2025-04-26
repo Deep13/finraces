@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import Sidebar from "../Components/Sidebar";
 import Post from "../Components/Post";
 
@@ -9,7 +9,7 @@ import { CiImageOn } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BsFillSendFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { fetchStocks, getRaceList, getTop4, getUserLikes, searchUsers } from "../Utils/api";
+import {debounceStockSearchj, getRaceList, getTop4, getUserLikes, searchUsers } from "../Utils/api";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import JoinRace from "../Components/JoinRace";
 import { FaSmile } from "react-icons/fa";
@@ -18,6 +18,7 @@ import { giphyKey } from "../Config";
 import {uploadImage, postCommunityPost,getPosts,getFollowees,followUser,unFollowUser} from "../Utils/api";
 import { FaPlusCircle,FaMinusCircle } from "react-icons/fa";
 import { ColorRing } from "react-loader-spinner";
+import { debounce } from "lodash";
 
 const Community = () => {
   const tabs = ["All", "Following", "My posts"];  
@@ -261,6 +262,33 @@ const handleFollow = async (isFollowed, leader) => {
   }
 };
 
+ const fetchStocks = useCallback(
+    debounce(async (query) => {
+        if (query.length > 2) {
+            try {
+                await debounceStockSearchj(query, (data) => {
+                    // Extract stock names from API response
+                    const stockNames = data.map((stock) => stock.name);
+                    
+                    // Set tag suggestions using extracted names
+                    setTagSuggestions(stockNames.filter((name) =>
+                        name.toLowerCase().includes(query.toLowerCase())
+                    ));
+                    
+                    setShowSuggestions(true);
+                });
+            } catch (error) {
+                console.error("Error fetching stocks:", error);
+            } finally {
+                console.log("final");
+            }
+        } else {
+            console.log("A");
+        }
+    }, 500),
+    []
+);
+
 const handleCommentChange = async(e) => {
   const value = e.target.value;
   setPostContent(value);
@@ -309,7 +337,7 @@ const insertTag = (tag) => {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex flex-col w-[70rem] gap-4 dark:bg-[#000D38] py-6 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E] dark:text-white">
+      <div className="flex flex-col w-[70rem] gap-4 dark:bg-[#000D38] p-4 md:mx-10 flex-1 rounded-xl border dark:border-[#00387E] dark:text-white">
         {
           joinRaceFormVisible && <JoinRace
           raceName={selectedRaceName}
@@ -317,14 +345,14 @@ const insertTag = (tag) => {
           race_id={selectedRaceId} />
       }
         {/* Title */}
-        <h2 className="font-semibold text-[1.5rem] font-poppins">Engage</h2>
+        {/* <h2 className="font-semibold text-[1.5rem] font-poppins">Engage</h2> */}
         {/* Content Section */}
-        <div className="flex items-start justify-center m-2 w-full gap-5">
+        <div className="flex items-start justify-center m-2 w-full gap-3">
           {/* Left Section - Post Creation + Posts */}
         <div className="flex items-start justify-center m-2 w-full gap-5">
           <div className="flex-1 flex flex-col gap-5 px-2">
             {/* Post Creation Box */}
-            <div className="dark:bg-[#002763] border dark:border-0 rounded-xl flex flex-col gap-4 p-5 w-full">
+            <div className="dark:bg-[#002763] border dark:border-0 rounded-xl flex flex-col gap-4 p-4 w-full">
               <div className="flex gap-4 p-5 w-full">
                 {/* User Avatar */}
               <div className="rounded-full w-16 h-16 bg-gray-300 overflow-hidden">
@@ -469,7 +497,7 @@ const insertTag = (tag) => {
 
 
             {/* Posts Section (Scrollable) */}
-            <div className="p-2 overflow-y-auto flex flex-col gap-5">
+            <div className="overflow-y-auto flex flex-col gap-5">
   {loadingPosts ? (
     <div className="flex items-center justify-center">
       <ColorRing
@@ -498,7 +526,7 @@ const insertTag = (tag) => {
         </div>
 
           {/* Right Section - Top Leaders & Top Stocks */}
-          <div className="w-96 flex flex-col items-center justify-center gap-5">
+          <div className="w-96 flex flex-col items-center justify-center gap-5 mt-1">
   
             {/* Top Leaders Section */}
             <div className="dark:bg-[#002763] p-4 rounded-xl w-full dark:text-white overflow-y-auto flex flex-col gap-4">
@@ -532,7 +560,7 @@ const insertTag = (tag) => {
                     <div
                       key={leaderId}
                       onClick={()=>{navigate(`/userprofile/${leaderId}`)}}
-                      className="flex cursor-pointer items-center justify-between p-3 border dark:border-[#00387E] w-full rounded-xl h-20 bg-[#e5f4ff] dark:bg-[#001B51]"
+                      className="flex cursor-pointer items-center justify-between px-3 py-1"
                     >
                       {/* User Image */}
                       <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-300">
@@ -558,7 +586,7 @@ const insertTag = (tag) => {
                           handleFollow(isFollowed,leader)
                         }}
                       >
-                        {isFollowed ? <FaMinusCircle /> : <FaPlusCircle />}
+                        {isFollowed ? <FaMinusCircle className=" text-red-500" /> : <FaPlusCircle className="text-green-500"/>}
                       </button>
                     </div>
                   );

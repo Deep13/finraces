@@ -37,7 +37,7 @@ const Sidebar = () => {
 
       case "My Races":
         if (!ud) setShowLoginForm(true)
-        else navigate('/profile')
+        else navigate('/blogs')
         break;
 
       case "Ongoing":
@@ -97,7 +97,7 @@ const Sidebar = () => {
         <button onClick={() => handleNavigation('My Races')}
           className={`${baseClass} ${isExactActive('/profile') ? activeGlow : inactiveClass}`}>
           <img src={darkModeEnabled ? finance_ideadark : finance_idea} alt="my races" />
-          My Races
+          Blogs
         </button>
 
         {/* Compare Stocks */}

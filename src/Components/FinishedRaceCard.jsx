@@ -39,7 +39,7 @@ const FinishedRaceCard = ({
     const [raceList, setRaceList] = useState()
     const navigate = useNavigate()
 
-    console.log("checking here", raceData?.participants?.[0]?.photo?.path)
+    // console.log("checking here", raceData?.participants?.[0]?.photo?.path)
 
 
     return (
