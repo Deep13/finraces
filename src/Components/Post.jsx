@@ -8,7 +8,7 @@ import { IoMdCamera } from "react-icons/io";
 import { MdOutlineGifBox } from "react-icons/md";
 import EmojiPicker from "emoji-picker-react";
 import { giphyKey } from "../Config";
-import {searchUsers,debounceStockSearchj, getPostComments,postComments,likePost, dislikePost, getUserLikedComments, likeComment, dislikeComment} from "../Utils/api"
+import {searchUsers,debounceStockSearchj, getPostComments,postComments,likePost, dislikePost, getUserLikedComments, likeComment, dislikeComment,deletePost} from "../Utils/api"
 import {debounce} from "lodash"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // Make sure this is imported
@@ -32,6 +32,7 @@ const Post = ({ postData, commentVisibility,likesArray=[],setLikesArray }) => {
 
   const dummyUsers = ["john_doe", "jane_smith", "elon_musk"];
   const dummyStocks = ["AAPL", "TSLA", "GOOGL"];
+  const userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
   const modules = {
     toolbar: [
       ['bold', 'italic', 'underline'],
@@ -40,6 +41,8 @@ const Post = ({ postData, commentVisibility,likesArray=[],setLikesArray }) => {
       ['clean'],
     ],
   };
+
+  const [showConfirmation,setShowConfirmation]=useState(false);
   
 
   // console.log(likesArray)
@@ -263,15 +266,22 @@ const [likedComments,setLikedComments]=useState([]);
   };
   
 
+  // console.log(JSON.stringify(userDetails),postData)
   
-  
+  const handleDeletePost=()=>{
+    deletePost(postData.id,()=>{
+      console.log("Success")
+    },(error)=>{
+      console.log(error)
+    })
+  }
 
   return (
     <div
       onClick={() => {
         if (!commentVisibility) navigate(`/post/${postData?.id}`);
       }}
-      className={`flex flex-col gap-4 p-4 rounded-xl w-full h-auto bg-[#e5f4ff] dark:bg-[#002763] border dark:border-0 shadow-lg ${!commentVisibility ? "cursor-pointer" : ""}`}
+      className={`relative flex flex-col gap-4 p-4 rounded-xl w-full h-auto bg-[#e5f4ff] dark:bg-[#002763] border dark:border-0 shadow-lg ${!commentVisibility ? "cursor-pointer" : ""}`}
     >
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -287,7 +297,24 @@ const [likedComments,setLikedComments]=useState([]);
           </div>
         </div>
         {/* <BsThreeDots className="dark:text-gray-400 cursor-pointer" size={20} /> */}
+        {(userDetails.userId==postData?.user?.id)&& commentVisibility &&<div onClick={()=>{setShowConfirmation(!showConfirmation)}} className="rounded-xl bg-red-500 py-1 px-2 cursor-pointer">
+          Delete
+        </div>}
       </div>
+
+      {showConfirmation &&
+        <div className="w-72 bg-[#e5f4ff] dark:bg-[#000D38] h-32 absolute z-10 right-5 top-20 rounded-xl flex flex-col gap-3 p-3">
+          <span>Are you sure you want to delete this post ?</span>
+          <div className="flex items-center justify-between px-5">
+            <div onClick={()=>{setShowConfirmation(false)}} className="border-2 cursor-pointer px-2 py-1 rounded-xl border-slate-300">Cancel</div>
+            <div onClick={()=>{
+              handleDeletePost()
+              setShowConfirmation(false)
+              navigate('/community')
+            }} className="border-2 bg-red-500 cursor-pointer px-2 py-1 rounded-xl border-red-500">Delete</div>
+          </div>
+        </div>
+      }
 
       {/* Content */}
       <div className="flex flex-col flex-1 gap-3">

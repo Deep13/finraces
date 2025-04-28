@@ -8,18 +8,22 @@ const UpcomingRacesAllRaces = ({filters}) => {
 
     const [raceList, setRaceList] = useState([]);
     const [loading,setLoading]=useState(false);
+    const [page,setPage]=useState(1);
+    const [totalRaces,setTotalRaces]=useState(1);
 
     useEffect(() => {
         setLoading(true)
-        getRaceList('scheduled', (data) => {
-            console.log('race list here', data);
-            setRaceList(data);
+        getRaceList('scheduled',page, (data) => {
+            let total=Math.floor((data.total)/10);
+            setTotalRaces(total)
+            console.log('finished races', data)
+            setRaceList(data.data)
             setLoading(false)
         }, () => {
             console.error('Failed to fetch race list');
             setLoading(false)
         });
-    }, [filters]);
+    }, [filters,page]);
 
     return (
         <div className='max-w-[1400px] relative mb-[3.3rem]'>
@@ -63,7 +67,7 @@ const UpcomingRacesAllRaces = ({filters}) => {
     )}
 </div>
 
-            {/* <Pagination currentPage={2} totalPages={10} onPageChange={() => { }} /> */}
+            {raceList.length>0 && <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />}
         </div>
     )
 }

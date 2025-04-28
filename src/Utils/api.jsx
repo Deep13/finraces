@@ -165,13 +165,14 @@ export const createRaceAndJoinUser = async (
 
 export const getRaceList = async (
   status = 'scheduled',
+  page=1,
   onSuccess = () => { },
   onError = () => { },
-  filters={endDate:"",selectedStocks:[]}
+  filters={endDate:"",selectedStocks:[]},
 ) => {
 
   let token = localStorage.getItem('token')
-  let url=`${GlobalURL}/api/v1/public/races/detailed?limit=10&statuses=${status}`
+  let url=`${GlobalURL}/api/v1/public/races/detailed?limit=10&statuses=${status}&page=${page}`
 
   if(filters.endDate!=""){
     let formatttedDate=new Date(filters.endDate).toISOString();
@@ -197,9 +198,9 @@ export const getRaceList = async (
     }
 
     const responseData = await response.json()
-    const data = await responseData.data
-    console.log('racelist', data)
-    onSuccess(data)
+    
+    console.log('racelist', responseData)
+    onSuccess(responseData)
 
   } catch (error) {
     console.error('Fetch request failed:', error);
@@ -2269,6 +2270,36 @@ export const getPosts=async(filterType,onSuccess,onError)=>{
 
 }
 
+export const deletePost =async(postId,onSuccess,onError)=>{
+  const token = localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/community-posts/${postId}`;
+  // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  try{
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    // const data = await response.json();
+    onSuccess();
+
+  }
+  catch(error){
+    onError(error)
+  }
+}
+
+
 export const getPostDetailed=async(postId,onSuccess,onError)=>{
   const token = localStorage.getItem('token');
   let url = `${GlobalURL}/api/v1/community-posts/${postId}`;
@@ -2733,4 +2764,54 @@ export const getUserLikedComments=async(onSuccess,onError)=>{
     onError(error)
   }
 
+}
+
+export const getFriends=async(onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+    const response= await fetch(`${GlobalURL}/api/v1/friends}`,{
+      method:"GET",
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+  }
+  catch(error){
+    onError(error)
+  }
+}
+
+export const getFollowers=async(onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+    const response= await fetch(`${GlobalURL}/api/v1/follows/followers}`,{
+      method:"GET",
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+  }
+  catch(error){
+    onError(error)
+  }
 }

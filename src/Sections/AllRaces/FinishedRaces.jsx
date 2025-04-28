@@ -8,35 +8,25 @@ const FinishedRaces = ({filters}) => {
 
     const [raceList, setRaceList] = useState([])
     const [loading,setLoading]=useState(false);
+    const [page,setPage]=useState(1);
+    const [totalRaces,setTotalRaces]=useState(1);
 
-    // useEffect(() => {
-    //     // first get the list of the finished races
-    //     setLoading(true)
-    //     getRaceList('finished', (data) => {
-    //         // alert('success')
-    //         console.log('finished races', data)
-    //         setRaceList(data)
-    //         setLoading(false)
-    //     }, (error) => {
-    //         // alert('failure')
-    //         console.log("error",error);
-    //         setLoading(false);
-    //     },filters)
-    // }, [])
     useEffect(() => {
         // first get the list of the finished races
         setLoading(true)
-        getRaceList('finished', (data) => {
+        getRaceList('finished',page, (data) => {
             // alert('success')
+            let total=Math.floor((data.total)/10);
+            setTotalRaces(total)
             console.log('finished races', data)
-            setRaceList(data)
+            setRaceList(data.data)
             setLoading(false)
         }, (error) => {
             // alert('failure')
             console.log("error",error);
             setLoading(false);
         },filters)
-    }, [filters])
+    }, [filters,page])
     return (
         <div className='max-w-[1400px] relative mb-[3.3rem]'>
             <div className='w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2 min-h-[200px] relative'>
@@ -63,7 +53,7 @@ const FinishedRaces = ({filters}) => {
     )}
 </div>
 
-            {/* <Pagination currentPage={2} totalPages={10} onPageChange={() => { }} /> */}
+        {raceList.length>0 && <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />}
         </div>
     )
 }
