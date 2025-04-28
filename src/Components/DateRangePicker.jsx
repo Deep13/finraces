@@ -19,20 +19,23 @@ const DateRangePicker = ({ startDate, endDate, setStartDate, setEndDate }) => {
 
   const formatRange = () => {
     const { from, to } = selectedRange;
-    if (from && to) return `${format(from, "MMM dd, yyyy")} - ${format(to, "MMM dd, yyyy")}`;
-    if (from) return format(from, "MMM dd, yyyy");
-    return "Select range";
+    if (from && to) return `${format(from, "MMM dd")} - ${format(to, "MMM dd")}`;
+    if (from) return format(from, "MMM dd");
+    return "Date Range";
   };
 
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <button className="px-4 py-2 border rounded-md bg-white dark:bg-[#002760] dark:border-slate-300 shadow-sm text-sm w-48">
+        <button
+          className={`flex dark:text-white justify-center items-center px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
+          bg-white dark:bg-transparent dark:border dark:border-[#00387E]`}
+        >
           {formatRange()}
         </button>
       </PopoverTrigger>
 
-      <PopoverContent className="p-4 bg-white dark:bg-[#002760] rounded-md shadow-lg">
+      <PopoverContent className="p-4 bg-white dark:bg-[#002760] rounded-md shadow-lg z-20">
         <DayPicker
           mode="range"
           selected={selectedRange}

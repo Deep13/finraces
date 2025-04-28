@@ -32,6 +32,8 @@ import Policy from './Pages/Policy'
 import Terms from './Pages/Terms'
 import HowToUseFinraces from './Pages/HowToUse'
 import Blogs from './Pages/Blogs'
+import WriteBlog from './Pages/WriteBlog'
+import AllBlogs from './Pages/AllBlogs'
 
 function App() {
 
@@ -67,6 +69,8 @@ function App() {
                 <Route path='/market' element={<Market />} />
                 <Route path='/stock/:ticker/:id' element={<SingleStock />} />
                 <Route path='/stockTable' element={<StockMarketTable />} />
+                <Route path='/write_blogs' element={<WriteBlog />} />
+                <Route path='/allBlogs' element={<AllBlogs />} />
               </Route>
               <Route path="/auth" element={<Auth />} />
               <Route path="/leaderboard" element={<Leaderboard />} />

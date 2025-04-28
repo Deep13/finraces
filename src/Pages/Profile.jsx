@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import coin from '../assets/images/coin2.png'
-import { getFollowers, getFriends, getUserDetails } from "../Utils/api";
+import { getFollowers, getFollowing, getFriends, getUserDetails } from "../Utils/api";
 import PicUploadPopUpd from "../Components/PicUploadPopUpd";
 import { Oval } from "react-loader-spinner";
 import Sidebar from '../Components/Sidebar'
@@ -16,7 +16,7 @@ import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
 import NoProfilePopup from '../Components/NoProfilePopup';
 import friends from '../assets/icons/friends_Icon.png'
 import followers from '../assets/icons/followers_Icon.png'
-
+import AnimatedNumber from "../Components/AnimatedNumber"
 const superTabsStrings = {
   Profile: 'Profile',
   EditProfile: 'Edit Profile',
@@ -35,6 +35,7 @@ const Profile = () => {
   const [NoUserPopup, setNoUserPopup] = useState(false)
   const [friendsCount,setFriendsCount]=useState(0);
   const [followersCount,setFollowersCount]=useState(0);
+  const [followingCount,setFollowingCount]=useState(0);
   const navigate = useNavigate()
 
 
@@ -57,6 +58,12 @@ const Profile = () => {
     })
     getFollowers((data)=>{
       setFollowersCount(data.total)
+    },(error)=>{
+      console.log(error)
+    })
+
+    getFollowing((data)=>{
+      setFollowingCount(data.total)
     },(error)=>{
       console.log(error)
     })
@@ -113,49 +120,53 @@ const Profile = () => {
                 </div>
               </div>
               <div className='flex-1 bg-white rounded-lg p-[1.5rem] flex justify-between dark:bg-[#001B51] dark:border dark:border-[#00387E]'>
-                <div className='flex justify-between w-full'>
-                  <div className="flex flex-col gap-[0.75rem]">
-                    <p className="font-semibold text-[2rem] dark:text-white">{data && data.firstName + " " + data.lastName}</p>
-                    <p className="font-semibold text-[1rem] -mt-4 text-slate-500 dark:text-white font-poppins">{data?.email}</p>
-                    {/* <p className="font-semibold text-[1rem] dark:text-white">AKA Samuel <span className="ml-3">L.A, Calirfonia</span></p> */}
-                    <div className="self-start flex gap-4">
-                      {/* XP card here  */}
-                      <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">
-                        {/* <div>
-                          <img src={coin} alt="" />
-                        </div> */}
-                        <div className="font-semibold text-[0.9rem] flex flex-col">
-                          <p className="font-semibold text-[0.9rem]">Explorer</p>
-                          {/* <p className="font-semibold text-[0.9rem]">250 XP</p> */}
-                        </div>
-                      </div>
-                      {/* <div className="flex gap-2 items-center">
-                        <div className="rounded-full bg-green-700 w-2 h-2 dark:bg-green-500" />
-                        <p className="font-bold text-[1rem] text-green-700 dark:text-green-500">Currently Online</p>
-                      </div> */}
-                    </div>
-                  </div>
-                  <div className="flex gap-20 dark:text-white mt-2 mr-2">
-                    {/* Followers */}
-                    <div className="flex items-center gap-4">
-                      <img src={followers} alt="Followers" className="w-20 h-20" />
-                      <div className="flex flex-col gap-1 items-center">
-                        <div className="text-xl font-semibold">Followers</div>
-                        <div className="text-lg">{followersCount}</div>
-                      </div>
-                    </div>
+              <div className="flex flex-col md:flex-row justify-between w-full gap-6">
+                {/* Left section */}
+                <div className="flex flex-col gap-3">
+                  <p className="font-semibold text-2xl dark:text-white">{data && data.firstName + " " + data.lastName}</p>
+                  <p className="font-semibold text-base -mt-2 text-slate-500 dark:text-white font-poppins">{data?.email}</p>
 
-                    {/* Friends */}
-                    <div className="flex items-center gap-4">
-                      <img src={friends} alt="Friends" className="w-20 h-20" />
-                      <div className="flex flex-col gap-1 items-center">
-                        <div className="text-xl font-semibold">Friends</div>
-                        <div className="text-lg">{friendsCount}</div>
+                  <div className="self-start flex gap-4">
+                    {/* XP Card */}
+                    <div className="py-2 px-3 bg-slate-200 rounded-xl flex gap-2 dark:bg-[#002763] dark:text-white">
+                      <div className="font-semibold text-sm flex flex-col">
+                        <p className="font-semibold text-sm">Explorer</p>
                       </div>
                     </div>
                   </div>
-
                 </div>
+
+                {/* Right section */}
+                <div className="flex justify-between md:justify-end gap-10 flex-wrap dark:text-white">
+                  {/* Following */}
+                  <div className="flex flex-col items-center gap-2">
+                    <img src={followers} alt="Followers" className="w-16 h-16 md:w-20 md:h-20" />
+                    <div className="flex flex-col items-center">
+                      <div className="text-lg md:text-xl font-semibold">Following</div>
+                      <div className="text-base md:text-lg"><AnimatedNumber to={followingCount} duration={1.5} /></div>
+                    </div>
+                  </div>
+
+                  {/* Followers */}
+                  <div className="flex flex-col items-center gap-2">
+                    <img src={followers} alt="Followers" className="w-16 h-16 md:w-20 md:h-20" />
+                    <div className="flex flex-col items-center">
+                      <div className="text-lg md:text-xl font-semibold">Followers</div>
+                      <div className="text-base md:text-lg"><AnimatedNumber to={followersCount} duration={1.5} /></div>
+                    </div>
+                  </div>
+
+                  {/* Friends */}
+                  <div className="flex flex-col items-center gap-2">
+                    <img src={friends} alt="Friends" className="w-16 h-16 md:w-20 md:h-20" />
+                    <div className="flex flex-col items-center">
+                      <div className="text-lg md:text-xl font-semibold">Friends</div>
+                      <div className="text-base md:text-lg"><AnimatedNumber to={friendsCount} duration={1.5} /></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               </div>
               <div className='flex flex-col gap-3'>
                 <button onClick={() => setSuperTabs(superTabsStrings.Profile)} className={superTabs === superTabsStrings.Profile ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Profile</button>

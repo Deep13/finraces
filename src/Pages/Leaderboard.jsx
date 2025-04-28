@@ -243,7 +243,7 @@ const Leaderboard = () => {
         <div className='flex-1 px-[2%] md:px-[6%]'>
           <div className='w-full rounded-lg py-8 dark:bg-[#000D38]'>
             <h1 className='text-[2.2rem] font-bold text-black text-center mb-4 dark:text-white'>Global Leaderboard</h1>
-            <div className="w-full px-20 flex flex-wrap justify-between items-center gap-4 md:gap-6 mb-6 dark:text-white">
+            <div className="w-full px-20 flex flex-wrap justify-center gap-[0.7rem] items-center mb-6 dark:text-white">
               {/* Tab Buttons */}
               <div className="flex gap-[0.7rem]">
                 {Object.keys(leaderboardData).map((tab, index) => (
@@ -260,7 +260,6 @@ const Leaderboard = () => {
 
   {/* Date Range Picker */}
   <div className="flex items-center gap-2 md:gap-4">
-    <label htmlFor="start-date" className="text-sm">Range:</label>
     <DateRangePicker
       startDate={startDate}
       endDate={endDate}

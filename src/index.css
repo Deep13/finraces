@@ -327,6 +327,15 @@ input[type='password'] {
   text-shadow: rgba(12, 159, 66, 0.67) 0px 0px 21px;
 } */
 
+/* This controls the post posted via community
+.postContent{
+
+} */
+
+/* This controls the comments on community posts
+.commentContent:{
+  
+} */
 
 .table-row-light:hover {
   background-color: none;

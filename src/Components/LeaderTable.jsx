@@ -30,10 +30,10 @@ const LeaderTable = ({
                 {/* head */}
                 <thead>
                     <tr>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] px-4 text-center cursor-pointer" onClick={()=>{setSortType("Rank")}}>Rank</th>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] cursor-pointer" onClick={()=>{setSortType("Name")}}>Player</th>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center cursor-pointer" onClick={()=>{setSortType("Races")}}>Total Races</th>
-                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center cursor-pointer" onClick={()=>{setSortType("Points")}}>Total Points</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] px-4 text-center cursor-pointer hover:underline" onClick={()=>{setSortType("Rank")}}>Rank</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] cursor-pointer hover:underline" onClick={()=>{setSortType("Name")}}>Player</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center cursor-pointer hover:underline" onClick={()=>{setSortType("Races")}}>Total Races</th>
+                        <th className="font-semibold py-4 dark:text-white text-[1.1rem] text-center cursor-pointer hover:underline" onClick={()=>{setSortType("Points")}}>Total Points</th>
                     </tr>
                 </thead>
                 <tbody>

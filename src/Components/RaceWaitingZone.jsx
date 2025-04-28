@@ -93,6 +93,13 @@ const RaceWaitingZone = ({
                         <p className='w-full text-center font-bold text-[#2177cb] uppercase my-[1rem] text-[1.2rem]'>Ready to launch in...</p>
                         <CountDownTimer setIsTimerFinished={setIsTimerFinished} deadline={start_date} />
                         {/* live joining users tile  */}
+                        <div className="flex flex-col items-center justify-between mt-2 mb-2">
+                            <div>Invite your friends</div>
+                            <input
+                            className="w-52 h-4 rounded-xl dark:bg-white dark:text-black border-2 border-black"
+                            type="text"
+                            />
+                        </div>
                         <p className='w-full text-center text-[#2177cb] uppercase text-[1.2rem] font-semibold'>Users joining</p>
                         <div className='w-full flex-1 text-center flex flex-col items-center gap-[5px] overflow-y-auto joining-users' style={{ maxHeight: '180px' }}>
                             {

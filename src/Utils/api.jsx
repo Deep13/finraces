@@ -2769,7 +2769,7 @@ export const getUserLikedComments=async(onSuccess,onError)=>{
 export const getFriends=async(onSuccess,onError)=>{
   try{
     let token=localStorage.getItem('token');
-    const response= await fetch(`${GlobalURL}/api/v1/friends}`,{
+    const response= await fetch(`${GlobalURL}/api/v1/friends`,{
       method:"GET",
       headers: {
         'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
@@ -2794,7 +2794,32 @@ export const getFriends=async(onSuccess,onError)=>{
 export const getFollowers=async(onSuccess,onError)=>{
   try{
     let token=localStorage.getItem('token');
-    const response= await fetch(`${GlobalURL}/api/v1/follows/followers}`,{
+    const response= await fetch(`${GlobalURL}/api/v1/follows/followers`,{
+      method:"GET",
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+  
+    const data = await response.json();
+    onSuccess(data);
+  }
+  catch(error){
+    onError(error)
+  }
+}
+
+export const getFollowing=async(onSuccess,onError)=>{
+  try{
+    let token=localStorage.getItem('token');
+    const response= await fetch(`${GlobalURL}/api/v1/follows/followees`,{
       method:"GET",
       headers: {
         'Content-Type': 'application/json',   // ✅ VERY IMPORTANT

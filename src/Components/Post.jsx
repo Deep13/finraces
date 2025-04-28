@@ -192,7 +192,7 @@ const handleCommentSubmit = () => {
         return match;
       });
 
-      return `<p>${formatted}</p>`;
+      return `<p class="commentContent">${formatted}</p>`;
     }
 
     const mediaTags = selectedMedia.map(src => `<img src="${src}" />`).join("");
@@ -320,6 +320,7 @@ const [likedComments,setLikedComments]=useState([]);
       <div className="flex flex-col flex-1 gap-3">
         {/* <p className="dark:text-white">{postData?.content}</p> */}
         <div
+            onClick={(e)=>{e.stopPropagation()}}
             className="prose dark:prose-invert"
             dangerouslySetInnerHTML={{ __html: postData?.content }}
           />

@@ -4,7 +4,7 @@ import ReactQuill from 'react-quill';
 import { postBlog, uploadImage } from '../Utils/api';
 import { RxCross2 } from "react-icons/rx";
 
-const CreateBlog = ({ onClose }) => {
+const CreateBlog = () => {
   const [content, setContent] = useState('');
   const [formData, setFormdata] = useState({
     title: "",
@@ -51,7 +51,7 @@ const CreateBlog = ({ onClose }) => {
         data.file.id,
         (data) => {
           console.log("success", data);
-          onClose();
+          // onClose();
         },
         (error) => console.log(error)
       );
@@ -61,12 +61,12 @@ const CreateBlog = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-40 z-50 flex justify-center items-start py-10 px-5">
-      <div className="flex flex-col dark:text-white gap-5 w-[60vw] rounded-xl border dark:border-[#00387E] dark:bg-[#000A2D] p-5">
+    <div className="flex justify-center items-start py-10 px-5 w-full">
+      <div className="flex flex-col dark:text-white gap-5 w-full rounded-xl border dark:border-[#00387E] dark:bg-[#000A2D] p-5">
         
         <div className="flex items-center justify-between p-2 relative">
           <div className="font-semibold text-lg">
-            Create Blog
+            Write Blog
           </div>
           <div className="flex items-center gap-4">
             {/* Submit Button */}
@@ -78,14 +78,14 @@ const CreateBlog = ({ onClose }) => {
             </button>
 
             {/* Close Icon */}
-            <button onClick={onClose} className="text-white hover:text-blue-500 absolute -right-4 -top-4">
+            {/* <button onClick={onClose} className="text-white hover:text-blue-500 absolute -right-4 -top-4">
               <RxCross2 size={24}/>
-            </button>
+            </button> */}
           </div>
         </div>
 
 
-        <div className="rounded-xl bg-white dark:bg-[#00387E] p-5 flex flex-col gap-5 max-h-[75vh] overflow-y-auto notificationScrollbar">
+        <div className="rounded-xl bg-white dark:bg-[#00387E] p-5 flex flex-col gap-5 overflow-y-auto notificationScrollbar">
           {/* Input Section: Inputs + Banner Side by Side */}
           <div className="flex gap-5 flex-wrap">
             {/* Left Inputs */}
@@ -180,12 +180,12 @@ const CreateBlog = ({ onClose }) => {
           {/* Content Section */}
           <div>
             <label className="text-sm mb-1 block">Content <span className="text-slate-400">(i)</span></label>
-            <div className="dark:bg-[#001B51] bg-white rounded-md overflow-hidden min-h-[200px] max-h-[400px]">
+            <div className="dark:bg-[#001B51] bg-white rounded-md overflow-hidden min-h-[200px]">
               <ReactQuill
                 value={content}
                 onChange={setContent}
                 theme="snow"
-                className="dark:text-white dark:[&_.ql-container]:bg-[#001B51] dark:[&_.ql-editor]:text-white dark:[&_.ql-editor]:bg-[#001B51] border-none min-h-[200px] max-h-[400px] overflow-y-auto"
+                className="dark:text-white dark:[&_.ql-container]:bg-[#001B51] dark:[&_.ql-editor]:text-white dark:[&_.ql-editor]:bg-[#001B51] border-none min-h-[200px] overflow-y-auto"
                 modules={{
                   toolbar: {
                     container: [

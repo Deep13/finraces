@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Sidebar from "../Components/Sidebar";
 import Post from "../Components/Post";
 
@@ -43,33 +43,11 @@ const Community = () => {
 
   // Proper Post Data
   const [posts, setPosts] = useState([]);
-  // {
-  //   id: 1,
-  //   userName: "John Doe",
-  //   userImg: "https://randomuser.me/api/portraits/men/1.jpg",
-  //   time: "2h ago",
-  //   content: "Exploring new AI advancements in tech!",
-  //   coverImg: "https://cdn.pixabay.com/photo/2023/08/15/14/05/banner-8192025_1280.png",
-  //   likes: 32,
-  // },
-  // {
-  //   id: 2,
-  //   userName: "Jane Smith",
-  //   userImg: "https://randomuser.me/api/portraits/women/2.jpg",
-  //   time: "5h ago",
-  //   content: "Just hit a new milestone in my project!",
-  //   coverImg: "https://img.freepik.com/free-vector/high-tech-futuristic-lines-technology-banner_1017-23966.jpg",
-  //   likes: 20,
-  // },
-  // {
-  //   id: 3,
-  //   userName: "Alex Johnson",
-  //   userImg: "https://randomuser.me/api/portraits/men/3.jpg",
-  //   time: "1 day ago",
-  //   content: "Blockchain is the future. What do you think?",
-  //   coverImg: "https://img.freepik.com/free-vector/vector-blockchain-poster_1441-1999.jpg",
-  //   likes: 15,
-  // },
+
+  const emojiPickerRef = useRef(null);
+  const gifPickerRef = useRef(null);
+  
+  
 
 // State for Experts to follow
 const [expertsToFollow, setExpertsToFollow] = useState([]);
@@ -81,29 +59,52 @@ const [gifSearch, setGifSearch] = useState("");
 const [gifResults, setGifResults] = useState([]);
 const [userLikes, setUserLikes] = useState([]);
 const [selectedFile,setSelectedFile]=useState();
-
+const navigate=useNavigate();
 // console.log("ud",userDetails)
 
+
 const formatter = (text, references) => {
-  const escapedRefs = references.map(ref =>
-    ref.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&")
-  );
+  const escapedRefs = references.map(ref => {
+    const name = ref.split("<-->")[0];
+    return name.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
+  });
   escapedRefs.sort((a, b) => b.length - a.length);
 
   const regex = new RegExp(`(${escapedRefs.join("|")})`, "gi");
 
   const formatted = text.replace(regex, (match) => {
+    const matchedRef = references.find(ref => ref.startsWith(match));
+    const id = matchedRef ? matchedRef.split("<-->")[1] : "";
+
     if (match.startsWith("@")) {
-      return `<span class="text-blue-300 font-semibold">${match}</span>`;
+      return `<span class="text-blue-300 font-semibold cursor-pointer tagged-user" data-id="${id}">${match}</span>`;
     } else if (match.startsWith("$")) {
-      return `<span class="text-teal-300 font-semibold">${match}</span>`;
+      return `<span class="text-teal-300 font-semibold cursor-pointer">${match}</span>`;
     }
     return match;
   });
 
-  return `<p>${formatted}</p>`;
+  return `<p class="postContent">${formatted}</p>`;
 };
 
+
+useEffect(() => {
+  const clickHandler = (e) => {
+    const target = e.target;
+    if (target.classList.contains("tagged-user")) {
+      const userId = target.getAttribute("data-id");
+      if (userId) {
+        navigate(`/userprofile/${userId}`);
+      }
+    }
+  };
+
+  document.addEventListener("click", clickHandler);
+
+  return () => {
+    document.removeEventListener("click", clickHandler);
+  };
+}, [navigate]);
 
 const sendPost = () => {
   const formattedText = formatter(postContent, references);
@@ -158,7 +159,7 @@ const handleImageUpload = (event) => {
   }
 };
 
-const navigate=useNavigate();
+
 const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 const [tagSuggestions, setTagSuggestions] = useState([]);
 const [showSuggestions, setShowSuggestions] = useState(false);
@@ -181,6 +182,27 @@ const fetchGifs = async (query) => {
   }
 };
 
+useEffect(() => {
+  fetchGifs("default")
+}, []);
+
+
+useEffect(() => {
+  function handleClickOutside(event) {
+    if (showEmojiPicker && emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+      setShowEmojiPicker(false);
+    }
+    if (showGifPicker && gifPickerRef.current && !gifPickerRef.current.contains(event.target)) {
+      setShowGifPicker(false);
+    }
+  }
+
+  document.addEventListener("mousedown", handleClickOutside);
+
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, [showEmojiPicker, showGifPicker]);
 
 //fetchData for experts to follow and upcoming races
 
@@ -268,7 +290,7 @@ const handleFollow = async (isFollowed, leader) => {
             try {
                 await debounceStockSearchj(query, (data) => {
                     // Extract stock names from API response
-                    const stockNames = data.map((stock) => stock.name);
+                    const stockNames = data.map((stock) => stock.name+ `<-->${stock.id}`);
                     
                     // Set tag suggestions using extracted names
                     setTagSuggestions(stockNames.filter((name) =>
@@ -301,7 +323,7 @@ const handleCommentChange = async(e) => {
     const query = atMatch[1].toLowerCase(); // Extract everything after @
     const data = await searchUsers(query, 5); // API call (adjust as needed)
     const extractedUsernames = data.data.map(
-      (user) => `${user.firstName} ${user.lastName}`.trim()
+      (user) => `${user.firstName} ${user.lastName}`.trim() + `<-->${user.id}`
     );
     setTagSuggestions(extractedUsernames);
     setShowSuggestions(true);
@@ -318,14 +340,15 @@ const handleCommentChange = async(e) => {
 const insertTag = (tag) => {
   const words = postContent.split(" ");
   const lastWord = words[words.length - 1];
-  const formattedTag = lastWord.startsWith("@") ? `@${tag}` : `$${tag}`;
+  const formattedTag = lastWord.startsWith("@") ? `@${tag.split("<-->")[0]}` : `$${tag.split("<-->")[0]}`;
+  const format2=lastWord.startsWith("@") ? `@${tag}` : `$${tag}`
   
   // Replace the last word with the selected tag
   words[words.length - 1] = formattedTag;
   setPostContent(words.join(" ") + " ");
 
   // Update the references array
-  setReferences((prev) => [...prev, formattedTag]);
+  setReferences((prev) => [...prev, format2]);
 
   // Hide suggestions
   setShowSuggestions(false);
@@ -383,7 +406,7 @@ const insertTag = (tag) => {
                     onClick={() => insertTag(tag)}
                     className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
                   >
-                    {tag}
+                    {tag.split("<-->")[0]}
                   </li>
                 ))}
               </ul>
@@ -424,13 +447,13 @@ const insertTag = (tag) => {
 
   {/* Emoji Picker */}
   {showEmojiPicker && (
-    <div className="absolute top-[6rem] right-10 z-50">
+    <div ref={emojiPickerRef} className="absolute top-[6rem] right-10 z-50">
       <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
     </div>
   )}
 
 {showGifPicker && (
-  <div className="absolute top-[6rem] left-28 z-50 w-96 bg-white dark:bg-[#001B51] p-3 rounded-xl shadow-xl">
+  <div ref={gifPickerRef} className="absolute top-[6rem] left-28 z-50 w-96 bg-white dark:bg-[#001B51] p-3 rounded-xl shadow-xl">
     <input 
       type="text" 
       value={gifSearch} 
@@ -475,7 +498,7 @@ const insertTag = (tag) => {
               </div>
 
               {bannerImg && (
-            <img src={bannerImg} alt="Banner Preview" className="w-full h-60 rounded-lg" />
+            <img src={bannerImg} alt="Banner Preview" className="max-h-60 rounded-lg" />
           )}
 
             </div>
@@ -532,7 +555,7 @@ const insertTag = (tag) => {
             <div className="dark:bg-[#002763] p-4 rounded-xl w-full dark:text-white overflow-y-auto flex flex-col gap-4">
               
               {/* Section Title */}
-              <h3 className="text-xl font-semibold dark:text-slate-300">Experts</h3>
+              <h3 className="text-xl font-semibold dark:text-slate-300">Follow Experts</h3>
               
               {/* Leaders List */}
               {loadingExperts?(
@@ -560,7 +583,7 @@ const insertTag = (tag) => {
                     <div
                       key={leaderId}
                       onClick={()=>{navigate(`/userprofile/${leaderId}`)}}
-                      className="flex cursor-pointer items-center justify-between px-3 py-1"
+                      className="flex cursor-pointer items-center justify-between px-3 py-1 group"
                     >
                       {/* User Image */}
                       <div className="w-14 h-14 rounded-xl overflow-hidden bg-gray-300">
@@ -580,13 +603,13 @@ const insertTag = (tag) => {
               
                       {/* Follow/Unfollow Button */}
                       <button
-                        className="p-2 z-10 ml-3 border-2 border-[#00387E] rounded-xl dark:hover:bg-[#00387E] transition"
+                        className={`p-2 z-10 ml-3 border-2 border-[#00387E] rounded-xl dark:hover:bg-[#00387E] transition ${isFollowed?"hidden group-hover:block":""}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleFollow(isFollowed,leader)
                         }}
                       >
-                        {isFollowed ? <FaMinusCircle className=" text-red-500" /> : <FaPlusCircle className="text-green-500"/>}
+                        {isFollowed ? <FaMinusCircle className=" text-red-500 hidden group-hover:block" /> : <FaPlusCircle className="text-green-500"/>}
                       </button>
                     </div>
                   );
