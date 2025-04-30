@@ -215,10 +215,10 @@ useEffect(()=>{
       console.log("error",error)
     },10)
 
-  getRaceList('scheduled',
+  getRaceList('scheduled',1,
     (data)=>{
       setLoadingRaces(false)
-      setUpcomingRaces(data)
+      setUpcomingRaces(data.data)
     },
   (error)=>{
     console.log("Error",error)

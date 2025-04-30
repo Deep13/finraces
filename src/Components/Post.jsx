@@ -173,6 +173,25 @@ const Post = ({ postData, commentVisibility,likesArray=[],setLikesArray }) => {
 };
 
 
+useEffect(() => {
+  const clickHandler = (e) => {
+    const target = e.target;
+    if (target.classList.contains("tagged-user")) {
+      const userId = target.getAttribute("data-id");
+      if (userId) {
+        navigate(`/userprofile/${userId}`);
+      }
+    }
+  };
+
+  document.addEventListener("click", clickHandler);
+
+  return () => {
+    document.removeEventListener("click", clickHandler);
+  };
+}, [navigate]);
+
+
 const handleCommentSubmit = () => {
   if (commentInput.trim() || selectedMedia.length > 0) {
     function formatter(comment, references) {

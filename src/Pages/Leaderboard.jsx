@@ -155,6 +155,7 @@ const Leaderboard = () => {
   const [searchQuery,setSearchQuery]=useState("");
   const [startDate,setStartDate]=useState("");
   const [sortType,setSortType]=useState("Rank");
+  const [sortDirection,setSortDirection]=useState("ASC");
   const [endDate,setEndDate]=useState("");
   const [page,setPage]=useState(1);
   const navigate=useNavigate();
@@ -176,8 +177,8 @@ const Leaderboard = () => {
       setLeaderboard(data.data)
       // setTop3(data.data.slice(0,3));
       setHasNextPage(data.hasNextPage)
-    },(error)=>{console.log(error)},sortType )
-  },[sortType])
+    },(error)=>{console.log(error)},sortType,sortDirection )
+  },[sortType,sortDirection])
 
   useEffect(() => {
     let today = new Date()
@@ -329,7 +330,7 @@ const Leaderboard = () => {
               
             </div>
 
-            <LeaderTable data={leaderboard} setSortType={setSortType} />
+            <LeaderTable data={leaderboard} setSortType={setSortType} setSortDirection={setSortDirection}/>
             {/* {hasNextPage && <Pagination />} */}
 
             <br /><br /><br />

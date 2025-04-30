@@ -168,7 +168,7 @@ export const getRaceList = async (
   page=1,
   onSuccess = () => { },
   onError = () => { },
-  filters={endDate:"",selectedStocks:[]},
+  filters={endDate:"",selectedStocks:[],startDate:""},
 ) => {
 
   let token = localStorage.getItem('token')
@@ -178,7 +178,10 @@ export const getRaceList = async (
     let formatttedDate=new Date(filters.endDate).toISOString();
     url+=`&endDateLessThanEqual=${formatttedDate}`
   }
-
+  if(filters.startDate!=""){
+    let formatttedDate=new Date(filters.startDate).toISOString();
+    url+=`&endDateGreaterThanEqual=${formatttedDate}`
+  }
   if (filters.selectedStocks.length > 0) {
     filters.selectedStocks.forEach((stock) => {
         url += `&tickersContains=${stock}`;
@@ -1024,9 +1027,10 @@ export const getTopRankers = async (
   onSuccess = () => {},
   onError = () => {},
   filterType="rank",
+  direction="ASC"
 ) => {
   try {
-    let url = `${GlobalURL}/api/v1/public/race-results/stats?limit=${limit}&page=${page}`;
+    let url = `${GlobalURL}/api/v1/public/race-results/stats?limit=${limit}&page=${page}&sortOrder=${direction}`;
 
     if(filterType=="Points"){
       url+=`&sortBy=points`

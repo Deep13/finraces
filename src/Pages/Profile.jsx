@@ -16,6 +16,7 @@ import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
 import NoProfilePopup from '../Components/NoProfilePopup';
 import friends from '../assets/icons/friends_Icon.png'
 import followers from '../assets/icons/followers_Icon.png'
+import followees from '../assets/icons/followee_Icon.png'
 import AnimatedNumber from "../Components/AnimatedNumber"
 const superTabsStrings = {
   Profile: 'Profile',
@@ -140,7 +141,7 @@ const Profile = () => {
                 <div className="flex justify-between md:justify-end gap-10 flex-wrap dark:text-white">
                   {/* Following */}
                   <div className="flex flex-col items-center gap-2">
-                    <img src={followers} alt="Followers" className="w-16 h-16 md:w-20 md:h-20" />
+                    <img src={followees} alt="Followers" className="w-16 h-16 md:w-20 md:h-20" />
                     <div className="flex flex-col items-center">
                       <div className="text-lg md:text-xl font-semibold">Following</div>
                       <div className="text-base md:text-lg"><AnimatedNumber to={followingCount} duration={1.5} /></div>

@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import {debounceStockSearchj} from "../Utils/api";
 import { debounce } from "lodash";
 import { FaMinusCircle } from "react-icons/fa";
-
+import DateRangePicker from "../Components/DateRangePicker"
 
 const tabs = {
     'Ongoing Races': 'Ongoing Races',
@@ -28,10 +28,12 @@ const AllRaces = () => {
     const [searchQuery,setSearchQuery]=useState("");
     const [stockSuggestions,setStockSuggestions]=useState([]);
     const [endDate,setEndDate]=useState("")
+    const [startDate,setStartDate]=useState("")
     const [stockNames,setStockNames]=useState([])
 
     const [filters,setFilters]=useState({
         endDate:"",
+        startDate:"",
         selectedStocks:[]
     })
     // console.log(thisLocation.state)
@@ -62,6 +64,11 @@ const AllRaces = () => {
         fetchStockOptions(searchQuery)
     },[searchQuery])
 
+    useEffect(()=>{
+        setStartDate("")
+        setEndDate("")
+        setStockNames([])
+    },[activeTab])
 
     return (
         <>
@@ -97,17 +104,18 @@ const AllRaces = () => {
                             
                             {/* Date Picker */}
                             {activeTab !== 'Ongoing Races' && (
-                            <div className="flex items-center gap-2 w-full md:w-auto">
-                                <label className="text-sm whitespace-nowrap">Date:</label>
-                                <input
-                                type="date"
-                                value={endDate}
-                                onChange={(e) => setEndDate(e.target.value)}
-                                min={activeTab === 'Upcoming Races' ? new Date().toISOString().split('T')[0] : undefined}
-                                max={activeTab === 'Finished Races' ? new Date().toISOString().split('T')[0] : undefined}
-                                className="rounded-md px-3 py-2 text-black focus:outline-none w-full md:w-48"
-                                />
-                            </div>
+                            // <div className="flex items-center gap-2 w-full md:w-auto">
+                            //     <label className="text-sm whitespace-nowrap">Date:</label>
+                            //     <input
+                            //     type="date"
+                            //     value={endDate}
+                            //     onChange={(e) => setEndDate(e.target.value)}
+                            //     min={activeTab === 'Upcoming Races' ? new Date().toISOString().split('T')[0] : undefined}
+                            //     max={activeTab === 'Finished Races' ? new Date().toISOString().split('T')[0] : undefined}
+                            //     className="rounded-md px-3 py-2 text-black focus:outline-none w-full md:w-48"
+                            //     />
+                            // </div>
+                            <DateRangePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} transform={false} restrict={activeTab} />
                             )}
 
                             {/* Stock Input */}
@@ -180,6 +188,7 @@ const AllRaces = () => {
                                 ...prev,
                                 endDate: endDate,
                                 selectedStocks: stockNames,
+                                startDate:startDate
                                 }));
                             }}
                             className="cursor-pointer bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-8 h-10 rounded-lg flex items-center justify-center text-sm font-semibold text-white"
@@ -210,6 +219,7 @@ const AllRaces = () => {
 };
 
 export default AllRaces;
+
 
 
 

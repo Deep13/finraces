@@ -8,8 +8,12 @@ import { getUser, sendFriendRequest } from '../Utils/api';
 import avatarplaceholder from '../assets/images/avatarplaceholder.png'
 import malePlaceholder from "../assets/images/manPlaceholder.jpg"
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg"
-import { checkFriendRequestStatus, unfriend, blockUser, unblockUser, getUsersBlockStatus } from '../Utils/api';
+import { checkFriendRequestStatus, unfriend, blockUser, unblockUser, getUsersBlockStatus, getFollowers, getFollowing, getFriends } from '../Utils/api';
 import NoProfilePopup from '../Components/NoProfilePopup';
+import friends from '../assets/icons/friends_Icon.png'
+import followers from '../assets/icons/followers_Icon.png'
+import followees from '../assets/icons/followee_Icon.png'
+import AnimatedNumber from "../Components/AnimatedNumber"
 
 
 const IndiUserProfile = () => {
@@ -30,6 +34,9 @@ const IndiUserProfile = () => {
     const [reqSent, setReqSent] = useState(false)
     const [noProfilePopup, setNoProfilePopup] = useState(false)
     const navigate = useNavigate()
+    const [friendsCount,setFriendsCount]=useState(0);
+    const [followersCount,setFollowersCount]=useState(0);
+    const [followingCount,setFollowingCount]=useState(0);
 
     const sd = localStorage.getItem('fin_userDetails')
     let selfDetails = sd && JSON.parse(atob(sd))
@@ -87,6 +94,24 @@ const IndiUserProfile = () => {
             setBlockStatus(data.status)
             setBlockId(data.id)
         })
+
+        getFriends((data)=>{
+            setFriendsCount(data.total)
+          },(error)=>{
+            console.log(error)
+          })
+          getFollowers((data)=>{
+            setFollowersCount(data.total)
+          },(error)=>{
+            console.log(error)
+          })
+      
+          getFollowing((data)=>{
+            setFollowingCount(data.total)
+          },(error)=>{
+            console.log(error)
+          })
+
     }, [])
 
 

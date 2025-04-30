@@ -225,7 +225,7 @@ const UserProfile = ({
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Race Name</th>
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Total Participants</th>
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Total Stocks</th>
-                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Your Ranking</th>
+                            <th className="py-4 dark:text-[#898989] text-[0.9rem]">Points</th>
                             <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th>
                             {/* <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th> */}
                         </tr>
@@ -244,7 +244,7 @@ const UserProfile = ({
                                             <th className="py-3 overflow-hidden text-ellipsis whitespace-nowrap group-hover:underline">{index + 1}</th>
                                             <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.name}</td>
                                             <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.participants.length}</td>
-                                            <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr?.ranking || "N/A"}</td>
+                                            <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr?.points || "N/A"}</td>
                                             <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">{curr.stocks.length}</td>
                                             <td className="text-[1.1rem]">
                                                 <div className='py-3 flex justify-start'>

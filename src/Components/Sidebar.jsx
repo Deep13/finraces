@@ -95,7 +95,7 @@ const Sidebar = () => {
 
         {/* My Races */}
         <button onClick={() => handleNavigation('My Races')}
-          className={`${baseClass} ${isExactActive('/profile') ? activeGlow : inactiveClass}`}>
+          className={`${baseClass} ${isExactActive('/blogs') ? activeGlow : inactiveClass}`}>
           <img src={darkModeEnabled ? finance_ideadark : finance_idea} alt="my races" />
           Blogs
         </button>

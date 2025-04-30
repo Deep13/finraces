@@ -33,9 +33,10 @@ const Blogs = () => {
                         <div className="font-semibold text-xl">
                             Featured Blogs
                         </div>
-                        <div className="font-light text-sm text-slate-300 cursor-pointer">
-                            Show More
+                        <div onClick={() => { navigate('/allBlogs?type=Featured', { state: 'Featured Blogs' }) }} className="font-light text-sm text-slate-300 cursor-pointer">
+                         Show More
                         </div>
+
                     </div>
                     <div className="w-full grid grid-cols-4 gap-5">
                         {[1, 2, 3, 4].map((_, idx) => (
@@ -83,52 +84,38 @@ const Blogs = () => {
 
                 </div>
 
-               <div className="grid grid-cols-2 grid-rows-1 gap-4 w-full h-[30rem]">
-                    {/* <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
-                        <img src={blogImg} className="w-full rounded-2xl"/>
-                        <div className="flex flex-col justify-center gap-4">
-                            <div className="font-semibold text-lg">Title</div>
-                            <div className="text-slate-300 h-10">Random stuff jknjdcnkdsmcklsmcklsdm cklds clds cjsnjn</div>
-                            <div className="font-semibold cursor-pointer">Read Now</div>
-                        </div>
-                    </div>
-                    <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
-                        <img src={blogImg} className="w-full rounded-2xl"/>
-                        <div className="flex flex-col justify-center gap-4">
-                            <div className="font-semibold text-lg">Title</div>
-                            <div className="text-slate-300 h-10">Random stuff jknjdcnkdsmcklsmcklsdm cklds clds cjsnjn</div>
-                            <div className="font-semibold cursor-pointer">Read Now</div>
-                        </div>
-                    </div> */}
-                    <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
-                        <img src={blogImg} className="w-full rounded-2xl h-[70%]"/>
-                        <div className="flex flex-col justify-center gap-4">
-                            <div className="font-semibold text-lg">Title</div>
-                            <div className="text-slate-300 h-10">Random stuff jknjdcnkdsmcklsmcklsdm cklds clds cjsnjn</div>
-                            <div className="font-semibold cursor-pointer">Read Now</div>
-                        </div>
-                    </div>
-                    <div className="border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-2 flex flex-col gap-5">
-                        <div className="flex gap-5 font-semibold text-xl py-2">
-                            Check Famous Blogs
-                        </div>
-                        <div className="flex flex-col flex-1 overflow-y-scroll notificationScrollbar">
-                            {[1, 2, 3, 4].map((_, idx) => (
-                                <div key={idx} className="flex gap-4 py-1">
-                                <div className="h-32 w-32">
-                                    <img src={blogImg} className="w-full rounded-2xl" />
-                                </div>
-                                <div className="flex flex-col gap-2">
-                                    <div className="font-semibold text-lg">Title</div>
-                                    <div className="text-slate-600 dark:text-slate-300 line-clamp-2">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque...
-                                    </div>
-                                    <div className="cursor-pointer font-semibold">Read Now</div>
-                                </div>
-                                </div>
-                            ))}
+               <div className="grid grid-cols-1 grid-rows-1 gap-4 w-full h-[30rem]">
+               <div className="w-full h-[30rem] border dark:border-[#000D38] dark:text-white dark:bg-[#001B51] rounded-2xl p-4 flex gap-4">
+                    {/* LEFT: Famous Blogs */}
+                    <div className="flex flex-col gap-4 w-1/2">
+                        <div className="text-xl font-semibold">Check Famous Blogs</div>
+                        <div className="flex flex-col flex-1 overflow-y-scroll pr-2 notificationScrollbar">
+                        {[1, 2, 3, 4].map((_, idx) => (
+                            <div key={idx} className="flex gap-4 py-1">
+                            <div className="h-28 w-28 flex-shrink-0">
+                                <img src={blogImg} className="w-full h-full rounded-xl object-cover" />
                             </div>
+                            <div className="flex flex-col gap-2">
+                                <div className="font-semibold text-lg">Title</div>
+                                <div className="text-slate-300 line-clamp-2">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque...
+                                </div>
+                                <div className="cursor-pointer font-semibold text-blue-400">Read Now</div>
+                            </div>
+                            </div>
+                        ))}
+                        </div>
+                    </div>
 
+                    {/* RIGHT: Featured Blog */}
+                    <div className="flex flex-col gap-4 w-1/2">
+                        <img src={blogImg} className="w-full h-[65%] rounded-xl object-cover" />
+                        <div className="flex flex-col justify-center gap-2">
+                        <div className="font-semibold text-lg">Featured Title</div>
+                        <div className="text-slate-300 h-12">Some short highlight or intro of the featured blog post goes here.</div>
+                        <div className="font-semibold cursor-pointer text-blue-400">Read Now</div>
+                        </div>
+                    </div>
                     </div>
                 </div>
 
