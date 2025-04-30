@@ -7,6 +7,7 @@ import CountDownTimer from '../Components/CountDown'
 import { motion, AnimatePresence } from "motion/react";
 import { useNavigate } from "react-router-dom";
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { getFriends } from "../Utils/api";
 // import RaceResult from "./RaceResult";
 
 const RaceWaitingZone = ({
@@ -20,6 +21,10 @@ const RaceWaitingZone = ({
 }) => {
 
     const [isTimerFinished, setIsTimerFinished] = useState(false)
+    const [searchQuery,setSearchQuery]=useState("");
+    const [friendList,setFriendList]=useState([]);
+    const [selectedFriends, setSelectedFriends] = useState([]);
+
 
     const ud = localStorage.getItem('fin_userDetails')
     const gd = localStorage.getItem('guest_details')
@@ -50,6 +55,17 @@ const RaceWaitingZone = ({
             closeCard(true)
         }
     }, [isTimerFinished])
+
+    useEffect(()=>{
+        if(searchQuery.length>0){
+            getFriends((data)=>{
+                console.log(data)
+                setFriendList(data.data)
+            },(error)=>{
+                console.log(error)
+            },searchQuery)
+        }
+    },[searchQuery])
 
     return (
         <>
@@ -96,9 +112,45 @@ const RaceWaitingZone = ({
                         <div className="flex flex-col items-center justify-between mt-2 mb-2">
                             <div>Invite your friends</div>
                             <input
-                            className="w-52 h-4 rounded-xl dark:bg-white dark:text-black border-2 border-black"
-                            type="text"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-52 h-8 rounded-xl dark:bg-white dark:text-black border-2 border-black px-2 mt-2"
+                                placeholder="Search your friends..."
+                                type="text"
                             />
+                            <div className="w-full max-h-40 overflow-y-auto mt-2">
+                                {
+                                    friendList?.length > 0 ? (
+                                    friendList
+                                        .filter(friend =>
+                                        friend?.firstName?.toLowerCase().includes(searchQuery.toLowerCase())
+                                        )
+                                        .map((friend) => {
+                                        const isSelected = selectedFriends.includes(friend.id);
+                                        return (
+                                            <div
+                                            key={friend.id}
+                                            onClick={() => {
+                                                setSelectedFriends(prev =>
+                                                isSelected
+                                                    ? prev.filter(id => id !== friend.id)
+                                                    : [...prev, friend.id]
+                                                );
+                                            }}
+                                            className={`w-full px-4 py-2 cursor-pointer rounded-md flex justify-between items-center
+                                            ${isSelected ? 'bg-blue-100 font-semibold' : 'hover:bg-gray-100'}`}
+                                            >
+                                            <span>{friend.firstName}</span>
+                                            {isSelected && <span className="text-blue-500 text-sm">Selected</span>}
+                                            </div>
+                                        );
+                                        })
+                                    ) : (
+                                    searchQuery.length>0 && <p className="text-sm text-gray-400 text-center">No friends found.</p>
+                                    )
+                                }
+                                </div>
+
                         </div>
                         <p className='w-full text-center text-[#2177cb] uppercase text-[1.2rem] font-semibold'>Users joining</p>
                         <div className='w-full flex-1 text-center flex flex-col items-center gap-[5px] overflow-y-auto joining-users' style={{ maxHeight: '180px' }}>

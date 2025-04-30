@@ -3,7 +3,7 @@ import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { FaRegCommentAlt, FaShare, FaRegSmile, FaReply } from "react-icons/fa";
 import { BsThreeDots, BsFillSendFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { useState,useCallback, useEffect } from "react";
+import { useState,useCallback, useEffect, useRef } from "react";
 import { IoMdCamera } from "react-icons/io";
 import { MdOutlineGifBox } from "react-icons/md";
 import EmojiPicker from "emoji-picker-react";
@@ -172,7 +172,7 @@ const Post = ({ postData, commentVisibility,likesArray=[],setLikesArray }) => {
     setShowSuggestions(false);
 };
 
-
+const contentRef = useRef(null);
 useEffect(() => {
   const clickHandler = (e) => {
     const target = e.target;
@@ -182,14 +182,26 @@ useEffect(() => {
         navigate(`/userprofile/${userId}`);
       }
     }
+    if (target.classList.contains("tagged-stock")) {
+      const userId = target.getAttribute("data-id").split("<-->")[0];
+      const ticker = target.getAttribute("data-id").split("<-->")[1];
+      if (userId && ticker) {
+        navigate(`/stock/${ticker}/${userId}`);
+      }
+    }
   };
 
-  document.addEventListener("click", clickHandler);
+  const container = contentRef.current;
+  if (container) {
+    container.addEventListener("click", clickHandler);
+  }
 
   return () => {
-    document.removeEventListener("click", clickHandler);
+    if (container) {
+      container.removeEventListener("click", clickHandler);
+    }
   };
-}, [navigate]);
+}, [postData]);
 
 
 const handleCommentSubmit = () => {
@@ -297,9 +309,9 @@ const [likedComments,setLikedComments]=useState([]);
 
   return (
     <div
-      onClick={() => {
-        if (!commentVisibility) navigate(`/post/${postData?.id}`);
-      }}
+    onClick={() => {
+      if (!commentVisibility) navigate(`/post/${postData?.id}`);
+    }}      
       className={`relative flex flex-col gap-4 p-4 rounded-xl w-full h-auto bg-[#e5f4ff] dark:bg-[#002763] border dark:border-0 shadow-lg ${!commentVisibility ? "cursor-pointer" : ""}`}
     >
       {/* Header */}
@@ -339,7 +351,8 @@ const [likedComments,setLikedComments]=useState([]);
       <div className="flex flex-col flex-1 gap-3">
         {/* <p className="dark:text-white">{postData?.content}</p> */}
         <div
-            onClick={(e)=>{e.stopPropagation()}}
+            ref={contentRef}
+            // onClick={(e)=>{e.stopPropagation()}}
             className="prose dark:prose-invert"
             dangerouslySetInnerHTML={{ __html: postData?.content }}
           />
@@ -347,7 +360,7 @@ const [likedComments,setLikedComments]=useState([]);
           <img
             src={postData.image.path}
             alt="Post"
-            className="rounded-xl h-60 w-full bg-gray-300"
+            className="rounded-xl max-h-60 bg-gray-300"
           />
         )}
       </div>

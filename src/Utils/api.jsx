@@ -134,7 +134,7 @@ export const createRaceAndJoinUser = async (
 
     let raceData = {
       race: {
-        privacy,
+        privacy:privacy,
         isSimulation: true,
         end_date: endDateTime,
         start_date: startDateTime,
@@ -2770,10 +2770,14 @@ export const getUserLikedComments=async(onSuccess,onError)=>{
 
 }
 
-export const getFriends=async(onSuccess,onError)=>{
+export const getFriends=async(onSuccess,onError,name="")=>{
   try{
     let token=localStorage.getItem('token');
-    const response= await fetch(`${GlobalURL}/api/v1/friends`,{
+    let url=`${GlobalURL}/api/v1/friends`;
+    if(name!=""){
+      url+=`?nameContains=${name}`
+    }
+    const response= await fetch(url,{
       method:"GET",
       headers: {
         'Content-Type': 'application/json',   // ✅ VERY IMPORTANT

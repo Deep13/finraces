@@ -74,12 +74,15 @@ const formatter = (text, references) => {
 
   const formatted = text.replace(regex, (match) => {
     const matchedRef = references.find(ref => ref.startsWith(match));
-    const id = matchedRef ? matchedRef.split("<-->")[1] : "";
+    let id = matchedRef ? matchedRef.split("<-->")[1] : "";
+    if(match.startsWith("$")){
+      id+=`<-->${matchedRef ? matchedRef.split("<-->")[2] : ""}`;
+    }
 
     if (match.startsWith("@")) {
       return `<span class="text-blue-300 font-semibold cursor-pointer tagged-user" data-id="${id}">${match}</span>`;
     } else if (match.startsWith("$")) {
-      return `<span class="text-teal-300 font-semibold cursor-pointer">${match}</span>`;
+      return `<span class="text-teal-300 font-semibold cursor-pointer tagged-stock" data-id="${id}">${match}</span>`;
     }
     return match;
   });
@@ -290,7 +293,8 @@ const handleFollow = async (isFollowed, leader) => {
             try {
                 await debounceStockSearchj(query, (data) => {
                     // Extract stock names from API response
-                    const stockNames = data.map((stock) => stock.name+ `<-->${stock.id}`);
+                    console.log(data[0].id)
+                    const stockNames = data.map((stock) => stock.name+ `<-->${stock.id}`+`<-->${stock.ticker}`);
                     
                     // Set tag suggestions using extracted names
                     setTagSuggestions(stockNames.filter((name) =>
@@ -474,6 +478,7 @@ const insertTag = (tag) => {
           onClick={() => {
             setBannerImg(gif.images.original.url);
             setShowGifPicker(false);
+            setSelectedFile(null);
             setGifSearch("");
             setGifResults([]);
           }}

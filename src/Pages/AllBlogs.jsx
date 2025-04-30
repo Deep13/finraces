@@ -56,27 +56,24 @@ const AllBlogs = () => {
         <div className="flex flex-col md:flex-row gap-6 w-full">
 
           {/* Categories Section */}
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col w-full md:max-w-[16rem]">
             <label className="font-semibold mb-1 text-sm">Categories</label>
-            <div className="flex overflow-x-auto gap-3 w-full pb-1">
+            <select
+              value={activeCategory}
+              onChange={(e) => handleCategoryClick(e.target.value)}
+              className="w-full bg-white dark:bg-[#001B4E] text-black dark:text-white p-3 rounded-lg border dark:border-[#00387E] focus:outline-none cursor-pointer"
+            >
               {Object.keys(categories).map((category) => (
-                <button
-                  key={category}
-                  onClick={() => handleCategoryClick(category)}
-                  className={`flex-shrink-0 whitespace-nowrap dark:text-white justify-center items-center px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
-                  ${activeCategory === category
-                    ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]'
-                    : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'
-                  }`}
-                >
+                <option key={category} value={category}>
                   {category}
-                </button>
+                </option>
               ))}
-            </div>
+            </select>
           </div>
 
+
           {/* Search by Title */}
-          <div className="flex flex-col w-full md:max-w-[16rem]">
+          {/* <div className="flex flex-col w-full md:max-w-[16rem]">
             <label className="font-semibold mb-1 text-sm">Search by Title</label>
             <input
               type="text"
@@ -85,10 +82,10 @@ const AllBlogs = () => {
               placeholder="Enter blog title..."
               className="w-full bg-white dark:bg-[#001B4E] text-black dark:text-white p-3 rounded-lg border dark:border-[#00387E] focus:outline-none"
             />
-          </div>
+          </div> */}
 
           {/* Search by Author */}
-          <div className="flex flex-col w-full md:max-w-[16rem]">
+          {/* <div className="flex flex-col w-full md:max-w-[16rem]">
             <label className="font-semibold mb-1 text-sm">Search by Author</label>
             <input
               type="text"
@@ -97,7 +94,7 @@ const AllBlogs = () => {
               placeholder="Enter author name..."
               className="w-full bg-white dark:bg-[#001B4E] text-black dark:text-white p-3 rounded-lg border dark:border-[#00387E] focus:outline-none"
             />
-          </div>
+          </div> */}
 
         </div>
 
