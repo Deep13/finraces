@@ -11,7 +11,7 @@ const CountDownTimer = ({ deadline, setIsTimerFinished }) => {
             const formatTime = (time) => String(time).padStart(2, '0');
 
             return (
-                <div className='w-full flex justify-center items-center gap-[0.5rem] mb-[1.5rem] text-[#2177cb] text-[2.1rem] font-poppins'>
+                <div className='w-full flex justify-center items-center gap-[0.5rem] mb-2 text-[#2177cb] text-[2.1rem] font-poppins'>
 
                     <div className='w-full flex justify-center gap-2'>
                         <div className='flex flex-col'>

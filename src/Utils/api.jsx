@@ -2848,3 +2848,44 @@ export const getFollowing=async(onSuccess,onError)=>{
     onError(error)
   }
 }
+
+export const sendRaceInvite=async(raceId,friendList,onSuccess,onError)=>{
+  try{ 
+    const token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/race-invitations`;
+    const formattedList = friendList.map(friend => ({
+      id: friend.id,
+    }));
+    
+    console.log(formattedList); // This will output an array of objects with just the "id" property
+    
+
+    let inviteBody={
+      invited_users:formattedList,
+      race:{
+        id:raceId
+      }
+    }
+    
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+      body:JSON.stringify(inviteBody)
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    // const data = await response.json();
+    // console.log('Community post created successfully:', data);
+    onSuccess();
+  } catch (error) {
+    onError(error);
+  }
+}
