@@ -61,7 +61,7 @@ const AllFriends = () => {
               <FriendCard
                 key={index}
                 name={friend?.user.firstName + " " + friend?.user.lastName}
-                image={friend?.user.photo.path}
+                image={friend?.user?.photo?.path}
                 id={friend?.user.id}
               />
             ))

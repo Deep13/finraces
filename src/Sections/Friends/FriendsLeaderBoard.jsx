@@ -62,7 +62,7 @@ const FriendsLeaderBoard = () => {
                         }} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                           {/* image */}
                           <div className="w-12 h-12 rounded-full overflow-hidden">
-                            <img className="w-full h-full object-cover" src={curr.user.photo.path} alt="" />
+                            <img className="w-full h-full object-cover" src={curr?.user?.photo?.path} alt="" />
                           </div>
                           {/* name and badge */}
                           <div className="flex flex-col justify-between gap-1">

@@ -2531,11 +2531,10 @@ export const postBlog=async(seoId,category,title,content,img,onSuccess,onError)=
   } 
 }
 
-export const getBlogs=async(onSuccess,onError)=>{
+export const getBlogs=async(onSuccess,onError,category)=>{
   try{
     const token = localStorage.getItem('token');
-    let url = `${GlobalURL}/api/v1/blogs`;
-    let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+    let url = `${GlobalURL}/api/v1/blogs?id={id:${category}}`;
 
   
 
@@ -2888,4 +2887,35 @@ export const sendRaceInvite=async(raceId,friendList,onSuccess,onError)=>{
   } catch (error) {
     onError(error);
   }
+}
+
+
+export const getBlogCategories=async(onSuccess,onError)=>{
+  try{
+    const token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/blog-categories`;
+
+  
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+      Authorization: `Bearer ${token}`
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    console.error('Server error:', errorText);
+    throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  onSuccess(data);
+  }
+  catch(error){
+    onError(error)
+  }
+
 }
