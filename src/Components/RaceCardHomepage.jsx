@@ -26,6 +26,7 @@ import { fetchRaceDataDetailed } from '../Utils/api'
 import { DarkModeContext } from '../Contexts/DarkModeProvider'
 import { Bar } from "react-chartjs-2";
 import { ColorRing } from 'react-loader-spinner'
+import ProgressDemo from './ProgressBar'
 
 
 const RaceCardHomepage = ({
@@ -47,6 +48,7 @@ const RaceCardHomepage = ({
     const [logos, setLogos] = useState({});
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate()
+    const [progress,setProgress]=useState(0);
     const options = {
         indexAxis: "y",
         responsive: true,
@@ -128,6 +130,49 @@ const RaceCardHomepage = ({
             },
         ],
     });
+
+    useEffect(() => {
+
+        const interval = setInterval(() => {
+    
+          const now = new Date();
+    
+          const start = new Date(start_Date);
+    
+          const end = new Date(end_date);
+     
+          // Calculate the progress percentage
+    
+          const totalDuration = end - start;
+    
+          const elapsedTime = now - start;
+     
+          // Ensure that progress is between 0 and 100
+    
+          let progressPercentage = (elapsedTime / totalDuration) * 100;
+     
+          if (progressPercentage > 100) {
+    
+            progressPercentage = 100;
+    
+          }
+    
+          if (progressPercentage < 0) {
+    
+            progressPercentage = 0;
+    
+          }
+     
+          setProgress(progressPercentage);
+    
+        }, 1000); // Update progress every second
+     
+        // Clean up the interval on component unmount
+    
+        return () => clearInterval(interval);
+    
+      }, [start_Date, end_date]);
+     
     useEffect(() => {
         // getStocksDataForRace(raceId, (data) => {
         //     setStocksDataForRace(data)
@@ -428,6 +473,7 @@ const RaceCardHomepage = ({
                     <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
                 </div> */}
 
+                        <div className='flex flex-col gap-10'>
                         <div className='w-full flex justify-center items-center gap-[25px]'>
                             <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender == 'female' ? femalePlaceholder : malePlaceholder} />
                                 <img className='ongoing-rank' src={Crown_1} />
@@ -436,6 +482,7 @@ const RaceCardHomepage = ({
                                 <img className='ongoing-rank' src={Crown_2} /></div>
                             <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={rankList[2].user_photo ? rankList[2].user_photo.path : rankList[2].gender == 'female' ? femalePlaceholder : malePlaceholder} />
                                 <img className='ongoing-rank' src={Crown_3} /></div>
+
 
 
 
@@ -474,16 +521,32 @@ const RaceCardHomepage = ({
                         <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p>
                     </div> */}
 
-                            {/* absolute elements
-                    <div className='absolute right-0 top-1/2'>
+                            {/* absolute elements */}
+                    {/* <div className='absolute right-0 top-1/2'>
                         <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
                     </div> */}
                         </div>
+                        <div className='w-full flex justify-center items-center gap-[25px]'>
+                        <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={stockRankList?.[0]?.stock_icon_url }/>
+                                {/* <img className='ongoing-rank' src={Crown_1} /> */}
+                            </div>
+                            <div style={{ position: 'relative', flex: 1 }}><img className='ongoing-users' src={stockRankList?.[1]?.stock_icon_url} />
+                                {/* <img className='ongoing-rank' src={Crown_2} /> */}
+                                </div>
+                            <div style={{ position: 'relative', flex: 1 }}> <img className='ongoing-users' src={stockRankList?.[2]?.stock_icon_url } />
+                                {/* <img className='ongoing-rank' src={Crown_3} /> */}
+                                </div>
+                        </div>
+                        </div>
+                        
                     </div>
-                    {data.labels.length > 0 && (
+                    <ProgressDemo progress={progress}/>
+
+                    
+                    {/* {data.labels.length > 0 && (
                         // <Bar data={data} options={options} plugins={[customPlugin]} />
-                        <iframe className="w-[100%] h-[400px]" height="832px" src={`/v4/index.html?raceId=${raceId}`} />
-                    )}
+                        // <iframe className="w-[100%] h-[400px]" height="832px" src={`/v4/index.html?raceId=${raceId}`} />
+                    )} */}
 
                 </div>
             )}

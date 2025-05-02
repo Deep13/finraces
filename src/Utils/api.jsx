@@ -2241,10 +2241,11 @@ export const getPosts=async(filterType,onSuccess,onError,page=1)=>{
 
   if (filterType === "My posts") {
     // params.append("userId", userDetails.userId);
-    url+=`userId=${userDetails.userId}`
+    url+=`&userId=${userDetails.userId}`
   }
 
   if (filterType === "Following") {
+    url+="&"
     params.append("filterByFollowing", "true"); // stringified boolean
   }
   if ([...params].length > 0) {

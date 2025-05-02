@@ -308,6 +308,22 @@ const [likedComments,setLikedComments]=useState([]);
     })
   }
 
+  const emojiPickerRef=useRef(null);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (showEmojiPicker && emojiPickerRef.current && !emojiPickerRef.current.contains(event.target)) {
+        setShowEmojiPicker(false);
+      }
+     
+    }
+  
+    document.addEventListener("mousedown", handleClickOutside);
+  
+    // return () => {
+    //   document.removeEventListener("mousedown", handleClickOutside);
+    // };
+  }, [showEmojiPicker, showGifPicker]);
+
   return (
     <div
     onClick={() => {
@@ -394,7 +410,7 @@ const [likedComments,setLikedComments]=useState([]);
         <div className="mt-4 p-4 rounded-xl">
           {/* Emoji Picker */}
           {showEmojiPicker && (
-            <div className="absolute top-[17rem] right-24 z-50">
+            <div ref={emojiPickerRef} className="absolute top-[17rem] right-24 z-50">
               <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
             </div>
           )}
@@ -543,7 +559,7 @@ const [likedComments,setLikedComments]=useState([]);
       className="flex gap-3 w-full items-start bg-slate-300 dark:bg-[#002763] p-3 rounded-lg"
     >
       <img
-        src={comment.user?.photo?.path || '/default-avatar.png'}
+        src={comment.user?.photo?.path || (comment.user?.gender && comment.user?.gender=='female'?femalePlaceholder:malePlaceholder)}
         alt="User Avatar"
         className="w-12 h-12 rounded-full bg-gray-400 object-cover"
       />
@@ -554,7 +570,7 @@ const [likedComments,setLikedComments]=useState([]);
           <strong>
             {comment.user?.firstName} {comment.user?.lastName}
           </strong>
-          <div className="dark:text-gray-400 text-sm">User</div>
+          {/* <div className="dark:text-gray-400 text-sm">User</div> */}
         </div>
 
         {/* Comment Content */}

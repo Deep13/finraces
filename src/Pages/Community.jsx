@@ -123,7 +123,7 @@ const sendPost = () => {
       const finalContent = formattedText;
 
       postCommunityPost("", finalContent, data.file.id, (data) => {
-        console.log("posted successfully", data);
+        console.log("posted successfully", [data, ...posts]);
         setPosts([data, ...posts]);
         resetState();
       }, (error) => {
@@ -206,9 +206,9 @@ useEffect(() => {
 
   document.addEventListener("mousedown", handleClickOutside);
 
-  return () => {
-    document.removeEventListener("mousedown", handleClickOutside);
-  };
+  // return () => {
+  //   document.removeEventListener("mousedown", handleClickOutside);
+  // };
 }, [showEmojiPicker, showGifPicker]);
 
 //fetchData for experts to follow and upcoming races
@@ -434,7 +434,7 @@ useEffect(() => {
               <div className="rounded-full w-16 h-16 bg-gray-300 overflow-hidden">
               <img
                 alt="userImg"
-                src={userDetails?.photo?.path || (userDetails?.gender && userDetails?.gender=='female'?femalePlaceholder:malePlaceholder)}
+                src={userDetails?.photo?.path ||userDetails?.profilePic?.path || (userDetails?.gender && userDetails?.gender=='female'?femalePlaceholder:malePlaceholder)}
                 className="object-cover w-full h-full"
               />
 

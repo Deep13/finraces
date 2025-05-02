@@ -22,6 +22,14 @@ const Footer = () => {
         <div onClick={()=>{navigate('/allraces',{ state: 'Finished Races' })}} className="hover:underline cursor-pointer">Finished Races</div>
         <div onClick={()=>{navigate('/market')}} className="hover:underline cursor-pointer">Market Research</div>
         <div onClick={()=>{navigate('/stockComparison')}} className="hover:underline cursor-pointer">Stock Comparison</div>
+        <a 
+          href="/sitemap.xml" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="hover:underline cursor-pointer"
+        >
+          Sitemap
+        </a>
         {/* <div onClick={()=>{navigate('/')}} className="hover:underline">Twitter</div>
         <div onClick={()=>{navigate('/')}} className="hover:underline">Instagram</div>
         <div onClick={()=>{navigate('/')}} className="hover:underline">Affiliate Program</div>
