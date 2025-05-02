@@ -18,14 +18,15 @@ const Hero = () => {
       <div className='flex overflow-visible justify-end items-center col-span-1 order-1 md:order-2'>
         {/* <img src={person} alt="" /> */}
         <div className="w-full aspect-w-16 aspect-h-9 rounded-lg overflow-hidden h-full mb-10">
-            <iframe
-              src="https://www.veed.io/embed/43102a89-b158-4f70-b8a5-8138a7058b98?title=0"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-              title="Finraces Video"
-            ></iframe>
+        <iframe
+          src="https://www.veed.io/embed/43102a89-b158-4f70-b8a5-8138a7058b98?title=0&autoplay=1&loop=1&controls=0"
+          frameBorder="0"
+          allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          className="w-full h-full"
+          title="Finraces Video"
+        ></iframe>
+
           </div>
 
       </div>

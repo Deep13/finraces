@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
-import { postBlog, uploadImage } from '../Utils/api';
+import { getBlogCategories, postBlog, uploadImage } from '../Utils/api';
 import { FiPlusCircle } from 'react-icons/fi';
 
 const CreateBlog = () => {
@@ -11,6 +11,7 @@ const CreateBlog = () => {
     category: "",
     bannerImg: ""
   });
+  const [categoriesMap, setCategoriesMap] = useState({});
   const [error, setError] = useState({ show: false, message: "" });
   const fileInputRef = useRef(null);
 
@@ -37,6 +38,16 @@ const CreateBlog = () => {
         btn.setAttribute('title', tooltips[qlFormat]);
       }
     });
+
+    getBlogCategories((data)=>{
+      const mappedCategories = {};
+        data.data.forEach((cat) => {
+          mappedCategories[cat.name] = cat.id;
+        });
+        setCategoriesMap(mappedCategories);
+    },(error)=>{
+      console.log("Error fetching categories",error)
+    })
   }, []);
 
   const sumbitBlog = () => {
@@ -51,7 +62,7 @@ const CreateBlog = () => {
     uploadImage(formData.bannerImg, (data) => {
       postBlog(
         "eda4717e-36f6-43ad-8f1a-6630b3e93a9c",
-        "6cbae941-fb07-4c5b-8d16-99d655abf681",
+        categoriesMap[formData.category],
         formData.title,
         content,
         data.file.id,
@@ -113,10 +124,12 @@ const CreateBlog = () => {
                   onChange={(e) => setFormdata(prev => ({ ...prev, category: e.target.value }))}
                   className="cursor-pointer w-full h-10 p-2 rounded-sm dark:bg-[#001B51] text-white"
                 >
-                  <option>Crypto</option>
-                  <option>Stocks</option>
-                  <option>Investing</option>
-                  <option>Races</option>
+                  <option value="" disabled>Select a category</option>
+                  {Object.keys(categoriesMap).map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
