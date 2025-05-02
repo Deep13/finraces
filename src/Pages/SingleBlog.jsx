@@ -36,7 +36,7 @@ const SingleBlog = () => {
         }
       },
       (error) => {
-        setError("Failed to fetch blog.",error);
+        setError("Failed to fetch blog.", error);
         setLoading(false);
       }
     );
@@ -76,7 +76,7 @@ const SingleBlog = () => {
         {/* Blog Content Container */}
         <div className="flex-1 px-4 mx-auto dark:text-white">
           <div className="bg-white dark:bg-[#000D38] rounded-xl border dark:border-[#00387E] p-6 md:p-10 shadow-md">
-            <h1 className="text-3xl md:text-5xl font-bold mb-6">{blog.title}</h1>
+            <h1 className="text-2xl md:text-3xl font-bold mb-6">{blog.title}</h1>
 
             <div className="flex items-center gap-4 mb-6">
               <img
@@ -117,10 +117,10 @@ const SingleBlog = () => {
         <div className="w-[25%] dark:text-white bg-white dark:bg-[#000D38] rounded-xl border dark:border-[#00387E] p-4 shadow-md min-h-[94%] flex flex-col gap-8">
           {/* Categories Section */}
           <div>
-            <div className="text-3xl font-bold mb-3">Categories</div>
+            <div className="text-xl font-bold mb-3">Categories</div>
             <ul className="list-none space-y-2">
               {categories.map((cat) => (
-                <li key={cat.id} className="flex items-center gap-2 text-lg cursor-pointer hover:text-blue-500 transition">
+                <li key={cat.id} className="flex items-center gap-2 text-md cursor-pointer hover:text-blue-500 transition">
                   <span className="text-blue-500">➤</span>
                   <Link to={`/allBlogs?type=${cat.name}`} className="flex-1">
                     {cat.name}
@@ -132,7 +132,7 @@ const SingleBlog = () => {
 
           {/* Recent Blogs Section */}
           <div>
-            <div className="text-3xl font-bold mb-3">Recent Blogs</div>
+            <div className="text-xl font-bold mb-3">Recent Blogs</div>
             <div className="space-y-4">
               {recentBlogs.length > 0 ? (
                 recentBlogs.map((item) => (

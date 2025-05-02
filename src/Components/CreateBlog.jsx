@@ -8,7 +8,7 @@ const CreateBlog = () => {
   const [content, setContent] = useState('');
   const [formData, setFormdata] = useState({
     title: "",
-    desc:"",
+    excerpt: "",
     category: "",
     bannerImg: ""
   });
@@ -40,14 +40,14 @@ const CreateBlog = () => {
       }
     });
 
-    getBlogCategories((data)=>{
+    getBlogCategories((data) => {
       const mappedCategories = {};
-        data.data.forEach((cat) => {
-          mappedCategories[cat.name] = cat.id;
-        });
-        setCategoriesMap(mappedCategories);
-    },(error)=>{
-      console.log("Error fetching categories",error)
+      data.data.forEach((cat) => {
+        mappedCategories[cat.name] = cat.id;
+      });
+      setCategoriesMap(mappedCategories);
+    }, (error) => {
+      console.log("Error fetching categories", error)
     })
   }, []);
 
@@ -65,6 +65,7 @@ const CreateBlog = () => {
         "eda4717e-36f6-43ad-8f1a-6630b3e93a9c",
         categoriesMap[formData.category],
         formData.title,
+        formData.excerpt,
         content,
         data.file.id,
         (data) => {
@@ -89,12 +90,12 @@ const CreateBlog = () => {
   };
 
   return (
-    <div className="flex justify-center items-start py-10 px-5 w-full">
+    <div className="flex justify-center items-start py-10 px-5 w-full pt-0">
       <div className="flex flex-col dark:text-white gap-5 w-full rounded-xl border dark:border-[#00387E] dark:bg-[#000A2D] p-5">
-        
+
         <div className="flex items-center justify-between p-2 relative">
           <div className="font-semibold text-lg">
-            Write Blog
+            Create Blog
           </div>
           <div className="flex items-center gap-4">
             <button
@@ -118,15 +119,7 @@ const CreateBlog = () => {
                   className="rounded-sm w-full h-10 dark:text-white px-2"
                 />
               </div>
-              <div>
-                <label>Excerpt</label>
-                <input
-                  value={formData.desc}
-                  onChange={(e) => setFormdata(prev => ({ ...prev, desc: e.target.value }))}
-                  type="text"
-                  className="rounded-sm w-full h-10 dark:text-white px-2"
-                />
-              </div>
+
               <div>
                 <label>Category</label>
                 <select
@@ -143,28 +136,45 @@ const CreateBlog = () => {
                 </select>
               </div>
             </div>
-
-            <div
-              className="w-64 h-64 min-w-[160px] cursor-pointer rounded-lg border border-dashed border-slate-500 bg-[#001B51] overflow-hidden flex items-center justify-center"
-              onClick={() => fileInputRef.current.click()}
-            >
-              {formData.bannerImg ? (
-                <img src={URL.createObjectURL(formData.bannerImg)} alt="Banner" className="object-cover w-full h-full" />
-              ) : (
-                <FiPlusCircle size={32} className='dark:text-white' />
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                ref={fileInputRef}
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    setFormdata(prev => ({ ...prev, bannerImg: file }));
-                  }
-                }}
-                className="hidden"
-              />
+            <div className='flex flex-roq gap-4 flex-1 '>
+              <div className='flex-1 '>
+                <label>Excerpt</label>
+                {/* <input
+                  value={formData.excerpt}
+                  onChange={(e) => setFormdata(prev => ({ ...prev, excerpt: e.target.value }))}
+                  type="text"
+                  className="rounded-sm w-full h-10 dark:text-white px-2"
+                /> */}
+                <textarea
+                  value={formData.excerpt}
+                  onChange={(e) => setFormdata(prev => ({ ...prev, excerpt: e.target.value }))}
+                  className="rounded-sm w-full dark:text-white px-2"
+                  rows={8}
+                  placeholder="Write a short excerpt..."
+                />
+              </div>
+              <div
+                className="w-64 h-64 min-w-[160px] cursor-pointer rounded-lg border border-dashed border-slate-500 bg-[#001B51] overflow-hidden flex items-center justify-center"
+                onClick={() => fileInputRef.current.click()}
+              >
+                {formData.bannerImg ? (
+                  <img src={URL.createObjectURL(formData.bannerImg)} alt="Banner" className="object-cover w-full h-full" />
+                ) : (
+                  <FiPlusCircle size={32} className='dark:text-white' />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      setFormdata(prev => ({ ...prev, bannerImg: file }));
+                    }
+                  }}
+                  className="hidden"
+                />
+              </div>
             </div>
           </div>
 

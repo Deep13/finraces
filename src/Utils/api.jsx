@@ -24,8 +24,8 @@ export const RegisterUser = async (
     is_guest: false,
   };
 
-  console.log('payload',payload);
-  console.log('input',gender);
+  console.log('payload', payload);
+  console.log('input', gender);
   try {
     // console.log('Registration payload', payload);
     const response = await axios.post(`${GlobalURL}/api/v1/auth/email/register`, payload);
@@ -134,7 +134,7 @@ export const createRaceAndJoinUser = async (
 
     let raceData = {
       race: {
-        privacy:privacy,
+        privacy: privacy,
         isSimulation: true,
         end_date: endDateTime,
         start_date: startDateTime,
@@ -165,28 +165,28 @@ export const createRaceAndJoinUser = async (
 
 export const getRaceList = async (
   status = 'scheduled',
-  page=1,
+  page = 1,
   onSuccess = () => { },
   onError = () => { },
-  filters={endDate:"",selectedStocks:[],startDate:""},
+  filters = { endDate: "", selectedStocks: [], startDate: "" },
 ) => {
 
   let token = localStorage.getItem('token')
-  let url=`${GlobalURL}/api/v1/public/races/detailed?limit=10&statuses=${status}&page=${page}`
+  let url = `${GlobalURL}/api/v1/public/races/detailed?limit=10&statuses=${status}&page=${page}`
 
-  if(filters.endDate!=""){
-    let formatttedDate=new Date(filters.endDate).toISOString();
-    url+=`&endDateLessThanEqual=${formatttedDate}`
+  if (filters.endDate != "") {
+    let formatttedDate = new Date(filters.endDate).toISOString();
+    url += `&endDateLessThanEqual=${formatttedDate}`
   }
-  if(filters.startDate!=""){
-    let formatttedDate=new Date(filters.startDate).toISOString();
-    url+=`&endDateGreaterThanEqual=${formatttedDate}`
+  if (filters.startDate != "") {
+    let formatttedDate = new Date(filters.startDate).toISOString();
+    url += `&endDateGreaterThanEqual=${formatttedDate}`
   }
   if (filters.selectedStocks.length > 0) {
     filters.selectedStocks.forEach((stock) => {
-        url += `&tickersContains=${stock}`;
+      url += `&tickersContains=${stock}`;
     });
-}
+  }
   try {
     const response = await fetch(url, {
       method: 'GET',
@@ -201,7 +201,7 @@ export const getRaceList = async (
     }
 
     const responseData = await response.json()
-    
+
     console.log('racelist', responseData)
     onSuccess(responseData)
 
@@ -319,7 +319,7 @@ export const joinAsGuest = async (
   try {
     console.log('Registration payload', payload);
 
-    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`,payload)
+    const response = await axios.post(`${GlobalURL}/api/v1/auth/email/guest`, payload)
     const data = await response.data
     console.log('Registration successful', data);
     // localStorage.setItem('guest_email', data.email)
@@ -483,25 +483,25 @@ export const getStocksDataForRace = async (race_id, onSuccess, onError) => {
   }
 };
 
-export const updateNotification=async(notificationIDs,onSuccess,onError)=>{
-  try{
-    const payload={
-      "ids":notificationIDs
+export const updateNotification = async (notificationIDs, onSuccess, onError) => {
+  try {
+    const payload = {
+      "ids": notificationIDs
     }
-    const token=localStorage.getItem('token')
+    const token = localStorage.getItem('token')
     const response = await fetch(`${GlobalURL}/api/v1/notifications`, {
       method: "PATCH", // Adjust the method if needed (e.g., POST, PUT, DELETE)
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body:JSON.stringify(payload)
+      body: JSON.stringify(payload)
 
-      
+
     });
     console.log(response)
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 }
@@ -948,9 +948,9 @@ export const updateProfile = async (payload, onSuccess, onError) => {
     const url = `${GlobalURL}/api/v1/auth/me`
     const replaceEmptyStrings = (obj) => {
       return JSON.parse(JSON.stringify(obj, (key, value) => (value === "" ? " " : value)));
-  };
-  
-  const updatedPayload = replaceEmptyStrings(payload);
+    };
+
+    const updatedPayload = replaceEmptyStrings(payload);
 
 
     // Make the PATCH request
@@ -988,7 +988,7 @@ export const getTop4 = async (
   endDate,
   onSuccess = () => { },
   onError = () => { },
-  limit=4,
+  limit = 4,
 ) => {
   // let token = localStorage.getItem('token')
   try {
@@ -1024,22 +1024,22 @@ export const getTopRankers = async (
   limit = 10,
   page = 1,
   searchQuery = '',
-  onSuccess = () => {},
-  onError = () => {},
-  filterType="rank",
-  direction="ASC"
+  onSuccess = () => { },
+  onError = () => { },
+  filterType = "rank",
+  direction = "ASC"
 ) => {
   try {
     let url = `${GlobalURL}/api/v1/public/race-results/stats?limit=${limit}&page=${page}&sortOrder=${direction}`;
 
-    if(filterType=="Points"){
-      url+=`&sortBy=points`
+    if (filterType == "Points") {
+      url += `&sortBy=points`
     }
-    if(filterType=="Name"){
-      url+=`&sortBy=name`
+    if (filterType == "Name") {
+      url += `&sortBy=name`
     }
-    if(filterType=="Races"){
-      url+=`&sortBy=races_won`
+    if (filterType == "Races") {
+      url += `&sortBy=races_won`
     }
 
     if (startDate) url += `&from=${formatLocalDateTime(startDate)}`
@@ -1232,15 +1232,15 @@ export const fuzzySearch = async (prefix) => {
 };
 
 
-export const searchUsers = async (prefix,limit="") => {
+export const searchUsers = async (prefix, limit = "") => {
 
 
   try {
 
 
     let url = `${GlobalURL}/api/v1/public/search/users?nameContains=${prefix}`
-    if(limit!=""){
-      url+=`&limit=${limit}`
+    if (limit != "") {
+      url += `&limit=${limit}`
     }
 
     // Make the PATCH request
@@ -1891,9 +1891,9 @@ export const addToWatchList = async (stockId, onSuccess, onError) => {
   }
 };
 
-export const getWatchList=async(onSuccess,onError,pageNum=1)=>{
-  try{
-    let token=localStorage.getItem('token');
+export const getWatchList = async (onSuccess, onError, pageNum = 1) => {
+  try {
+    let token = localStorage.getItem('token');
 
     const response = await axios.get(`${GlobalURL}/api/v1/stock-watchlists?page=${pageNum}`, {
       headers: {
@@ -1908,16 +1908,16 @@ export const getWatchList=async(onSuccess,onError,pageNum=1)=>{
     }
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
-export const deleteFromWatchlist=async(id,onSuccess,onError)=>{
-  try{
-    let token=localStorage.getItem('token');
-    
-    let url=`${GlobalURL}/api/v1/stock-watchlists/${id}`
+export const deleteFromWatchlist = async (id, onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem('token');
+
+    let url = `${GlobalURL}/api/v1/stock-watchlists/${id}`
 
     const response = await axios.delete(url, {
       headers: {
@@ -1927,7 +1927,7 @@ export const deleteFromWatchlist=async(id,onSuccess,onError)=>{
 
     // Check if request was successful
     if (response.status === 200) {
-      
+
       onSuccess(response.data); // Pass stock history data
     } else {
       throw new Error(`Unexpected response status: ${response.status}`);
@@ -1935,15 +1935,15 @@ export const deleteFromWatchlist=async(id,onSuccess,onError)=>{
 
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
-export const getStockComparisonData=async(ticker,onSuccess,onError)=>{
-  try{
-    let token=localStorage.getItem('token');
-    let url=`${GlobalURL}/api/v1/stocks/${ticker}/financials`
+export const getStockComparisonData = async (ticker, onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/stocks/${ticker}/financials`
 
     const response = await axios.get(url, {
       headers: {
@@ -1958,19 +1958,19 @@ export const getStockComparisonData=async(ticker,onSuccess,onError)=>{
       throw new Error(`Unexpected response status: ${response.status}`);
     }
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
 
-export const getChats=async(onSuccess,onError,id,page=1)=>{
-  if(!id)return;
-  try{
-    let token=localStorage.getItem('token');
+export const getChats = async (onSuccess, onError, id, page = 1) => {
+  if (!id) return;
+  try {
+    let token = localStorage.getItem('token');
     let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
-    console.log("user",userDetails)
-    let url=`${GlobalURL}/api/v1/messages?receiver=${id}&page=${page}`
+    console.log("user", userDetails)
+    let url = `${GlobalURL}/api/v1/messages?receiver=${id}&page=${page}`
 
     const response = await axios.get(url, {
       headers: {
@@ -1980,7 +1980,7 @@ export const getChats=async(onSuccess,onError,id,page=1)=>{
 
     // Check if request was successful
     if (response.status === 200) {
-      
+
       onSuccess(response.data); // Pass stock history data
     } else {
       throw new Error(`Unexpected response status: ${response.status}`);
@@ -1988,22 +1988,22 @@ export const getChats=async(onSuccess,onError,id,page=1)=>{
 
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
-export const postChats=async(msg,reciever,onSuccess,onError)=>{
-  console.log("check",msg,reciever)
-  try{
+export const postChats = async (msg, reciever, onSuccess, onError) => {
+  console.log("check", msg, reciever)
+  try {
     let token = localStorage.getItem("token");
-    const payload = { 
-      is_read:false,
+    const payload = {
+      is_read: false,
       content: msg,
-      receiver:reciever
-     };
+      receiver: reciever
+    };
     const url = `${GlobalURL}/api/v1/messages`;
-    
+
 
     const response = await fetch(url, {
       method: "POST",
@@ -2023,18 +2023,18 @@ export const postChats=async(msg,reciever,onSuccess,onError)=>{
     const data = await response.json(); // Parse response JSON
     onSuccess(data); // Call success callback with API response
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
-export const markChatsAsRead=async(chatId,onSuccess,onError)=>{
-  try{
-    let token=localStorage.getItem('token');
+export const markChatsAsRead = async (chatId, onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem('token');
     const url = `${GlobalURL}/api/v1/messages/${chatId}`;
-    const payload = { 
-      is_read:true,
-     };
+    const payload = {
+      is_read: true,
+    };
 
     const response = await fetch(url, {
       method: "PATCH",
@@ -2055,18 +2055,18 @@ export const markChatsAsRead=async(chatId,onSuccess,onError)=>{
     onSuccess(data); // Call success callback with API response
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
 
-export const getAllChats=async(onSuccess,onError)=>{
-  try{
-    let token=localStorage.getItem('token');
+export const getAllChats = async (onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem('token');
     let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
-    console.log("user",userDetails)
-    let url=`${GlobalURL}/api/v1/messages/users`
+    console.log("user", userDetails)
+    let url = `${GlobalURL}/api/v1/messages/users`
 
     const response = await axios.get(url, {
       headers: {
@@ -2076,7 +2076,7 @@ export const getAllChats=async(onSuccess,onError)=>{
 
     // Check if request was successful
     if (response.status === 200) {
-      
+
       onSuccess(response.data); // Pass stock history data
     } else {
       throw new Error(`Unexpected response status: ${response.status}`);
@@ -2084,16 +2084,16 @@ export const getAllChats=async(onSuccess,onError)=>{
 
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
-export const checkWatchlist=async(ticker,onSuccess,onError)=>{
-  try{
-    let token=localStorage.getItem('token');
+export const checkWatchlist = async (ticker, onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem('token');
 
-    let url=`${GlobalURL}/api/v1/stock-watchlists/ticker/${ticker}/exists`
+    let url = `${GlobalURL}/api/v1/stock-watchlists/ticker/${ticker}/exists`
 
     const response = await axios.get(url, {
       headers: {
@@ -2103,7 +2103,7 @@ export const checkWatchlist=async(ticker,onSuccess,onError)=>{
 
     // Check if request was successful
     if (response.status === 200) {
-      
+
       onSuccess(response.data); // Pass stock history data
     } else {
       throw new Error(`Unexpected response status: ${response.status}`);
@@ -2111,17 +2111,17 @@ export const checkWatchlist=async(ticker,onSuccess,onError)=>{
 
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
-export const getStockChartData=async(ticker,startDate,endDate,units,onSuccess,onError)=>{
-  console.log("inputs",ticker,startDate,endDate,units)
-  try{
-    let token=localStorage.getItem('token');
+export const getStockChartData = async (ticker, startDate, endDate, units, onSuccess, onError) => {
+  console.log("inputs", ticker, startDate, endDate, units)
+  try {
+    let token = localStorage.getItem('token');
 
-    let url=`${GlobalURL}/api/v1/stocks/${ticker}/aggregates?multiplierNum=1&timespanUnit=${units}&startDate=${startDate}&endDate=${endDate}`
+    let url = `${GlobalURL}/api/v1/stocks/${ticker}/aggregates?multiplierNum=1&timespanUnit=${units}&startDate=${startDate}&endDate=${endDate}`
 
     const response = await axios.get(url, {
       headers: {
@@ -2131,7 +2131,7 @@ export const getStockChartData=async(ticker,startDate,endDate,units,onSuccess,on
 
     // Check if request was successful
     if (response.status === 200) {
-      
+
       onSuccess(response.data); // Pass stock history data
     } else {
       throw new Error(`Unexpected response status: ${response.status}`);
@@ -2139,7 +2139,7 @@ export const getStockChartData=async(ticker,startDate,endDate,units,onSuccess,on
 
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
@@ -2148,7 +2148,7 @@ export const getStockChartData=async(ticker,startDate,endDate,units,onSuccess,on
 export const uploadImage = async (file, onSuccess, onError) => {
   const UPLOAD_URL = `${GlobalURL}/api/v1/files/upload`;
   const token = localStorage.getItem('token');
-  
+
   try {
     if (!file) throw new Error("No file provided");
     if (!token) throw new Error("Missing token in localStorage");
@@ -2197,11 +2197,11 @@ export const postCommunityPost = async (title, content, img, onSuccess, onError)
 
     const reqBody = img
       ? {
-          ...commonData,
-          image: {
-            id: img
-          }
+        ...commonData,
+        image: {
+          id: img
         }
+      }
       : commonData;
 
 
@@ -2228,89 +2228,30 @@ export const postCommunityPost = async (title, content, img, onSuccess, onError)
   }
 };
 
-export const getPosts=async(filterType,onSuccess,onError,page=1)=>{
-  try{
+export const getPosts = async (filterType, onSuccess, onError, page = 1) => {
+  try {
     const token = localStorage.getItem('token');
-  let url = `${GlobalURL}/api/v1/community-posts?page=${page}`;
-  let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+    let url = `${GlobalURL}/api/v1/community-posts?page=${page}`;
+    let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
 
-  // if(filterType!="All"){
-  //   url+="?";
-  // }
-  const params = new URLSearchParams();
+    // if(filterType!="All"){
+    //   url+="?";
+    // }
+    const params = new URLSearchParams();
 
-  if (filterType === "My posts") {
-    // params.append("userId", userDetails.userId);
-    url+=`&userId=${userDetails.userId}`
-  }
-
-  if (filterType === "Following") {
-    url+="&"
-    params.append("filterByFollowing", "true"); // stringified boolean
-  }
-  if ([...params].length > 0) {
-    url += `${params.toString()}`;
-  }
-
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
-      Authorization: `Bearer ${token}`
-    },
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Server error:', errorText);
-    throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
-  }
-
-  const data = await response.json();
-  onSuccess(data);
-  }
-  catch(error){
-    onError(error)
-  }
-
-}
-
-export const deletePost =async(postId,onSuccess,onError)=>{
-  const token = localStorage.getItem('token');
-  let url = `${GlobalURL}/api/v1/community-posts/${postId}`;
-  // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
-
-  try{
-    const response = await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
-        Authorization: `Bearer ${token}`
-      },
-    });
-  
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Server error:', errorText);
-      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    if (filterType === "My posts") {
+      // params.append("userId", userDetails.userId);
+      url += `&userId=${userDetails.userId}`
     }
-  
-    // const data = await response.json();
-    onSuccess();
 
-  }
-  catch(error){
-    onError(error)
-  }
-}
+    if (filterType === "Following") {
+      url += "&"
+      params.append("filterByFollowing", "true"); // stringified boolean
+    }
+    if ([...params].length > 0) {
+      url += `${params.toString()}`;
+    }
 
-
-export const getPostDetailed=async(postId,onSuccess,onError)=>{
-  const token = localStorage.getItem('token');
-  let url = `${GlobalURL}/api/v1/community-posts/${postId}`;
-  // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
-
-  try{
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -2318,32 +2259,91 @@ export const getPostDetailed=async(postId,onSuccess,onError)=>{
         Authorization: `Bearer ${token}`
       },
     });
-  
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
+  }
+  catch (error) {
+    onError(error)
+  }
+
+}
+
+export const deletePost = async (postId, onSuccess, onError) => {
+  const token = localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/community-posts/${postId}`;
+  // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    // const data = await response.json();
+    onSuccess();
 
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 }
 
-export const likePost = async(postId,onSuccess,onError)=>{
-  try{ 
+
+export const getPostDetailed = async (postId, onSuccess, onError) => {
+  const token = localStorage.getItem('token');
+  let url = `${GlobalURL}/api/v1/community-posts/${postId}`;
+  // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
+
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    onSuccess(data);
+
+  }
+  catch (error) {
+    onError(error)
+  }
+}
+
+export const likePost = async (postId, onSuccess, onError) => {
+  try {
     const token = localStorage.getItem('token');
     let url = `${GlobalURL}/api/v1/community-post-likes`;
-    const reqBody={
-      post:{
-        id:postId
+    const reqBody = {
+      post: {
+        id: postId
       }
     }
-    
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -2366,11 +2366,11 @@ export const likePost = async(postId,onSuccess,onError)=>{
     onError(error);
   }
 }
-export const dislikePost = async(postId,onSuccess,onError)=>{
-  try{ 
+export const dislikePost = async (postId, onSuccess, onError) => {
+  try {
     const token = localStorage.getItem('token');
     let url = `${GlobalURL}/api/v1/community-post-likes/${postId}`;
-    
+
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
@@ -2393,13 +2393,13 @@ export const dislikePost = async(postId,onSuccess,onError)=>{
   }
 }
 
-export const getUserLikes=async(onSuccess,onError)=>{
+export const getUserLikes = async (onSuccess, onError) => {
   const token = localStorage.getItem('token');
- 
+
   let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
   let url = `${GlobalURL}/api/v1/community-post-likes?userId=${userDetails.userId}`;
 
-  try{
+  try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -2407,29 +2407,29 @@ export const getUserLikes=async(onSuccess,onError)=>{
         Authorization: `Bearer ${token}`
       },
     });
-  
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
 
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 
 }
 
-export const getPostComments=async(postId,onSuccess,onError)=>{
+export const getPostComments = async (postId, onSuccess, onError) => {
   const token = localStorage.getItem('token');
-  let url = `${GlobalURL}/api/v1/community-post-comments?postId=${postId}`; 
+  let url = `${GlobalURL}/api/v1/community-post-comments?postId=${postId}`;
   // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
 
-  try{
+  try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -2437,7 +2437,7 @@ export const getPostComments=async(postId,onSuccess,onError)=>{
         Authorization: `Bearer ${token}`
       },
     });
-  
+
     const text = await response.text(); // Get raw response
 
     if (!response.ok) {
@@ -2449,12 +2449,12 @@ export const getPostComments=async(postId,onSuccess,onError)=>{
     const data = text ? JSON.parse(text) : null;
     onSuccess(data);
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 }
 
-export const postComments=async(postId,title,content,onSuccess,onError)=>{
+export const postComments = async (postId, title, content, onSuccess, onError) => {
   try {
     const token = localStorage.getItem('token');
     const url = `${GlobalURL}/api/v1/community-post-comments`;
@@ -2487,25 +2487,26 @@ export const postComments=async(postId,title,content,onSuccess,onError)=>{
     onSuccess(data);
   } catch (error) {
     onError(error);
-  } 
+  }
 }
 
-export const postBlog=async(seoId,category,title,content,img,onSuccess,onError)=>{
+export const postBlog = async (seoId, category, title, excerpt, content, img, onSuccess, onError) => {
   try {
     const token = localStorage.getItem('token');
     const url = `${GlobalURL}/api/v1/blogs`;
 
     const reqBody = {
       title: title,        // Make sure this is a plain string
-      content: content,    // Make sure this is a plain string
+      content: content,
+      excerpt: excerpt,   // Make sure this is a plain string
       seo: {
         id: seoId            // Must be a string too
       },
-      category:{
-        id:category
+      category: {
+        id: category
       },
-      image:{
-        id:img
+      image: {
+        id: img
       }
     };
 
@@ -2529,45 +2530,47 @@ export const postBlog=async(seoId,category,title,content,img,onSuccess,onError)=
     onSuccess(data);
   } catch (error) {
     onError(error);
-  } 
+  }
 }
 
-export const getBlogs=async(onSuccess,onError,category,page=1)=>{
-  try{
+
+
+export const getBlogs = async (onSuccess, onError, category, page = 1) => {
+  try {
     const token = localStorage.getItem('token');
     let url = `${GlobalURL}/api/v1/blogs?blogCategoryId=${category}&page=${page}&limit=12`;
 
-  
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
-      Authorization: `Bearer ${token}`
-    },
-  });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Server error:', errorText);
-    throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    onSuccess(data);
   }
-
-  const data = await response.json();
-  onSuccess(data);
-  }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 
 }
 
-export const getBlogDetailed=async(blogId,onSuccess,onError)=>{
+export const getBlogDetailed = async (blogId, onSuccess, onError) => {
   const token = localStorage.getItem('token');
   let url = `${GlobalURL}/api/v1/blogs/${blogId}`;
   // let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
 
-  try{
+  try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -2575,28 +2578,28 @@ export const getBlogDetailed=async(blogId,onSuccess,onError)=>{
         Authorization: `Bearer ${token}`
       },
     });
-  
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
 
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 
 }
 
-export const getFollowees=async(onSuccess,onError)=>{
-  let token=localStorage.getItem('token');
+export const getFollowees = async (onSuccess, onError) => {
+  let token = localStorage.getItem('token');
   let url = `${GlobalURL}/api/v1/follows/followees`;
 
-  try{
+  try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -2604,27 +2607,27 @@ export const getFollowees=async(onSuccess,onError)=>{
         Authorization: `Bearer ${token}`
       },
     });
-  
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
-export const followUser=async(followeeId,onSuccess,onError)=>{
-  let token=localStorage.getItem('token');
+export const followUser = async (followeeId, onSuccess, onError) => {
+  let token = localStorage.getItem('token');
   let url = `${GlobalURL}/api/v1/follows`;
 
-  try{
+  try {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -2633,27 +2636,27 @@ export const followUser=async(followeeId,onSuccess,onError)=>{
       },
       body: JSON.stringify({ followee: String(followeeId) })
     });
-  
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 }
 
-export const unFollowUser=async(followeeId,onSuccess,onError)=>{
-  let token=localStorage.getItem('token');
+export const unFollowUser = async (followeeId, onSuccess, onError) => {
+  let token = localStorage.getItem('token');
   let url = `${GlobalURL}/api/v1/follows/${followeeId}`;
 
-  try{
+  try {
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
@@ -2661,33 +2664,33 @@ export const unFollowUser=async(followeeId,onSuccess,onError)=>{
         Authorization: `Bearer ${token}`
       },
     });
-  
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     // const data = await response.json();
     onSuccess();
 
   }
-  catch(error){
+  catch (error) {
     onError(error);
   }
 
 }
 
-export const likeComment=async(commentId,onSuccess,onError)=>{
-  try{
+export const likeComment = async (commentId, onSuccess, onError) => {
+  try {
     const token = localStorage.getItem('token');
     let url = `${GlobalURL}/api/v1/community-comment-likes`;
-    const reqBody={
-      post:{
-        id:commentId
+    const reqBody = {
+      post: {
+        id: commentId
       }
     }
-    
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -2707,16 +2710,16 @@ export const likeComment=async(commentId,onSuccess,onError)=>{
     console.log('Community post created successfully:', data);
     onSuccess(data);
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 }
 
-export const dislikeComment = async(commentId,onSuccess,onError)=>{
-  try{ 
+export const dislikeComment = async (commentId, onSuccess, onError) => {
+  try {
     const token = localStorage.getItem('token');
     let url = `${GlobalURL}/api/v1/community-comment-likes/${commentId}`;
-    
+
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
@@ -2739,13 +2742,13 @@ export const dislikeComment = async(commentId,onSuccess,onError)=>{
   }
 }
 
-export const getUserLikedComments=async(onSuccess,onError)=>{
+export const getUserLikedComments = async (onSuccess, onError) => {
   const token = localStorage.getItem('token');
- 
+
   let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
   let url = `${GlobalURL}/api/v1/community-comment-likes?userId=${userDetails.userId}`;
 
-  try{
+  try {
     const response = await fetch(url, {
       method: 'GET',
       headers: {
@@ -2753,32 +2756,32 @@ export const getUserLikedComments=async(onSuccess,onError)=>{
         Authorization: `Bearer ${token}`
       },
     });
-  
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
 
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 
 }
 
-export const getFriends=async(onSuccess,onError,name="")=>{
-  try{
-    let token=localStorage.getItem('token');
-    let url=`${GlobalURL}/api/v1/friends`;
-    if(name!=""){
-      url+=`?nameContains=${name}`
+export const getFriends = async (onSuccess, onError, name = "") => {
+  try {
+    let token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/friends`;
+    if (name != "") {
+      url += `?nameContains=${name}`
     }
-    const response= await fetch(url,{
-      method:"GET",
+    const response = await fetch(url, {
+      method: "GET",
       headers: {
         'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
         Authorization: `Bearer ${token}`
@@ -2790,20 +2793,20 @@ export const getFriends=async(onSuccess,onError,name="")=>{
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 }
 
-export const getFollowers=async(onSuccess,onError)=>{
-  try{
-    let token=localStorage.getItem('token');
-    const response= await fetch(`${GlobalURL}/api/v1/follows/followers`,{
-      method:"GET",
+export const getFollowers = async (onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem('token');
+    const response = await fetch(`${GlobalURL}/api/v1/follows/followers`, {
+      method: "GET",
       headers: {
         'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
         Authorization: `Bearer ${token}`
@@ -2815,20 +2818,20 @@ export const getFollowers=async(onSuccess,onError)=>{
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 }
 
-export const getFollowing=async(onSuccess,onError)=>{
-  try{
-    let token=localStorage.getItem('token');
-    const response= await fetch(`${GlobalURL}/api/v1/follows/followees`,{
-      method:"GET",
+export const getFollowing = async (onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem('token');
+    const response = await fetch(`${GlobalURL}/api/v1/follows/followees`, {
+      method: "GET",
       headers: {
         'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
         Authorization: `Bearer ${token}`
@@ -2840,40 +2843,40 @@ export const getFollowing=async(onSuccess,onError)=>{
       console.error('Server error:', errorText);
       throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
     }
-  
+
     const data = await response.json();
     onSuccess(data);
   }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 }
 
-export const sendRaceInvite=async(raceId,friendList,onSuccess,onError)=>{
-  try{ 
+export const sendRaceInvite = async (raceId, friendList, onSuccess, onError) => {
+  try {
     const token = localStorage.getItem('token');
     let url = `${GlobalURL}/api/v1/race-invitations`;
     const formattedList = friendList.map(friend => ({
       id: friend.id,
     }));
-    
-    console.log(formattedList); // This will output an array of objects with just the "id" property
-    
 
-    let inviteBody={
-      invited_users:formattedList,
-      race:{
-        id:raceId
+    console.log(formattedList); // This will output an array of objects with just the "id" property
+
+
+    let inviteBody = {
+      invited_users: formattedList,
+      race: {
+        id: raceId
       }
     }
-    
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
         Authorization: `Bearer ${token}`
       },
-      body:JSON.stringify(inviteBody)
+      body: JSON.stringify(inviteBody)
     });
 
     if (!response.ok) {
@@ -2891,31 +2894,31 @@ export const sendRaceInvite=async(raceId,friendList,onSuccess,onError)=>{
 }
 
 
-export const getBlogCategories=async(onSuccess,onError)=>{
-  try{
+export const getBlogCategories = async (onSuccess, onError) => {
+  try {
     const token = localStorage.getItem('token');
     let url = `${GlobalURL}/api/v1/blog-categories`;
 
-  
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
-      Authorization: `Bearer ${token}`
-    },
-  });
 
-  if (!response.ok) {
-    const errorText = await response.text();
-    console.error('Server error:', errorText);
-    throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    onSuccess(data);
   }
-
-  const data = await response.json();
-  onSuccess(data);
-  }
-  catch(error){
+  catch (error) {
     onError(error)
   }
 
