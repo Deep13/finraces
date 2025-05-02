@@ -20,16 +20,36 @@ const DateRangePicker = ({
 
   const handleDateSelection = (range) => {
     setSelectedRange(range);
-    if (range?.from) setStartDate(format(range.from, "yyyy-MM-dd"));
-    if (range?.to) setEndDate(format(range.to, "yyyy-MM-dd"));
+  
+    if (range?.from) {
+      setStartDate(format(range.from, "yyyy-MM-dd"));
+    } else {
+      setStartDate(null); // Or reset if no start date
+    }
+  
+    if (range?.to) {
+      setEndDate(format(range.to, "yyyy-MM-dd"));
+    } else if (range?.from) {
+      // If only one date selected (like a single click)
+      setEndDate(format(range.from, "yyyy-MM-dd"));
+    } else {
+      setEndDate(null); // Or reset if no end date
+    }
   };
+  
 
   const formatRange = () => {
-    const { from, to } = selectedRange;
-    if (from && to) return `${format(from, "MMM dd")} - ${format(to, "MMM dd")}`;
-    if (from) return format(from, "MMM dd");
-    return "Date Range";
+    const { from, to } = selectedRange || {};
+
+    try {
+      if (from && to) return `${format(from, "MMM dd")} - ${format(to, "MMM dd")}`;
+      if (from) return format(from, "MMM dd");
+      return "Date Range";
+    } catch {
+      return "Date Range";
+    }
   };
+  
 
   const today = startOfDay(new Date());
   let disabledRange = undefined;

@@ -8,6 +8,7 @@ const CreateBlog = () => {
   const [content, setContent] = useState('');
   const [formData, setFormdata] = useState({
     title: "",
+    desc:"",
     category: "",
     bannerImg: ""
   });
@@ -118,6 +119,15 @@ const CreateBlog = () => {
                 />
               </div>
               <div>
+                <label>Excerpt</label>
+                <input
+                  value={formData.desc}
+                  onChange={(e) => setFormdata(prev => ({ ...prev, desc: e.target.value }))}
+                  type="text"
+                  className="rounded-sm w-full h-10 dark:text-white px-2"
+                />
+              </div>
+              <div>
                 <label>Category</label>
                 <select
                   value={formData.category}
@@ -135,7 +145,7 @@ const CreateBlog = () => {
             </div>
 
             <div
-              className="w-40 h-40 min-w-[160px] cursor-pointer rounded-lg border border-dashed border-slate-500 bg-[#001B51] overflow-hidden flex items-center justify-center"
+              className="w-64 h-64 min-w-[160px] cursor-pointer rounded-lg border border-dashed border-slate-500 bg-[#001B51] overflow-hidden flex items-center justify-center"
               onClick={() => fileInputRef.current.click()}
             >
               {formData.bannerImg ? (

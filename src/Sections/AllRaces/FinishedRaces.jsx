@@ -53,7 +53,7 @@ const FinishedRaces = ({filters}) => {
     )}
 </div>
 
-        {raceList.length>0 && <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />}
+        {raceList.length>0 && page<totalRaces && <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />}
         </div>
     )
 }

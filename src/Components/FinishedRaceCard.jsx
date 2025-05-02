@@ -55,6 +55,14 @@ const FinishedRaceCard = ({
                 <div className='h-full flex flex-col justify-start items-end flex-1'>
                     <h3 className='text-[1.05rem] font-bold dark:text-white'>Created By</h3>
                     <p className='text-[0.7rem] dark:text-white'>{raceData?.created_by?.firstName + " " + raceData?.created_by?.lastName}</p>
+                    <p className='text-[0.7rem] dark:text-white font-poppins'>
+                        {raceData?.end_date &&
+                            (() => {
+                                const [year, month, day] = raceData.end_date.split("T")[0].split("-");
+                                return `${day}/${month}/${year}`;
+                            })()
+                        }
+                    </p>
                 </div>
             </div>
 

@@ -9,6 +9,7 @@ const Blogs = () => {
   const [raceBlogs, setRaceBlogs] = useState([]);
   const [stockBlogs, setStockBlogs] = useState([]);
   const [cryptoBlogs, setCryptoBlogs] = useState([]);
+  const [investingBlogs, setInvestingBlogs] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [famousBlogs, setFamousBlogs] = useState([]);
   const [featuredBlog, setFeaturedBlog] = useState(null);
@@ -50,6 +51,9 @@ const Blogs = () => {
         const cryptoCategory = categories.find(
           (cat) => cat.name.toLowerCase() === "crypto"
         );
+        const investingCategory = categories.find(
+          (cat) => cat.name.toLowerCase() === "investing"
+        );
 
         if (racesCategory) {
           getBlogs(
@@ -78,6 +82,15 @@ const Blogs = () => {
             },
             (error) => console.log(error),
             cryptoCategory.id
+          );
+        }
+        if (investingCategory) {
+          getBlogs(
+            (data) => {
+              setCryptoBlogs(data.data.slice(0, 4));
+            },
+            (error) => console.log(error),
+            investingCategory.id
           );
         }
       },
@@ -212,8 +225,8 @@ const Blogs = () => {
             {/* LEFT: Famous Blogs with Dropdown */}
             <div className="flex flex-col gap-4 w-1/2">
               <div className="flex justify-between items-center">
-                <div className="text-xl font-semibold">Check Famous Blogs</div>
-                <select
+                <div className="text-xl font-semibold">Investing</div>
+                {/* <select
                   value={selectedCategory || ""}
                   onChange={handleCategoryChange}
                   className="p-2 rounded bg-[#001B51] border dark:border-slate-300 text-white cursor-pointer"
@@ -226,11 +239,11 @@ const Blogs = () => {
                       {cat.name}
                     </option>
                   ))}
-                </select>
+                </select> */}
               </div>
               <div className="flex flex-col flex-1 overflow-y-scroll pr-2 notificationScrollbar">
-                {famousBlogs.length > 0 ? (
-                  famousBlogs.map((blog, idx) => (
+                {investingBlogs.length > 0 ? (
+                  investingBlogs.map((blog, idx) => (
                     <div
                       key={idx}
                       className="flex gap-4 py-1"
@@ -258,7 +271,7 @@ const Blogs = () => {
                   ))
                 ) : (
                   <div className="text-slate-400">
-                    Select a category to load blogs.
+                    No blogs for this category. Be the first one to write.
                   </div>
                 )}
               </div>
@@ -266,23 +279,23 @@ const Blogs = () => {
 
             {/* RIGHT: Featured Blog */}
             <div className="flex flex-col gap-4 w-1/2">
-              {featuredBlog ? (
+              {investingBlogs?.length>0 ? (
                 <>
                   <img
-                    src={featuredBlog.image.path || blogImg}
+                    src={investingBlogs[0]?.image?.path || blogImg}
                     className="w-full h-[65%] rounded-xl object-cover"
-                    alt={featuredBlog.title}
+                    alt={investingBlogs[0].title}
                   />
                   <div className="flex flex-col justify-center gap-2">
                     <div className="font-semibold text-lg">
-                      {featuredBlog.title}
+                      {investingBlogs[0].title}
                     </div>
                     <div className="text-slate-300 h-12">
-                      {featuredBlog.description || "No description available."}
+                      {investingBlogs[0].description || "No description available."}
                     </div>
                     <div
                       className="font-semibold cursor-pointer text-blue-400"
-                      onClick={() => navigate(`/blog/${featuredBlog.id}`)}
+                      onClick={() => navigate(`/blog/${investingBlogs[0].id}`)}
                     >
                       Read Now
                     </div>
@@ -290,7 +303,7 @@ const Blogs = () => {
                 </>
               ) : (
                 <div className="text-slate-400 flex justify-center items-center h-full">
-                  Select a blog to view details here.
+                  Write one now.
                 </div>
               )}
             </div>

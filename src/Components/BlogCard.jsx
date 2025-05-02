@@ -4,7 +4,7 @@ const BlogCard = ({ data }) => {
   const navigate=useNavigate();
   return (
     <div className="flex flex-col gap-3 rounded-2xl bg-white dark:bg-[#001B4E] p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
-      <div className="h-40 w-full">
+      <div className="h-72 w-full">
         <img
           src={data?.image?.path}
           alt="Blog"

@@ -167,6 +167,10 @@ const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 const [tagSuggestions, setTagSuggestions] = useState([]);
 const [showSuggestions, setShowSuggestions] = useState(false);
 const [references,setReferences] = useState([]);
+const fileRef=useRef(null)
+const loaderRef = useRef(null);
+const [page,setPage]=useState(1);
+const [hasMore,setHasMore]=useState(false);
 
 const handleEmojiClick = (emojiData) => {
   setPostContent(prev => prev + emojiData.emoji);
@@ -254,11 +258,22 @@ useEffect(()=>{
   setLoadingPosts(true)
   getPosts(activeTab,(data)=>{
     setPosts(data.data);
+    setHasMore(data.hasNextPage)
     setLoadingPosts(false)
   },(error)=>{
     console.log(error)
-  });
+  },page);
 },[activeTab])
+useEffect(()=>{
+  setLoadingPosts(true)
+  getPosts(activeTab,(data)=>{
+    setPosts([...posts,...data.data]);
+    setHasMore(data.hasNextPage)
+    setLoadingPosts(false)
+  },(error)=>{
+    console.log(error)
+  },page);
+},[page])
 
 const handleFollow = async (isFollowed, leader) => {
   const leaderId = leader?.user?.id;
@@ -358,7 +373,39 @@ const insertTag = (tag) => {
   setShowSuggestions(false);
 };
 
-const fileRef=useRef(null)
+let flag=0;
+
+useEffect(() => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const target = entries[0];
+      if (target.isIntersecting && hasMore && !loadingPosts ) {
+        
+        if(flag==0){
+          setPage((prev) => prev + 1);
+          flag=1;
+        }
+      }
+      else{
+        flag=0;
+      }
+    },
+    {
+      root: null,       // viewport
+      rootMargin: "0px",
+      threshold: 1.0,   // trigger when fully visible
+    }
+  );
+
+  if (loaderRef.current) {
+    observer.observe(loaderRef.current);
+  }
+
+  return () => {
+    if (loaderRef.current) observer.unobserve(loaderRef.current);
+  };
+}, [hasMore, loadingPosts]);
+
 
   return (
     <div className="w-full relative min-h-screen flex pb-8 pt-8 dark:bg-[#000924]">
@@ -430,12 +477,7 @@ const fileRef=useRef(null)
     </button> */}
 
     {/* Emoji Toggle Button */}
-    <button
-      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-      className="hover:text-gray-300 transition-all flex items-center gap-1"
-    >
-      <FaSmile size={22} /> Emoji
-    </button>
+    
   </div>
 {bannerImg && (
             <img src={bannerImg} alt="Banner Preview" className="max-h-[36rem] mt-3 w-fit rounded-lg" />
@@ -459,7 +501,7 @@ const fileRef=useRef(null)
 
   {/* Emoji Picker */}
   {showEmojiPicker && (
-    <div ref={emojiPickerRef} className="absolute top-[6rem] right-10 z-50">
+    <div ref={emojiPickerRef} className="absolute top-[3.5rem] -right-24 z-50">
       <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
     </div>
   )}
@@ -499,6 +541,12 @@ const fileRef=useRef(null)
 
   
 </div>
+<button
+      onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+      className="hover:text-gray-300 transition-all flex gap-1"
+    >
+      <FaSmile size={48} />
+    </button>
 
               <button 
                 onClick={() => sendPost()} 
@@ -516,45 +564,69 @@ const fileRef=useRef(null)
             </div>
 
             {/* Sticky Navigation Tabs */}
-<div className="sticky top-0 z-10 flex items-center justify-center gap-2 w-full p-3 rounded-xl border dark:border-0 dark:bg-[#002763] dark:text-white font-semibold">
-  {tabs.map((tab, index) => (
-    <span
-      key={index}
-      className={`cursor-pointer transition-all ${
-        activeTab === tab ? "text-blue-400" : "dark:text-gray-300"
-      }`}
-      onClick={() => setActiveTab(tab)}
-    >
-      {tab}
-    </span>
-  )).reduce((prev, curr) => prev === null ? [curr] : [...prev, <span key={`sep-${prev.length}`} className="text-gray-500"> | </span>, curr], null)}
-</div>
+            <div className="sticky top-0 z-10 flex items-center justify-center gap-2 w-full p-3 rounded-xl border dark:border-0 dark:bg-[#002763] dark:text-white font-semibold">
+              {tabs.map((tab, index) => (
+                <span
+                  key={index}
+                  className={`cursor-pointer transition-all ${
+                    activeTab === tab ? "text-blue-400" : "dark:text-gray-300"
+                  }`}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab}
+                </span>
+              )).reduce((prev, curr) => prev === null ? [curr] : [...prev, <span key={`sep-${prev.length}`} className="text-gray-500"> | </span>, curr], null)}
+            </div>
 
 
             {/* Posts Section (Scrollable) */}
             <div className="overflow-y-auto flex flex-col gap-5">
-  {loadingPosts ? (
-    <div className="flex items-center justify-center">
-      <ColorRing
-        visible={true}
-        height="65"
-        width="65"
-        ariaLabel="color-ring-loading"
-        wrapperStyle={{}}
-        wrapperClass="color-ring-wrapper"
-        colors={['#e15b64', '#f47e60']}
-      />
-    </div>
-  ) : posts && posts.length > 0 ? (
-    posts.map((post) => (
-      <Post key={post.id} postData={post} commentVisibility={false} likesArray={userLikes} setLikesArray={setUserLikes}/>
-    ))
-  ) : (
-    <div className="text-center text-gray-500 mt-10">
-      No posts yet. Be the first one to post!
-    </div>
-  )}
-</div>
+              {posts && posts.length > 0 ? (
+                <>
+                  {posts.map((post) => (
+                    <Post
+                      key={post.id}
+                      postData={post}
+                      commentVisibility={false}
+                      likesArray={userLikes}
+                      setLikesArray={setUserLikes}
+                    />
+                  ))}
+
+                  {/* Loader sentinel for infinite scroll */}
+                  <div ref={loaderRef} className="h-10 flex justify-center items-center">
+                    {loadingPosts && (
+                      <ColorRing
+                        visible={true}
+                        height="40"
+                        width="40"
+                        ariaLabel="color-ring-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="color-ring-wrapper"
+                        colors={['#e15b64', '#f47e60']}
+                      />
+                    )}
+                  </div>
+                </>
+              ) : loadingPosts ? (
+                <div className="flex items-center justify-center">
+                  <ColorRing
+                    visible={true}
+                    height="65"
+                    width="65"
+                    ariaLabel="color-ring-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="color-ring-wrapper"
+                    colors={['#e15b64', '#f47e60']}
+                  />
+                </div>
+              ) : (
+                <div className="text-center text-gray-500 mt-10">
+                  No posts yet. Be the first one to post!
+                </div>
+              )}
+            </div>
+
 
 
           </div>

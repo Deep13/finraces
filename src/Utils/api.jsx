@@ -2228,15 +2228,15 @@ export const postCommunityPost = async (title, content, img, onSuccess, onError)
   }
 };
 
-export const getPosts=async(filterType,onSuccess,onError)=>{
+export const getPosts=async(filterType,onSuccess,onError,page=1)=>{
   try{
     const token = localStorage.getItem('token');
-  let url = `${GlobalURL}/api/v1/community-posts`;
+  let url = `${GlobalURL}/api/v1/community-posts?page=${page}`;
   let userDetails = JSON.parse(atob(localStorage.getItem('fin_userDetails')));
 
-  if(filterType!="All"){
-    url+="?";
-  }
+  // if(filterType!="All"){
+  //   url+="?";
+  // }
   const params = new URLSearchParams();
 
   if (filterType === "My posts") {
