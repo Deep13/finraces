@@ -377,7 +377,7 @@ const [likedComments,setLikedComments]=useState([]);
           <img
             src={postData.image.path}
             alt="Post"
-            className="rounded-xl max-h-60 bg-gray-300 w-fit"
+            className="rounded-xl max-h-[30rem] bg-gray-300 w-fit"
           />
         )}
       </div>
