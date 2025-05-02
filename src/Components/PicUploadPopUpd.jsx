@@ -105,9 +105,11 @@ const PicUploadPopUpd = ({
                                         setImageUrl(data?.photo?.path)
                                         setProfileImage(data?.photo?.path)
                                         let userData = JSON.parse(atob(localStorage.getItem('fin_userDetails')))
-                                        userData.photo.path = data?.data?.path
+                                        userData.profilePic.path = data?.data?.path
                                         localStorage.setItem('fin_userDetails', btoa(JSON.stringify((userData))))
                                         setShowPopUp(true);
+                                    },(error)=>{
+                                        console.log(error)
                                     })
                                     // exit(false)
                                     setTimeout(() => setImageIsLoading(false), 2500)

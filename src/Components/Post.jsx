@@ -582,7 +582,7 @@ const [likedComments,setLikedComments]=useState([]);
         </div>
 
         {/* Bottom Right Like Button */}
-        <div className="flex justify-end mt-3">
+        {/* <div className="flex justify-end mt-3">
           <div className="flex items-center gap-1 text-sm dark:text-gray-400 hover:text-white cursor-pointer">
           {likedComments?.includes(comment?.id) ? (
           <AiFillLike size={22} className="text-blue-500" onClick={(e) => {
@@ -596,7 +596,7 @@ const [likedComments,setLikedComments]=useState([]);
         )}
             <span>{comment.like_count || 0}</span>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   ))

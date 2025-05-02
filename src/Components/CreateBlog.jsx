@@ -3,6 +3,8 @@ import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import { getBlogCategories, postBlog, uploadImage } from '../Utils/api';
 import { FiPlusCircle } from 'react-icons/fi';
+import { useNavigate } from 'react-router-dom';
+import { ColorRing } from 'react-loader-spinner';
 
 const CreateBlog = () => {
   const [content, setContent] = useState('');
@@ -15,6 +17,8 @@ const CreateBlog = () => {
   const [categoriesMap, setCategoriesMap] = useState({});
   const [error, setError] = useState({ show: false, message: "" });
   const fileInputRef = useRef(null);
+  const navigate=useNavigate()
+  const [loading,setLoading]=useState(false)
 
   useEffect(() => {
     const tooltips = {
@@ -55,10 +59,33 @@ const CreateBlog = () => {
     if (!formData.bannerImg) {
       setError({
         show: true,
-        message: 'Banner image is required. Kindly add a banner image to be shown with your blog.'
+        message: 'Featured image is required. Kindly add a featured image to be shown with your blog.'
       });
       return;
     }
+    if (!formData.title || formData.title=="") {
+      setError({
+        show: true,
+        message: 'Title is required. Kindly add a title to be shown with your blog.'
+      });
+      return;
+    }
+    if (!formData.category ||formData.category=="") {
+      setError({
+        show: true,
+        message: 'Category is required. Kindly add a category for your blog.'
+      });
+      return;
+    }
+    if (content.length<500) {
+      setError({
+        show: true,
+        message: 'Content is too small. Kindly add more.'
+      });
+      return;
+    }
+
+    setLoading(true)
 
     uploadImage(formData.bannerImg, (data) => {
       postBlog(
@@ -69,11 +96,14 @@ const CreateBlog = () => {
         content,
         data.file.id,
         (data) => {
+          setLoading(false)
           console.log("success", data);
+          navigate(`/blog/${data.id}`)
           // onClose(); // optional: clear the form or close modal
         },
         (error) => {
           console.log(error);
+          setLoading(false)
           setError({
             show: true,
             message: 'We have run into a backend issue. Kindly report it via Support from your profile.'
@@ -82,6 +112,7 @@ const CreateBlog = () => {
       );
     }, (error) => {
       console.log(error);
+      setLoading(false)
       setError({
         show: true,
         message: 'We have run into a backend issue. Kindly report it via Support from your profile.'
@@ -107,7 +138,20 @@ const CreateBlog = () => {
           </div>
         </div>
 
-        <div className="rounded-xl bg-white dark:bg-[#00387E] p-5 flex flex-col gap-5 overflow-y-auto notificationScrollbar">
+        {loading?(
+          <div className="flex items-center justif-center w-full">
+            <ColorRing
+              visible={true}
+              height="40"
+              width="40"
+              ariaLabel="color-ring-loading"
+              wrapperStyle={{}}
+              wrapperClass="color-ring-wrapper"
+              colors={['#e15b64', '#f47e60']}
+            />
+          </div>
+        ):(
+          <div className="rounded-xl bg-white dark:bg-[#00387E] p-5 flex flex-col gap-5 overflow-y-auto notificationScrollbar">
           <div className="flex gap-5 flex-wrap">
             <div className="flex flex-col gap-4 flex-1 min-w-[300px]">
               <div>
@@ -221,6 +265,7 @@ const CreateBlog = () => {
             </div>
           </div>
         </div>
+        )}
 
         {/* Error Modal */}
         {error.show && (

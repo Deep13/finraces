@@ -17,6 +17,7 @@ const AllBlogs = () => {
   const [page, setPage] = useState(1);
   const [totalBlogs, setTotalBlogs] = useState(1);
   const [blogs, setBlogs] = useState([]);
+  const [hasNext,setHasNext]=useState(false);
 
   // Fetch categories
   useEffect(() => {
@@ -51,6 +52,7 @@ const AllBlogs = () => {
       (data) => {
         setBlogs(data.data);
         setTotalBlogs(data.total-1)
+        setHasNext(data.hasNextPage)
       },
       (error) => {
         console.log("Fetching blogs failed", error);
@@ -106,7 +108,7 @@ const AllBlogs = () => {
           </div>
         </div>
 
-        {page<totalBlogs && <Pagination
+        {hasNext && <Pagination
           currentPage={page}
           totalPages={totalBlogs}
           onPageChange={(newPage) => setPage(newPage)}
