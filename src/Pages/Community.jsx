@@ -25,7 +25,7 @@ const Community = () => {
   const { setShowLoginForm } = useContext(DarkModeContext)
   const guestDetails = localStorage.getItem('guest_details')
   //grab userDetails for posting
-  let userDetails=JSON.parse(atob(localStorage.getItem("fin_userDetails")))
+ 
 
   const [activeTab,setActiveTab]=useState("All");
   const [postContent,setPostContent]=useState("");
@@ -62,6 +62,19 @@ const [selectedFile,setSelectedFile]=useState();
 const navigate=useNavigate();
 // console.log("ud",userDetails)
 
+useEffect(()=>{
+  let token=localStorage.getItem('token');
+  // let ud=localStorage.getItem('fin_userDetails');
+
+  if(!token){
+      setShowLoginForm(true);
+  }
+},[])
+
+let userDetails=null
+const storedData = localStorage.getItem("fin_userDetails");
+  if (storedData) {
+    userDetails = JSON.parse(atob(storedData));}
 
 const formatter = (text, references) => {
   const escapedRefs = references.map(ref => {
@@ -188,6 +201,10 @@ const fetchGifs = async (query) => {
     console.error("Failed to fetch GIFs", err);
   }
 };
+
+
+
+    
 
 useEffect(() => {
   fetchGifs("default")
@@ -406,7 +423,7 @@ useEffect(() => {
   };
 }, [hasMore, loadingPosts]);
 
-
+console.log(userDetails)
   return (
     <div className="w-full relative min-h-screen flex pb-8 pt-8 dark:bg-[#000924]">
       {/* Sidebar */}
@@ -434,7 +451,7 @@ useEffect(() => {
               <div className="rounded-full w-16 h-16 bg-gray-300 overflow-hidden">
               <img
                 alt="userImg"
-                src={userDetails?.photo?.path ||userDetails?.profilePic?.path || (userDetails?.gender && userDetails?.gender=='female'?femalePlaceholder:malePlaceholder)}
+                src={userDetails?.profilePic?.path || (userDetails?.gender && userDetails?.gender=='female'?femalePlaceholder:malePlaceholder)}
                 className="object-cover w-full h-full"
               />
 

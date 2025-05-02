@@ -10,6 +10,7 @@ const FinishedRaces = ({filters}) => {
     const [loading,setLoading]=useState(false);
     const [page,setPage]=useState(1);
     const [totalRaces,setTotalRaces]=useState(1);
+    const [hasNextPage,setHasNextPage]=useState(false)
 
     useEffect(() => {
         // first get the list of the finished races
@@ -21,6 +22,7 @@ const FinishedRaces = ({filters}) => {
             console.log('finished races', data)
             setRaceList(data.data)
             setLoading(false)
+            setHasNextPage(data.hasNextPage)
         }, (error) => {
             // alert('failure')
             console.log("error",error);
@@ -53,7 +55,7 @@ const FinishedRaces = ({filters}) => {
     )}
 </div>
 
-        {raceList.length>0 && page<totalRaces && <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />}
+        {hasNextPage && <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />}
         </div>
     )
 }

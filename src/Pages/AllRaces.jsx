@@ -197,6 +197,7 @@ const AllRaces = () => {
                             </div>
                             <div
                             onClick={()=>{
+                                setStartDate("")
                                 setEndDate("");
                                 setStockNames([])
                             }}

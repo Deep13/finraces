@@ -160,6 +160,8 @@ const Leaderboard = () => {
   const [page,setPage]=useState(1);
   const navigate=useNavigate();
 
+  const [flag,setFlag]=useState(false);
+
 
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
@@ -185,7 +187,7 @@ const Leaderboard = () => {
     let sevenDaysAgo = new Date()
     let monthAgo = new Date()
     sevenDaysAgo.setDate(today.getDate() - 7)
-    monthAgo.setDate(today.getMonth() - 1)
+    monthAgo.setMonth(today.getMonth() - 1)
     let startDate = ''
     if (activeTab === 'Today') {
       startDate = today

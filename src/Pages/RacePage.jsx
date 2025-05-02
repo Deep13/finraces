@@ -977,7 +977,7 @@ const RacePage = () => {
                                         />}
                                     </div>
                                     <div className='h-full flex flex-row justify-center items-end'>
-                                        <div className="border-2 dark:border-[#00387E] flex items-center rounded-lg gap-2 mr-4 text-[12px] text-[white]">
+                                        {/* <div className="border-2 dark:border-[#00387E] flex items-center rounded-lg gap-2 mr-4 text-[12px] text-[white]">
                                             {['Horse', 'Ticker', 'Rank', 'Price'].map((item) => (
                                                 <span
                                                     key={item}
@@ -987,7 +987,7 @@ const RacePage = () => {
                                                     {item}
                                                 </span>
                                             ))}
-                                        </div>
+                                        </div> */}
                                         <HiInformationCircle className="text-[white] text-[30px] cursor-pointer" onClick={() => setshowDetails(true)} />
                                         {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
                                     </div>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Popover, PopoverTrigger, PopoverContent } from "@radix-ui/react-popover";
 import { DayPicker } from "react-day-picker";
 import { format, startOfDay } from "date-fns";
@@ -17,6 +17,14 @@ const DateRangePicker = ({
     from: startDate ? new Date(startDate) : undefined,
     to: endDate ? new Date(endDate) : undefined,
   });
+
+  useEffect(() => {
+    setSelectedRange({
+      from: startDate ? new Date(startDate) : undefined,
+      to: endDate ? new Date(endDate) : undefined,
+    });
+  }, [startDate, endDate]);
+  
 
   const handleDateSelection = (range) => {
     setSelectedRange(range);

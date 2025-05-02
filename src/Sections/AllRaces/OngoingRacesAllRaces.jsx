@@ -9,6 +9,7 @@ const OngoingRacesAllRaces = ({filters}) => {
     const [loading,setLoading]=useState(false);
     const [page,setPage]=useState(1);
     const [totalRaces,setTotalRaces]=useState(1);
+    const [hasNextPage,setHasNextPage]=useState(false)
 
     useEffect(() => {
         setLoading(true)
@@ -16,6 +17,7 @@ const OngoingRacesAllRaces = ({filters}) => {
             // alert('success')
             let total=Math.floor((data.total)/10);
             setTotalRaces(total)
+            setHasNextPage(data.hasNextPage)
             console.log('finished races', data)
             setRaceList(data.data)
             setLoading(false)
@@ -57,7 +59,7 @@ const OngoingRacesAllRaces = ({filters}) => {
     )}
 </div>
 
-            {raceList.length>0 && <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />}
+            {hasNextPage && <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />}
         </div>
     )
 }

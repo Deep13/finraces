@@ -184,9 +184,9 @@ const UserProfile = ({
                     </div>
                 </div>
                 <div className='col-span-2 bg-white rounded-lg p-[1.5rem] flex justify-center items-center flex-col dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white'>
-                    <p className="mb-[8px] text-[1rem] self-start">Achievements</p>
-                    <div className='w-full h-full flex justify-start flex-wrap gap-[30px]'>
-                        {badges.length > 0 &&
+                    <p className="mb-[8px] text-xl self-start font-semibold">Achievements</p>
+                    <div className='w-full h-full grid grid-cols-3 gap-[30px]'>
+                        {/* {badges.length > 0 &&
                             badges?.map(curr => {
                                 return (
                                     <div key={curr.id} className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
@@ -194,22 +194,25 @@ const UserProfile = ({
                                     </div>
                                 )
                             })
-                        }
-                        {/* <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                        } */}
+                        <div className='p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
                             <img className='w-full h-full object-cover' src={goldbadge} alt="" />
                         </div>
-                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                        <div className='p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
                             <img className='w-full h-full object-cover' src={badgemountain} alt="" />
                         </div>
-                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                        <div className='p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
                             <img className='w-full h-full object-cover' src={badgegiftpurple} alt="" />
                         </div>
-                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                        <div className='p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
                             <img className='w-full h-full object-cover' src={badgegiftred} alt="" />
                         </div>
-                        <div className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                        <div className='p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
                             <img className='w-full h-full object-cover' src={badgegiftsilver} alt="" />
-                        </div> */}
+                        </div>
+                        <div className='p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
+                            <img className='w-full h-full object-cover' src={redbadge} alt="" />
+                        </div>
                     </div>
                 </div>
             </div>
