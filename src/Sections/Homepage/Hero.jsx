@@ -2,6 +2,7 @@ import React from 'react'
 import coin1 from '../../assets/images/Hero/Coins1.png'
 import coin2 from '../../assets/images/Hero/Coins2.png'
 import person from '../../assets/images/Excited_person_image.png'
+import finraces from "../../assets/videos/Finraces.mp4"
 
 const Hero = () => {
   return (
@@ -17,17 +18,28 @@ const Hero = () => {
 
       <div className='flex overflow-visible justify-end items-center col-span-1 order-1 md:order-2'>
         {/* <img src={person} alt="" /> */}
-        <div className="w-full aspect-w-16 aspect-h-9 rounded-lg overflow-hidden h-full mb-10">
-        <iframe
+        <div className="w-full aspect-w-16 rounded-lg overflow-hidden mb-10">
+          <video
+            autoPlay
+            loop
+            muted
+            controls=""
+            width="100%"
+          >
+            <source src={finraces} type="video/mp4" />
+            Your browser does not support the video tag.
+
+          </video>
+          {/* <iframe
           src="https://www.veed.io/embed/43102a89-b158-4f70-b8a5-8138a7058b98?title=0&autoplay=1&loop=1&controls=0"
           frameBorder="0"
           allow="autoplay; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           className="w-full h-full"
           title="Finraces Video"
-        ></iframe>
+        ></iframe> */}
 
-          </div>
+        </div>
 
       </div>
     </div>
