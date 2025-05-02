@@ -15,8 +15,19 @@ const Hero = () => {
         }} className='w-[8.9rem] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] dark:text-white font-bold text-[0.82rem] px-[2rem] py-[0.82rem] border border-black bg-[#e5f4ff] rounded-[33px]'>Learn More</button> */}
       </div>
 
-      <div className='flex overflow-visible justify-end col-span-1 order-1 md:order-2'>
-        <img src={person} alt="" />
+      <div className='flex overflow-visible justify-end items-center col-span-1 order-1 md:order-2'>
+        {/* <img src={person} alt="" /> */}
+        <div className="w-full aspect-w-16 aspect-h-9 rounded-lg overflow-hidden h-full mb-10">
+            <iframe
+              src="https://www.veed.io/embed/43102a89-b158-4f70-b8a5-8138a7058b98?title=0"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+              title="Finraces Video"
+            ></iframe>
+          </div>
+
       </div>
     </div>
   )

@@ -119,8 +119,8 @@ const sendPost = () => {
 
   if (selectedFile) {
     uploadImage(selectedFile, (data) => {
-      const mediaTag = `<img src="${data.file.url}" class="rounded-md my-4" />`;
-      const finalContent = formattedText + mediaTag;
+      // const mediaTag = `<img src="${data.file.url}" class="rounded-md my-4 w-fit" />`;
+      const finalContent = formattedText;
 
       postCommunityPost("", finalContent, data.file.id, (data) => {
         console.log("posted successfully", data);
@@ -136,7 +136,7 @@ const sendPost = () => {
     // 🟡 This handles GIF image embed
     let gifTag = "";
     if (bannerImg && bannerImg.includes("giphy")) {
-      gifTag = `<img src="${bannerImg}" class="rounded-md my-4" />`;
+      gifTag = `<img src="${bannerImg}" class="rounded-md my-4 w-fit" />`;
     }
 
     const finalContent = formattedText + gifTag;
@@ -358,6 +358,8 @@ const insertTag = (tag) => {
   setShowSuggestions(false);
 };
 
+const fileRef=useRef(null)
+
   return (
     <div className="w-full relative min-h-screen flex pb-8 pt-8 dark:bg-[#000924]">
       {/* Sidebar */}
@@ -394,30 +396,16 @@ const insertTag = (tag) => {
               {/* Input & Actions */}
               <div className="flex flex-col gap-3 flex-1 relative">
                 {/* Input Box */}
-                <input 
+                <textarea 
                   type="text" 
                   value={postContent} 
                   onChange={handleCommentChange} 
-                  className="rounded-xl px-4 py-3 bg-slate-200 dark:bg-[#001B51] text-white placeholder-gray-400 focus:outline-none" 
+                  className="rounded-xl px-4 py-3 resize-none max-h-[180px] notificationScrollbar bg-slate-200 dark:bg-[#001B51] text-white placeholder-gray-400 focus:outline-none " 
                   placeholder="Start a post..." 
                 />
 
-              {showSuggestions && tagSuggestions.length > 0 && (
-              <ul className="absolute left-4 bottom-[110%] bg-white dark:bg-[#1c1c1c] text-black dark:text-white border border-gray-300 dark:border-gray-700 rounded-md shadow-lg w-64 max-h-40 overflow-y-auto z-50">
-                {tagSuggestions.map((tag, idx) => (
-                  <li
-                    key={idx}
-                    onClick={() => insertTag(tag)}
-                    className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
-                  >
-                    {tag.split("<-->")[0]}
-                  </li>
-                ))}
-              </ul>
-            )}
-
-  {/* Actions (Media, Emoji, etc.) */}
-  <div className="flex items-center justify-evenly dark:text-white">
+{/* Actions (Media, Emoji, etc.) */}
+<div className="flex items-center justify-evenly dark:text-white">
     <button
       className="hover:text-gray-300 transition-all flex items-center gap-1"
       onClick={() => document.getElementById("bannerUpload").click()}
@@ -428,6 +416,7 @@ const insertTag = (tag) => {
         id="bannerUpload"
         className="hidden"
         onChange={handleImageUpload}
+        ref={fileRef}
       />
       <CiImageOn size={24} /> Image
     </button>
@@ -448,6 +437,25 @@ const insertTag = (tag) => {
       <FaSmile size={22} /> Emoji
     </button>
   </div>
+{bannerImg && (
+            <img src={bannerImg} alt="Banner Preview" className="max-h-[36rem] mt-3 w-fit rounded-lg" />
+          )}
+
+              {showSuggestions && tagSuggestions.length > 0 && (
+              <ul className="absolute left-4 bottom-[110%] bg-white dark:bg-[#1c1c1c] text-black dark:text-white border border-gray-300 dark:border-gray-700 rounded-md shadow-lg w-64 max-h-40 overflow-y-auto z-50">
+                {tagSuggestions.map((tag, idx) => (
+                  <li
+                    key={idx}
+                    onClick={() => insertTag(tag)}
+                    className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"
+                  >
+                    {tag.split("<-->")[0]}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+  
 
   {/* Emoji Picker */}
   {showEmojiPicker && (
@@ -481,6 +489,7 @@ const insertTag = (tag) => {
             setSelectedFile(null);
             setGifSearch("");
             setGifResults([]);
+            fileRef.current.value=""
           }}
         />
       ))}
@@ -502,9 +511,7 @@ const insertTag = (tag) => {
 
               </div>
 
-              {bannerImg && (
-            <img src={bannerImg} alt="Banner Preview" className="max-h-60 rounded-lg" />
-          )}
+              
 
             </div>
 

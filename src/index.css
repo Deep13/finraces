@@ -337,6 +337,16 @@ input[type='password'] {
   
 } */
 
+.ql-toolbar {
+  border: none !important;
+}
+
+.ql-container {
+  border: none !important;
+  flex: 1;
+}
+
+
 .table-row-light:hover {
   background-color: none;
 }

@@ -2,18 +2,16 @@ import { useState, useEffect, useRef } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill from 'react-quill';
 import { postBlog, uploadImage } from '../Utils/api';
-import { RxCross2 } from "react-icons/rx";
+import { FiPlusCircle } from 'react-icons/fi';
 
 const CreateBlog = () => {
   const [content, setContent] = useState('');
   const [formData, setFormdata] = useState({
     title: "",
     category: "",
-    visibility: "Private",
-    comments: "true",
     bannerImg: ""
   });
-
+  const [error, setError] = useState({ show: false, message: "" });
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -42,6 +40,14 @@ const CreateBlog = () => {
   }, []);
 
   const sumbitBlog = () => {
+    if (!formData.bannerImg) {
+      setError({
+        show: true,
+        message: 'Banner image is required. Kindly add a banner image to be shown with your blog.'
+      });
+      return;
+    }
+
     uploadImage(formData.bannerImg, (data) => {
       postBlog(
         "eda4717e-36f6-43ad-8f1a-6630b3e93a9c",
@@ -51,12 +57,22 @@ const CreateBlog = () => {
         data.file.id,
         (data) => {
           console.log("success", data);
-          // onClose();
+          // onClose(); // optional: clear the form or close modal
         },
-        (error) => console.log(error)
+        (error) => {
+          console.log(error);
+          setError({
+            show: true,
+            message: 'We have run into a backend issue. Kindly report it via Support from your profile.'
+          });
+        }
       );
     }, (error) => {
       console.log(error);
+      setError({
+        show: true,
+        message: 'We have run into a backend issue. Kindly report it via Support from your profile.'
+      });
     });
   };
 
@@ -69,26 +85,17 @@ const CreateBlog = () => {
             Write Blog
           </div>
           <div className="flex items-center gap-4">
-            {/* Submit Button */}
             <button
               onClick={sumbitBlog}
               className="px-6 py-2 rounded-md bg-[#0053F0] text-white"
             >
               Post Blog
             </button>
-
-            {/* Close Icon */}
-            {/* <button onClick={onClose} className="text-white hover:text-blue-500 absolute -right-4 -top-4">
-              <RxCross2 size={24}/>
-            </button> */}
           </div>
         </div>
 
-
         <div className="rounded-xl bg-white dark:bg-[#00387E] p-5 flex flex-col gap-5 overflow-y-auto notificationScrollbar">
-          {/* Input Section: Inputs + Banner Side by Side */}
           <div className="flex gap-5 flex-wrap">
-            {/* Left Inputs */}
             <div className="flex flex-col gap-4 flex-1 min-w-[300px]">
               <div>
                 <label>Title</label>
@@ -98,15 +105,6 @@ const CreateBlog = () => {
                   type="text"
                   className="rounded-sm w-full h-10 dark:text-white px-2"
                 />
-              </div>
-              <div>
-                {/* <label>Subtitle</label>
-                <input
-                  value={formData.subtitle}
-                  onChange={(e) => setFormdata(prev => ({ ...prev, subtitle: e.target.value }))}
-                  type="text"
-                  className="rounded-sm w-full h-10 dark:text-white px-2"
-                /> */}
               </div>
               <div>
                 <label>Category</label>
@@ -121,46 +119,16 @@ const CreateBlog = () => {
                   <option>Races</option>
                 </select>
               </div>
-              <div className="flex gap-3 items-center">
-                <span className="font-semibold">Visibility</span>
-                <div>
-                  <button
-                    onClick={() => setFormdata(prev => ({ ...prev, visibility: 'Public' }))}
-                    className={`px-4 py-1 rounded-l-md border border-slate-400 ${formData.visibility === 'Public' ? 'bg-[#0053F0] text-white' : 'bg-[#001B51]'}`}
-                  >
-                    Public
-                  </button>
-                  <button
-                    onClick={() => setFormdata(prev => ({ ...prev, visibility: 'Private' }))}
-                    className={`px-4 py-1 rounded-r-md border border-slate-400 ${formData.visibility === 'Private' ? 'bg-[#0053F0] text-white' : 'bg-[#001B51]'}`}
-                  >
-                    Private
-                  </button>
-                </div>
-              </div>
-              <div className="flex gap-2 items-center">
-                <span className="font-semibold">Comments</span>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="sr-only peer"
-                    checked={formData.comments === "true"}
-                    onChange={(e) => setFormdata(prev => ({
-                      ...prev,
-                      comments: e.target.checked ? "true" : "false"
-                    }))}
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none dark:bg-gray-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0053F0]"></div>
-                </label>
-              </div>
             </div>
 
-            {/* Right Banner Image */}
-            <div className="w-40 h-40 min-w-[160px] cursor-pointer rounded-lg border border-dashed border-slate-500 bg-[#001B51] overflow-hidden flex items-center justify-center" onClick={() => fileInputRef.current.click()}>
+            <div
+              className="w-40 h-40 min-w-[160px] cursor-pointer rounded-lg border border-dashed border-slate-500 bg-[#001B51] overflow-hidden flex items-center justify-center"
+              onClick={() => fileInputRef.current.click()}
+            >
               {formData.bannerImg ? (
                 <img src={URL.createObjectURL(formData.bannerImg)} alt="Banner" className="object-cover w-full h-full" />
               ) : (
-                <img src="/upload-icon.png" alt="Upload" className="h-12 w-12 opacity-50" />
+                <FiPlusCircle size={32} className='dark:text-white' />
               )}
               <input
                 type="file"
@@ -177,15 +145,21 @@ const CreateBlog = () => {
             </div>
           </div>
 
-          {/* Content Section */}
           <div>
             <label className="text-sm mb-1 block">Content <span className="text-slate-400">(i)</span></label>
-            <div className="dark:bg-[#001B51] bg-white rounded-md overflow-hidden min-h-[200px]">
+            <div className="dark:bg-[#001B51] bg-white rounded-md overflow-hidden min-h-[200px] h-[500px]">
               <ReactQuill
                 value={content}
                 onChange={setContent}
                 theme="snow"
-                className="dark:text-white dark:[&_.ql-container]:bg-[#001B51] dark:[&_.ql-editor]:text-white dark:[&_.ql-editor]:bg-[#001B51] border-none min-h-[200px] overflow-y-auto"
+                style={{
+                  minHeight: '300px',
+                  height: '100%',
+                  border: 'none',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flex: 1
+                }}
                 modules={{
                   toolbar: {
                     container: [
@@ -213,9 +187,23 @@ const CreateBlog = () => {
               />
             </div>
           </div>
-
-          
         </div>
+
+        {/* Error Modal */}
+        {error.show && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white dark:bg-[#001B51] p-6 rounded-lg max-w-sm w-full text-center shadow-lg">
+              <h2 className="text-2xl font-semibold mb-4 text-red-600 dark:text-red-400">Error</h2>
+              <p className="text-md dark:text-white">{error.message}</p>
+              <button
+                onClick={() => setError({ show: false, message: "" })}
+                className="mt-5 px-4 py-2 bg-[#0053F0] text-white rounded-md"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

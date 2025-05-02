@@ -9,10 +9,10 @@ const OngoingRaces = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    getRaceList('running', (data) => {
+    getRaceList('running', 1,(data) => {
       // alert('success')
       console.log('running races', data)
-      setRaceList(data)
+      setRaceList(data.data)
     }, () => {
       // alert('failure')
     })

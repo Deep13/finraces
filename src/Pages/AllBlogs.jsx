@@ -1,43 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Sidebar from "../Components/Sidebar";
 import BlogCard from '../Components/BlogCard';
-import Pagination from '../Components/Pagination'
-import blogImg from "../assets/images/blogImg1.png"
-
-// Fake blog data
-const blogData = Array.from({ length: 12 }, (_, i) => ({
-  title: `Blog Title ${i + 1}`,
-  description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque...',
-  image: blogImg,
-}));
+import Pagination from '../Components/Pagination';
+import { getBlogCategories, getBlogs } from '../Utils/api';
 
 const AllBlogs = () => {
-  const categories = {
-    'My Blogs': 'My Blogs',
-    'Trending Blogs': 'Trending Blogs',
-    'Featured Blogs': 'Featured Blogs',
-  };
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const typeFromQuery = queryParams.get('type');
 
-  const thisLocation = useLocation();
-  const [activeCategory, setActiveCategory] = useState(
-    categories[thisLocation?.state?.toString()] || 'My Blogs'
-  );
+  const [categoriesMap, setCategoriesMap] = useState({});
+  const [activeCategory, setActiveCategory] = useState('');
   const [searchAuthor, setSearchAuthor] = useState('');
   const [searchTitle, setSearchTitle] = useState('');
-  const [page,setPage]=useState(1);
-  const [totalRaces,setTotalRaces]=useState(1);
+  const [page, setPage] = useState(1);
+  const [totalBlogs, setTotalBlogs] = useState(1);
+  const [blogs, setBlogs] = useState([]);
+
+  // Fetch categories
+  useEffect(() => {
+    getBlogCategories(
+      (data) => {
+        const mappedCategories = {};
+        data.data.forEach((cat) => {
+          mappedCategories[cat.name] = cat.id;
+        });
+        setCategoriesMap(mappedCategories);
+
+        // Set default category: if type param is valid, else first category
+        if (typeFromQuery && mappedCategories[typeFromQuery]) {
+          setActiveCategory(typeFromQuery);
+        } else {
+          const firstCategory = Object.keys(mappedCategories)[0];
+          setActiveCategory(firstCategory);
+        }
+      },
+      (error) => {
+        console.log("Error fetching categories", error);
+      }
+    );
+  }, [typeFromQuery]);
+
+  // Fetch blogs when activeCategory changes
+  useEffect(() => {
+    const categoryId = categoriesMap[activeCategory];
+    if (!categoryId) return; // Don't fetch until category is set
+
+    getBlogs(
+      (data) => {
+        setBlogs(data.data);
+        setTotalBlogs(data.total-1)
+      },
+      (error) => {
+        console.log("Fetching blogs failed", error);
+      },
+      categoryId,page
+    );
+  }, [activeCategory, categoriesMap,page]);
 
   const handleCategoryClick = (category) => {
     setActiveCategory(category);
-  };
-
-  const handleAuthorChange = (e) => {
-    setSearchAuthor(e.target.value);
-  };
-
-  const handleTitleChange = (e) => {
-    setSearchTitle(e.target.value);
   };
 
   return (
@@ -46,15 +69,8 @@ const AllBlogs = () => {
 
       <div className="flex flex-col w-[70rem] gap-6 dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex-1 rounded-xl border dark:border-[#00387E] dark:text-white">
 
-        {/* <div className="flex items-center justify-between">
-          <span className="font-semibold text-[1.5rem] font-poppins flex flex-row items-center">
-            Blogs
-          </span>
-        </div> */}
-
         {/* Filters Section */}
         <div className="flex flex-col md:flex-row gap-6 w-full">
-
           {/* Categories Section */}
           <div className="flex flex-col w-full md:max-w-[16rem]">
             <label className="font-semibold mb-1 text-sm">Categories</label>
@@ -63,39 +79,13 @@ const AllBlogs = () => {
               onChange={(e) => handleCategoryClick(e.target.value)}
               className="w-full bg-white dark:bg-[#001B4E] text-black dark:text-white p-3 rounded-lg border dark:border-[#00387E] focus:outline-none cursor-pointer"
             >
-              {Object.keys(categories).map((category) => (
+              {Object.keys(categoriesMap).map((category) => (
                 <option key={category} value={category}>
                   {category}
                 </option>
               ))}
             </select>
           </div>
-
-
-          {/* Search by Title */}
-          {/* <div className="flex flex-col w-full md:max-w-[16rem]">
-            <label className="font-semibold mb-1 text-sm">Search by Title</label>
-            <input
-              type="text"
-              value={searchTitle}
-              onChange={handleTitleChange}
-              placeholder="Enter blog title..."
-              className="w-full bg-white dark:bg-[#001B4E] text-black dark:text-white p-3 rounded-lg border dark:border-[#00387E] focus:outline-none"
-            />
-          </div> */}
-
-          {/* Search by Author */}
-          {/* <div className="flex flex-col w-full md:max-w-[16rem]">
-            <label className="font-semibold mb-1 text-sm">Search by Author</label>
-            <input
-              type="text"
-              value={searchAuthor}
-              onChange={handleAuthorChange}
-              placeholder="Enter author name..."
-              className="w-full bg-white dark:bg-[#001B4E] text-black dark:text-white p-3 rounded-lg border dark:border-[#00387E] focus:outline-none"
-            />
-          </div> */}
-
         </div>
 
         {/* Blogs Display Section */}
@@ -106,14 +96,21 @@ const AllBlogs = () => {
             {searchAuthor && ` | Author: "${searchAuthor}"`}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogData.map((blog, idx) => (
-              <BlogCard key={idx} data={blog} />
-            ))}
+            {blogs.length > 0 ? (
+              blogs.map((blog, idx) => (
+                <BlogCard key={idx} data={blog} />
+              ))
+            ) : (
+              <p>No blogs found.</p>
+            )}
           </div>
-
         </div>
 
-        <Pagination currentPage={page} totalPages={totalRaces} onPageChange={(newPage) => setPage(newPage)} />
+        {page<totalBlogs && <Pagination
+          currentPage={page}
+          totalPages={totalBlogs}
+          onPageChange={(newPage) => setPage(newPage)}
+        />}
       </div>
     </div>
   );

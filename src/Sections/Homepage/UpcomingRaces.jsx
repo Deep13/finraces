@@ -18,9 +18,9 @@ const UpcomingRaces = () => {
   };
 
   useEffect(() => {
-    getRaceList('scheduled', (data) => {
+    getRaceList('scheduled', 1,(data) => {
       console.log('race list here', data);
-      setRaceList(data);
+      setRaceList(data.data);
     }, () => {
       console.error('Failed to fetch race list');
     });

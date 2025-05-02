@@ -1,77 +1,111 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../Components/Sidebar";
-import blogImg from "../assets/images/blogImg1.png";
+import { useParams, Link } from "react-router-dom";
+import { getBlogCategories, getBlogDetailed, getBlogs } from "../Utils/api";
 
 const SingleBlog = () => {
-  const blog = {
-    title: "The Journey to Clean Code",
-    author: {
-      name: "Jane Doe",
-      avatar: "https://i.pravatar.cc/150?img=3",
-      date: "April 29, 2025",
-    },
-    banner: blogImg,
-    content: `
-      <p>Writing clean code is not just about using correct syntax; it’s about writing code that is readable, maintainable, and elegant. Whether you're working solo or in a team, clean code is crucial.</p>
-      <p>Start by using meaningful variable names, keeping functions small, and avoiding code repetition. Comment only where necessary. If your code needs a comment to explain what it does, maybe refactor the code instead.</p>
-      <p>Remember, <strong>code is read more often than it is written</strong>. Make the reader's job easier.</p>
-    `,
-  };
+  const { id } = useParams();
+  const [blog, setBlog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [recentBlogs, setRecentBlogs] = useState([]);
 
-  const recentBlogs = [
-    {
-      img: blogImg,
-      title: "Mastering React in 30 Days",
-      author: "John Smith",
-    },
-    {
-      img: blogImg,
-      title: "Intro to Web3 and Crypto",
-      author: "Alice Lee",
-    },
-    {
-      img: blogImg,
-      title: "Top 5 Stock Market Tips",
-      author: "Robert Brown",
-    },
-  ];
+  useEffect(() => {
+    setLoading(true);
+    // Fetch the single blog
+    getBlogDetailed(
+      id,
+      (data) => {
+        setBlog(data);
+        setLoading(false);
+
+        // After fetching the blog, fetch recent blogs of the same category
+        if (data.category?.id) {
+          getBlogs(
+            (blogsData) => {
+              // Exclude the current blog itself from the list
+              const filteredBlogs = blogsData.data.filter((b) => b.id !== data.id);
+              setRecentBlogs(filteredBlogs);
+            },
+            (error) => {
+              console.error("Failed to fetch recent blogs:", error);
+            },
+            data.category.id
+          );
+        }
+      },
+      (error) => {
+        setError("Failed to fetch blog.",error);
+        setLoading(false);
+      }
+    );
+
+    // Fetch all categories
+    getBlogCategories(
+      (data) => {
+        setCategories(data.data);
+      },
+      (error) => {
+        console.error("Failed to fetch categories:", error);
+      }
+    );
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center dark:bg-[#000924]">
+        <p className="text-lg dark:text-white">Loading...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center dark:bg-[#000924]">
+        <p className="text-lg text-red-500">{error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full min-h-screen flex dark:bg-[#000924]">
-      {/* Sidebar */}
       <Sidebar />
 
-      <div className="flex items-center justify-center gap-2 w-[90%] mx-auto">
+      <div className="flex items-start justify-between gap-4 w-[90%] mx-auto p-5">
         {/* Blog Content Container */}
-        <div className="flex-1 py-8 px-4 mx-auto dark:text-white">
-          {/* Blog Card */}
+        <div className="flex-1 px-4 mx-auto dark:text-white">
           <div className="bg-white dark:bg-[#000D38] rounded-xl border dark:border-[#00387E] p-6 md:p-10 shadow-md">
-            {/* Title */}
             <h1 className="text-3xl md:text-5xl font-bold mb-6">{blog.title}</h1>
 
-            {/* Author Info */}
             <div className="flex items-center gap-4 mb-6">
               <img
-                src={blog.author.avatar}
+                src={blog.user?.photo?.path || "https://i.pravatar.cc/150?img=3"}
                 alt="Author"
                 className="w-10 h-10 rounded-full object-cover"
               />
               <div className="text-sm">
-                <div className="font-semibold">{blog.author.name}</div>
-                <div className="text-slate-500 dark:text-slate-400">{blog.author.date}</div>
+                <div className="font-semibold">
+                  {`${blog.user?.firstName || "Jane"} ${blog.user?.lastName || "Doe"}`}
+                </div>
+                <div className="text-slate-500 dark:text-slate-400">
+                  {new Date(blog.createdAt).toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </div>
               </div>
             </div>
 
-            {/* Banner */}
             <div className="w-full h-64 md:h-[28rem] rounded-lg overflow-hidden mb-10">
               <img
-                src={blog.banner}
+                src={blog.image?.path}
                 alt="Blog Banner"
                 className="w-full h-full object-cover"
               />
             </div>
 
-            {/* Blog Content */}
             <div
               className="prose dark:prose-invert prose-lg max-w-none mb-12"
               dangerouslySetInnerHTML={{ __html: blog.content }}
@@ -85,9 +119,12 @@ const SingleBlog = () => {
           <div>
             <div className="text-3xl font-bold mb-3">Categories</div>
             <ul className="list-none space-y-2">
-              {["Crypto", "Races", "Stocks"].map((cat, idx) => (
-                <li key={idx} className="flex items-center gap-2 text-lg cursor-pointer">
-                  <span className="text-blue-500">➤</span> {cat}
+              {categories.map((cat) => (
+                <li key={cat.id} className="flex items-center gap-2 text-lg cursor-pointer hover:text-blue-500 transition">
+                  <span className="text-blue-500">➤</span>
+                  <Link to={`/allBlogs?type=${cat.name}`} className="flex-1">
+                    {cat.name}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -97,19 +134,29 @@ const SingleBlog = () => {
           <div>
             <div className="text-3xl font-bold mb-3">Recent Blogs</div>
             <div className="space-y-4">
-              {recentBlogs.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <img
-                    src={item.img}
-                    alt="Recent Blog"
-                    className="w-14 h-14 rounded-md object-cover"
-                  />
-                  <div className="text-xl">
-                    <div className="font-semibold line-clamp-2">{item.title}</div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400">{item.author}</div>
-                  </div>
-                </div>
-              ))}
+              {recentBlogs.length > 0 ? (
+                recentBlogs.map((item) => (
+                  <Link
+                    key={item.id}
+                    to={`/blog/${item.id}`}
+                    className="flex items-center gap-3 hover:bg-gray-100 dark:hover:bg-[#001b43] p-2 rounded-md transition"
+                  >
+                    <img
+                      src={item.image?.path || "/assets/images/blogImg1.png"}
+                      alt="Recent Blog"
+                      className="w-14 h-14 rounded-md object-cover"
+                    />
+                    <div className="text-sm">
+                      <div className="font-semibold line-clamp-2">{item.title}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400">
+                        {`${item.user?.firstName || ""} ${item.user?.lastName || ""}`}
+                      </div>
+                    </div>
+                  </Link>
+                ))
+              ) : (
+                <p className="text-slate-500 dark:text-slate-400 text-sm">No recent blogs found.</p>
+              )}
             </div>
           </div>
         </div>

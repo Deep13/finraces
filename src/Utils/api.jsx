@@ -2531,10 +2531,10 @@ export const postBlog=async(seoId,category,title,content,img,onSuccess,onError)=
   } 
 }
 
-export const getBlogs=async(onSuccess,onError,category)=>{
+export const getBlogs=async(onSuccess,onError,category,page=1)=>{
   try{
     const token = localStorage.getItem('token');
-    let url = `${GlobalURL}/api/v1/blogs?id={id:${category}}`;
+    let url = `${GlobalURL}/api/v1/blogs?blogCategoryId=${category}&page=${page}&limit=12`;
 
   
 

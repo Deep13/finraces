@@ -15,6 +15,7 @@ import 'react-quill/dist/quill.snow.css'; // Make sure this is imported
 import malePlaceholder from '../assets/images/manPlaceholder.jpg'
 import femalePlaceholder from '../assets/images/womanPlaceholder.jpg'
 import { GrFormView } from "react-icons/gr";
+import { FiPlusCircle } from "react-icons/fi";
 
 const Post = ({ postData, commentVisibility,likesArray=[],setLikesArray }) => {
   const navigate = useNavigate();
@@ -348,19 +349,19 @@ const [likedComments,setLikedComments]=useState([]);
       }
 
       {/* Content */}
-      <div className="flex flex-col flex-1 gap-3">
+      <div className="flex flex-col gap-3">
         {/* <p className="dark:text-white">{postData?.content}</p> */}
         <div
             ref={contentRef}
             // onClick={(e)=>{e.stopPropagation()}}
-            className="prose dark:prose-invert"
+            className="prose dark:prose-invert w-full"
             dangerouslySetInnerHTML={{ __html: postData?.content }}
           />
         {postData?.image?.path && (
           <img
             src={postData.image.path}
             alt="Post"
-            className="rounded-xl max-h-60 bg-gray-300"
+            className="rounded-xl max-h-60 bg-gray-300 w-fit"
           />
         )}
       </div>
@@ -380,10 +381,11 @@ const [likedComments,setLikedComments]=useState([]);
         )} <span>{postData?.like_count || 0}</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
-          <FaRegCommentAlt size={20} /> <span>Comment</span>
+          <FaRegCommentAlt size={20} /> 
+          <span>{postData?.commentsCount||0}</span>
         </div>
         <div className="flex items-center gap-2 cursor-pointer hover:text-white">
-          <GrFormView size={28} /> <span>Views {postData?.view_count ||0}</span>
+          <GrFormView size={28} /> <span>{postData?.view_count ||0}</span>
         </div>
       </div>
 
@@ -392,7 +394,7 @@ const [likedComments,setLikedComments]=useState([]);
         <div className="mt-4 p-4 rounded-xl">
           {/* Emoji Picker */}
           {showEmojiPicker && (
-            <div className="absolute top-[40rem] right-60 z-50">
+            <div className="absolute top-[17rem] right-24 z-50">
               <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
             </div>
           )}
@@ -450,7 +452,7 @@ const [likedComments,setLikedComments]=useState([]);
               value={commentInput}
               onChange={handleCommentChange} // Ensure this is set correctly
               placeholder="Write a comment..."
-              className="w-full px-5 py-3 pr-16 bg-transparent dark:text-white placeholder-gray-400 focus:outline-none"
+              className="w-full px-5 py-3 pr-16 bg-transparent dark:text-white placeholder-gray-400 focus:outline-none relative"
             />
 
 
@@ -478,7 +480,7 @@ const [likedComments,setLikedComments]=useState([]);
                   setShowGifPicker(false);
                 }}
               />
-              <label>
+              {/* <label>
                 <IoMdCamera className="cursor-pointer" size={26} />
                 <input
                   type="file"
@@ -495,7 +497,7 @@ const [likedComments,setLikedComments]=useState([]);
                   setShowGifPicker(!showGifPicker);
                   setShowEmojiPicker(false);
                 }}
-              />
+              /> */}
             </div>
             <button
               onClick={handleCommentSubmit}

@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "../Components/Sidebar";
 import Post from "../Components/Post";
-import { IoArrowBackCircle } from "react-icons/io5";
+import { IoArrowBackCircle, IoClose } from "react-icons/io5";
 import { useEffect, useState } from "react";
 import { getPostDetailed, getUserLikes } from "../Utils/api";
 import { ColorRing } from "react-loader-spinner";
@@ -41,9 +41,9 @@ const PostDetailed = () => {
                 {/* Back Button */}
                 <button 
                     onClick={() => navigate('/community')} 
-                    className="px-2 py-1 mb-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition w-fit"
+                    className="px-2 py-1 mb-4 text-white rounded-lg transition w-full flex justify-end "
                 >
-                    <IoArrowBackCircle size={32}/>
+                    <IoClose size={32}/>
                 </button>
 
                 {loading?(

@@ -9,6 +9,7 @@ import StockTrendChartMini from "../Components/StockChartMini";
 import { deleteFromWatchlist, getMarketGainers, getMarketLosers, getStockChartData, getWatchList,searchStock, debounceStockSearchj, addToWatchList } from "../Utils/api";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import { FiMinusCircle } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 const stockData = [
     {
       name: "Apple",
@@ -18,6 +19,7 @@ const stockData = [
       trend: [10, 15, 16, 28, 16, 22],
       percentage: 45,
       change: 13,
+      navigate:"/AAPL/4fc93602-a51a-4220-a55a-6a1e291adf66"
     },
     {
         name: "Tesla",
@@ -27,6 +29,7 @@ const stockData = [
         trend: [21, 15, 12, 18, 16, 22],
         percentage: 21,
         change: 15,
+        navigate:"/TSLA/c2b7f3d7-702a-4837-b4d3-a1899edcf8f9"
       },
       {
         name: "Netflix",
@@ -36,6 +39,7 @@ const stockData = [
         trend: [12, 15, 12, 18, 18, 32],
         percentage: 52,
         change: 12,
+        navigate:"/NFLX/57a0e048-43de-4c41-84b7-9bea41de5fe6"
       },
       {
         name: "AMD",
@@ -45,6 +49,7 @@ const stockData = [
         trend: [11, 12, 12, 18, 16, 22],
         percentage: 12,
         change: 23,
+        navigate:"/stock/AMD/2d95a22b-e3a0-424a-a661-1d4401ed5b25"
       },
   ];
 
@@ -56,6 +61,7 @@ const Market = () => {
     // const [selectedSort, setSelectedSort] = useState("Relevance");
     // const [filterOpen, setFilterOpen] = useState(false);
     // const [sortOpen, setSortOpen] = useState(false);
+    const navigate=useNavigate()
     const [watchList,setWatchList]=useState();
     const [selectedStock,setSelectedStock]=useState();
     const [chartData,setChartData]=useState();
@@ -410,7 +416,7 @@ const Market = () => {
                 {stockData.map((stock, index) => (
                     <tr key={index} className="border-b border-[#00387E]">
                         {/* Stock Logo & Name */}
-                        <td className="py-3 px-4 flex items-center gap-2">
+                        <td className="py-3 px-4 flex items-center gap-2 cursor-pointer" onClick={()=>{navigate(`${stock.navigate}`)}}>
                             <img src={stock.logo} alt={stock.name} className="w-10 h-10 rounded-full" />
                             <span className="font-semibold">{stock.name}</span>
                         </td>
