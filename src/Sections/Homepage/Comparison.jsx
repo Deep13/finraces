@@ -219,7 +219,7 @@ const Comparison = () => {
         "updatedAt": "2025-02-23T11:34:41.343Z"
     }}/>
             </div>
-            <div className="h-[30rem] w-4/5 bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mx-auto">
+            <div className="h-[30rem] w-full bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mx-auto">
                 <StockChart labels={labels} datasets={dataset}/>
             </div>
           </div>

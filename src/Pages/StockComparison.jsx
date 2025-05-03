@@ -387,6 +387,7 @@ const StockComparison = () => {
               setOpenedIndex(index);
             }} 
             key={index}
+            className="w-[13rem] 2xl:w-[15rem]"
           >
              <StockComparisonCard data={selectedStocks[index]}/>            
           </div>

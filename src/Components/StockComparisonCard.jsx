@@ -14,7 +14,7 @@ const StockWatchlistCard = ({ data }) => {
     }
 
     return (
-        <div className='cursor-pointer w-[13rem] 2xl:w-[15rem] h-[10rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between mr-3'>
+        <div className='cursor-pointer w-full h-[10rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between mr-3'>
             
             {/* Name with icon */}
             <div className='flex justify-between items-center w-full'>
