@@ -108,6 +108,7 @@ const RacePage = () => {
     const navigate = useNavigate()
     const stockChart = useRef()
     const iframeRef = useRef(null);
+    const {setShowLoginForm} =useContext(DarkModeContext)
 
     const ud = localStorage.getItem('fin_userDetails')
     const userDetails2 = ud && JSON.parse(atob(ud))
@@ -789,7 +790,8 @@ const RacePage = () => {
         let encodedUserDetails = localStorage.getItem('fin_userDetails') || localStorage.getItem('guest_details');
       
         if (!encodedUserDetails) {
-          throw new Error("User details not found in localStorage");
+          setShowLoginForm(true)
+          return
         }
       
         const currentUser = JSON.parse(atob(encodedUserDetails));
