@@ -9,6 +9,7 @@ import FAQ from '../Sections/Homepage/FAQ'
 import { motion } from 'motion/react'
 import Sidebar from '../Components/Sidebar'
 import GuestOrLoggedOutHero from '../Sections/Homepage/GuestOrLoggedOutHero'
+import Comparison from '../Sections/Homepage/Comparison'
 
 const Home = () => {
 
@@ -56,6 +57,7 @@ const Home = () => {
         <OngoingRaces />
         <Leaderboard />
         <UpcomingRaces />
+        <Comparison/>
         <KeyFeatures />
         {/* <Heading /> */}
         <FAQ />

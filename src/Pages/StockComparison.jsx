@@ -12,6 +12,7 @@ import { debounce } from "lodash";
 import stockData from "../stockData.json"
 import CandleChart from "../Components/CandleChart";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
+import DateRangePicker from "../Components/DateRangePicker";
 
 
 const StockComparison = () => {
@@ -71,7 +72,13 @@ const StockComparison = () => {
   // const [datasets,setDatasets] = useState([{},{},{},{}]);
   const [chartData,setChartData] = useState([{},{},{},{}]);
   const [candleData,setCandleData] = useState([{},{},{},{}]);
-  
+  const today = new Date();
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(today.getMonth() - 1);
+  const formatDate = (date) => date.toISOString().split('T')[0];
+
+  const [startDate, setStartDate] = useState(formatDate(oneMonthAgo));
+  const [endDate, setEndDate] = useState(formatDate(today));
   const {setShowLoginForm,chartRef} =useContext(DarkModeContext)
   
   
@@ -120,12 +127,12 @@ const StockComparison = () => {
     }));
   };
   const fetchStockDataForChart = () => {
-    let { startDate, endDate } = getDateRange();
+    // let { startDate, endDate } = getDateRange();
     let units = 'day';
 
-    if (timeRange === '1D') {
-        units = 'hour';
-    }
+    // if (timeRange === '1D') {
+    //     units = 'hour';
+    // }
 
     console.log("Check", startDate, endDate, units);
     
@@ -439,8 +446,9 @@ const StockComparison = () => {
                   chartRef.current.resetZoom();
                 }
               }}>Reset Zoom</button>
+              <DateRangePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} transform={false}/>
               {/* Time Range Dropdown */}
-              <div className="relative">
+              {/* <div className="relative">
                 <button
                   className="flex py-2 items-center justify-between gap-2 pb-1 rounded-md px-3 border dark:border-[#00387E] cursor-pointer"
                   onClick={() => setTimeOpen(!timeOpen)}
@@ -463,7 +471,7 @@ const StockComparison = () => {
                     ))}
                   </div>
                 )}
-              </div>
+              </div> */}
 
               {/* Years Dropdown */}
               {/* <div className="relative">

@@ -84,7 +84,7 @@ const DateRangePicker = ({
       <Popover>
         <PopoverTrigger asChild>
           <div
-            className="flex items-center justify-between w-[250px] px-3 py-2 bg-white dark:bg-[#001B4E] border border-gray-300 dark:border-[#00387E] rounded-md text-sm dark:text-white cursor-pointer"
+            className="flex items-center justify-between w-40 px-5 py-2 bg-white dark:bg-[#001B4E] border border-gray-300 dark:border-[#00387E] rounded-md text-sm dark:text-white cursor-pointer"
           >
             <span className="truncate">{formatRange() || "Select Date Range"}</span>
             <LuCalendarDays />

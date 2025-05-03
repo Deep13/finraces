@@ -1,4 +1,4 @@
-import { useContext, useRef, useState, useMemo,useEffect } from "react";
+import { useContext, useMemo } from "react";
 import PropTypes from "prop-types";
 import { Line } from "react-chartjs-2";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
@@ -14,110 +14,87 @@ import {
 } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
 
-ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend, Title, zoomPlugin);
+ChartJS.register(
+  LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
+  Tooltip,
+  Legend,
+  Title,
+  zoomPlugin
+);
 
-const generateStaticData = (filter, num) => {
-  const now = new Date();
-  let labels = [];
-  let datasets = [];
-
-  if (filter === "1D") {
-    labels = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-  } else {
-    const days = { "1W": 7, "1M": 30, "3M": 90, "6M": 180 }[filter] || 30;
-    labels = Array.from({ length: days + 1 }, (_, i) => {
-      let date = new Date();
-      date.setDate(now.getDate() - (days - i));
-      return date.toISOString().split("T")[0];
-    });
-  }
-
-  for (let i = 0; i < num; i++) {
-    datasets.push({
-      label: `Stock ${i + 1}`,
-      data: labels.map(() => 100 + Math.random() * 10), // Random stock prices
-      borderColor: [ "#00E396","#FEB019","#FF4560","#775DD0"][i], // Different colors
-    });
-  }
-
-  return { labels, datasets };
+const transformToPercentage = (data) => {
+  if (!Array.isArray(data) || data.length === 0) return [];
+  const first = data[0];
+  return data.map((val, idx) =>
+    idx === 0 ? 0 : ((val - first) / first) * 100
+  );
 };
 
 
-const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter = "1M", staticData = false,disableAnimation=false }) => {
-  const { darkModeEnabled ,chartRef} = useContext(DarkModeContext);
-  
-  const [selectedPoints, setSelectedPoints] = useState({ start: null, end: null, difference: null });
 
-  const staticChartData = useMemo(() => (staticData ? generateStaticData(filter,num) : { labels, datasets }), [staticData, filter, labels, datasets]);
+const StockChart = ({
+  labels = [],
+  datasets = [],
+  area = false,
+  disableAnimation = false,
+}) => {
+  const { darkModeEnabled, chartRef } = useContext(DarkModeContext);
+  const totalDuration = 4000;
+const delayBetweenPoints = totalDuration / labels.length;
 
-  const handleDownload = () => {
-    if (chartRef?.current) {
-      const link = document.createElement("a");
-      link.href = chartRef.current.toBase64Image();
-      link.download = "chart.png";
-      link.click();
-    }
-  };
+console.log(labels,"check2")
 
+const previousY = (ctx) =>
+  ctx.index === 0
+    ? ctx?.chart?.scales?.y?.getPixelForValue(100)
+    : ctx?.chart?.getDatasetMeta(ctx?.datasetIndex)?.data?.[ctx?.index - 1]?.getProps(["y"], true)?.y;
 
-  // useEffect(() => {
-  //   // Cleanup function: Destroy previous chart instance before updating
-  //   return () => {
-  //     if (chartRef.current) {
-  //       chartRef.current.destroy();
-  //     }
-  //   };
-  // }, [labels, datasets]); // Runs whenever labels or datasets change
+const animation = {
+  x: {
+    type: "number",
+    easing: "linear",
+    duration: delayBetweenPoints,
+    from: NaN,
+    delay(ctx) {
+      if (ctx.type !== "data" || ctx.xStarted) {
+        return 0;
+      }
+      ctx.xStarted = true;
+      return ctx.index * delayBetweenPoints;
+    },
+  },
+  y: {
+    type: "number",
+    easing: "linear",
+    duration: delayBetweenPoints,
+    from:previousY,
+    delay(ctx) {
+      if (ctx.type !== "data" || ctx.yStarted) {
+        return 0;
+      }
+      ctx.yStarted = true;
+      return ctx.index * delayBetweenPoints;
+    },
+  },
+};
 
-  const data = {
-    labels: staticChartData.labels,
-    datasets: staticChartData.datasets.map((dataset) => ({
+  const transformedDatasets = useMemo(() => {
+    return datasets.map((dataset) => ({
       ...dataset,
-      backgroundColor: area ? (ctx) => getGradient(ctx, dataset.borderColor || "#00E396") : dataset.borderColor || "#00E396",
+      data: transformToPercentage(dataset.data),
+      fill: area,
       borderWidth: 2,
       pointRadius: 0,
       pointHoverRadius: 0,
-      tension: area?1:0,
-      fill: area,
-    })),
-  };
-  const totalDuration = 4000;
-  const delayBetweenPoints = totalDuration / staticChartData.labels.length;
-  
-  const previousY = (ctx) =>
-    ctx.index === 0
-      ? ctx?.chart?.scales?.y?.getPixelForValue(100)
-      : ctx?.chart?.getDatasetMeta(ctx?.datasetIndex)?.data?.[ctx?.index - 1]?.getProps(["y"], true)?.y;
-
-  const animation = {
-    x: {
-      type: "number",
-      easing: "linear",
-      duration: delayBetweenPoints,
-      from: NaN,
-      delay(ctx) {
-        if (ctx.type !== "data" || ctx.xStarted) {
-          return 0;
-        }
-        ctx.xStarted = true;
-        return ctx.index * delayBetweenPoints;
-      },
-    },
-    y: {
-      type: "number",
-      easing: "linear",
-      duration: delayBetweenPoints,
-      from:previousY,
-      delay(ctx) {
-        if (ctx.type !== "data" || ctx.yStarted) {
-          return 0;
-        }
-        ctx.yStarted = true;
-        return ctx.index * delayBetweenPoints;
-      },
-    },
-  };
+      tension: area ? 0.4 : 0,
+      backgroundColor: area
+        ? (ctx) => getGradient(ctx, dataset.borderColor || "#00E396")
+        : dataset.borderColor || "#00E396",
+    }));
+  }, [datasets, area]);
 
   const getGradient = (ctx, borderColor) => {
     if (!ctx?.chart?.ctx) return borderColor;
@@ -128,74 +105,65 @@ const StockChart = ({ labels = [], datasets = [], area = false, num = 1, filter 
     return gradient;
   };
 
+  const data = {
+    labels,
+    datasets: transformedDatasets,
+  };
+
   const options = {
-  responsive: true,
-  maintainAspectRatio: false,
-  animation:disableAnimation?false:animation,
-  scales: {
-    x: {
-      ticks: { color: darkModeEnabled ? "#fff" : "#000" },
-      grid: { color: darkModeEnabled ? "#444" : "#ddd" },
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: disableAnimation ? false : animation,
+    scales: {
+      x: {
+        ticks: { color: darkModeEnabled ? "#fff" : "#000" },
+        grid: { color: darkModeEnabled ? "#444" : "#ddd" },
+      },
+      y: {
+        beginAtZero: true, // Start Y-axis at 0%
+        ticks: {
+          color: darkModeEnabled ? "#fff" : "#000",
+          callback: (value) => `${value}%`, // Show % on Y-axis
+        },
+        grid: { color: darkModeEnabled ? "#444" : "#ddd", borderDash: [5, 5] },
+      },
     },
-    y: {
-      ticks: { color: darkModeEnabled ? "#fff" : "#000" },
-      grid: { color: darkModeEnabled ? "#444" : "#ddd", borderDash: [5, 5] },
+    plugins: {
+      legend: { display: labels.length>0? true:false },
+      tooltip: {
+        enabled: true,
+        callbacks: {
+          label: (context) => {
+            const val = context.parsed.y.toFixed(2);
+            return `${context.dataset.label}: ${val}%`;
+          },
+        },
+        backgroundColor: darkModeEnabled ? "#333" : "#fff",
+        titleColor: darkModeEnabled ? "#fff" : "#000",
+        bodyColor: darkModeEnabled ? "#fff" : "#000",
+      },
+      zoom: {
+        pan: { enabled: true, mode: "xy" },
+        zoom: {
+          wheel: { enabled: true },
+          pinch: { enabled: true },
+          mode: "xy",
+        },
+      },
     },
-  },
-  plugins: {
-    legend: { display: labels.length>0?true:false },
-    tooltip: {
-      enabled: true,
-      backgroundColor: darkModeEnabled ? "#333" : "#fff",
-      titleColor: darkModeEnabled ? "#fff" : "#000",
-      bodyColor: darkModeEnabled ? "#fff" : "#000",
+    elements: {
+      point: {
+        radius: 0,
+        hoverRadius: 0,
+      },
     },
-    zoom: {
-      pan: { enabled: true, mode: "xy" },
-      zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: "xy" },
-    },
-  },
-  elements: {
-    point: {
-      radius: 0, // Hides points
-      hoverRadius: 0, // Hides points on hover
-    },
-  },
-};
-
-
-  // const handleResetSelection = () => {
-  //   if (chartRef.current) {
-  //     chartRef.current.resetZoom();
-  //     setSelectedPoints({ start: null, end: null, difference: null });
-  //   }
-  // };
+  };
 
   return (
     <div style={{ position: "relative", width: "100%", height: "400px" }}>
       <Line ref={chartRef} data={data} options={options} />
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "10px", gap: "10px" }}>
-        {/* <button onClick={handleResetSelection} style={buttonStyle}>Reset</button> */}
-        <button onClick={handleDownload} style={buttonStyle}>Download </button>
-      </div>
-      {selectedPoints.start !== null && selectedPoints.end !== null && (
-        <div style={{ textAlign: "center", marginTop: "10px", color: darkModeEnabled ? "#fff" : "#000" }}>
-          <strong>Difference: </strong> {selectedPoints.difference}
-        </div>
-      )}
     </div>
   );
-};
-
-const buttonStyle = {
-  padding: "8px 12px",
-  fontSize: "16px",
-  fontWeight: "bold",
-  backgroundColor: "#6b7280",
-  color: "#fff",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
 };
 
 StockChart.propTypes = {
@@ -208,9 +176,7 @@ StockChart.propTypes = {
     })
   ),
   area: PropTypes.bool,
-  stock: PropTypes.bool,
-  filter: PropTypes.oneOf(["1D", "1W", "1M", "3M", "6M"]),
-  staticData: PropTypes.bool,
+  disableAnimation: PropTypes.bool,
 };
 
 export default StockChart;
