@@ -10,6 +10,7 @@ import { deleteFromWatchlist, getMarketGainers, getMarketLosers, getStockChartDa
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import { FiMinusCircle } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
+import DateRangePicker from "../Components/DateRangePicker";
 const stockData = [
     {
       name: "Apple",
@@ -19,7 +20,7 @@ const stockData = [
       trend: [10, 15, 16, 28, 16, 22],
       percentage: 45,
       change: 13,
-      navigate:"/AAPL/4fc93602-a51a-4220-a55a-6a1e291adf66"
+      navigate:"/stock/AAPL/4fc93602-a51a-4220-a55a-6a1e291adf66"
     },
     {
         name: "Tesla",
@@ -29,7 +30,7 @@ const stockData = [
         trend: [21, 15, 12, 18, 16, 22],
         percentage: 21,
         change: 15,
-        navigate:"/TSLA/c2b7f3d7-702a-4837-b4d3-a1899edcf8f9"
+        navigate:"/stock/TSLA/c2b7f3d7-702a-4837-b4d3-a1899edcf8f9"
       },
       {
         name: "Netflix",
@@ -39,7 +40,7 @@ const stockData = [
         trend: [12, 15, 12, 18, 18, 32],
         percentage: 52,
         change: 12,
-        navigate:"/NFLX/57a0e048-43de-4c41-84b7-9bea41de5fe6"
+        navigate:"/stock/NFLX/57a0e048-43de-4c41-84b7-9bea41de5fe6"
       },
       {
         name: "AMD",
@@ -78,6 +79,8 @@ const Market = () => {
     const [hasNext,setHasNext]=useState(false);
     const observerRef = useRef(null); // Observer reference for last item
     const {setShowLoginForm} =useContext(DarkModeContext)
+    const [startDate,setStartDate]=useState("")
+    const [endDate,setEndDate]=useState("")
     
 
 
@@ -230,11 +233,24 @@ const Market = () => {
         const fromDate = sevenDaysAgo.toISOString().split('T')[0]; // Format: YYYY-MM-DD
         const toDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
 
-        getStockChartData(ticker,fromDate,toDate,'day',(data)=>{
-            setChartData(data)
-        },(error)=>{console.log(error)})
+        const finalStartDate = startDate && startDate.trim() !== "" ? startDate : fromDate;
+        const finalEndDate = endDate && endDate.trim() !== "" ? endDate : toDate;
+
+        getStockChartData(
+            ticker,
+            finalStartDate,
+            finalEndDate,
+            'day',
+            (data) => {
+                setChartData(data);
+            },
+            (error) => {
+                console.log(error);
+            }
+        );
+
           
-    },[selectedStock])
+    },[selectedStock,startDate,endDate])
 
     const updateState = (searchedStock) => {
         // Check if stock is already in the watchlist
@@ -286,15 +302,20 @@ const Market = () => {
            {/* Selected Stock */}
            <div className="flex flex-1 flex-col gap-2 w-full">
              {selectedStock ? (
-               <div className="flex p-2 gap-5 rounded-lg items-center w-full bg-white dark:bg-[#002763] border dark:border-[#00387E]">
-                 <img className="rounded-full w-10 h-10" src={selectedStock?.stock?.icon_url} alt='stockImg' />
-                 <div className="flex-1 min-w-0">
-                   <div className="text-xl font-bold truncate flex gap-2 items-center">{selectedStock?.stock?.name} ({selectedStock?.stock?.ticker}) <FiMinusCircle onClick={()=>{setShowModal(true)}} color="red" size={28} className="cursor-pointer ml-10 mt-4" /></div>
-                   
-                   <div className="flex items-center justify-between gap-3">
-                     <div className="font-semibold">{(selectedStock?.stock?.price +'$') || "N/A"}</div>
-                   </div>
-                 </div>
+               <div className="flex justify-between w-full rounded-lg items-center p-2 bg-white dark:bg-[#002763] border dark:border-[#00387E]">
+                  <div className="flex p-2 gap-5 items-center ">
+                  <img className="rounded-full w-10 h-10" src={selectedStock?.stock?.icon_url} alt='stockImg' />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xl font-bold truncate flex gap-2 items-center">{selectedStock?.stock?.name} ({selectedStock?.stock?.ticker}) <FiMinusCircle onClick={()=>{setShowModal(true)}} color="red" size={28} className="cursor-pointer ml-10 mt-4" /></div>
+                    
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="font-semibold">{(selectedStock?.stock?.price +'$') || "N/A"}</div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <DateRangePicker startDate={startDate} endDate={endDate} setStartDate={setStartDate} setEndDate={setEndDate} transform={false}/>
+                </div>
                </div>
              ) : (
                <div className="mt-16"></div>

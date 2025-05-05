@@ -108,12 +108,12 @@ const SingleStock = () => {
         <div className="dark:bg-[#000D38] py-5 md:px-10 mx-[1rem] md:mx-[7rem] flex flex-1 flex-col gap-3 rounded-xl border dark:border-[#00387E] dark:text-white">
             <div className="flex justify-between items-center">
                 <div className="flex justify-between p-2 gap-5 rounded-lg">
-                    <img className="rounded-full w-12 h-12" src={stockData?.image? stockData.image:facebookLogo} alt='stockImg'></img>
+                    <img className="rounded-full w-12 h-12" src={stockData?.image} alt='stockImg'></img>
                         <div className="">
-                            <div className=" font-bold">{stockData?.companyName? stockData.companyName:"Facebook"} ({stockData?ticker:"FEB"})</div>
+                            <div className=" font-bold">{stockData?.companyName} ({stockData?ticker:"FEB"})</div>
                             <div className="flex items-center justify-between gap-3">
-                                <div className="font-semibold">{stockData?.price? stockData.price:281}$</div>
-                                <div className="flex gap-2 text-red-500">{stockData?.changes? stockData.changes:12}% <IoIosArrowDown/> </div>
+                                <div className="font-semibold">{stockData?.price}$</div>
+                                <div className="flex gap-2 text-red-500">{stockData?.changes}% <IoIosArrowDown/> </div>
                             </div>
                         </div>
                 </div>

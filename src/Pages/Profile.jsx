@@ -53,7 +53,13 @@ const Profile = () => {
     })
 
     getFriends((data)=>{
-      setFriendsCount(data.total)
+      
+      if(data.total==0){
+        setFriendsCount(data.total)
+      }
+      else{
+        setFriendsCount(data.total-1)
+      }
     },(error)=>{
       console.log(error)
     })

@@ -45,7 +45,6 @@ const StockChart = ({
   const totalDuration = 4000;
 const delayBetweenPoints = totalDuration / labels.length;
 
-console.log(labels,"check2")
 
 const previousY = (ctx) =>
   ctx.index === 0
@@ -123,7 +122,7 @@ const animation = {
         beginAtZero: true, // Start Y-axis at 0%
         ticks: {
           color: darkModeEnabled ? "#fff" : "#000",
-          callback: (value) => `${value}%`, // Show % on Y-axis
+          callback: (value) => `${Math.round(value)}%`, // Show % on Y-axis
         },
         grid: { color: darkModeEnabled ? "#444" : "#ddd", borderDash: [5, 5] },
       },
@@ -134,7 +133,7 @@ const animation = {
         enabled: true,
         callbacks: {
           label: (context) => {
-            const val = context.parsed.y.toFixed(2);
+            const val = context.parsed.y;
             return `${context.dataset.label}: ${val}%`;
           },
         },

@@ -37,6 +37,13 @@ import Sidebar from "../Components/Sidebar";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import ImageSlider from "../Components/ImageSlider";
 import YourBetsCard from '../Components/YourBetsCard'
+import Crown_1 from '../assets/images/Crown_1.png'
+import Crown_2 from '../assets/images/Crown_2.png'
+import Crown_3 from '../assets/images/Crown_3.png'
+import malePlceholder from '../assets/images/manPlaceholder.jpg'
+import femalePlceholder from '../assets/images/womanPlaceholder.jpg'
+import box from '../assets/images/ongoingRaces/focus_box.svg'
+import boxdark from '../assets/images/boxdark.svg'
 import { Bar } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -997,7 +1004,7 @@ const RacePage = () => {
 
 
                                 <div className="flex-1 rounded-[20px]  mb-4 ">
-                                    <div className="flex justify-between w-full items-center mb-[10px] dark:text-white">
+                                    <div className="flex justify-between w-full items-center mb-[10px dark:text-white">
 
 
                                     </div>
@@ -1005,13 +1012,90 @@ const RacePage = () => {
 
 
 
-                                    {/* {
+                                    {
                                         raceStatus === 'finished' && <div className="w-full h-full flex justify-center items-center">
-                                            <div className='rounded-lg bg-white shadow-xl italic px-8 py-4 w-[50%] z-20 grid place-items-center text-3xl font-bold self-center text-center'>
-                                                Race Finished
-                                            </div>
+                                            <div onClick={() => navigate(`/race/${raceDetails?.id}`)} className='rounded-[24px] w-[90%] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] mt-[20px]'>
+                                                        <div className='w-full flex justify-between mb-[14px]'>
+                                                            <div className='flex gap-[0.76rem] flex-1'>
+                                                                <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
+                                                                <div className='h-full'>
+                                                                    <h3 className='text-[1.05rem] font-bold dark:text-white line-clamp-3'>{raceDetails.name}</h3>
+                                                                    {/* <p className='text-[0.7rem]'>XYZ</p> */}
+                                                                </div>
+                                                            </div>
+                                                            <div className='h-full flex flex-col justify-start items-end flex-1'>
+                                                                <h3 className='text-[1.05rem] font-bold dark:text-white'>Created By</h3>
+                                                                <p className='text-[0.7rem] dark:text-white'>{raceDetails?.created_by?.firstName + " " + raceDetails?.created_by?.lastName}</p>
+                                                                <p className='text-[0.7rem] dark:text-white font-poppins'>
+                                                                    {raceDetails?.end_date &&
+                                                                        (() => {
+                                                                            const [year, month, day] = raceDetails.end_date.split("T")[0].split("-");
+                                                                            return `${day}/${month}/${year}`;
+                                                                        })()
+                                                                    }
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                            
+                                                        <div className='w-full flex justify-center items-center mb-[25px] relative flex-col'>
+                                            
+                                                            <div className='w-full flex justify-center items-center gap-[25px]'>
+                                            
+                                                                <div style={{ position: 'relative', flex: 1 }}>  <img
+                                                                    className='h-72 w-96 rounded-xl'
+                                                                    src={rankList?.[0]?.user_photo
+                                                                        || (rankList?.[0]?.gender === 'female' ? femalePlceholder : malePlceholder)}
+                                                                />
+                                                                    <img className='h-30 absolute -bottom-[40px] -left-[10px]' src={Crown_1} />
+                                                                </div>
+                                                                <div style={{ position: 'relative', flex: 1 }}><img
+                                                                    className='h-72 w-96 rounded-xl'
+                                                                    src={rankList?.[1]?.user_photo
+                                                                        || (rankList?.[1]?.gender === 'female' ? femalePlceholder : malePlceholder)}
+                                                                />
+                                                                    <img className='h-30 absolute -bottom-[40px] -left-[10px]' src={Crown_2} /></div>
+                                                                <div style={{ position: 'relative', flex: 1 }}> <img
+                                                                    className='h-72 w-96 rounded-xl'
+                                                                    src={rankList?.[2]?.user_photo
+                                                                        || (rankList?.[2]?.gender === 'female' ? femalePlceholder : malePlceholder)}
+                                                                />
+                                                                    <img className='h-30 absolute -bottom-[40px] -left-[10px]' src={Crown_3} /></div>
+                                                            </div>
+                                                            <div className='w-full flex justify-center items-center gap-[25px] mt-[40px] text-white'>
+                                                                <div className='flex flex-1 justify-center text-xl font-semibold'>
+                                                                    <p>{rankList?.[0]?.user_name} </p>
+                                                                </div>
+                                                                <div className='flex flex-1 justify-center text-xl font-semibold'>
+                                                                    <p>{rankList?.[1]?.user_name} </p>
+                                                                </div>
+                                                                <div className='flex flex-1 justify-center text-xl font-semibold'>
+                                                                    <p>{rankList?.[2]?.user_name} </p>
+                                                                </div>
+                                                            </div>
+                                                            <div className='w-full flex justify-center items-center gap-[25px] mt-[20px]'>
+                                                                <div className='flex flex-1 justify-center'>
+                                                                    <img className='rounded-xl w-60 h-60'
+                                                                        src={stockRankList?.[0]?.stock_icon_url}
+                                                                    />
+                                                                </div>
+                                                                <div className='flex flex-1 justify-center'>
+                                                                    <img className='rounded-xl w-60 h-60'
+                                                                        src={stockRankList?.[1]?.stock_icon_url}
+                                                                    />
+                                                                </div>
+                                                                <div className='flex flex-1 justify-center'>
+                                                                    <img className='rounded-xl w-60 h-60'
+                                                                        src={stockRankList?.[2]?.stock_icon_url}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                            
+                                            
+                                            
+                                                    </div>
                                         </div>
-                                    } */}
+                                    }
 
                                     {graphType == "Ticker" && data.labels.length > 0 && raceStatus !== 'finished' && (
                                         <Bar data={data} options={options} plugins={[customPlugin]} />

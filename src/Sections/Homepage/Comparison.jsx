@@ -148,10 +148,10 @@ const Comparison = () => {
     ]
   return (
     <div className='max-w-[1400px] relative mb-[3.3rem]'>
-          <a onClick={() => navigate('/stockComparison', { state: 'Ongoing Races' })} className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
+          <a onClick={() => navigate('/stockComparison')} className='absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center' href="">
             Compare more <BiChevronRight size={18} />
           </a>
-          <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Compare Stocks</h2>
+          <h2 className='text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white'>Stock Comparison</h2>
           <div className="flex flex-col gap-5 ml-10">
             <div className='w-full flex gap-5 items-center justify-center'>
                 <StockWatchlistCard data={{

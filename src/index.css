@@ -28,6 +28,14 @@ textarea {
   color-scheme: dark;
 }
 
+
+@layer components {
+  .rdp .rdp-nav_icon {
+    @apply text-white;
+    stroke: white; /* Tailwind doesn’t cover this by default */
+  }
+}
+
 /* input[type='password'] {
     font-family: Verdana;
 }

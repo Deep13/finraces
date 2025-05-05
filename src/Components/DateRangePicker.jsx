@@ -70,12 +70,20 @@ const DateRangePicker = ({
 
   const Calendar = (
     <DayPicker
-      mode="range"
-      selected={selectedRange}
-      onSelect={handleDateSelection}
-      numberOfMonths={1}
-      disabled={disabledRange}
-    />
+  mode="range"
+  selected={selectedRange}
+  onSelect={handleDateSelection}
+  numberOfMonths={1}
+  disabled={disabledRange}
+  modifiersStyles={{
+    today: {
+      color: 'black',
+      backgroundColor: 'white',
+      borderRadius: '50%',
+    },
+  }}
+/>
+
   );
 
   if (!transform) {
@@ -84,10 +92,10 @@ const DateRangePicker = ({
       <Popover>
         <PopoverTrigger asChild>
           <div
-            className="flex items-center justify-between w-40 px-5 py-2 bg-white dark:bg-[#001B4E] border border-gray-300 dark:border-[#00387E] rounded-md text-sm dark:text-white cursor-pointer"
+            className="flex items-center justify-between px-5 py-2 bg-white dark:bg-[#001B4E] border border-gray-300 dark:border-[#00387E] rounded-md text-sm dark:text-white cursor-pointer"
           >
             <span className="truncate">{formatRange() || "Select Date Range"}</span>
-            <LuCalendarDays />
+            <LuCalendarDays className="ml-3" />
           </div>
         </PopoverTrigger>
 
