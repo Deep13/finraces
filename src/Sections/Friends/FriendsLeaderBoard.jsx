@@ -40,7 +40,7 @@ const FriendsLeaderBoard = () => {
             <tbody>
               {/* row 1 */}
               {
-                leaderboardData?.data?.data?.map((curr, index) => {
+                leaderboardData?.data?.map((curr, index) => {
                   return (
                     <tr key={curr.user.id} className="odd:bg-transparent even:bg-[#00276] group">
                       <th className="text-[1.5rem] py-3 font-poppins group-hover:underline">{index + 1}</th>

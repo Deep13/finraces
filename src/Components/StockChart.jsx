@@ -40,6 +40,7 @@ const StockChart = ({
   datasets = [],
   area = false,
   disableAnimation = false,
+  zoom=false
 }) => {
   const { darkModeEnabled, chartRef } = useContext(DarkModeContext);
   const totalDuration = 4000;
@@ -80,10 +81,16 @@ const animation = {
   },
 };
 
-  const transformedDatasets = useMemo(() => {
-    return datasets.map((dataset) => ({
+const transformedDatasets = useMemo(() => {
+  return datasets.map((dataset) => {
+    const transformedData = transformToPercentage(dataset.data);
+    return {
       ...dataset,
-      data: transformToPercentage(dataset.data),
+      data: transformedData.map((percent, idx) => ({
+        x: labels[idx],
+        y: percent,
+        rawOriginal: dataset.data[idx], // ✅ Keep the real value here
+      })),
       fill: area,
       borderWidth: 2,
       pointRadius: 0,
@@ -92,8 +99,10 @@ const animation = {
       backgroundColor: area
         ? (ctx) => getGradient(ctx, dataset.borderColor || "#00E396")
         : dataset.borderColor || "#00E396",
-    }));
-  }, [datasets, area]);
+    };
+  });
+}, [datasets, area]);
+
 
   const getGradient = (ctx, borderColor) => {
     if (!ctx?.chart?.ctx) return borderColor;
@@ -130,22 +139,24 @@ const animation = {
     plugins: {
       legend: { display: labels.length>0? true:false },
       tooltip: {
+        mode: 'nearest',
+        intersect: false,
         enabled: true,
         callbacks: {
           label: (context) => {
-            const val = context.parsed.y;
-            return `${context.dataset.label}: ${val}%`;
-          },
+            const realVal = context.raw.rawOriginal ?? context.raw; // fallback
+            return `${context.dataset.label}: ${realVal}`;
+          },          
         },
         backgroundColor: darkModeEnabled ? "#333" : "#fff",
         titleColor: darkModeEnabled ? "#fff" : "#000",
         bodyColor: darkModeEnabled ? "#fff" : "#000",
       },
       zoom: {
-        pan: { enabled: true, mode: "xy" },
+        pan: { enabled: zoom, mode: "xy" },
         zoom: {
-          wheel: { enabled: true },
-          pinch: { enabled: true },
+          wheel: { enabled: zoom },
+          pinch: { enabled: zoom },
           mode: "xy",
         },
       },

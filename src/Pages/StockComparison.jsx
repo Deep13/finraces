@@ -534,9 +534,9 @@ const StockComparison = () => {
         <div className="h-[30rem] w-full bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mb-7">
           <div className="w-full h-full">
             {graphType=='line'&&
-            <StockChart labels={labels} datasets={chartData} staticData={false} filter={timeRange} num={numVal} />}
+            <StockChart labels={labels} datasets={chartData} area={false} disableAnimation={false} zoom={true}  />}
             {graphType=='area'&&
-            <StockChart labels={labels} datasets={chartData} area={true} staticData={false} filter={timeRange } num={numVal} disableAnimation={true}/>}
+            <StockChart labels={labels} datasets={chartData} area={true} disableAnimation={true} zoom={true}/>}
             {/* {graphType=='candle' &&
             <CandleChart 
             labels={labels}

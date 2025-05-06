@@ -21,7 +21,7 @@ import AnimatedNumber from "../Components/AnimatedNumber"
 const superTabsStrings = {
   Profile: 'Profile',
   EditProfile: 'Edit Profile',
-  Friends: 'Friends'
+  Interactions: 'Interactions'
 }
 
 const Profile = () => {
@@ -58,7 +58,7 @@ const Profile = () => {
         setFriendsCount(data.total)
       }
       else{
-        setFriendsCount(data.total-1)
+        setFriendsCount(data.total)
       }
     },(error)=>{
       console.log(error)
@@ -177,7 +177,7 @@ const Profile = () => {
               </div>
               <div className='flex flex-col gap-3'>
                 <button onClick={() => setSuperTabs(superTabsStrings.Profile)} className={superTabs === superTabsStrings.Profile ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Profile</button>
-                <button onClick={() => setSuperTabs(superTabsStrings.Friends)} className={superTabs === superTabsStrings.Friends ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Friends</button>
+                <button onClick={() => setSuperTabs(superTabsStrings.Interactions)} className={superTabs === superTabsStrings.Interactions ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'} >Interactions</button>
                 <button onClick={() => navigate('/settings')} className={superTabs === superTabsStrings.EditProfile ? 'w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]' : 'w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white'}>Edit Profile</button>
                 <button onClick={() => {
                   localStorage.removeItem('token')
@@ -193,7 +193,7 @@ const Profile = () => {
               superTabs === superTabsStrings.Profile && <UserProfile userId={data?.id} />
             }
             {
-              superTabs === superTabsStrings.Friends && <Friends />
+              superTabs === superTabsStrings.Interactions && <Friends />
             }
             {
               superTabs === superTabsStrings.EditProfile && <EditProfile />

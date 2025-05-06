@@ -1309,7 +1309,7 @@ export const fetchFriendsLeaderboard = async (
 
   const token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/race-results/stats?friendOfUserId=${Number(friendOfUserId)}`, {
+    let response = await axios.get(`${GlobalURL}/api/v1/user-leaderboards?friendOfUserId=${Number(friendOfUserId)}`, {
       headers: {
         'Authorization': `Bearer ${token}`, // Example for passing a token
       }

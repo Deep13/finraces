@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import AddFriend from '../Friends/AddFriend'
 import AllFirends from '../Friends/AllFirends'
+import AllFollowers from '../Friends/AllFollowers'
+import AllFollowees from '../Friends/AllFollowees'
 import Challanges from '../Friends/Challanges'
 import FriendsLeaderBoard from '../Friends/FriendsLeaderBoard'
 import Requests from '../Friends/Requests'
@@ -10,7 +12,9 @@ const tabs = {
     AllFriends: "All Friends",
     FreindsLeaderboard: 'Friends Leaderboard',
     AddFried: 'Add a Friend',
-    Requests: 'Requests'
+    Requests: 'Requests',
+    Followers: 'Followers',
+    Following: 'Following'
 }
 
 const Friends = () => {
@@ -36,6 +40,8 @@ const Friends = () => {
             <div className="flex-1 bg-white rounded-xl dark:bg-[#001B51] border dark:border-[#00387E] dark:text-white py-4 px-6">
                 {activeTab === tabs.AddFried && <AddFriend />}
                 {activeTab === tabs.AllFriends && <AllFirends />}
+                {activeTab === tabs.Followers && <AllFollowers />}
+                {activeTab === tabs.Following && <AllFollowees />}
                 {activeTab === tabs.Requests && <Requests />}
                 {activeTab === tabs.FreindsLeaderboard && <FriendsLeaderBoard />}
             </div>
