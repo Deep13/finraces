@@ -190,6 +190,14 @@ useEffect(() => {
         navigate(`/stock/${ticker}/${userId}`);
       }
     }
+    const raceCard = target.closest(".race-card");
+    if (raceCard) {
+      const raceId = raceCard.getAttribute("data-id");
+      if (raceId) {
+        navigate(`/race/${raceId}`);
+        return;
+      }
+    }
   };
 
   const container = contentRef.current;
@@ -326,9 +334,7 @@ const [likedComments,setLikedComments]=useState([]);
 
   return (
     <div
-    onClick={() => {
-      if (!commentVisibility) navigate(`/post/${postData?.id}`);
-    }}      
+         
       className={`relative flex flex-col gap-4 p-4 rounded-xl w-full h-auto bg-[#e5f4ff] dark:bg-[#002763] border dark:border-0 shadow-lg ${!commentVisibility ? "cursor-pointer" : ""}`}
     >
       {/* Header */}
@@ -396,7 +402,9 @@ const [likedComments,setLikedComments]=useState([]);
             handleLike(false)}} />
         )} <span>{postData?.like_count || 0}</span>
         </div>
-        <div className="flex items-center gap-2 cursor-pointer hover:text-white">
+        <div className="flex items-center gap-2 cursor-pointer hover:text-white" onClick={() => {
+      if (!commentVisibility) navigate(`/post/${postData?.id}`);
+    }} >
           <FaRegCommentAlt size={20} /> 
           <span>{postData?.commentsCount||0}</span>
         </div>

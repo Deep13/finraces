@@ -5,6 +5,8 @@ import person3 from '../../assets/images/person3.png';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../Components/Pagination';
 import { fetchFriendsLeaderboard } from '../../Utils/api';
+import malePlaceholder from '../../assets/images/manPlaceholder.jpg'
+import femalePlaceholder from '../../assets/images/womanPlaceholder.jpg'
 
 const FriendsLeaderBoard = () => {
 
@@ -33,7 +35,7 @@ const FriendsLeaderBoard = () => {
               <tr>
                 <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Rank</th>
                 <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Player</th>
-                <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Most Races Won</th>
+                <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Total Races Played</th>
                 <th className="font-semibold py-4 dark:text-white text-[1.1rem]">Total Points</th>
               </tr>
             </thead>
@@ -62,7 +64,7 @@ const FriendsLeaderBoard = () => {
                         }} className="w-full flex gap-3 justify-start items-center cursor-pointer">
                           {/* image */}
                           <div className="w-12 h-12 rounded-full overflow-hidden">
-                            <img className="w-full h-full object-cover" src={curr?.user?.photo?.path} alt="" />
+                            <img className="w-full h-full object-cover" src={curr?.user?.photo?.path || (curr?.user?.gender && curr?.user?.gender=='female'?femalePlaceholder:malePlaceholder)} alt="" />
                           </div>
                           {/* name and badge */}
                           <div className="flex flex-col justify-between gap-1">
@@ -72,7 +74,7 @@ const FriendsLeaderBoard = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="text-[1.1rem] py-3 font-poppins group-hover:underline">{curr.num_races_won}</td>
+                      <td className="text-[1.1rem] py-3 font-poppins group-hover:underline">{curr.races_played}</td>
                       <td className="text-[1.1rem] py-3 font-poppins group-hover:underline">{curr.total_points}</td>
                     </tr>
                   )

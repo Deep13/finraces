@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
-const StockWatchlistCard = ({ data }) => {
+const StockWatchlistCard = ({ data,clickable=false }) => {
     const { setSelectedStock } = useContext(DarkModeContext);
     const navigate = useNavigate();
 
@@ -14,7 +14,11 @@ const StockWatchlistCard = ({ data }) => {
     }
 
     return (
-        <div className='cursor-pointer w-full h-[10rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between mr-3'>
+        <div onClick={()=>{
+            if(clickable){
+                navigate(`/stock/${data?.ticker}/${data?.id}`)
+            }
+        }} className='cursor-pointer w-full h-[10rem] p-4 dark:text-white dark:bg-[#002763] rounded-xl shadow-lg dark:shadow-none border-[#00387E] flex flex-col gap-[9px] justify-between mr-3'>
             
             {/* Name with icon */}
             <div className='flex justify-between items-center w-full'>

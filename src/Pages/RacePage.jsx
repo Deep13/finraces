@@ -14,6 +14,7 @@ import bronze_king_crown from '../assets/images/bronze_king_crown.svg'
 import Polygon7 from '../assets/images/Polygon7.svg'
 import Person from '../assets/images/person3.png'
 import { HiInformationCircle } from "react-icons/hi";
+import { IoMdShare } from "react-icons/io";
 import Placeholder from '../assets/images/placeholder.png'
 import malePlaceholder from "../assets/images/manPlaceholder.jpg";
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
@@ -59,6 +60,10 @@ import RacePriceChart from "../Components/RacePriceChart";
 import BumpChart from "../Components/BumpChart";
 import JoinRace from "../Components/JoinRace";
 
+import html2canvas from 'html2canvas';
+import { useCommunity } from "../Contexts/CommunityProvider";
+
+
 // Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -69,6 +74,7 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 //     CarouselNext,
 //     CarouselPrevious,
 // } from "@/components/ui/carousel"
+
 
 
 
@@ -114,6 +120,9 @@ const RacePage = () => {
     const userDetails = localStorage.getItem('fin_userDetails')
     const navigate = useNavigate()
     const stockChart = useRef()
+    const cardRef = useRef(null);
+    const {setShareModal,setModalImg}=useCommunity()
+
     const iframeRef = useRef(null);
     const {setShowLoginForm} =useContext(DarkModeContext)
 
@@ -556,6 +565,78 @@ const RacePage = () => {
 
     useEffect(()=>{console.log("check",stockRankList)},[stockRankList])
 
+    const handleShareClick = async () => {
+            setShareModal(true)
+            setModalImg(`
+                <div class="w-full flex items-center cursor-pointer race-card" data-id="${raceDetails?.id}">
+                  <div class="rounded-[32px] w-[42rem] border border-black px-[2rem] py-[1.5rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] mt-[20px]">
+                    
+                    <!-- Header -->
+                    <div class="w-full flex justify-between mb-[1.5rem]">
+                      <div class="flex gap-[1rem] flex-1">
+                        <img class="w-6 h-6" src="${darkModeEnabled ? boxdark : box}" alt="box icon" />
+                        <div class="h-full">
+                          <h3 class="text-sm font-bold dark:text-white line-clamp-3">${raceDetails?.name}</h3>
+                        </div>
+                      </div>
+                      <div class="h-full flex flex-col justify-start items-end flex-1">
+                        <h3 class="text-sm font-bold dark:text-white">Created By</h3>
+                        <p class="text-xs dark:text-white">${raceDetails?.created_by?.firstName || ''} ${raceDetails?.created_by?.lastName || ''}</p>
+                        <p class="text-xs dark:text-white font-poppins">
+                          ${
+                            raceDetails?.end_date
+                              ? (() => {
+                                  const [year, month, day] = raceDetails.end_date.split("T")[0].split("-");
+                                  return `${day}/${month}/${year}`;
+                                })()
+                              : ''
+                          }
+                        </p>
+                      </div>
+                    </div>
+              
+                    <!-- Leaderboard Section -->
+                    <div class="w-full flex justify-center items-center mb-[10px] relative flex-col">
+                      <div class="flex justify-center items-start gap-[50px]">
+                        ${[0, 1, 2]
+                          .map((i) => {
+                            const user = rankList?.[i];
+                            const crown = [Crown_1, Crown_2, Crown_3][i];
+                            const userImg =
+                              user?.user_photo || (user?.gender === 'female' ? femalePlceholder : malePlceholder);
+                            const userName = user?.user_name || '';
+                            const stockIcon = stockRankList?.[i]?.stock_icon_url || '';
+                            return `
+                              <div class="flex flex-col items-center gap-[12px]">
+                                <div style="position: relative;">
+                                  <img class="h-28 w-28 rounded-2xl" src="${userImg}" />
+                                  <img class="h-10 absolute -bottom-[12px] -left-[12px]" src="${crown}" />
+                                </div>
+                                <p class="text-base font-semibold dark:text-white">${userName}</p>
+                                <img class="rounded-xl w-20 h-20" src="${stockIcon}" />
+                              </div>
+                            `;
+                          })
+                          .join('')}
+                      </div>
+                    </div>
+              
+                  </div>
+                </div>
+              `);
+              
+        
+    };
+
+    <button
+                                    
+                                    className="px-4 py-2 rounded-md bg-blue-500 text-white mt-4 absolute text-4xl"
+                                    >
+                                    Share
+                                    </button>
+    
+    
+
     // This function transforms socket data for line chart not using it now but maybe needed later
     // const dataTransform = (input) => {
     //     const stockIndexes = {};
@@ -886,7 +967,6 @@ const RacePage = () => {
             </>
         )
     } else {
-
         return (
             <>
                 {
@@ -997,7 +1077,9 @@ const RacePage = () => {
                                                 </span>
                                             ))}
                                         </div> */}
+                                        <IoMdShare className="text-[white] text-[30px] cursor-pointer mr-5" onClick={handleShareClick} />
                                         <HiInformationCircle className="text-[white] text-[30px] cursor-pointer" onClick={() => setshowDetails(true)} />
+                                        
                                         {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
                                     </div>
                                 </div>
@@ -1012,18 +1094,20 @@ const RacePage = () => {
 
 
 
+                                    
                                     {
-                                        raceStatus === 'finished' && <div className="w-full h-full flex justify-center items-center">
-                                            <div onClick={() => navigate(`/race/${raceDetails?.id}`)} className='rounded-[24px] w-[90%] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] mt-[20px]'>
+                                        raceStatus === 'finished' && <div ref={cardRef} className="w-full h-full flex justify-center items-center">
+                                            <div className='rounded-[24px] w-[90%] px-[1.1rem] py-[1rem] flex flex-col overflow-hidden cursor-pointer mt-[20px]'>
                                                         <div className='w-full flex justify-between mb-[14px]'>
-                                                            <div className='flex gap-[0.76rem] flex-1'>
+                                                            {/* <div className='flex gap-[0.76rem] flex-1'>
                                                                 <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
                                                                 <div className='h-full'>
                                                                     <h3 className='text-[1.05rem] font-bold dark:text-white line-clamp-3'>{raceDetails.name}</h3>
-                                                                    {/* <p className='text-[0.7rem]'>XYZ</p> */}
+                                                                    
                                                                 </div>
-                                                            </div>
-                                                            <div className='h-full flex flex-col justify-start items-end flex-1'>
+                                                            </div> */}
+ 
+                                                            {/* <div className='h-full flex flex-col justify-start items-end flex-1'>
                                                                 <h3 className='text-[1.05rem] font-bold dark:text-white'>Created By</h3>
                                                                 <p className='text-[0.7rem] dark:text-white'>{raceDetails?.created_by?.firstName + " " + raceDetails?.created_by?.lastName}</p>
                                                                 <p className='text-[0.7rem] dark:text-white font-poppins'>
@@ -1034,7 +1118,7 @@ const RacePage = () => {
                                                                         })()
                                                                     }
                                                                 </p>
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                             
                                                         <div className='w-full flex justify-center items-center mb-[25px] relative flex-col'>

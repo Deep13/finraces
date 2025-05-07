@@ -451,7 +451,7 @@ console.log(userDetails)
               <div className="rounded-full w-16 h-16 bg-gray-300 overflow-hidden">
               <img
                 alt="userImg"
-                src={userDetails?.profilePic?.path || (userDetails?.gender && userDetails?.gender=='female'?femalePlaceholder:malePlaceholder)}
+                src={userDetails?.photo?.path || userDetails?.profilePic?.path || (userDetails?.gender && userDetails?.gender=='female'?femalePlaceholder:malePlaceholder)}
                 className="object-cover w-full h-full"
               />
 

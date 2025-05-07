@@ -145,7 +145,7 @@ const transformedDatasets = useMemo(() => {
         callbacks: {
           label: (context) => {
             const realVal = context.raw.rawOriginal ?? context.raw; // fallback
-            return `${context.dataset.label}: ${realVal}`;
+            return `${context.dataset.label}: ${realVal}$`;
           },          
         },
         backgroundColor: darkModeEnabled ? "#333" : "#fff",

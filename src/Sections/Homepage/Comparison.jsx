@@ -169,7 +169,7 @@ const Comparison = () => {
                     "id": "4fc93602-a51a-4220-a55a-6a1e291adf66",
                     "createdAt": "2025-02-23T11:25:09.248Z",
                     "updatedAt": "2025-02-23T11:25:09.248Z"
-                }}/>
+                }} clickable={true}/>
                         <StockWatchlistCard data={{
         "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA_icon.png",
         "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/TSLA.svg",
@@ -185,7 +185,7 @@ const Comparison = () => {
         "id": "c2b7f3d7-702a-4837-b4d3-a1899edcf8f9",
         "createdAt": "2025-02-23T11:38:50.932Z",
         "updatedAt": "2025-02-23T11:38:50.932Z"
-    }}/>
+    }} clickable={true}/>
                         <StockWatchlistCard data={{
         "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/AMZN_icon.jpeg",
         "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/AMZN.svg",
@@ -201,7 +201,7 @@ const Comparison = () => {
         "id": "3bd7ebff-bf79-4cfd-a2ec-e729460f187a",
         "createdAt": "2025-02-23T11:26:01.191Z",
         "updatedAt": "2025-02-23T11:26:01.191Z"
-    }}/>
+    }} clickable={true}/>
                         <StockWatchlistCard data={{
         "icon_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/NFLX_icon.jpeg",
         "logo_url": "https://finracerdev-7891.s3.us-east-1.amazonaws.com/stocks/images/NFLX.svg",
@@ -217,7 +217,7 @@ const Comparison = () => {
         "id": "57a0e048-43de-4c41-84b7-9bea41de5fe6",
         "createdAt": "2025-02-23T11:34:41.343Z",
         "updatedAt": "2025-02-23T11:34:41.343Z"
-    }}/>
+    }} clickable={true}/>
             </div>
             <div className="h-[30rem] w-full bg-[#e4eaf0]  dark:bg-[#001a50] flex rounded-xl py-2 px-5 mx-auto">
                 <StockChart labels={labels} datasets={dataset}/>

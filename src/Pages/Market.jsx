@@ -304,9 +304,9 @@ const Market = () => {
              {selectedStock ? (
                <div className="flex justify-between w-full rounded-lg items-center p-2 bg-white dark:bg-[#002763] border dark:border-[#00387E]">
                   <div className="flex p-2 gap-5 items-center ">
-                  <img className="rounded-full w-10 h-10" src={selectedStock?.stock?.icon_url} alt='stockImg' />
+                  <img className="rounded-full w-10 h-10 " src={selectedStock?.stock?.icon_url} alt='stockImg' />
                   <div className="flex-1 min-w-0">
-                    <div className="text-xl font-bold truncate flex gap-2 items-center">{selectedStock?.stock?.name} ({selectedStock?.stock?.ticker}) <FiMinusCircle onClick={()=>{setShowModal(true)}} color="red" size={28} className="cursor-pointer ml-10 mt-4" /></div>
+                    <div className="text-xl font-bold truncate flex gap-2 items-center cursor-pointer"  onClick={()=>{navigate(`/stock/${selectedStock?.stock?.ticker}/${selectedStock?.stock?.id}`)}}>{selectedStock?.stock?.name} ({selectedStock?.stock?.ticker}) <FiMinusCircle onClick={()=>{setShowModal(true)}} color="red" size={28} className="cursor-pointer ml-10 mt-4" /></div>
                     
                     <div className="flex items-center justify-between gap-3">
                       <div className="font-semibold">{(selectedStock?.stock?.price +'$') || "N/A"}</div>

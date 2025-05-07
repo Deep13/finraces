@@ -1,9 +1,10 @@
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState} from 'react'
 import Navbar from '../Navbar'
 import Footer from '../Footer'
-import { Outlet } from 'react-router-dom'
-import { RefreshToken, reportBug } from '../../Utils/api'
+import { Outlet,useNavigate } from 'react-router-dom'
+import { postCommunityPost, RefreshToken, reportBug } from '../../Utils/api'
 import { DarkModeContext } from '../../Contexts/DarkModeProvider'
+import { useCommunity } from '../../Contexts/CommunityProvider';
 
 const NavFootWrapper = () => {
 
@@ -27,6 +28,9 @@ const NavFootWrapper = () => {
     area: 'Bug',
     description: ''
   });
+
+  const {shareModal,setShareModal,modalText,setModalText,modalImg,setModalImg}=useCommunity()
+  const navigate=useNavigate()
 
   const submitBugReport = async () => {
     console.log('Submitting Report:', reportData);
@@ -60,6 +64,27 @@ const NavFootWrapper = () => {
     setErrorMsg("");
   };
 
+  const shareWithCommunity = () => {
+    let finalContent = modalImg;
+  
+    if (modalText) {
+      finalContent = `
+        <div class="shared-post-wrapper">
+          <p class="postContent">${modalText}</p>
+          ${modalImg}
+        </div>
+      `;
+    }
+  
+    postCommunityPost("", finalContent, "", () => {
+      setModalText("");
+      setModalImg("");
+      setShareModal(false);
+      navigate("/community");
+    });
+  };
+  
+
   return (
     <div className='w-full relative dark:bg-[#000924] flex flex-col min-h-[100vh]'>
       <Navbar />
@@ -86,7 +111,55 @@ const NavFootWrapper = () => {
           </div>
         </div>
       )}
+      {shareModal && (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="bg-white dark:bg-[#010B2C] rounded-lg shadow-lg p-6 w-[90%] md:w-[500px]">
+            <h2 className="text-xl font-bold dark:text-white mb-4">Share in Community</h2>
 
+            <div className="flex flex-col gap-3">
+                
+                {/* Image Preview */}
+                {modalImg && (
+  <div className="w-full max-h-[32rem] overflow-auto">
+    <div className="flex justify-center">
+      <div className="max-w-full" dangerouslySetInnerHTML={{ __html: modalImg }} />
+    </div>
+  </div>
+)}
+
+
+                {/* Description */}
+                <div className="flex flex-col">
+                    <textarea
+                        className="p-2 border rounded-md dark:bg-[#001F52] dark:text-white"
+                        value={modalText}
+                        onChange={(e) => setModalText(e.target.value)}
+                        placeholder="Write a description..."
+                        rows="3"
+                    />
+                </div>
+
+                {/* Buttons */}
+                <div className="flex justify-end gap-2 mt-4">
+                    <button
+                        onClick={() => setShareModal(false)}
+                        className="px-4 py-2 rounded-md bg-gray-300 text-black"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={shareWithCommunity}
+                        className="px-4 py-2 rounded-md dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] text-white"
+                    >
+                        Share
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+)}
+
+      
       {report && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white dark:bg-[#010B2C] rounded-lg shadow-lg p-6 w-[90%] md:w-[500px]">
