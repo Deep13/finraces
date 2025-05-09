@@ -5,6 +5,7 @@ import { ColorRing } from "react-loader-spinner";
 export default function RacePredictionsTable({ userId }) {
   const [expanded, setExpanded] = useState(null);
   const [races, setRaces] = useState([]);
+  const [priceMap, setPriceMap] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -14,6 +15,17 @@ export default function RacePredictionsTable({ userId }) {
       (data) => {
         setRaces(data);
         setLoading(false);
+
+        const allStocks = data?.data?.flatMap((race) => race?.stocks ?? []);
+
+        const idPriceMap = allStocks.reduce((acc, stock) => {
+          if (stock?.id && stock?.price !== undefined) {
+            acc[stock.id] = stock.price;
+          }
+          return acc;
+        }, {});
+
+        setPriceMap(idPriceMap);
       },
       (error) => {
         console.log("Error fetching races data for predictions table ", error);
@@ -93,7 +105,7 @@ export default function RacePredictionsTable({ userId }) {
                       )}
                     </div>
                   </td>
-                  <td className="py-3 px-4 font-semibold rounded-r-xl">
+                  <td className="py-3 px-4 font-semibold rounded-r-xl text-wrap">
                     {race?.name}
                   </td>
                 </tr>
@@ -125,11 +137,25 @@ export default function RacePredictionsTable({ userId }) {
                                   key={i}
                                   className="text-sm border-t border-gray-600"
                                 >
-                                  <td className="p-2 mx-auto left">
+                                  <td className="p-2 mx-auto left text-wrap">
                                     {p?.stock?.name}
                                   </td>
-                                  <td className="p-2">{p?.prediction_rank}</td>
-                                  <td className="p-2 mx-auto">0</td>
+                                  <td className="p-2">
+                                    ${p?.prediction_price}
+                                  </td>
+                                  <td className="p-2 mx-auto">
+                                    {priceMap[p?.stock?.id] !== undefined
+                                      ? `${(
+                                          100 -
+                                          Math.abs(
+                                            ((priceMap[p.stock.id] -
+                                              p.prediction_price) /
+                                              priceMap[p.stock.id]) *
+                                              100
+                                          )
+                                        ).toFixed(2)}%`
+                                      : "N/A"}
+                                  </td>
                                 </tr>
                               ))}
                           </tbody>
