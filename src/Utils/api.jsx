@@ -3047,7 +3047,7 @@ export const getBlogCategories = async (onSuccess, onError) => {
 
 export const getRacePredictionsTable = async (userId, onSuccess, onError) => {
   try {
-    let url = `${GlobalURL}/api/v1/races/detailed?createdBy=${userId}`;
+    let url = `${GlobalURL}/api/v1/races/detailed?participatedBy=${userId}`;
     const token = localStorage.getItem("token");
 
     const response = await fetch(url, {
