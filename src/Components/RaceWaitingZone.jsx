@@ -253,39 +253,41 @@ const RaceWaitingZone = ({
             ))}
           </div>
 
-          {!hasJoined && (
-            <div className="mt-3">
-              <button
-                onClick={() => {
-                  if (!det) {
-                    setShowLoginForm(true);
-                  } else {
-                    setJoinRaceFormVisible(true);
-                  }
-                }}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700"
-              >
-                Join Race
-              </button>
+          <div className="flex items-center justify-center gap-10">
+            {!hasJoined && (
+              <div className="mt-3">
+                <button
+                  onClick={() => {
+                    if (!det) {
+                      setShowLoginForm(true);
+                    } else {
+                      setJoinRaceFormVisible(true);
+                    }
+                  }}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700"
+                >
+                  Join Race
+                </button>
+              </div>
+            )}
+
+            {joinRaceFormVisible && (
+              <JoinRace
+                raceName={raceName}
+                closeForm={() => setJoinRaceFormVisible(false)}
+                race_id={race_id}
+              />
+            )}
+
+            {/* Back Button */}
+            <div
+              onClick={() => {
+                navigate("/allraces", { state: "Upcoming Races" });
+              }}
+              className="bg-[#2177cb] text-white p-2 rounded-lg font-semibold hover:underline cursor-pointer mt-4"
+            >
+              Back
             </div>
-          )}
-
-          {joinRaceFormVisible && (
-            <JoinRace
-              raceName={raceName}
-              closeForm={() => setJoinRaceFormVisible(false)}
-              race_id={race_id}
-            />
-          )}
-
-          {/* Back Button */}
-          <div
-            onClick={() => {
-              navigate("/allraces", { state: "Upcoming Races" });
-            }}
-            className="bg-[#2177cb] text-white p-2 rounded-lg font-semibold hover:underline cursor-pointer mt-4"
-          >
-            Back
           </div>
         </motion.div>
       </motion.div>

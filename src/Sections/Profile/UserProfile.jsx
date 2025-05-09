@@ -237,18 +237,20 @@ const UserProfile = ({ userId }) => {
       <div className="w-full p-4 bg-white dark:bg-[#001b51] dark:border dark:border-[#00387E] rounded-[20px]">
         <div className="flex mb-4">
           <button
-            className={`px-4 py-2 rounded-l ${
-              activeTab === "stats" ? "bg-blue-600 text-white" : "bg-gray-200"
+            className={`px-4 py-2 rounded-l dark:text-white ${
+              activeTab === "stats"
+                ? "bg-blue-600 text-white"
+                : "border dark:border-[#00387E]"
             }`}
             onClick={() => setActiveTab("stats")}
           >
             Races
           </button>
           <button
-            className={`px-4 py-2 rounded-r ${
+            className={`px-4 py-2 rounded-r dark:text-white ${
               activeTab === "predictions"
                 ? "bg-blue-600 text-white"
-                : "bg-gray-200"
+                : "border dark:border-[#00387E]"
             }`}
             onClick={() => setActiveTab("predictions")}
           >
