@@ -29,6 +29,7 @@ import GoldenDiamond from "../../Components/GoldDiamond.jsx";
 import { TbSum } from "react-icons/tb";
 
 import { GiPodiumWinner, GiPodiumSecond, GiPodiumThird } from "react-icons/gi";
+import RacePredictionsTable from "../../Components/RacePredictionsTable.jsx";
 
 const UserProfile = ({ userId }) => {
   const [total, setTotal] = useState(0);
@@ -36,7 +37,7 @@ const UserProfile = ({ userId }) => {
   const [loadingRaces, setLoadingRaces] = useState(true);
   const [totalPoints, setTotalPoints] = useState(0);
   const [winningRate, setWinnigRate] = useState(0);
-
+  const [activeTab, setActiveTab] = useState("stats"); // "stats" | "predictions"
   const [raceCounts, setRaceCounts] = useState({
     // keys are ranks and values are counts of races with that rank
     1: 0,
@@ -234,80 +235,108 @@ const UserProfile = ({ userId }) => {
 
       {/* table is remaining  */}
       <div className="w-full p-4 bg-white dark:bg-[#001b51] dark:border dark:border-[#00387E] rounded-[20px]">
-        <table className="table border-separate border-spacing-0 w-full text-left dark:text-white">
-          {/* head */}
-          <thead>
-            <tr>
-              <th className="py-4 dark:text-[#898989] text-[0.9rem]">
-                Serial No.
-              </th>
-              <th className="py-4 dark:text-[#898989] text-[0.9rem]">
-                Race Name
-              </th>
-              <th className="py-4 dark:text-[#898989] text-[0.9rem]">
-                Total Participants
-              </th>
-              <th className="py-4 dark:text-[#898989] text-[0.9rem]">
-                Total Stocks
-              </th>
-              <th className="py-4 dark:text-[#898989] text-[0.9rem]">Points</th>
-              <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th>
-              {/* <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {/* row 1 */}
-            {races.length > 0
-              ? races?.map((curr, index) => {
-                  return (
-                    <tr
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(`/race/${curr.id}`);
-                      }}
-                      key={index}
-                      className="odd:bg-transparent even:bg-[#00276] pb-2 dark:border-b cursor-pointer group"
-                    >
-                      <th className="py-3 overflow-hidden text-ellipsis whitespace-nowrap group-hover:underline">
-                        {index + 1}
-                      </th>
-                      <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
-                        {curr.name}
-                      </td>
-                      <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
-                        {curr.participants.length}
-                      </td>
-                      <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
-                        {curr?.points || "N/A"}
-                      </td>
-                      <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
-                        {curr.stocks.length}
-                      </td>
-                      <td className="text-[1.1rem]">
-                        <div className="py-3 flex justify-start">
-                          {curr.status === "scheduled" && (
-                            <div className="text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-3 rounded-full font-poppins">
-                              {capitalize(curr.status)}
-                            </div>
-                          )}
-                          {curr.status === "running" && (
-                            <div className="text-green-500 bg-opacity-25 text-center font-medium  bg-green-500 border-green-500 border px-3 rounded-full font-poppins">
-                              {capitalize(curr.status)}
-                            </div>
-                          )}
-                          {curr.status === "finished" && (
-                            <div className="text-red-300 bg-opacity-25 text-center font-medium  bg-red-600 border-red-700 border px-3 rounded-full">
-                              {capitalize(curr.status)}
-                            </div>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              : !loadingRaces && <p>There are no recent Races</p>}
-          </tbody>
-        </table>
+        <div className="flex mb-4">
+          <button
+            className={`px-4 py-2 rounded-l ${
+              activeTab === "stats" ? "bg-blue-600 text-white" : "bg-gray-200"
+            }`}
+            onClick={() => setActiveTab("stats")}
+          >
+            Races
+          </button>
+          <button
+            className={`px-4 py-2 rounded-r ${
+              activeTab === "predictions"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200"
+            }`}
+            onClick={() => setActiveTab("predictions")}
+          >
+            Predictions
+          </button>
+        </div>
+        {activeTab == "stats" ? (
+          <table className="table border-separate border-spacing-0 w-full text-left dark:text-white">
+            {/* head */}
+            <thead>
+              <tr>
+                <th className="py-4 dark:text-[#898989] text-[0.9rem]">
+                  Serial No.
+                </th>
+                <th className="py-4 dark:text-[#898989] text-[0.9rem]">
+                  Race Name
+                </th>
+                <th className="py-4 dark:text-[#898989] text-[0.9rem]">
+                  Total Participants
+                </th>
+                <th className="py-4 dark:text-[#898989] text-[0.9rem]">
+                  Total Stocks
+                </th>
+                <th className="py-4 dark:text-[#898989] text-[0.9rem]">
+                  Points
+                </th>
+                <th className="py-4 dark:text-[#898989] text-[0.9rem]">
+                  Status
+                </th>
+                {/* <th className="py-4 dark:text-[#898989] text-[0.9rem]">Status</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {/* row 1 */}
+              {races.length > 0
+                ? races?.map((curr, index) => {
+                    return (
+                      <tr
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/race/${curr.id}`);
+                        }}
+                        key={index}
+                        className="odd:bg-transparent even:bg-[#00276] pb-2 dark:border-b cursor-pointer group"
+                      >
+                        <th className="py-3 overflow-hidden text-ellipsis whitespace-nowrap group-hover:underline">
+                          {index + 1}
+                        </th>
+                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
+                          {curr.name}
+                        </td>
+                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
+                          {curr.participants.length}
+                        </td>
+                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
+                          {curr?.points || "N/A"}
+                        </td>
+                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
+                          {curr.stocks.length}
+                        </td>
+                        <td className="text-[1.1rem]">
+                          <div className="py-3 flex justify-start">
+                            {curr.status === "scheduled" && (
+                              <div className="text-white bg-opacity-25 text-center font-medium  bg-white border-white border px-3 rounded-full font-poppins">
+                                {capitalize(curr.status)}
+                              </div>
+                            )}
+                            {curr.status === "running" && (
+                              <div className="text-green-500 bg-opacity-25 text-center font-medium  bg-green-500 border-green-500 border px-3 rounded-full font-poppins">
+                                {capitalize(curr.status)}
+                              </div>
+                            )}
+                            {curr.status === "finished" && (
+                              <div className="text-red-300 bg-opacity-25 text-center font-medium  bg-red-600 border-red-700 border px-3 rounded-full">
+                                {capitalize(curr.status)}
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                : !loadingRaces && <p>There are no recent Races</p>}
+            </tbody>
+          </table>
+        ) : (
+          <RacePredictionsTable userId={userId} />
+        )}
         {loadingRaces && (
           <div className="w-full flex justify-center items-center">
             <ColorRing

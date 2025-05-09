@@ -790,13 +790,15 @@ const StockComparison = () => {
 
             {searchQuery?.length > 2 && (
               <div className="dark:bg-[#000A2D] dark:text-white mt-2 rounded-lg p-2 max-h-48 overflow-y-auto notificationScrollbar">
-                {stocksData.filter(
+                {stocksData?.filter(
                   (stock) =>
-                    !selectedStocks.some((selected) => selected.id === stock.id)
+                    !selectedStocks?.some(
+                      (selected) => selected?.id === stock?.id
+                    )
                 )?.length > 0 ? (
                   <div className="flex flex-col gap-2">
                     {stocksData
-                      .filter(
+                      ?.filter(
                         (stock) =>
                           !selectedStocks.some(
                             (selected) => selected.id === stock.id

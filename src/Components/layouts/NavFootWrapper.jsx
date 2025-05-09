@@ -100,12 +100,28 @@ const NavFootWrapper = () => {
     });
   };
 
+  var isMobileDevice =
+    /Mobi|Android|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(
+      navigator.userAgent
+    );
+
   return (
     <div className="w-full relative dark:bg-[#000924] flex flex-col min-h-[100vh]">
       <Navbar />
 
       <Outlet />
       <Footer />
+      {isMobileDevice && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-90 text-white text-center p-4">
+          <div className="max-w-md w-full bg-white text-black p-6 rounded-xl shadow-xl">
+            <h2 className="text-xl font-semibold mb-4">Unsupported Device</h2>
+            <p>
+              This app is not supported on mobile devices. Kindly open it on a
+              computer.
+            </p>
+          </div>
+        </div>
+      )}
       {successModel && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
           <div

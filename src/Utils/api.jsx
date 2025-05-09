@@ -3044,3 +3044,31 @@ export const getBlogCategories = async (onSuccess, onError) => {
     onError(error);
   }
 };
+
+export const getRacePredictionsTable = async (userId, onSuccess, onError) => {
+  try {
+    let url = `${GlobalURL}/api/v1/races/detailed?createdBy=${userId}`;
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Server error:", errorText);
+      throw new Error(
+        `Failed to post: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};
