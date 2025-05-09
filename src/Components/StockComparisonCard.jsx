@@ -38,7 +38,7 @@ const StockWatchlistCard = ({ data,clickable=false }) => {
             {/* Stock Price */}
             <div className="flex gap-2">
                 <p className="dark:text-white text-[0.9rem] font-poppins font-semibold">
-                    {data?.price !== null ? `${data?.price}$` : "N/A"}
+                    {data?.price !== null ? `$${data?.price}` : "N/A"}
                 </p>
             </div>
         </div>

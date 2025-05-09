@@ -68,7 +68,11 @@ const StockTrendChart = ({ stockData = [], static: isStatic = false, filter = "1
     maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
-      tooltip: { enabled: true },
+      tooltip: { 
+        enabled: true,
+        mode: 'nearest',
+        intersect: false,
+       },
     },
     scales: {
       x: {

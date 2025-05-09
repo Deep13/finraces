@@ -2802,6 +2802,33 @@ export const getFriends = async (onSuccess, onError, name = "") => {
   }
 }
 
+export const unfollowUser=async(userId,onSuccess,onError)=>{
+  try {
+    const token = localStorage.getItem('token');
+    let url = `${GlobalURL}/api/v1/follows/${userId}`;
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',   // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Server error:', errorText);
+      throw new Error(`Failed to post: ${response.status} ${response.statusText}`);
+    }
+
+    // const data = await response.json();
+    // console.log('Community post created successfully:', data);
+    onSuccess();
+  } catch (error) {
+    onError(error);
+  }
+
+}
 export const getFollowers = async (onSuccess, onError) => {
   try {
     let token = localStorage.getItem('token');
