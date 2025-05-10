@@ -594,11 +594,11 @@ const RacePage = () => {
 
   const handleShareClick = async () => {
     setShareModal(true);
-    setModalText(`Check out my rankings in this race. \n ${raceDetails?.name}`);
+    setModalText(
+      `<p class="dark:text-white text-wrap">Check out my rankings in this race. <br/> <span class="race-card cursor-pointer hover:underline" data-id="${raceDetails?.id}">${raceDetails?.name}</span> <p/>`
+    );
     setModalImg(`
-                <div class="w-full flex items-center cursor-pointer race-card" data-id="${
-                  raceDetails?.id
-                }">
+                <div class="w-full flex items-center cursor-pointer race-card" >
                   <div class="rounded-[32px] w-[42rem] px-[2rem] py-[1.5rem] flex flex-col overflow-hidden cursor-pointer mt-[20px]">
               
                     <!-- Leaderboard Section -->

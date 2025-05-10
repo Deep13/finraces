@@ -151,14 +151,17 @@ const NavFootWrapper = () => {
 
             <div className="flex flex-col gap-3">
               {/* Description */}
-              <div className="flex flex-col">
-                <textarea
+              <div
+                className="flex flex-col"
+                dangerouslySetInnerHTML={{ __html: modalText }}
+              >
+                {/* <textarea
                   className="p-2 border rounded-md dark:bg-[#5c92e8] dark:text-white"
                   value={modalText}
                   onChange={(e) => setModalText(e.target.value)}
                   placeholder="Write a description..."
                   rows="3"
-                />
+                /> */}
               </div>
 
               {/* Image Preview */}
