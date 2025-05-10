@@ -236,6 +236,9 @@ const Market = () => {
   }, [watchList, hasNext]);
 
   useEffect(() => {
+    if (!selectedStock) return;
+    // Fetch stock chart data when selectedStock changes
+
     const today = new Date();
     const sevenDaysAgo = new Date();
     const ticker = selectedStock?.stock?.ticker;
@@ -402,7 +405,7 @@ const Market = () => {
                   Add <FaPlus />
                 </div>
               </div>
-              <div className="dark:bg-[#001B51] bg-[#e4eaf0] rounded-lg p-3 border dark:border-[#00387E] flex-2">
+              <div className="rounded-lg p-3 flex-2">
                 <div className="flex flex-col gap-2 max-h-[18.5rem] overflow-y-auto custom-scrollbar p-2 w-full">
                   {watchList?.map((stockData, index) => (
                     <div

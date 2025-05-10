@@ -38,6 +38,11 @@ const Community = () => {
   const { setShowLoginForm } = useContext(DarkModeContext);
   const guestDetails = localStorage.getItem("guest_details");
   //grab userDetails for posting
+  let userDetails = null;
+  const storedData = localStorage.getItem("fin_userDetails");
+  if (storedData) {
+    userDetails = JSON.parse(atob(storedData));
+  }
 
   const [activeTab, setActiveTab] = useState("All");
   const [postContent, setPostContent] = useState("");
@@ -80,12 +85,6 @@ const Community = () => {
     }
   }, []);
 
-  let userDetails = null;
-  const storedData = localStorage.getItem("fin_userDetails");
-  if (storedData) {
-    userDetails = JSON.parse(atob(storedData));
-  }
-
   const formatter = (text, references) => {
     const escapedRefs = references.map((ref) => {
       const name = ref.split("<-->")[0];
@@ -121,7 +120,7 @@ const Community = () => {
       const target = e.target;
       if (target.classList.contains("tagged-user")) {
         const userId = target.getAttribute("data-id");
-        if (userId) {
+        if (userId && userId != userDetails?.userId) {
           navigate(`/userprofile/${userId}`);
         }
       }

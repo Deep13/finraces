@@ -418,9 +418,13 @@ const Post = ({
           />
           <div>
             <div
-              className="font-semibold dark:text-white cursor-pointer hover:underline"
+              className={`font-semibold dark:text-white ${
+                userDetails?.userId != postData.user.id &&
+                "hover:underline cursor-pointer"
+              }`}
               onClick={() => {
-                navigate(`/userprofile/${postData.user.id}`);
+                if (userDetails?.userId != postData.user.id)
+                  navigate(`/userprofile/${postData.user.id}`);
               }}
             >
               {postData?.user?.firstName} {postData?.user?.lastName}

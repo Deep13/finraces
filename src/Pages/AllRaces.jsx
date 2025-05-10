@@ -73,7 +73,6 @@ const AllRaces = () => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setStockNames([]);
         setStockSuggestions([]);
         setSearchQuery("");
       }
@@ -84,6 +83,13 @@ const AllRaces = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    // Update activeTab when location.state changes (e.g., via Sidebar navigation)
+    if (thisLocation?.state && tabs[thisLocation.state.toString()]) {
+      setActiveTab(tabs[thisLocation.state.toString()]);
+    }
+  }, [thisLocation]);
 
   return (
     <>

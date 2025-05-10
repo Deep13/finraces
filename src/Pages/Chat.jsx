@@ -486,6 +486,18 @@ const Chat = () => {
 
         {/* Right Panel (Chat Messages) */}
         <div className="w-[60%] h-[32rem] dark:bg-[#001B51] border dark:border-[#00387E] rounded-xl pl-3 pr-1 py-2 flex flex-col">
+          {selectedUser && (
+            <div className="flex items-center gap-4 border-b border-gray-200 dark:border-[#00387E] pb-3 mb-2">
+              <img
+                className="rounded-full h-10 w-10 object-cover"
+                src={selectedUser?.photo?.path}
+                alt="User"
+              />
+              <span className="font-semibold text-lg">
+                {selectedUser.firstName} {selectedUser.lastName}
+              </span>
+            </div>
+          )}
           {/* Chat messages */}
           <div
             ref={chatContainerRef}
