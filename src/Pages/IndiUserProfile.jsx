@@ -23,6 +23,7 @@ import friends from "../assets/icons/friends_Icon.png";
 import followers from "../assets/icons/followers_Icon.png";
 import followees from "../assets/icons/followee_Icon.png";
 import AnimatedNumber from "../Components/AnimatedNumber";
+import { useCommunity } from "../Contexts/CommunityProvider";
 
 const IndiUserProfile = () => {
   const [requestSent, setRequestSent] = useState(false);
@@ -45,6 +46,7 @@ const IndiUserProfile = () => {
   const [followersCount, setFollowersCount] = useState(0);
   const [followingCount, setFollowingCount] = useState(0);
 
+  const { setSelectedUser } = useCommunity();
   const sd = localStorage.getItem("fin_userDetails");
   let selfDetails = sd && JSON.parse(atob(sd));
 
@@ -197,6 +199,17 @@ const IndiUserProfile = () => {
               </div>
               {selfDetails && selfDetails.userId && (
                 <div className="flex flex-col gap-3 justify-end">
+                  <button
+                    onClick={() => {
+                      setSelectedUser(userDetails);
+                      navigate("/community");
+                    }}
+                    className={
+                      "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white"
+                    }
+                  >
+                    Posts
+                  </button>
                   {blockStatus && blockStatus === "unblocked" && (
                     <button
                       onClick={() => {

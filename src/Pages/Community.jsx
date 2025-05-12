@@ -8,7 +8,7 @@ import { BiMedal } from "react-icons/bi";
 import { CiImageOn } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
 import { BsFillSendFill } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   debounceStockSearchj,
   getRaceList,
@@ -32,10 +32,12 @@ import {
 import { FaPlusCircle, FaMinusCircle } from "react-icons/fa";
 import { ColorRing } from "react-loader-spinner";
 import { debounce } from "lodash";
+import { useCommunity } from "../Contexts/CommunityProvider";
 
 const Community = () => {
   const tabs = ["All", "Following", "My posts"];
   const { setShowLoginForm } = useContext(DarkModeContext);
+  const { selectedUser, setSelectedUser } = useCommunity();
   const guestDetails = localStorage.getItem("guest_details");
   //grab userDetails for posting
   let userDetails = null;
@@ -74,7 +76,10 @@ const Community = () => {
   const [userLikes, setUserLikes] = useState([]);
   const [selectedFile, setSelectedFile] = useState();
   const navigate = useNavigate();
-  // console.log("ud",userDetails)
+
+  // State for search Users
+  const [userList, setUserList] = useState([]);
+  const [userSearchQuery, setUserSearchQuery] = useState("");
 
   useEffect(() => {
     let token = localStorage.getItem("token");
@@ -283,11 +288,21 @@ const Community = () => {
       }
     );
 
-    getPosts("All", (data) => {
-      console.log(data);
-      setLoadingPosts(false);
-      setPosts(data.data);
-    });
+    if (!selectedUser) {
+      getPosts(
+        "All",
+        (data) => {
+          console.log(data);
+          setLoadingPosts(false);
+          setPosts(data.data);
+        },
+        (errrr) => {
+          console.log(errrr);
+        },
+        1,
+        -1
+      );
+    }
 
     getFollowees(
       (data) => {
@@ -315,6 +330,8 @@ const Community = () => {
   }, []);
 
   useEffect(() => {
+    if (selectedUser) return;
+
     setLoadingPosts(true);
     getPosts(
       activeTab,
@@ -326,10 +343,14 @@ const Community = () => {
       (error) => {
         console.log(error);
       },
-      page
+      page,
+      -1
     );
   }, [activeTab]);
+
   useEffect(() => {
+    if (selectedUser) return;
+
     setLoadingPosts(true);
     getPosts(
       activeTab,
@@ -341,7 +362,8 @@ const Community = () => {
       (error) => {
         console.log(error);
       },
-      page
+      page,
+      -1
     );
   }, [page]);
 
@@ -485,7 +507,35 @@ const Community = () => {
     };
   }, [hasMore, loadingPosts]);
 
-  console.log(userDetails);
+  const handleUserSearch = async (query) => {
+    const data = await searchUsers(query);
+    setUserList(data.data);
+  };
+  useEffect(() => {
+    if (userSearchQuery.length > 2) handleUserSearch(userSearchQuery);
+  }, [userSearchQuery]);
+
+  useEffect(() => {
+    console.log("selectedUser", selectedUser);
+    if (selectedUser) {
+      setLoadingPosts(true);
+      getPosts(
+        "Search",
+        (data) => {
+          setPosts(data.data);
+          setUserSearchQuery("");
+          setUserList([]);
+          setLoadingPosts(false);
+        },
+        (error) => {
+          console.log(error);
+        },
+        1,
+        selectedUser.id
+      );
+    }
+  }, [selectedUser]);
+
   return (
     <div className="w-full relative min-h-screen flex pb-8 pt-8 dark:bg-[#000924]">
       {/* Sidebar */}
@@ -663,43 +713,98 @@ const Community = () => {
                 </div>
               </div>
 
-              {/* Sticky Navigation Tabs */}
-              <div className="sticky top-0 z-10 flex items-center justify-center gap-2 w-full p-3 rounded-xl border dark:border-0 dark:bg-[#002763] dark:text-white font-semibold">
-                {tabs
-                  .map((tab, index) => (
-                    <span
-                      key={index}
-                      className={`cursor-pointer transition-all ${
-                        activeTab === tab
-                          ? "text-blue-400"
-                          : "dark:text-gray-300"
-                      }`}
-                      onClick={() => setActiveTab(tab)}
-                    >
-                      {tab}
-                    </span>
-                  ))
-                  .reduce(
-                    (prev, curr) =>
-                      prev === null
-                        ? [curr]
-                        : [
-                            ...prev,
-                            <span
-                              key={`sep-${prev.length}`}
-                              className="text-gray-500"
-                            >
-                              {" "}
-                              |{" "}
-                            </span>,
-                            curr,
-                          ],
-                    null
+              <div className="flex items-center justify-between p-3 rounded-xl border dark:border-0 dark:bg-[#002763] dark:text-white font-semibold">
+                {/* Sticky Navigation Tabs */}
+                <div className="sticky top-0 z-10 flex items-center justify-center gap-2 w-full ">
+                  {tabs
+                    .map((tab, index) => (
+                      <span
+                        key={index}
+                        className={`cursor-pointer transition-all ${
+                          activeTab === tab && !selectedUser
+                            ? "text-blue-400"
+                            : "dark:text-gray-300"
+                        }`}
+                        onClick={() => {
+                          setSelectedUser(null);
+                          setActiveTab(tab);
+                        }}
+                      >
+                        {tab}
+                      </span>
+                    ))
+                    .reduce(
+                      (prev, curr) =>
+                        prev === null
+                          ? [curr]
+                          : [
+                              ...prev,
+                              <span
+                                key={`sep-${prev.length}`}
+                                className="text-gray-500"
+                              >
+                                {" "}
+                                |{" "}
+                              </span>,
+                              curr,
+                            ],
+                      null
+                    )}
+                </div>
+                {/* User Search */}
+                <div className="flex items-center justify-center gap-2 w-full p-3 rounded-xl border dark:border-0 dark:bg-[#002763] dark:text-white font-semibold">
+                  <input
+                    type="text"
+                    placeholder="Search users..."
+                    className="w-full px-4 py-2 relative rounded-lg bg-slate-200 dark:bg-[#001B51] text-white placeholder-gray-400 focus:outline-none"
+                    value={userSearchQuery}
+                    onChange={(e) => {
+                      setUserSearchQuery(e.target.value);
+                    }}
+                  />
+                  {/* User search results dropdown */}
+                  {userSearchQuery.length > 2 && userList.length > 0 && (
+                    <div className="absolute top-[21rem] w-full notificationScrollbar max-w-[28rem] bg-white dark:bg-[#001B51] border border-gray-300 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto z-50">
+                      {userList.map((user) => (
+                        <div
+                          key={user.id}
+                          className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-[#00387E] cursor-pointer flex items-center gap-2"
+                          onClick={() => {
+                            setSelectedUser(user);
+                          }}
+                        >
+                          <img
+                            src={
+                              user?.photo?.path
+                                ? user.photo.path
+                                : user?.gender === "female"
+                                ? femalePlaceholder
+                                : malePlaceholder
+                            }
+                            alt={user.firstName}
+                            className="w-8 h-8 rounded-full object-cover"
+                          />
+                          <span>
+                            {user.firstName} {user.lastName}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   )}
+                </div>
               </div>
 
               {/* Posts Section (Scrollable) */}
               <div className="overflow-y-auto flex flex-col gap-5">
+                {selectedUser && (
+                  <div>
+                    <h3 className="text-xl font-semibold dark:text-slate-300">
+                      Posts by {selectedUser?.firstName}{" "}
+                      {selectedUser?.lastName}
+                    </h3>
+                  </div>
+                )}
+                {/* Posts List */}
                 {posts && posts.length > 0 ? (
                   <>
                     {posts.map((post) => (
@@ -744,7 +849,7 @@ const Community = () => {
                   </div>
                 ) : (
                   <div className="text-center text-gray-500 mt-10">
-                    No posts yet. Be the first one to post!
+                    No posts yet.
                   </div>
                 )}
               </div>
