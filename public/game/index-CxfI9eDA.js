@@ -72329,9 +72329,9 @@ const GameConstant = {
   ANIMATION_DURATION: 0.25,
   DURATION_DIALOG: 0.2,
   GAME_RESIZE_RATIO: 0.98,
-  CAMERA_X: -22.214,
-  CAMERA_Y: 7.425,
-  CAMERA_Z: -83.284,
+  CAMERA_X: -11,
+  CAMERA_Y: 12,
+  CAMERA_Z: -65.283,
   CAMERA_X_LANDSCAPE: 0,
   CAMERA_Y_LANDSCAPE: 16,
   CAMERA_Z_LANDSCAPE: 25,
@@ -77661,7 +77661,6 @@ const _AssetManager = class _AssetManager {
     return new Promise((resolve, reject) => {
       this.assets.loadFromUrl(url2, type2, (err, asset) => {
         if (err || !asset) {
-          console.log(`Loaded ${key}`);
           reject(err);
         }
         asset.name = key;
@@ -82769,7 +82768,7 @@ class Horse extends Entity {
       sprite.frameKeys = [key];
       AssetManager.registerAsset(sprite, key, "sprite");
       cb && cb();
-      let originScale = 0.15;
+      let originScale = 0.19;
       let originSize = 400;
       let scale2 = originScale * originSize / asset.resource.width;
       this.iconCenter.setLocalScale(scale2, scale2, scale2);
@@ -82782,8 +82781,8 @@ class Horse extends Entity {
       type: SPRITETYPE_SIMPLE,
       spriteAsset: AssetManager.find("spr_location_icon")
     });
-    this._iconLocation.setLocalScale(0.02, 0.02, 0.02);
-    this._iconLocation.setLocalPosition(0, 7, 4);
+    this._iconLocation.setLocalScale(0.035, 0.035, 0.035);
+    this._iconLocation.setLocalPosition(0.5, 7.5, 4);
     this._iconLocation.setLocalEulerAngles(0, -90, 0);
     this._iconLocation.sprite.color = Util.randomColor();
     this.addChild(this._iconLocation);
@@ -82792,7 +82791,7 @@ class Horse extends Entity {
       type: SPRITETYPE_SIMPLE
     });
     this.iconCenter.setLocalScale(0.15, 0.15, 0);
-    this.iconCenter.setLocalPosition(0, 10, 0);
+    this.iconCenter.setLocalPosition(0, 12, 0);
     this.iconCenter.setLocalEulerAngles(0, 0, 0);
     this._iconLocation.addChild(this.iconCenter);
     this.text = new Entity();
@@ -82914,12 +82913,10 @@ class MainCamera extends Entity {
     this.addComponent("camera", {
       clearColor: new Color(1, 1, 1),
       farClip: 1e4,
-      nearClip: 0.05,
+      nearClip: 0.01,
       orthoHeight: 16,
       projection: PROJECTION_ORTHOGRAPHIC
     });
-    this.translate(0, 5, 10);
-    this.lookAt(0, 0, 0);
   }
 }
 const name = "map";
@@ -84040,7 +84037,7 @@ class PlayScreen extends UIScreen {
   }
   _initUser2() {
     let user2 = new Entity();
-    user2.setLocalPosition(-50, -150, 0);
+    user2.setLocalPosition(-50, -145, 0);
     user2.setLocalScale(1.2, 1.2, 1);
     this.userContainer.addChild(user2);
     this.tweenUser2 = Tween.createRotateTween(user2, new Vec3(0, 0, 5), {
@@ -84154,7 +84151,7 @@ class PlayScreen extends UIScreen {
   _initUser3() {
     let user3 = new Entity();
     user3.setLocalScale(1.2, 1.2, 1);
-    user3.setLocalPosition(500, -150, 0);
+    user3.setLocalPosition(500, -145, 0);
     this.userContainer.addChild(user3);
     this.tweenUser3 = Tween.createRotateTween(user3, new Vec3(0, 0, 5), {
       duration: 0.1,
@@ -84266,7 +84263,7 @@ class PlayScreen extends UIScreen {
   }
   _initUser1() {
     let user1 = new Entity();
-    user1.setLocalPosition(-600, -150, 0);
+    user1.setLocalPosition(-600, -145, 0);
     this.userContainer.addChild(user1);
     this.tweenUser1 = Tween.createRotateTween(user1, new Vec3(0, 0, 5), {
       duration: 0.1,
@@ -84759,6 +84756,7 @@ class PlayScene extends Scene2 {
     if (diff > 0) {
       this.playTime += diff;
       this.startLine.enabled = false;
+      this.cameraFollower.enable();
       this.startGame();
       this.isStarted = true;
       this.updateHorsePosition(this.raceConfig.stocks);
@@ -84974,12 +84972,19 @@ class PlayScene extends Scene2 {
         lerpSpeed: 5
       }
     });
+    this.cameraFollower.disable();
   }
   startGame() {
     this.horses.forEach((horse) => {
       horse.start();
     });
     SoundManager2.play("race", 0.5, true);
+    Tween.createCountTween({
+      duration: 1,
+      onComplete: () => {
+        this.cameraFollower.enable();
+      }
+    }).start();
   }
   updateHorsePosition(stocks) {
     if (this.startUpdatePricePositionZ === 0) {
