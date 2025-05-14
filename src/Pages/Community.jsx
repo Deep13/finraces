@@ -713,7 +713,7 @@ const Community = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-xl border dark:border-0 dark:bg-[#002763] dark:text-white font-semibold">
+              <div className="flex items-center justify-between py-3 rounded-xl border dark:border-0 dark:bg-[#002763] dark:text-white font-semibold">
                 {/* Sticky Navigation Tabs */}
                 <div className="sticky top-0 z-10 flex items-center justify-center gap-2 w-full ">
                   {tabs

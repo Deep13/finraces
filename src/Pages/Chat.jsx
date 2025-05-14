@@ -2,7 +2,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { RxMixerVertical } from "react-icons/rx";
 import { MdArrowBackIos } from "react-icons/md";
 import { FaPaperPlane } from "react-icons/fa";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import {
   getAllChats,
   getChats,
@@ -16,6 +16,9 @@ import { debounce } from "lodash";
 import { globalUrl } from "../Config";
 import { io } from "socket.io-client";
 import { useRef } from "react";
+import malePlaceholder from "../assets/images/manPlaceholder.jpg";
+import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
+import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 const Chat = () => {
   const userId = JSON.parse(
@@ -30,12 +33,23 @@ const Chat = () => {
   const [searchMode, setSearchMode] = useState(false); // Indicates whether we're searching globally or among friends
   const [chatUsers, setChatUsers] = useState([]);
   const [chatData, setChatData] = useState();
-  const [selectedUser, setSelectedUser] = useState(null); // Active chat
+  const [selectedUser, setSelectedUser] = useState(); // Active chat
   const [messages, setMessages] = useState([]); // Chat messages
   const chatContainerRef = useRef(null);
   const userDetails = JSON.parse(atob(localStorage.getItem("fin_userDetails")));
+  const { setShowLoginForm } = useContext(DarkModeContext);
+  const selectedRef = useRef(null);
 
   // const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    let token = localStorage.getItem("token");
+    // let ud=localStorage.getItem('fin_userDetails');
+
+    if (!token) {
+      setShowLoginForm(true);
+    }
+  }, []);
 
   useEffect(() => {
     getAllChats(
@@ -68,18 +82,18 @@ const Chat = () => {
 
   const handleNewMessage = (socketResponse) => {
     const { fromUserId, message } = socketResponse;
-    console.log(selectedUser);
+
     // Case 1: Message is from the user currently opened in chat
-    if (selectedUser?.id === fromUserId) {
+    if (selectedRef.current?.id === fromUserId) {
       const newMessage = {
         content: message.message,
         receiver: { isBot: false },
         sender: {
           id: fromUserId,
-          firstName: selectedUser.firstName,
-          lastName: selectedUser.lastName,
+          firstName: selectedRef.current.firstName,
+          lastName: selectedRef.current.lastName,
           isBot: false,
-          gender: selectedUser.gender,
+          gender: selectedRef.current.gender,
         },
         id: crypto.randomUUID(), // Generate a unique ID for the frontend
         createdAt: message.createdAt,
@@ -292,8 +306,13 @@ const Chat = () => {
   //   }
   // },[selectedUser])
 
+  useEffect(() => {
+    console.log("Selected user changed:", selectedUser);
+  }, [selectedUser]);
+
   const handleSelectUser = (user) => {
     setSelectedUser(user);
+    selectedRef.current = user;
     setFilteredFriends([]);
     setSearchQuery("");
 
@@ -469,8 +488,15 @@ const Chat = () => {
                 >
                   <img
                     className="rounded-full h-12 w-12"
-                    src={user?.user?.photo?.path}
-                  ></img>
+                    src={
+                      user?.user?.photo?.path
+                        ? user.user.photo.path
+                        : user?.user?.gender === "female"
+                        ? femalePlaceholder
+                        : malePlaceholder
+                    }
+                    alt={`${user.user.firstName} ${user.user.lastName}`}
+                  />
                   <div>
                     {user.user.firstName} {user.user.lastName}
                   </div>
@@ -490,7 +516,13 @@ const Chat = () => {
             <div className="flex items-center gap-4 border-b border-gray-200 dark:border-[#00387E] pb-3 mb-2">
               <img
                 className="rounded-full h-10 w-10 object-cover"
-                src={selectedUser?.photo?.path}
+                src={
+                  selectedUser?.photo?.path
+                    ? selectedUser.photo.path
+                    : selectedUser?.gender === "female"
+                    ? femalePlaceholder
+                    : malePlaceholder
+                }
                 alt="User"
               />
               <span className="font-semibold text-lg">
@@ -534,6 +566,14 @@ const Chat = () => {
               placeholder="Type message here..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault(); // Prevent newline if shift not pressed
+                  console.log("Enter pressed: Submit action here");
+                  // You can call your submit function here
+                  handleSendMessage();
+                }
+              }}
             />
             <button
               className="ml-2 p-2 rounded-full bg-blue-500 text-white"
