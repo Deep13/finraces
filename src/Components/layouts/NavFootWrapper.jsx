@@ -92,10 +92,11 @@ const NavFootWrapper = () => {
       `;
     }
 
+    setShareModal(false);
     postCommunityPost("", finalContent, "", () => {
       setModalText("");
       setModalImg("");
-      setShareModal(false);
+
       navigate("/community");
     });
   };

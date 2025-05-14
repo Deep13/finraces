@@ -1097,13 +1097,18 @@ const RacePage = () => {
                         <div className="font-semibold font-poppins">
                           {raceDetails && (
                             <Countdown
-                              date={raceDetails && raceDetails["end_date"]}
-                              renderer={({ hours, minutes, seconds }) => {
+                              date={raceDetails["end_date"]}
+                              renderer={({ days, hours, minutes, seconds }) => {
                                 const formatTime = (time) =>
                                   String(time).padStart(2, "0");
-                                return `${formatTime(hours)}:${formatTime(
-                                  minutes
-                                )}:${formatTime(seconds)}`;
+
+                                return (
+                                  <span>
+                                    {days > 0 && `${formatTime(days)}:`}
+                                    {formatTime(hours)}:{formatTime(minutes)}:
+                                    {formatTime(seconds)}
+                                  </span>
+                                );
                               }}
                             />
                           )}
@@ -1147,7 +1152,7 @@ const RacePage = () => {
                                         </div> */}
                     {raceStatus === "finished" &&
                       rankList.some(
-                        (item) => item.user?.id === userDetails.id
+                        (item) => item.user?.id === userDetails
                       ) && (
                         <IoMdShare
                           className="text-[white] text-[30px] cursor-pointer mr-5"

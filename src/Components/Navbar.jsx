@@ -281,7 +281,7 @@ const Navbar = () => {
                           onClick={() => {
                             if (notification.type.split("-")[0] == "race") {
                               navigate(
-                                `/race/${notification.notification.payload.race_id}`
+                                `/race/${notification.notification.payload.race.id}`
                               );
                             }
                           }}
