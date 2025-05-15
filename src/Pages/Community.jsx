@@ -4,6 +4,7 @@ import Post from "../Components/Post";
 
 import malePlaceholder from "../assets/images/manPlaceholder.jpg";
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
+import { TiInfoLarge } from "react-icons/ti";
 import { BiMedal } from "react-icons/bi";
 import { CiImageOn } from "react-icons/ci";
 import { IoDocumentTextOutline } from "react-icons/io5";
@@ -585,6 +586,15 @@ const Community = () => {
                       className="rounded-xl px-4 py-3 resize-none max-h-[180px] notificationScrollbar bg-slate-200 dark:bg-[#001B51] text-white placeholder-gray-400 focus:outline-none "
                       placeholder="Start a post..."
                     />
+                    <div className="absolute top-0 right-1 group">
+                      <span className="inline-block text-[1rem] p-1 font-semibold w-4 h-4 rounded-full text-gray-500 text-center cursor-pointer">
+                        <TiInfoLarge />
+                      </span>
+                      <div className="absolute left-8 top-1/2 -translate-y-1/2 w-56 bg-gray-800 text-white text-xs rounded-lg px-3 py-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                        You can mention users with <b>@username</b> or stocks
+                        with <b>$stock</b> in your post.
+                      </div>
+                    </div>
 
                     {/* Actions (Media, Emoji, etc.) */}
                     <div className="flex items-center justify-evenly dark:text-white">

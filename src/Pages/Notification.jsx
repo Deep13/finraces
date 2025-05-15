@@ -8,7 +8,6 @@ import allNotification from "../assets/images/allNotifications.png";
 import raceNotification from "../assets/images/racing-flag.png";
 import requestNotification from "../assets/images/request.png";
 import inviteNotification from "../assets/images/invite.png";
-import { use } from "react";
 
 const Notification = () => {
   const [activeTab, setActiveTab] = useState("All");
@@ -75,15 +74,24 @@ const Notification = () => {
 
   // Function to filter notifications based on category
   const filterNotifications = (category) => {
+    const types = {
+      Race: [
+        "race-participants-status-started",
+        "race-participants-status-finished",
+      ],
+      Invite: ["race-invitation"],
+      Request: [],
+    };
+
     if (category === "All") {
       setFilteredNotifications(notifications);
-    } else {
-      console.log(category.toLowerCase());
-      const filtered = notifications.filter(
-        (notification) =>
-          notification?.type.split("-")[0] === category.toLowerCase()
+    } else if (types[category] && types[category].length > 0) {
+      const filtered = notifications.filter((notification) =>
+        types[category].includes(notification?.notification?.type)
       );
       setFilteredNotifications(filtered);
+    } else {
+      setFilteredNotifications([]);
     }
   };
 

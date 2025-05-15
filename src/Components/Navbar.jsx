@@ -279,7 +279,18 @@ const Navbar = () => {
                       return (
                         <div
                           onClick={() => {
-                            if (notification.type.split("-")[0] == "race") {
+                            if (
+                              notification.type ==
+                                "race-participants-status-started" ||
+                              notification.type ==
+                                "race-participants-status-finished"
+                            ) {
+                              navigate(
+                                `/race/${notification.notification.payload.race_id}`
+                              );
+                            } else if (
+                              notification.type === "race-invitation"
+                            ) {
                               navigate(
                                 `/race/${notification.notification.payload.race.id}`
                               );

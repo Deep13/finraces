@@ -597,43 +597,57 @@ const RacePage = () => {
     setModalText(
       `<p class="dark:text-white text-wrap">Check out my rankings in this race. <br/> <span class="race-card cursor-pointer hover:underline" data-id="${raceDetails?.id}">${raceDetails?.name}</span> <p/>`
     );
+    const maxUserSlots = Math.min(3, rankList?.length || 0);
+    const maxStockSlots = Math.min(3, stockRankList?.length || 0);
+
     setModalImg(`
-                <div class="w-full flex items-center cursor-pointer race-card" >
-                  <div class="rounded-[32px] w-[42rem] px-[2rem] py-[1.5rem] flex flex-col overflow-hidden cursor-pointer mt-[20px]">
-              
-                    <!-- Leaderboard Section -->
-                    <div class="w-full flex justify-center items-center mb-[10px] relative flex-col">
-                      <div class="flex justify-center items-start gap-[50px]">
-                        ${[0, 1, 2]
-                          .map((i) => {
-                            const user = rankList?.[i];
-                            const crown = [Crown_1, Crown_2, Crown_3][i];
-                            const userImg =
-                              user?.user_photo ||
-                              (user?.gender === "female"
-                                ? femalePlceholder
-                                : malePlceholder);
-                            const userName = user?.user_name || "";
-                            const stockIcon =
-                              stockRankList?.[i]?.stock_icon_url || "";
-                            return `
-                              <div class="flex flex-col items-center gap-10">
-                                <div style="position: relative;">
-                                  <img class="h-36 w-36 rounded-2xl" src="${userImg}" />
-                                  <img class="h-16 absolute -bottom-[12px] -left-[12px]" src="${crown}" />
-                                </div>
-                                <p class="text-base font-semibold dark:text-white">${userName}</p>
-                                <img class="rounded-xl w-28 h-28" src="${stockIcon}" />
-                              </div>
-                            `;
-                          })
-                          .join("")}
-                      </div>
-                    </div>
-              
+  <div class="w-full flex items-center cursor-pointer race-card">
+    <div class="rounded-[32px] w-[42rem] px-[2rem] py-[1.5rem] flex flex-col overflow-hidden cursor-pointer mt-[20px]">
+
+      <!-- Leaderboard Section -->
+      <div class="w-full flex justify-center items-center mb-[10px] relative flex-col">
+
+        <!-- User Row -->
+        <div class="flex justify-center items-start gap-[50px] mb-[30px]">
+          ${[...Array(maxUserSlots)]
+            .map((_, i) => {
+              const user = rankList[i];
+              const crown = [Crown_1, Crown_2, Crown_3][i];
+              const userImg =
+                user?.user_photo ||
+                (user?.gender === "female" ? femalePlceholder : malePlceholder);
+              const userName = user?.user_name || "";
+
+              return `
+                <div class="flex flex-col items-center gap-4">
+                  <div style="position: relative;">
+                    <img class="h-36 w-36 rounded-2xl" src="${userImg}" />
+                    <img class="h-16 absolute -bottom-[12px] -left-[12px]" src="${crown}" />
                   </div>
+                  <p class="text-base font-semibold dark:text-white">${userName}</p>
                 </div>
-              `);
+              `;
+            })
+            .join("")}
+        </div>
+
+        <!-- Stock Row -->
+        <div class="flex justify-center items-start gap-[50px]">
+          ${[...Array(maxStockSlots)]
+            .map((_, i) => {
+              const stockIcon = stockRankList[i]?.stock_icon_url || "";
+              return stockIcon
+                ? `<img class="rounded-xl w-28 h-28" src="${stockIcon}" />`
+                : "";
+            })
+            .join("")}
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+`);
   };
 
   <button className="px-4 py-2 rounded-md bg-blue-500 text-white mt-4 absolute text-4xl">
