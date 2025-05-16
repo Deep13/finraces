@@ -612,10 +612,16 @@ const RacePage = () => {
           ${[...Array(maxUserSlots)]
             .map((_, i) => {
               const user = rankList[i];
-              const crown = [Crown_1, Crown_2, Crown_3][i];
+              const crown = [
+                "https://fascinating-frangipane-ac3ff9.netlify.app/images/Crown_1.png",
+                "https://fascinating-frangipane-ac3ff9.netlify.app/images/Crown_2.png",
+                "https://fascinating-frangipane-ac3ff9.netlify.app/images/Crown_3.png",
+              ][i];
               const userImg =
                 user?.user_photo ||
-                (user?.gender === "female" ? femalePlceholder : malePlceholder);
+                (user?.gender === "female"
+                  ? "https://fascinating-frangipane-ac3ff9.netlify.app/images/womanPlaceholder.jpg"
+                  : "https://fascinating-frangipane-ac3ff9.netlify.app/images/manPlaceholder.jpg");
               const userName = user?.user_name || "";
 
               return `
@@ -1164,13 +1170,10 @@ const RacePage = () => {
                                                 </span>
                                             ))}
                                         </div> */}
-                    {raceStatus === "finished" &&
-                      rankList.some((item) => item.user_id === userDetails) && (
-                        <IoMdShare
-                          className="text-[white] text-[30px] cursor-pointer mr-5"
-                          onClick={handleShareClick}
-                        />
-                      )}
+                    <IoMdShare
+                      className="text-[white] text-[30px] cursor-pointer mr-5"
+                      onClick={handleShareClick}
+                    />
 
                     <HiInformationCircle
                       className="text-[white] text-[30px] cursor-pointer"

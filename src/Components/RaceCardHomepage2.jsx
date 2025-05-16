@@ -35,6 +35,15 @@ import Second from "../assets/images/stockRace/2nd.jpg";
 import Third from "../assets/images/stockRace/3rd.jpg";
 import Fourth from "../assets/images/stockRace/4th.jpg";
 import Fifth from "../assets/images/stockRace/5th.jpg";
+import Sixth from "../assets/images/stockRace/6th.png";
+import Seventh from "../assets/images/stockRace/7th.png";
+import Eightth from "../assets/images/stockRace/8th.png";
+import Ningth from "../assets/images/stockRace/9th.png";
+import Tenth from "../assets/images/stockRace/10th.png";
+
+import rank1 from "../assets/images/stockRace/rank1.png";
+import rank2 from "../assets/images/stockRace/rank2.png";
+import rank3 from "../assets/images/stockRace/rank3.png";
 
 const rankImages = {
   1: First,
@@ -42,9 +51,14 @@ const rankImages = {
   3: Third,
   4: Fourth,
   5: Fifth,
+  6: Sixth,
+  7: Seventh,
+  8: Eightth,
+  9: Ningth,
+  10: Tenth,
 };
 
-const RaceCardHomepage = ({
+const RaceCardHomepage2 = ({
   raceId = "54asdffasaFSf",
   raceName = "Abstrace Race",
   end_date,
@@ -188,7 +202,7 @@ const RaceCardHomepage = ({
     // getStocksDataForRace(raceId, (data) => {
     //     setStocksDataForRace(data)
     // })
-    setLoading(true);
+    // setLoading(true);
     fetchRaceDataDetailed(raceId, (res) => {
       console.log("racedata detailed:", res);
       const barColors = [
@@ -533,7 +547,7 @@ const RaceCardHomepage = ({
                 </div> */}
 
             <div className="flex flex-col gap-10">
-              <div className="w-full flex justify-center items-center gap-[25px]">
+              {/* <div className="w-full flex justify-center items-center gap-[25px]">
                 <div style={{ position: "relative", flex: 1 }}>
                   {" "}
                   <img
@@ -576,45 +590,12 @@ const RaceCardHomepage = ({
                   <img className="ongoing-rank" src={Crown_3} />
                 </div>
 
-                {/* <div className='relative aspect-square p-[22px]'>
-                    <img src={person2} alt="silver medal position" />
-                    <img src={silver_crown} alt="1st position person" />
-                    <p >Nik</p>
-                </div> */}
+              </div> */}
 
-                {/* <div
-                        onClick={(e) => {
-                            e.stopPropagation()
-                            navigate(`/userprofile/$`)
-                        }}
-                        className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'> */}
-                {/* <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[0].user_photo ? rankList[0].user_photo.path : rankList[0].gender=='female'?femalePlaceholder:malePlaceholder} />
-                            <img className='w-full h-full object-cover w-[100px]' src={silver_crown} alt="1st position person" />
-                        </div>
-                        <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[0].user_name}</p>
-                    </div>
-
-                    <div className='relative aspect-square p-[10px] z-[5] flex justify-center item-center flex-col'>
-                        <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[1].user_photo ? rankList[1].user_photo.path : rankList[0].gender=='female'?femalePlaceholder:malePlaceholder} />
-                            <img className='w-full h-full object-cover w-[110px]' src={gold_crown} alt="1st position person" />
-                        </div>
-                        <p className='relative text-center font-semibold text-[12px] dark:text-white'>{rankList[1].user_name}</p>
-                    </div>
-
-                    <div className='relative aspect-square p-[10px] scale-90 z-[5] flex justify-center item-center flex-col'>
-                        <div className='relative flex justify-center items-center'>
-                            <img className='absolute z-[-1] w-[50%] rounded-[50%]' src={rankList[2].user_photo ? rankList[2].user_photo.path : rankList[0].gender=='female'?femalePlaceholder:malePlaceholder} />
-                            <img className='w-full h-full object-cover w-[100px]' src={bronze_corwn} alt="1st position person" />
-                        </div>
-                        <p className='relative  text-center font-semibold text-[12px] dark:text-white'>{rankList[2].user_name}</p>
-                    </div> */}
-
-                {/* absolute elements */}
-                {/* <div className='absolute right-0 top-1/2'>
-                        <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
-                    </div> */}
+              <div className="w-full flex justify-center items-center gap-[25px]">
+                <img src={rank1} alt="1st place" />
+                <img src={rank2} alt="2nd place" />
+                <img src={rank3} alt="3rd place" />
               </div>
               <div
                 style={{ backgroundImage: `url(${Bg})` }}
@@ -622,7 +603,6 @@ const RaceCardHomepage = ({
               >
                 {stockRankList &&
                   [...stockRankList]
-                    .slice(0, 5)
                     .reverse() // so 5th left -> 1st right
                     .map((stock, index, arr) => (
                       <React.Fragment key={index}>
@@ -680,4 +660,4 @@ const RaceCardHomepage = ({
   );
 };
 
-export default RaceCardHomepage;
+export default RaceCardHomepage2;
