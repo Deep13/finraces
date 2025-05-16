@@ -24,19 +24,28 @@ iframe {
   fill: #ffffff !important;
 }
 .rdp-range_middle {
-  background-color: #1500ff !important;
+  background-color: #3c79ff !important;
 }
 
 .rdp-range_start {
-  background: #1500ff !important;
+  background: #3c79ff !important;
   border-radius: 30px 0px 0px 30px !important;
 }
 .rdp-range_end {
-  background: #1500ff !important;
+  background: #3c79ff !important;
   border-radius: 0px 30px 30px 0px !important;
 }
 
 .rdp-range_start.rdp-range_end {
-  background: #1500ff !important;
+  background: #3c79ff !important;
   border-radius: 30px 30px 30px 30px !important;
+}
+.rdp-range_start .rdp-day_button {
+  background-color: #3c79ff !important;
+  border: 0px !important;
+}
+
+.rdp-range_end .rdp-day_button {
+  background-color: #3c79ff !important;
+  border: 0px !important;
 }
