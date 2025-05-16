@@ -621,7 +621,7 @@ const RacePage = () => {
               return `
                 <div class="flex flex-col items-center gap-4">
                   <div style="position: relative;">
-                    <img class="h-36 w-36 rounded-2xl" src="${userImg}" />
+                    <img class="h-36 w-36 rounded-2xl aspect-square" src="${userImg}" />
                     <img class="h-16 absolute -bottom-[12px] -left-[12px]" src="${crown}" />
                   </div>
                   <p class="text-base font-semibold dark:text-white">${userName}</p>
@@ -1165,9 +1165,7 @@ const RacePage = () => {
                                             ))}
                                         </div> */}
                     {raceStatus === "finished" &&
-                      rankList.some(
-                        (item) => item.user?.id === userDetails
-                      ) && (
+                      rankList.some((item) => item.user_id === userDetails) && (
                         <IoMdShare
                           className="text-[white] text-[30px] cursor-pointer mr-5"
                           onClick={handleShareClick}
