@@ -357,7 +357,7 @@ const RaceCardHomepage2 = ({
           const relativePosition =
             ((data.data["stocks"].length - stock.rank) *
               (data.data["stocks"].length * 10)) /
-              data.data["stocks"].length +
+            data.data["stocks"].length +
             elapsedTime; // here 5 is total no. of stocks  *10 is not required here
           newPosArr.push(relativePosition);
         });
@@ -593,9 +593,9 @@ const RaceCardHomepage2 = ({
               </div> */}
 
               <div className="w-full flex justify-center items-center gap-[25px]">
-                <img src={rank1} alt="1st place" />
-                <img src={rank2} alt="2nd place" />
-                <img src={rank3} alt="3rd place" />
+                <img style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }} src={rank1} alt="1st place" />
+                <img style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }} src={rank2} alt="2nd place" />
+                <img style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }} src={rank3} alt="3rd place" />
               </div>
               <div
                 style={{ backgroundImage: `url(${Bg})` }}

@@ -37,20 +37,10 @@ const OngoingRaces = () => {
         Ongoing Races
       </h2>
       <div className="w-full gap-[1.4rem] grid grid-cols-1 mb-5">
-        <RaceCardHomepage2
-          start_Date={"2025-05-15T15:38:06.558Z"}
-          end_date={"2025-07-19T14:00:00.558Z"}
-          raceName={"Super's Test Triumph 1747323476558"}
-          raceId={"f3e1242f-6216-4f4a-a6f8-d56ea728bd8c"}
-          key={13}
-          onRaceFinished={() => setRaceList(console.log("finished"))}
-        />
-      </div>
-      <div className="w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2">
         {raceList.length > 0 &&
-          raceList.slice(0, 4).map((curr, index) => {
+          raceList.slice(0, 1).map((curr, index) => {
             return (
-              <RaceCardHomepage
+              <RaceCardHomepage2
                 start_Date={curr.start_date}
                 end_date={curr.end_date}
                 raceName={curr.name}
@@ -60,6 +50,26 @@ const OngoingRaces = () => {
                   setRaceList([
                     ...raceList.slice(0, index),
                     ...raceList.slice(index + 1),
+                  ])
+                }
+              />
+            );
+          })}
+      </div>
+      <div className="w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2">
+        {raceList.length > 0 &&
+          raceList.slice(1, 4).map((curr, index) => {
+            return (
+              <RaceCardHomepage
+                start_Date={curr.start_date}
+                end_date={curr.end_date}
+                raceName={curr.name}
+                raceId={curr.id}
+                key={index + 1}
+                onRaceFinished={() =>
+                  setRaceList([
+                    ...raceList.slice(1, index + 1),
+                    ...raceList.slice(index + 2),
                   ])
                 }
               />

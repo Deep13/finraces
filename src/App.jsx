@@ -36,10 +36,14 @@ import Blogs from './Pages/Blogs'
 import WriteBlog from './Pages/WriteBlog'
 import AllBlogs from './Pages/AllBlogs'
 import SingleBlog from './Pages/SingleBlog'
+import ReactGA from "react-ga4";
 
 function App() {
 
-
+  useEffect(() => {
+    ReactGA.initialize("G-ZHYKD0HBSQ");
+    ReactGA.send("pageview");
+  }, []);
 
   return (
     <>
@@ -57,13 +61,13 @@ function App() {
                   <Route path="/community" element={<Community />} />
                   <Route path="/screener" element={<Screener />} />
                   <Route path="/watchlist" element={<Watchlistpage />} />
-                  <Route path="/community" element={<Community/>} />
-                  <Route path="/post/:post_id" element={<PostDetailed/>} />
+                  <Route path="/community" element={<Community />} />
+                  <Route path="/post/:post_id" element={<PostDetailed />} />
                   <Route path="/userprofile/:user_id" element={<IndiUserProfile />} />
-                  <Route path="/policy" element={<Policy/>}/>
-                  <Route path="/terms" element={<Terms/>}/>
-                  <Route path='/blogs' element={<Blogs/>}/>
-                  <Route path="/how_to_use_finraces" element={<HowToUseFinraces/>}/>
+                  <Route path="/policy" element={<Policy />} />
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path='/blogs' element={<Blogs />} />
+                  <Route path="/how_to_use_finraces" element={<HowToUseFinraces />} />
 
                   <Route path="/notifications" element={<Notification />} />
                   <Route path="/chat" element={<Chat />} />
