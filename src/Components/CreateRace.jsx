@@ -252,7 +252,7 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
 
   const handleDurationSelect = (hours) => {
     const now = new Date();
-    now.setMinutes(now.getMinutes() + 1);
+    now.setMinutes(now.getMinutes() + 5);
     const end = new Date(now.getTime() + hours * 60 * 60 * 1000);
 
     // Format date as yyyy-mm-dd and time as HH:MM (24hr)
@@ -408,6 +408,18 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
                   Start time is Required
                 </p>
               )}
+              {raceDetails.start_date &&
+                raceDetails.start_time &&
+                new Date(
+                  `${raceDetails.start_date}T${raceDetails.start_time}`
+                ) < new Date() && (
+                  <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1">
+                    <span>
+                      <BiError size={15} />
+                    </span>
+                    Start time cannot be in the past
+                  </p>
+                )}
             </div>
           </div>
 
