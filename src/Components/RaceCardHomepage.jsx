@@ -616,56 +616,12 @@ const RaceCardHomepage = ({
                         <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
                     </div> */}
               </div>
-              <div
-                style={{ backgroundImage: `url(${Bg})` }}
-                className="w-full min-h-[200px] flex justify-center items-center gap-4 px-4 py-6 bg-[#001b3a] rounded-xl bg-cover bg-center"
-              >
-                {stockRankList &&
-                  [...stockRankList]
-                    .slice(0, 5)
-                    .reverse() // so 5th left -> 1st right
-                    .map((stock, index, arr) => (
-                      <React.Fragment key={index}>
-                        <div className="flex flex-col items-center text-white relative">
-                          <div className="flex gap-5 items-center">
-                            {/* Heading image (e.g., 5th, 4th...) */}
-                            <img
-                              src={rankImages[arr.length - index]}
-                              alt={`${arr.length - index} place`}
-                              className="mb-2 -mt-[15px] w-[60px]"
-                            />
 
-                            {/* Arrow between items (not after last) */}
-                            {index !== arr.length - 1 && (
-                              <img
-                                src={Arrow}
-                                alt="arrow"
-                                className="w-5 h-5 mx-2 -mt-[25px]"
-                              />
-                            )}
-                          </div>
-
-                          {/* Stock ticker name */}
-                          <div className="text-sm font-bold mb-1 mt-10">
-                            {stock?.stock_ticker}
-                          </div>
-
-                          {/* Stock icon */}
-                          <img
-                            src={stock?.stock_icon_url}
-                            alt={stock?.stock_ticker}
-                            className="w-[70px] h-[70px] object-contain"
-                          />
-                        </div>
-                      </React.Fragment>
-                    ))}
-              </div>
-
-              {/* <iframe
+              <iframe
                 className="flex-1 w-full h-[400px]"
                 ref={iframeRef}
-                src={`/raceCard/index.html?raceId=${raceId}`}
-              /> */}
+                src={`/game/index.html?raceId=${raceId}`}
+              />
             </div>
           </div>
           <ProgressDemo progress={progress} />

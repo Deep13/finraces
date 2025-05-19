@@ -2687,34 +2687,6 @@ export const getBlogDetailed = async (blogId, onSuccess, onError) => {
   }
 };
 
-export const getFollowees = async (onSuccess, onError) => {
-  let token = localStorage.getItem("token");
-  let url = `${GlobalURL}/api/v1/follows/followees`;
-
-  try {
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json", // ✅ VERY IMPORTANT
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Server error:", errorText);
-      throw new Error(
-        `Failed to post: ${response.status} ${response.statusText}`
-      );
-    }
-
-    const data = await response.json();
-    onSuccess(data);
-  } catch (error) {
-    onError(error);
-  }
-};
-
 export const followUser = async (followeeId, onSuccess, onError) => {
   let token = localStorage.getItem("token");
   let url = `${GlobalURL}/api/v1/follows`;
@@ -2924,10 +2896,14 @@ export const unfollowUser = async (userId, onSuccess, onError) => {
     onError(error);
   }
 };
-export const getFollowers = async (onSuccess, onError) => {
+export const getFollowers = async (onSuccess, onError, userId) => {
   try {
     let token = localStorage.getItem("token");
-    const response = await fetch(`${GlobalURL}/api/v1/follows/followers`, {
+    let url = `${GlobalURL}/api/v1/follows/followers`;
+    if (userId) {
+      url += `?userId=${userId}`;
+    }
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json", // ✅ VERY IMPORTANT
@@ -2950,10 +2926,43 @@ export const getFollowers = async (onSuccess, onError) => {
   }
 };
 
-export const getFollowing = async (onSuccess, onError) => {
+export const getFollowing = async (onSuccess, onError, userId) => {
   try {
     let token = localStorage.getItem("token");
-    const response = await fetch(`${GlobalURL}/api/v1/follows/followees`, {
+    let url = `${GlobalURL}/api/v1/follows/followees`;
+
+    if (userId) {
+      url += `?userId=${userId}`;
+    }
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json", // ✅ VERY IMPORTANT
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Server error:", errorText);
+      throw new Error(
+        `Failed to post: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};
+
+export const getFollowees = async (onSuccess, onError) => {
+  try {
+    let token = localStorage.getItem("token");
+    let url = `${GlobalURL}/api/v1/follows/followees`;
+
+    const response = await fetch(url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json", // ✅ VERY IMPORTANT

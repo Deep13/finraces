@@ -357,7 +357,7 @@ const RaceCardHomepage2 = ({
           const relativePosition =
             ((data.data["stocks"].length - stock.rank) *
               (data.data["stocks"].length * 10)) /
-            data.data["stocks"].length +
+              data.data["stocks"].length +
             elapsedTime; // here 5 is total no. of stocks  *10 is not required here
           newPosArr.push(relativePosition);
         });
@@ -593,53 +593,27 @@ const RaceCardHomepage2 = ({
               </div> */}
 
               <div className="w-full flex justify-center items-center gap-[25px]">
-                <img style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }} src={rank1} alt="1st place" />
-                <img style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }} src={rank2} alt="2nd place" />
-                <img style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }} src={rank3} alt="3rd place" />
+                <img
+                  style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
+                  src={rank1}
+                  alt="1st place"
+                />
+                <img
+                  style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
+                  src={rank2}
+                  alt="2nd place"
+                />
+                <img
+                  style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
+                  src={rank3}
+                  alt="3rd place"
+                />
               </div>
-              <div
-                style={{ backgroundImage: `url(${Bg})` }}
-                className="w-full min-h-[200px] flex justify-center items-center gap-4 px-4 py-6 bg-[#001b3a] rounded-xl bg-cover bg-center"
-              >
-                {stockRankList &&
-                  [...stockRankList]
-                    .reverse() // so 5th left -> 1st right
-                    .map((stock, index, arr) => (
-                      <React.Fragment key={index}>
-                        <div className="flex flex-col items-center text-white relative">
-                          <div className="flex gap-5 items-center">
-                            {/* Heading image (e.g., 5th, 4th...) */}
-                            <img
-                              src={rankImages[arr.length - index]}
-                              alt={`${arr.length - index} place`}
-                              className="mb-2 -mt-[15px] w-[60px]"
-                            />
-
-                            {/* Arrow between items (not after last) */}
-                            {index !== arr.length - 1 && (
-                              <img
-                                src={Arrow}
-                                alt="arrow"
-                                className="w-5 h-5 mx-2 -mt-[25px]"
-                              />
-                            )}
-                          </div>
-
-                          {/* Stock ticker name */}
-                          <div className="text-sm font-bold mb-1 mt-10">
-                            {stock?.stock_ticker}
-                          </div>
-
-                          {/* Stock icon */}
-                          <img
-                            src={stock?.stock_icon_url}
-                            alt={stock?.stock_ticker}
-                            className="w-[70px] h-[70px] object-contain"
-                          />
-                        </div>
-                      </React.Fragment>
-                    ))}
-              </div>
+              <iframe
+                className="flex-1 w-full h-[500px]"
+                ref={iframeRef}
+                src={`/game/index.html?raceId=${raceId}`}
+              />
 
               {/* <iframe
                 className="flex-1 w-full h-[400px]"
