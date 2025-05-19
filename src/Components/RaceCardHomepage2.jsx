@@ -593,24 +593,28 @@ const RaceCardHomepage2 = ({
               </div> */}
 
               <div className="w-full flex justify-center items-center gap-[25px]">
-                <img
+                {/* <img
                   style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
                   src={rank1}
                   alt="1st place"
-                />
-                <img
+                /> */}
+
+                <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#c37c2a] to-[#c69607] rounded-xl"></div>
+                <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#0a78b6] to-[#094db4] rounded-xl"></div>
+                <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#c84e45] to-[#ae241a] rounded-xl"></div>
+                {/* <img
                   style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
                   src={rank2}
                   alt="2nd place"
-                />
-                <img
+                /> */}
+                {/* <img
                   style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
                   src={rank3}
                   alt="3rd place"
-                />
+                /> */}
               </div>
               <iframe
-                className="flex-1 w-full h-[500px]"
+                className="w-full min-h-[170px]"
                 ref={iframeRef}
                 src={`/game/index.html?raceId=${raceId}`}
               />
@@ -622,7 +626,7 @@ const RaceCardHomepage2 = ({
               /> */}
             </div>
           </div>
-          <ProgressDemo progress={progress} />
+          {/* <ProgressDemo progress={progress} /> */}
 
           {/* {data.labels.length > 0 && (
                         // <Bar data={data} options={options} plugins={[customPlugin]} />

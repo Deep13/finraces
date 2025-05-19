@@ -624,7 +624,7 @@ const RaceCardHomepage = ({
               />
             </div>
           </div>
-          <ProgressDemo progress={progress} />
+          {/* <ProgressDemo progress={progress} /> */}
 
           {/* {data.labels.length > 0 && (
                         // <Bar data={data} options={options} plugins={[customPlugin]} />
