@@ -16,7 +16,7 @@ import {
   getUsersBlockStatus,
   getFollowers,
   getFollowing,
-  getFriends,
+  getFriendsCount,
 } from "../Utils/api";
 import NoProfilePopup from "../Components/NoProfilePopup";
 import friends from "../assets/icons/friends_Icon.png";
@@ -110,9 +110,10 @@ const IndiUserProfile = () => {
         setBlockId(data.id);
       });
 
-    getFriends(
+    getFriendsCount(
+      user_id,
       (data) => {
-        setFriendsCount(data.total);
+        setFriendsCount(data);
       },
       (error) => {
         console.log(error);

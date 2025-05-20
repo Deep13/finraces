@@ -67,7 +67,7 @@ import RacePriceChart from "../Components/RacePriceChart";
 import BumpChart from "../Components/BumpChart";
 import JoinRace from "../Components/JoinRace";
 
-import html2canvas from "html2canvas";
+import { useSocket } from "../Contexts/SocketProvider";
 import { useCommunity } from "../Contexts/CommunityProvider";
 
 // Register Chart.js components
@@ -788,42 +788,44 @@ const RacePage = () => {
 
   // can you try this
 
+  const socket = useSocket();
+
   useEffect(() => {
     // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
-    const socket = io("https://www.missionatal.com", {
-      reconnection: true, // Automatically reconnect if the connection is lost
-      reconnectionAttempts: Infinity,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      transports: ["websocket"], // Use WebSocket transport
-    });
+    if (!socket) return;
+
+    const joinData = {
+      raceId: race_id,
+    };
+
+    socket.emit("watch-race", joinData);
 
     // Event listeners for the connection
-    socket.on("connect", () => {
-      // console.log('Connected to the server with id:', socket.id);
+    // socket.on("connect", () => {
+    //   // console.log('Connected to the server with id:', socket.id);
 
-      const joinData = {
-        raceId: race_id,
-      };
+    //   const joinData = {
+    //     raceId: race_id,
+    //   };
 
-      socket.emit("watch-race", joinData);
-    });
+    //   socket.emit("watch-race", joinData);
+    // });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected from the server");
-    });
+    // socket.on("disconnect", () => {
+    //   console.log("Disconnected from the server");
+    // });
 
-    socket.on("reconnect_attempt", () => {
-      console.log("Attempting to reconnect...");
-    });
+    // socket.on("reconnect_attempt", () => {
+    //   console.log("Attempting to reconnect...");
+    // });
 
-    socket.on("reconnect", (attemptNumber) => {
-      console.log("Reconnected to the server after", attemptNumber, "attempts");
-    });
+    // socket.on("reconnect", (attemptNumber) => {
+    //   console.log("Reconnected to the server after", attemptNumber, "attempts");
+    // });
 
-    socket.on("reconnect_failed", () => {
-      console.log("Failed to reconnect to the server");
-    });
+    // socket.on("reconnect_failed", () => {
+    //   console.log("Failed to reconnect to the server");
+    // });
 
     // Listening for any custom event (for example, a message event)
     socket.on("message", (data) => {

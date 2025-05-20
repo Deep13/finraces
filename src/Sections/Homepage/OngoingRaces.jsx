@@ -38,7 +38,7 @@ const OngoingRaces = () => {
       </h2>
       <div className="w-full gap-[1.4rem] grid grid-cols-1 mb-5">
         {raceList.length > 0 &&
-          raceList.slice(0, 1).map((curr, index) => {
+          raceList.slice(0, 2).map((curr, index) => {
             return (
               <RaceCardHomepage2
                 start_Date={curr.start_date}
@@ -52,11 +52,12 @@ const OngoingRaces = () => {
                     ...raceList.slice(index + 1),
                   ])
                 }
+                participants={curr.participants}
               />
             );
           })}
       </div>
-      <div className="w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2">
+      {/* <div className="w-full gap-[1.4rem] grid grid-cols-1 md:grid-cols-2">
         {raceList.length > 0 &&
           raceList.slice(1, 4).map((curr, index) => {
             return (
@@ -75,7 +76,7 @@ const OngoingRaces = () => {
               />
             );
           })}
-      </div>
+      </div> */}
       {raceList.length === 0 && (
         <p className="dark:text-white text-center">
           There are no recent ongoing races

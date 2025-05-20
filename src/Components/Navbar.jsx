@@ -25,55 +25,26 @@ import malePlaceholder from "../assets/images/manPlaceholder.jpg";
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
 import { getUser } from "../Utils/api";
 import io from "socket.io-client";
+import { useSocket } from "../Contexts/SocketProvider";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
+  const socket = useSocket();
+
   useEffect(() => {
-    let ud = localStorage.getItem("fin_userDetails");
-    let userDetails = ud && JSON.parse(atob(ud));
-    let { userId } = userDetails || {}; // Handle possible null values
-    let token = localStorage.getItem("token");
+    if (!socket) return;
 
-    if (!userId || !token) {
-      //   console.error("User ID or token is missing");
-      return; // Stop execution if userId or token is missing
-    }
-
-    const socket = io("https://www.missionatal.com", {
-      auth: {
-        token: token,
-      },
-      query: { userId },
-      reconnection: true,
-      reconnectionAttempts: Infinity,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      transports: ["websocket"],
-    });
-
-    socket.on("connect", () => {
-      console.log("✅ Connected to WebSocket Server");
-    });
-
-    socket.on("connect_error", (err) => {
-      console.error("❌ Connection Error:", err);
-    });
-
-    socket.on("disconnect", (reason) => {
-      console.warn("⚠️ Disconnected from server:", reason);
-      setNotifications([]);
-    });
-
-    socket.on("notifications", (data) => {
-      setNotifications((prevNotifications) => [...prevNotifications, data]);
-      //   console.log("Notification from server:", data);
-    });
-
-    // Cleanup socket connection on component unmount
-    return () => {
-      socket.disconnect();
+    const handler = (data) => {
+      setNotifications((prev) => [...prev, data]);
     };
-  }, []); // ✅ Empty dependency array means this runs only once when the component mounts
+
+    socket.on("notifications", handler);
+
+    // Cleanup to avoid duplicate listeners
+    return () => {
+      socket.off("notifications", handler);
+    };
+  }, [socket]);
 
   const {
     darkModeEnabled,

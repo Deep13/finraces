@@ -19,6 +19,7 @@ import { useRef } from "react";
 import malePlaceholder from "../assets/images/manPlaceholder.jpg";
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
+import { useSocket } from "../Contexts/SocketProvider";
 
 const Chat = () => {
   const userId = JSON.parse(
@@ -40,6 +41,7 @@ const Chat = () => {
   const { setShowLoginForm } = useContext(DarkModeContext);
   const selectedRef = useRef(null);
 
+  const socket = useSocket();
   // const [socket, setSocket] = useState(null);
 
   useEffect(() => {
@@ -170,52 +172,18 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    if (!userId || !globalUrl) return;
+    if (!socket) return;
 
-    console.log("Connecting to WebSocket server", globalUrl);
-    const token = localStorage.getItem("token");
-    const newSocket = io(globalUrl, {
-      auth: {
-        token: token, // Pass the token for authentication
-      },
-      query: { userId },
-      reconnection: true,
-      reconnectionAttempts: Infinity,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      transports: ["websocket"],
-    });
-
-    newSocket.on("connect", () => {
-      console.log("Connected to server with socket ID:", newSocket.id);
-    });
-
-    newSocket.on("disconnect", () => {
-      console.log("Disconnected from server");
-    });
-
-    newSocket.on("reconnect_attempt", () => {
-      console.log("Attempting to reconnect...");
-    });
-
-    newSocket.on("reconnect", (attemptNumber) => {
-      console.log("Reconnected after", attemptNumber, "attempts");
-    });
-
-    newSocket.on("reconnect_failed", () => {
-      console.log("Failed to reconnect");
-    });
-
-    newSocket.on("receive-chat-message", (data) => {
+    socket.on("receive-chat-message", (data) => {
       console.log("New message received:", data);
 
       handleNewMessage(data);
     });
 
     return () => {
-      newSocket.disconnect();
+      socket.off("receive-chat-message");
     };
-  }, []);
+  }, [socket]);
 
   // Debounced global search function
   const performSearch = useCallback(
