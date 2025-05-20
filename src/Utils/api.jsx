@@ -524,7 +524,12 @@ export const updateNotification = async (
       },
       body: JSON.stringify(payload),
     });
-    console.log(response);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    // console.log("API Response:", data);
+    onSuccess();
   } catch (error) {
     onError(error);
   }

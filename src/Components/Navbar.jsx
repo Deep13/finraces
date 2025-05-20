@@ -23,9 +23,10 @@ import SimpleSwitch from "./Switch";
 import avatarplaceholder from "../assets/images/avatarplaceholder.png";
 import malePlaceholder from "../assets/images/manPlaceholder.jpg";
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
-import { getUser } from "../Utils/api";
+import { getUser, updateNotification } from "../Utils/api";
 import io from "socket.io-client";
 import { useSocket } from "../Contexts/SocketProvider";
+import { set } from "lodash";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
@@ -137,6 +138,32 @@ const Navbar = () => {
   //     })
   //     setUnseenNotifications(unseen)
   // },[notifications])
+  const [flag, setFlag] = useState(false);
+
+  useEffect(() => {
+    if (flag && !notificationToggle) {
+      setFlag(false);
+      setUnseenNotifications([]);
+    }
+  }, [flag, notificationToggle]);
+
+  useEffect(() => {
+    if (notificationToggle) {
+      const unseen = notifications.filter((n) => !n.notification.is_read);
+      const notificationIds = unseen.map((n) => n.notification.id);
+
+      updateNotification(
+        notificationIds,
+        () => {
+          console.log("Notification updated:");
+          setFlag(true);
+        },
+        (error) => {
+          console.error("Error updating notifications:", error);
+        }
+      );
+    }
+  }, [notificationToggle]);
 
   return (
     <>
@@ -230,7 +257,7 @@ const Navbar = () => {
                 color={darkModeEnabled ? "white" : "black"}
                 size={18}
               />
-              {unseenNotifications.length > 0 && (
+              {unseenNotifications.length > 0 && !notificationToggle && (
                 <span className="absolute -top-1 -right-1 bg-red-600 text-white text-s font-bold px-2 rounded-full">
                   {unseenNotifications.length}
                 </span>
@@ -245,7 +272,6 @@ const Navbar = () => {
                     transition={{ duration: 0.2, ease: "easeInOut" }}
                     className={`absolute top-14 -right-4 p-3 dark:bg-[#164286] shalxl dark:shadow-none bg-white w-[23.3rem] rounded-xl flex flex-col gap-3 items-center`}
                   >
-                    {/* place notifications here  */}
                     {unseenNotifications.slice(0, 5).map((notification) => {
                       return (
                         <div

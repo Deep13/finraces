@@ -613,15 +613,15 @@ const RacePage = () => {
             .map((_, i) => {
               const user = rankList[i];
               const crown = [
-                "https://fascinating-frangipane-ac3ff9.netlify.app/images/Crown_1.png",
-                "https://fascinating-frangipane-ac3ff9.netlify.app/images/Crown_2.png",
-                "https://fascinating-frangipane-ac3ff9.netlify.app/images/Crown_3.png",
+                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_1.png",
+                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_2.png",
+                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_3.png",
               ][i];
               const userImg =
                 user?.user_photo ||
                 (user?.gender === "female"
-                  ? "https://fascinating-frangipane-ac3ff9.netlify.app/images/womanPlaceholder.jpg"
-                  : "https://fascinating-frangipane-ac3ff9.netlify.app/images/manPlaceholder.jpg");
+                  ? "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/womanPlaceholder.jpg"
+                  : "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/manPlaceholder.jpg");
               const userName = user?.user_name || "";
 
               return `
