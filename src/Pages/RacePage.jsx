@@ -144,6 +144,128 @@ const RacePage = () => {
     console.log("status", raceStatus);
   }, [raceStatus]);
 
+  const socket = useSocket();
+
+  useEffect(() => {
+    // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
+    if (!socket) return;
+
+    const joinData = {
+      raceId: race_id,
+    };
+
+    socket.emit("watch-race", joinData);
+
+    // Event listeners for the connection
+    // socket.on("connect", () => {
+    //   // console.log('Connected to the server with id:', socket.id);
+
+    //   const joinData = {
+    //     raceId: race_id,
+    //   };
+
+    //   socket.emit("watch-race", joinData);
+    // });
+
+    // socket.on("disconnect", () => {
+    //   console.log("Disconnected from the server");
+    // });
+
+    // socket.on("reconnect_attempt", () => {
+    //   console.log("Attempting to reconnect...");
+    // });
+
+    // socket.on("reconnect", (attemptNumber) => {
+    //   console.log("Reconnected to the server after", attemptNumber, "attempts");
+    // });
+
+    // socket.on("reconnect_failed", () => {
+    //   console.log("Failed to reconnect to the server");
+    // });
+
+    // Listening for any custom event (for example, a message event)
+    socket.on("message", (data) => {
+      // console.log('Message from server:', JSON.stringify(data, null, 2));
+      if (data.event === "user-joined") {
+        console.log(data.data.firstName);
+        if (data.data.firstName) {
+          // setJoinedUsers(previous => ([...previous, data.data.firstName]))
+          const objectAlreadyThere = joinedUsersRef.current.filter(
+            (curr) => curr.id === data.data.id
+          );
+
+          if (objectAlreadyThere.length === 0) {
+            joinedUsersRef.current = [...joinedUsersRef.current, data.data];
+            setRefresh("1");
+          }
+        }
+        // setMessage(prev => [...prev, ${data.data.firstName} ${data.data.lastName} has joined the race.])
+      }
+      if (data.event === "race-data") {
+        setRaceResults(data.data);
+        console.log("race data socket", data.data);
+        console.log("check", transformSocketData(data.data));
+        // dataTransform(data.data)
+        if (data?.data?.status) {
+          setRaceStatus(data.data.status);
+        } // somehow this is not reflecting
+        setIsLoadingRaceTile(false);
+        setRankList(
+          getParticipantsWithRanks(
+            data.data["race_result"],
+            data.data["participantsWithNoRank"]
+          )
+        );
+        setStockRankList(data.data["stocks"]);
+        flag.current += 1;
+        // console.log('this Race data', data)
+
+        // code by deepak
+        let elapsedTime = calculateDurationInSeconds(
+          data.data.start_date,
+          new Date().toISOString()
+        );
+        let newPosArr = [];
+        sortAlphabetically2(data.data["stocks"])?.forEach((stock) => {
+          const relativePosition =
+            ((data.data["stocks"].length - stock.rank) *
+              (data.data["stocks"].length * 10)) /
+              data.data["stocks"].length +
+            elapsedTime; // here 5 is total no. of stocks  *10 is not required here
+          newPosArr.push(relativePosition);
+        });
+        // console.log('New Positions Array', newPosArr);
+        setData((prevData) => {
+          const newData = newPosArr;
+
+          return {
+            ...prevData,
+            datasets: [
+              {
+                ...prevData.datasets[0],
+                data: newData,
+              },
+            ],
+          };
+        });
+        // code by deepak
+      }
+    });
+
+    // Sending a message to the server
+    setTimeout(() => {
+      console.log("Sending message to server...");
+
+      socket.emit("events", { content: "Hello from client!" });
+    }, 2000);
+
+    // Cleanup the socket connection when the component unmounts
+    return () => {
+      if (socket) socket.disconnect();
+      console.log("Socket disconnected");
+    };
+  }, [race_id, socket]);
+
   // code by deepak
   const [data, setData] = useState({
     labels: [], // Initial labels
@@ -787,128 +909,6 @@ const RacePage = () => {
   };
 
   // can you try this
-
-  const socket = useSocket();
-
-  useEffect(() => {
-    // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
-    if (!socket) return;
-
-    const joinData = {
-      raceId: race_id,
-    };
-
-    socket.emit("watch-race", joinData);
-
-    // Event listeners for the connection
-    // socket.on("connect", () => {
-    //   // console.log('Connected to the server with id:', socket.id);
-
-    //   const joinData = {
-    //     raceId: race_id,
-    //   };
-
-    //   socket.emit("watch-race", joinData);
-    // });
-
-    // socket.on("disconnect", () => {
-    //   console.log("Disconnected from the server");
-    // });
-
-    // socket.on("reconnect_attempt", () => {
-    //   console.log("Attempting to reconnect...");
-    // });
-
-    // socket.on("reconnect", (attemptNumber) => {
-    //   console.log("Reconnected to the server after", attemptNumber, "attempts");
-    // });
-
-    // socket.on("reconnect_failed", () => {
-    //   console.log("Failed to reconnect to the server");
-    // });
-
-    // Listening for any custom event (for example, a message event)
-    socket.on("message", (data) => {
-      // console.log('Message from server:', JSON.stringify(data, null, 2));
-      if (data.event === "user-joined") {
-        console.log(data.data.firstName);
-        if (data.data.firstName) {
-          // setJoinedUsers(previous => ([...previous, data.data.firstName]))
-          const objectAlreadyThere = joinedUsersRef.current.filter(
-            (curr) => curr.id === data.data.id
-          );
-
-          if (objectAlreadyThere.length === 0) {
-            joinedUsersRef.current = [...joinedUsersRef.current, data.data];
-            setRefresh("1");
-          }
-        }
-        // setMessage(prev => [...prev, ${data.data.firstName} ${data.data.lastName} has joined the race.])
-      }
-      if (data.event === "race-data") {
-        setRaceResults(data.data);
-        console.log("race data socket", data.data);
-        console.log("check", transformSocketData(data.data));
-        // dataTransform(data.data)
-        if (data?.data?.status) {
-          setRaceStatus(data.data.status);
-        } // somehow this is not reflecting
-        setIsLoadingRaceTile(false);
-        setRankList(
-          getParticipantsWithRanks(
-            data.data["race_result"],
-            data.data["participantsWithNoRank"]
-          )
-        );
-        setStockRankList(data.data["stocks"]);
-        flag.current += 1;
-        // console.log('this Race data', data)
-
-        // code by deepak
-        let elapsedTime = calculateDurationInSeconds(
-          data.data.start_date,
-          new Date().toISOString()
-        );
-        let newPosArr = [];
-        sortAlphabetically2(data.data["stocks"])?.forEach((stock) => {
-          const relativePosition =
-            ((data.data["stocks"].length - stock.rank) *
-              (data.data["stocks"].length * 10)) /
-              data.data["stocks"].length +
-            elapsedTime; // here 5 is total no. of stocks  *10 is not required here
-          newPosArr.push(relativePosition);
-        });
-        // console.log('New Positions Array', newPosArr);
-        setData((prevData) => {
-          const newData = newPosArr;
-
-          return {
-            ...prevData,
-            datasets: [
-              {
-                ...prevData.datasets[0],
-                data: newData,
-              },
-            ],
-          };
-        });
-        // code by deepak
-      }
-    });
-
-    // Sending a message to the server
-    setTimeout(() => {
-      console.log("Sending message to server...");
-
-      socket.emit("events", { content: "Hello from client!" });
-    }, 2000);
-
-    // Cleanup the socket connection when the component unmounts
-    return () => {
-      if (socket) socket.disconnect();
-      console.log("Socket disconnected");
-    };
-  }, [race_id]);
 
   const findImageUrlForStock = (id) =>
     stocksDataForRace

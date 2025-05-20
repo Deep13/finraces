@@ -202,28 +202,28 @@ const RaceCardHomepage2 = ({
               </div> */}
 
               <div className="w-full flex justify-center items-center gap-[25px]">
-                {/* <img
+                <img
                   style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
                   src={rank1}
                   alt="1st place"
-                /> */}
+                />
 
-                <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#c37c2a] to-[#c69607] rounded-xl"></div>
+                {/* <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#c37c2a] to-[#c69607] rounded-xl"></div>
                 <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#0a78b6] to-[#094db4] rounded-xl"></div>
-                <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#c84e45] to-[#ae241a] rounded-xl"></div>
-                {/* <img
+                <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#c84e45] to-[#ae241a] rounded-xl"></div> */}
+                <img
                   style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
                   src={rank2}
                   alt="2nd place"
-                /> */}
-                {/* <img
+                />
+                <img
                   style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
                   src={rank3}
                   alt="3rd place"
-                /> */}
+                />
               </div>
               <iframe
-                className="w-full min-h-[170px]"
+                className="w-full min-h-[170px] h-full"
                 ref={iframeRef}
                 src={`/game/index.html?raceId=${raceId}`}
               />
