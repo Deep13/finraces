@@ -86,7 +86,7 @@ const RaceCardHomepage2 = ({
       {loading ? (
         <div
           onClick={() => navigate(`/race/${raceId}`)}
-          className="rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] items-center justify-center h-52 w-full"
+          className="rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E] items-center justify-center w-full"
         >
           <ColorRing
             visible={true}
@@ -149,98 +149,18 @@ const RaceCardHomepage2 = ({
             </div>
           </div>
 
-          <div className="w-full flex justify-center items-center mb-[25px] relative">
-            {/* absolute elements */}
-            {/* <div className='absolute left-0 top-1/2 -scale-100'>
-                    <img src={darkModeEnabled ? linedark : line_beside_medals} alt="" />
-                </div> */}
-
-            <div className="flex flex-col gap-10">
-              {/* <div className="w-full flex justify-center items-center gap-[25px]">
-                <div style={{ position: "relative", flex: 1 }}>
-                  {" "}
-                  <img
-                    className="ongoing-users"
-                    src={
-                      rankList[0].user_photo
-                        ? rankList[0].user_photo.path
-                        : rankList[0].gender == "female"
-                        ? femalePlaceholder
-                        : malePlaceholder
-                    }
-                  />
-                  <img className="ongoing-rank" src={Crown_1} />
-                </div>
-                <div style={{ position: "relative", flex: 1 }}>
-                  <img
-                    className="ongoing-users"
-                    src={
-                      rankList[1].user_photo
-                        ? rankList[1].user_photo.path
-                        : rankList[1].gender == "female"
-                        ? femalePlaceholder
-                        : malePlaceholder
-                    }
-                  />
-                  <img className="ongoing-rank" src={Crown_2} />
-                </div>
-                <div style={{ position: "relative", flex: 1 }}>
-                  {" "}
-                  <img
-                    className="ongoing-users"
-                    src={
-                      rankList[2].user_photo
-                        ? rankList[2].user_photo.path
-                        : rankList[2].gender == "female"
-                        ? femalePlaceholder
-                        : malePlaceholder
-                    }
-                  />
-                  <img className="ongoing-rank" src={Crown_3} />
-                </div>
-
-              </div> */}
-
-              <div className="w-full flex justify-center items-center gap-[25px]">
-                <img
-                  style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
-                  src={rank1}
-                  alt="1st place"
-                />
-
-                {/* <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#c37c2a] to-[#c69607] rounded-xl"></div>
-                <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#0a78b6] to-[#094db4] rounded-xl"></div>
-                <div className="h-[200px] w-[400px] bg-gradient-to-r from-[#c84e45] to-[#ae241a] rounded-xl"></div> */}
-                <img
-                  style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
-                  src={rank2}
-                  alt="2nd place"
-                />
-                <img
-                  style={{ maxWidth: 420, borderRadius: 30, marginTop: 15 }}
-                  src={rank3}
-                  alt="3rd place"
-                />
-              </div>
-              <iframe
-                className="w-full min-h-[170px] h-full"
-                ref={iframeRef}
-                src={`/game/index.html?raceId=${raceId}`}
-              />
-
-              {/* <iframe
-                className="flex-1 w-full h-[400px]"
-                ref={iframeRef}
-                src={`/raceCard/index.html?raceId=${raceId}`}
-              /> */}
-            </div>
-          </div>
           {/* <ProgressDemo progress={progress} /> */}
 
           {/* {data.labels.length > 0 && (
                         // <Bar data={data} options={options} plugins={[customPlugin]} />
                         // <iframe className="w-[100%] h-[400px]" height="832px" src={`/v4/index.html?raceId=${raceId}`} />
                     )} */}
+
+          <iframe
+            className="w-full min-h-[170px] h-[25rem]"
+            ref={iframeRef}
+            src={`/game/index.html?raceId=${raceId}`}
+          />
         </div>
       )}
     </>
