@@ -156,11 +156,15 @@ const RaceCardHomepage2 = ({
                         // <iframe className="w-[100%] h-[400px]" height="832px" src={`/v4/index.html?raceId=${raceId}`} />
                     )} */}
 
-          <iframe
-            className="w-full min-h-[200px] h-[27rem]"
-            ref={iframeRef}
-            src={`/game/index.html?raceId=${raceId}`}
-          />
+          <div
+            className="w-full min-h-[200px] h-[27rem] cursor-pointer"
+            onClick={() => navigate(`/race/${raceId}`)}
+          >
+            <iframe
+              className="w-full h-full pointer-events-none"
+              src={`/game/index.html?raceId=${raceId}`}
+            />
+          </div>
         </div>
       )}
     </>

@@ -67,7 +67,7 @@ const JoinRace = ({
               alt="box icon"
             />
             <div className="flex-1 flex gap-[8px]">
-              <h3 className="text-[1.75rem] font-semibold dark:text-white">
+              <h3 className="text-[1.75rem] font-semibold dark:text-white w-full max-w-[80%]">
                 Join {raceName}
               </h3>
             </div>
