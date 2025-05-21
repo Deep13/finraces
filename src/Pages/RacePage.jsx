@@ -260,11 +260,11 @@ const RacePage = () => {
     }, 2000);
 
     // Cleanup the socket connection when the component unmounts
-    return () => {
-      if (socket) socket.disconnect();
-      console.log("Socket disconnected");
-    };
-  }, [race_id, socket]);
+    // return () => {
+    //   if (socket) socket.disconnect();
+    //   console.log("Socket disconnected");
+    // };
+  }, [race_id]);
 
   // code by deepak
   const [data, setData] = useState({
