@@ -69,6 +69,7 @@ import JoinRace from "../Components/JoinRace";
 
 import { useSocket } from "../Contexts/SocketProvider";
 import { useCommunity } from "../Contexts/CommunityProvider";
+import { connectSocket } from "../Utils/socket";
 
 // Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -148,7 +149,14 @@ const RacePage = () => {
 
   useEffect(() => {
     // Connect to the Nest.js Socket.IO server (replace the URL with your server's URL)
-    if (!socket) return;
+    if (!socket) {
+      // const ud = localStorage.getItem("fin_userDetails");
+      // const userDetails = ud && JSON.parse(atob(ud));
+      // const { userId } = userDetails || {};
+      // const token = localStorage.getItem("token");
+      // connectSocket(userId, token);
+      return;
+    }
 
     const joinData = {
       raceId: race_id,
@@ -264,7 +272,7 @@ const RacePage = () => {
     //   if (socket) socket.disconnect();
     //   console.log("Socket disconnected");
     // };
-  }, [race_id]);
+  }, [race_id, socket]);
 
   // code by deepak
   const [data, setData] = useState({

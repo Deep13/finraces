@@ -21,7 +21,10 @@ export const SocketProvider = ({ children }) => {
     const s = connectSocket(userId, token);
     setSocket(s);
 
-    return () => disconnectSocket();
+    return () => {
+      disconnectSocket();
+      setSocket(null);
+    };
   }, []);
 
   return (
