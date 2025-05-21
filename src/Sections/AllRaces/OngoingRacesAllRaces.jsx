@@ -34,8 +34,8 @@ const OngoingRacesAllRaces = ({ filters }) => {
     );
   }, [filters, page]);
   return (
-    <div className="max-w-[1400px] relative mb-[3.3rem]">
-      <div className="w-full gap-[1rem] grid grid-cols-1 md:grid-cols-2 min-h-[200px] relative">
+    <div className="max-w-[2000px] relative mb-[3.3rem]">
+      <div className="w-full gap-[1rem] grid grid-cols-1 md:grid-cols-2 min-h-[280px] relative">
         {loading ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <ColorRing

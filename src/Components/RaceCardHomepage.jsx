@@ -480,7 +480,7 @@ const RaceCardHomepage = ({
           onClick={() => navigate(`/race/${raceId}`)}
           className="rounded-[24px] border border-black px-[1.1rem] py-[1rem] bg-[#edf7ff] dark:bg-[#002864] flex flex-col overflow-hidden cursor-pointer dark:border dark:border-[#00397E]"
         >
-          <div className="w-full flex justify-between mb-[14px]">
+          <div className="w-80 md:w-full flex justify-between mb-[14px]">
             <div className="flex gap-[0.76rem] flex-1">
               <img
                 className="w-12 h-12"

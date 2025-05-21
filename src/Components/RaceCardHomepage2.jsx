@@ -157,7 +157,7 @@ const RaceCardHomepage2 = ({
                     )} */}
 
           <iframe
-            className="w-full min-h-[170px] h-[25rem]"
+            className="w-full min-h-[200px] h-[27rem]"
             ref={iframeRef}
             src={`/game/index.html?raceId=${raceId}`}
           />
