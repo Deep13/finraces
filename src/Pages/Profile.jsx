@@ -50,6 +50,10 @@ const Profile = () => {
       if (data.is_guest) {
         setNoProfilePopup(true);
       }
+      getAllBadges(data.id, (data) => {
+        console.log("all badges", data.data);
+        setBadges(data.data);
+      });
       setImageUrl(data?.photo?.path);
       // if specific to user then get all badges here
       setTimeout(() => setImageIsLoading(false), 4000);
@@ -85,10 +89,6 @@ const Profile = () => {
       }
     );
 
-    getAllBadges((data) => {
-      console.log("all badges", data.data);
-      setBadges(data.data);
-    });
     window.scrollTo(0, 0);
   }, []);
 
@@ -281,7 +281,7 @@ const Profile = () => {
 
             {/* bento layout for some stats  */}
             {superTabs === superTabsStrings.Profile && (
-              <UserProfile userId={data?.id} />
+              <UserProfile userId={data?.id} badges={badges} />
             )}
             {superTabs === superTabsStrings.Interactions && <Friends />}
             {superTabs === superTabsStrings.EditProfile && <EditProfile />}

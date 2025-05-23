@@ -31,7 +31,7 @@ import { TbSum } from "react-icons/tb";
 import { GiPodiumWinner, GiPodiumSecond, GiPodiumThird } from "react-icons/gi";
 import RacePredictionsTable from "../../Components/RacePredictionsTable.jsx";
 
-const UserProfile = ({ userId }) => {
+const UserProfile = ({ userId, badges }) => {
   const [total, setTotal] = useState(0);
   const [races, setRaces] = useState([]);
   const [loadingRaces, setLoadingRaces] = useState(true);
@@ -173,62 +173,27 @@ const UserProfile = ({ userId }) => {
                         </div> */}
           </div>
         </div>
-        <div className="col-span-2 bg-white rounded-lg p-[1.5rem] flex justify-center items-center flex-col dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
-          <p className="mb-[8px] text-xl self-start font-semibold">
-            Achievements
-          </p>
-          <div className="w-full h-full grid grid-cols-3 gap-[30px]">
-            {/* {badges.length > 0 &&
-                            badges?.map(curr => {
-                                return (
-                                    <div key={curr.id} className='p-2 w-[7rem] h-[7rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4'>
-                                        <img className='w-full h-full object-fit' src={curr.badge.image} alt="" />
-                                    </div>
-                                )
-                            })
-                        } */}
-            <div className="p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4">
-              <img
-                className="w-full h-full object-cover"
-                src={goldbadge}
-                alt=""
-              />
-            </div>
-            <div className="p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4">
-              <img
-                className="w-full h-full object-cover"
-                src={badgemountain}
-                alt=""
-              />
-            </div>
-            <div className="p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4">
-              <img
-                className="w-full h-full object-cover"
-                src={badgegiftpurple}
-                alt=""
-              />
-            </div>
-            <div className="p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4">
-              <img
-                className="w-full h-full object-cover"
-                src={badgegiftred}
-                alt=""
-              />
-            </div>
-            <div className="p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4">
-              <img
-                className="w-full h-full object-cover"
-                src={badgegiftsilver}
-                alt=""
-              />
-            </div>
-            <div className="p-2 w-[10rem] h-[10rem] overflow-hidden bg-[#000A2D] self-start rounded-xl flex-wrap gap-4">
-              <img
-                className="w-full h-full object-cover"
-                src={redbadge}
-                alt=""
-              />
-            </div>
+        <div className="col-span-2 bg-white rounded-lg p-[1.5rem] flex flex-col items-start dark:bg-[#001B51] dark:border dark:border-[#00387E] dark:text-white">
+          <p className="mb-4 text-xl font-semibold">Achievements</p>
+          <div className="w-full grid grid-cols-2 md:grid-cols-3 gap-6 min-h-[7rem]">
+            {badges?.slice(0, 6)?.map((curr, index) => (
+              <div
+                key={index}
+                className="p-2 w-full flex flex-col items-center justify-start h-auto"
+              >
+                <img
+                  className="w-24 h-24 object-contain mb-2"
+                  src={curr?.badge?.image}
+                  alt={curr?.badge?.name || "badge"}
+                />
+                <div className="text-center text-base font-semibold mt-1">
+                  {curr?.badge?.name
+                    ? curr.badge.name.charAt(0).toUpperCase() +
+                      curr.badge.name.slice(1)
+                    : ""}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

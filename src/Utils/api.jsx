@@ -1221,16 +1221,20 @@ export const getRacesCountByRank = async (
 };
 
 export const getAllBadges = async (
+  userId,
   onSuccess = () => {},
   onError = () => {}
 ) => {
   // let token = localStorage.getItem('token')
   try {
-    let response = await axios.get(`${GlobalURL}/api/v1/public/user-badges`, {
-      headers: {
-        // 'Authorization': `Bearer ${token}`, // Example for passing a token
-      },
-    });
+    let response = await axios.get(
+      `${GlobalURL}/api/v1/public/user-badges?userId=${userId}`,
+      {
+        headers: {
+          // 'Authorization': `Bearer ${token}`, // Example for passing a token
+        },
+      }
+    );
     let result = await response.data;
     // console.log('result success', result)
     onSuccess(result);

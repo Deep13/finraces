@@ -89,6 +89,10 @@ const IndiUserProfile = () => {
       if (data.is_guest) {
         setNoProfilePopup(true);
       }
+      getAllBadges(data.id, (data) => {
+        console.log("all badges", data.data);
+        setBadges(data.data);
+      });
       setUserDetails(data);
     });
     token &&
@@ -138,10 +142,6 @@ const IndiUserProfile = () => {
       },
       user_id
     );
-    getAllBadges((data) => {
-      console.log("all badges", data.data);
-      setBadges(data.data);
-    });
   }, []);
 
   return (
@@ -191,20 +191,24 @@ const IndiUserProfile = () => {
                   {/* <p className="font-semibold text-[1rem] dark:text-white">AKA Samuel <span className="ml-3">L.A, Calirfonia</span></p> */}
                   <div className="self-start flex gap-4">
                     {/* XP card here  */}
-                    <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">
-                      {/* <div>
+
+                    {/* <div>
                                             <img src={coin} alt="" />
                                         </div> */}
-                      <div className="font-semibold text-[0.9rem] flex flex-col">
-                        <p className="font-semibold text-[0.9rem]">
-                          {badges[badges.length - 1]?.badge?.name
-                            .charAt(0)
-                            .toUpperCase() +
-                            badges[badges.length - 1]?.badge?.name.slice(1)}
-                        </p>
-                        {/* <p className="font-semibold text-[0.9rem]">250 XP</p> */}
+
+                    {badges.length > 0 && (
+                      <div className="py-[0.5rem] px-[0.8rem] bg-slate-200 rounded-xl flex gap-[7px] dark:bg-[#002763] dark:text-white">
+                        <div className="font-semibold text-[0.9rem] flex flex-col">
+                          <p className="font-semibold text-[0.9rem]">
+                            {badges[badges.length - 1]?.badge?.name
+                              .charAt(0)
+                              .toUpperCase() +
+                              badges[badges.length - 1]?.badge?.name.slice(1)}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    )}
+                    {/* <p className="font-semibold text-[0.9rem]">250 XP</p> */}
 
                     {/* <div className="flex gap-2 items-center">
                                         <div className="rounded-full bg-green-700 w-2 h-2 dark:bg-green-500" />
@@ -353,7 +357,7 @@ const IndiUserProfile = () => {
                 </div>
               )}
             </div>
-            <UserProfile userId={user_id} />
+            <UserProfile userId={user_id} badges={badges} />
           </div>
         </div>
       </div>
