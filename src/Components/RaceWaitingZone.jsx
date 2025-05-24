@@ -8,6 +8,18 @@ import { useNavigate } from "react-router-dom";
 import { getFriends, sendRaceInvite } from "../Utils/api";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import JoinRace from "./JoinRace";
+import {
+  FacebookShareButton,
+  WhatsappShareButton,
+  RedditShareButton,
+  FacebookIcon,
+  WhatsappIcon,
+  RedditIcon,
+} from "react-share";
+
+// Get current URL
+const currentUrl = window.location.href;
+const shareMessage = `Hey there,\nJoin this race on Finraces: ${currentUrl}`;
 
 const RaceWaitingZone = ({
   closeCard = () => {},
@@ -231,6 +243,43 @@ const RaceWaitingZone = ({
               </div>
             </div>
           )}
+
+          <div className="mt-4 w-full flex flex-col items-center">
+            <p className="text-center font-semibold text-gray-700 mb-2">
+              Share with friends
+            </p>
+            <div className="flex gap-4 justify-center">
+              <WhatsappShareButton url={currentUrl} title="Join my race:">
+                <WhatsappIcon size={32} round />
+              </WhatsappShareButton>
+              <FacebookShareButton url={currentUrl} quote="Join my race:">
+                <FacebookIcon size={32} round />
+              </FacebookShareButton>
+              <RedditShareButton url={currentUrl} title="Join my race:">
+                <RedditIcon size={32} round />
+              </RedditShareButton>
+              {/* Instagram doesn't support direct sharing via web—use a fallback */}
+              <a
+                href={`https://www.instagram.com/`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on Instagram"
+                className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm"
+              >
+                IG
+              </a>
+              {/* Discord - use general message copy */}
+              <a
+                href={`https://discord.com/channels/@me`}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Share on Discord"
+                className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm"
+              >
+                💬
+              </a>
+            </div>
+          </div>
 
           {/* Joined Users */}
           <p className="w-full text-center text-[#2177cb] uppercase text-[1.2rem] font-semibold">
