@@ -15,7 +15,12 @@ import {
   FacebookIcon,
   WhatsappIcon,
   RedditIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  MailruShareButton,
+  XIcon,
 } from "react-share";
+import { MailIcon } from "lucide-react";
 
 // Get current URL
 const currentUrl = window.location.href;
@@ -244,7 +249,7 @@ const RaceWaitingZone = ({
             </div>
           )}
 
-          <div className="mt-4 w-full flex flex-col items-center">
+          <div className="mt-4 w-full flex flex-col items-center mb-2">
             <p className="text-center font-semibold text-gray-700 mb-2">
               Share with friends
             </p>
@@ -258,26 +263,13 @@ const RaceWaitingZone = ({
               <RedditShareButton url={currentUrl} title="Join my race:">
                 <RedditIcon size={32} round />
               </RedditShareButton>
-              {/* Instagram doesn't support direct sharing via web—use a fallback */}
-              <a
-                href={`https://www.instagram.com/`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Share on Instagram"
-                className="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm"
-              >
-                IG
-              </a>
-              {/* Discord - use general message copy */}
-              <a
-                href={`https://discord.com/channels/@me`}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Share on Discord"
-                className="w-8 h-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm"
-              >
-                💬
-              </a>
+
+              <TwitterShareButton url={currentUrl} title="Join my race:">
+                <XIcon size={32} round />
+              </TwitterShareButton>
+              {/* <MailruShareButton url={currentUrl} title="Join my race:">
+                <MailIcon size={32} round />
+              </MailruShareButton> */}
             </div>
           </div>
 
