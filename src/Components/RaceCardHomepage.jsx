@@ -35,6 +35,7 @@ import Second from "../assets/images/stockRace/2nd.jpg";
 import Third from "../assets/images/stockRace/3rd.jpg";
 import Fourth from "../assets/images/stockRace/4th.jpg";
 import Fifth from "../assets/images/stockRace/5th.jpg";
+import CountDownTimer from "./CountDown";
 
 const rankImages = {
   1: First,
@@ -66,6 +67,7 @@ const RaceCardHomepage = ({
   const [maxValue, setMaxValue] = useState(120);
   const [logos, setLogos] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isTimerFinished, setIsTimerFinished] = useState(false);
   const navigate = useNavigate();
   const [progress, setProgress] = useState(0);
   const options = {
@@ -498,7 +500,7 @@ const RaceCardHomepage = ({
                     </div> */}
             </div>
             <div className="flex-1 flex justify-center">
-              <CountdownCircleTimer
+              {/* <CountdownCircleTimer
                 isPlaying
                 size={50}
                 strokeWidth={3}
@@ -518,7 +520,12 @@ const RaceCardHomepage = ({
                     </div>
                   );
                 }}
-              </CountdownCircleTimer>
+              </CountdownCircleTimer> */}
+              <CountDownTimer
+                deadline={end_date}
+                setIsTimerFinished={setIsTimerFinished}
+                mode={"Home"}
+              />
             </div>
             <div className="h-full flex flex-col justify-start items-end flex-1">
               <h3 className="text-[1.05rem] font-bold dark:text-white">{`${participants?.length} participants`}</h3>

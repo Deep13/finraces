@@ -3,6 +3,7 @@ import RaceCardHomepage from "../../Components/RaceCardHomepage";
 import Pagination from "../../Components/Pagination";
 import { getRaceList } from "../../Utils/api";
 import { ColorRing } from "react-loader-spinner";
+import RaceCardHomepage2 from "../../Components/RaceCardHomepage2";
 
 const OngoingRacesAllRaces = ({ filters }) => {
   const [raceList, setRaceList] = useState([]);
@@ -34,8 +35,8 @@ const OngoingRacesAllRaces = ({ filters }) => {
     );
   }, [filters, page]);
   return (
-    <div className="max-w-[2000px] relative mb-[3.3rem]">
-      <div className="w-full gap-[1rem] grid grid-cols-1 md:grid-cols-2 min-h-[280px] relative">
+    <div className="max-w-[2000px] w-full relative mb-[3.3rem]">
+      <div className="w-full gap-[1rem] flex flex-col min-h-[280px] relative">
         {loading ? (
           <div className="absolute inset-0 flex items-center justify-center">
             <ColorRing
@@ -50,12 +51,13 @@ const OngoingRacesAllRaces = ({ filters }) => {
           </div>
         ) : raceList.length > 0 ? (
           raceList.map((curr, index) => (
-            <RaceCardHomepage
+            <RaceCardHomepage2
               key={curr.id}
               start_Date={curr.start_date}
               end_date={curr.end_date}
               raceName={curr.name}
               raceId={curr.id}
+              participants={curr.participants}
             />
           ))
         ) : (

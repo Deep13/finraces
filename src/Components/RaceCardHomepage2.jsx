@@ -44,6 +44,7 @@ import Tenth from "../assets/images/stockRace/10th.png";
 import rank1 from "../assets/images/stockRace/rank1.png";
 import rank2 from "../assets/images/stockRace/rank2.png";
 import rank3 from "../assets/images/stockRace/rank3.png";
+import CountDownTimer from "./CountDown";
 
 const rankImages = {
   1: First,
@@ -69,6 +70,7 @@ const RaceCardHomepage2 = ({
   const { darkModeEnabled } = useContext(DarkModeContext);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [isTimerFinished, setIsTimerFinished] = useState(false);
 
   const iframeRef = React.useRef(null);
   const getRemainingSeconds = (targetDate, initial_date) => {
@@ -121,7 +123,7 @@ const RaceCardHomepage2 = ({
                     </div> */}
             </div>
             <div className="flex-1 flex justify-center">
-              <CountdownCircleTimer
+              {/* <CountdownCircleTimer
                 isPlaying
                 size={50}
                 strokeWidth={3}
@@ -130,6 +132,7 @@ const RaceCardHomepage2 = ({
                 initialRemainingTime={getRemainingSeconds(end_date, new Date())} // time that is remaining from now
                 colorsTime={[7]}
               >
+                
                 {({ remainingTime }) => {
                   const hours = Math.floor(remainingTime / 3600);
                   const minutes = Math.floor((remainingTime % 3600) / 60);
@@ -141,7 +144,12 @@ const RaceCardHomepage2 = ({
                     </div>
                   );
                 }}
-              </CountdownCircleTimer>
+              </CountdownCircleTimer> */}
+              <CountDownTimer
+                deadline={end_date}
+                setIsTimerFinished={setIsTimerFinished}
+                mode={"Home"}
+              />
             </div>
             <div className="h-full flex flex-col justify-start items-end flex-1">
               <h3 className="text-[1.05rem] font-bold dark:text-white">{`${participants?.length} participants`}</h3>

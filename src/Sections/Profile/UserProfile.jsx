@@ -270,9 +270,9 @@ const UserProfile = ({ userId, badges }) => {
                         <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
                           {curr.participants.length}
                         </td>
-                        <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
+                        {/* <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
                           {curr?.points || "N/A"}
-                        </td>
+                        </td> */}
                         <td className="text-[1.1rem] py-3 group-hover:underline font-poppins">
                           {curr.stocks.length}
                         </td>

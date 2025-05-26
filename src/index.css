@@ -10,14 +10,49 @@ textarea {
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin; /* Firefox */
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb {
+    background-color: #00387e;
+    border-radius: 4px;
+  }
+
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track {
+    background: #010b2c;
+  }
+}
+
+.dark {
+  scrollbar-color: #00387e transparent; /* Firefox */
+}
+
+.dark::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark::-webkit-scrollbar-thumb {
+  background-color: #00387e;
+  border-radius: 4px;
+}
 
 @layer base {
   @font-face {
-    font-family: 'Raleway';
-    src: url('./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf') format('truetype');
+    font-family: "Raleway";
+    src: url("./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf")
+      format("truetype");
   }
-  @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
   :root {
     --radius: 0.5rem;
@@ -27,7 +62,6 @@ textarea {
 .dark {
   color-scheme: dark;
 }
-
 
 @layer components {
   .rdp .rdp-nav_icon {
@@ -48,23 +82,31 @@ input[type='password'] {
 
 .notificationScrollbar {
   scrollbar-width: thin; /* For Firefox */
-  scrollbar-color: #00387E transparent; /* For Firefox */
+  scrollbar-color: #00387e transparent; /* For Firefox */
 }
 
 .hero-gradient {
   background: rgb(229, 244, 255);
-  background: linear-gradient(90deg, rgba(229, 244, 255, 1) 49%, rgba(0, 0, 0, 0.2508059376094187) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(229, 244, 255, 1) 49%,
+    rgba(0, 0, 0, 0.2508059376094187) 100%
+  );
 }
 
 .profile_card_button_grad {
   background: rgb(102, 217, 255);
-  background: linear-gradient(90deg, rgba(102, 217, 255, 1) 0%, rgba(18, 83, 153, 1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(102, 217, 255, 1) 0%,
+    rgba(18, 83, 153, 1) 100%
+  );
 }
 
 /** Text Gradient Example */
 .text-gradient {
-  color: #06896A;
-  background-image: linear-gradient(45deg, #06896A 16%, #045841 75%);
+  color: #06896a;
+  background-image: linear-gradient(45deg, #06896a 16%, #045841 75%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -101,7 +143,6 @@ input[type='password'] {
   background-color: rgba(100, 100, 100, 0.8);
   /* Darker grey on hover */
 }
-
 
 .selected-item {
   text-align: center;
@@ -174,7 +215,7 @@ input[type='password'] {
   text-align: center;
   z-index: 1;
   background-color: transparent;
-  border-color: #00387E;
+  border-color: #00387e;
 }
 
 .segment label {
@@ -186,7 +227,6 @@ input[type='password'] {
   transition: color 0.5s ease;
   @apply text-black dark:text-white;
 }
-
 
 .segment.active label {
   color: #000;
@@ -228,7 +268,7 @@ input[type='password'] {
   text-align: center;
   z-index: 1;
   background-color: transparent;
-  border-color: #00387E;
+  border-color: #00387e;
 }
 
 .segment label {
@@ -265,7 +305,7 @@ input[type='password'] {
   text-align: center;
   z-index: 1;
   background-color: transparent;
-  border-color: #00387E;
+  border-color: #00387e;
 }
 
 .segment-dark label {
@@ -283,12 +323,6 @@ input[type='password'] {
   font-weight: bold;
 }
 
-
-
-
-
-
-
 /* Only allow transitions once component is ready */
 .controls.ready::before {
   transition: transform 0.3s ease, width 0.3s ease;
@@ -296,8 +330,6 @@ input[type='password'] {
 .controls_dark.ready::before {
   transition: transform 0.3s ease, width 0.3s ease;
 }
-
-
 
 .custom-scrollbar {
   overflow: auto;
@@ -330,7 +362,6 @@ input[type='password'] {
   /* Dark thumb, transparent track */
 }
 
-
 /* .online_text{
   text-shadow: rgba(12, 159, 66, 0.67) 0px 0px 21px;
 } */
@@ -354,7 +385,6 @@ input[type='password'] {
   flex: 1;
 }
 
-
 .table-row-light:hover {
   background-color: none;
 }
@@ -367,23 +397,21 @@ input[type='password'] {
   background: #000;
 }
 
-
 .shadowImperial {
   box-shadow: inset -1px -4px 20px 6px #0000004d;
 }
 
 .glow {
-  box-shadow: -1px -20px 91px 3px #0076D6;
+  box-shadow: -1px -20px 91px 3px #0076d6;
 }
 
 .triangle-up {
-	width: 0;
-	height: 0;
-	border-left: 25px solid transparent;
-	border-right: 25px solid transparent;
-	border-bottom: 50px solid #555;
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 50px solid #555;
 }
-
 
 /* for text editor */
 /* .ql-toolbar button::after {
@@ -408,15 +436,14 @@ input[type='password'] {
   opacity: 1;
 } */
 
-
 /* input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
 } */
- /* this thing war removing the calendar icon  */
+/* this thing war removing the calendar icon  */
 
- select option {
+select option {
   margin: 40px;
   /* background: rgba(0, 0, 0, 0.3); */
   color: #fff;
