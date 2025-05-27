@@ -2908,7 +2908,7 @@ export const unfollowUser = async (userId, onSuccess, onError) => {
 export const getFollowers = async (onSuccess, onError, userId) => {
   try {
     let token = localStorage.getItem("token");
-    let url = `${GlobalURL}/api/v1/follows/followers`;
+    let url = `${GlobalURL}/api/v1/public/follows/followers`;
     if (userId) {
       url += `?userId=${userId}`;
     }
@@ -2938,7 +2938,7 @@ export const getFollowers = async (onSuccess, onError, userId) => {
 export const getFollowing = async (onSuccess, onError, userId) => {
   try {
     let token = localStorage.getItem("token");
-    let url = `${GlobalURL}/api/v1/follows/followees`;
+    let url = `${GlobalURL}/api/v1/public/follows/followees`;
 
     if (userId) {
       url += `?userId=${userId}`;
@@ -2969,7 +2969,7 @@ export const getFollowing = async (onSuccess, onError, userId) => {
 export const getFollowees = async (onSuccess, onError) => {
   try {
     let token = localStorage.getItem("token");
-    let url = `${GlobalURL}/api/v1/follows/followees`;
+    let url = `${GlobalURL}/api/v1/public/follows/followees`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -3071,7 +3071,7 @@ export const getBlogCategories = async (onSuccess, onError) => {
 
 export const getRacePredictionsTable = async (userId, onSuccess, onError) => {
   try {
-    let url = `${GlobalURL}/api/v1/races/detailed?participatedBy=${userId}`;
+    let url = `${GlobalURL}/api/v1/public/races/detailed?participatedBy=${userId}`;
     const token = localStorage.getItem("token");
 
     const response = await fetch(url, {
@@ -3099,7 +3099,63 @@ export const getRacePredictionsTable = async (userId, onSuccess, onError) => {
 
 export const getFriendsCount = async (userId, onSuccess, onError) => {
   try {
-    let url = `${GlobalURL}/api/v1/friends/count?userId=${userId}`;
+    let url = `${GlobalURL}/api/v1/public/friends/count?userId=${userId}`;
+    let token = localStorage.getItem("token");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Server error:", errorText);
+      throw new Error(
+        `Failed to post: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};
+
+export const getFolloweeCount = async (userId, onSuccess, onError) => {
+  try {
+    let url = `${GlobalURL}/api/v1/public/follows/followees/count?userId=${userId}`;
+    let token = localStorage.getItem("token");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Server error:", errorText);
+      throw new Error(
+        `Failed to post: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data = await response.json();
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};
+
+export const getFollowersCount = async (userId, onSuccess, onError) => {
+  try {
+    let url = `${GlobalURL}/api/v1/public/follows/followers/count?userId=${userId}`;
     let token = localStorage.getItem("token");
 
     const response = await fetch(url, {

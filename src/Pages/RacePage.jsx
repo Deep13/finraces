@@ -127,7 +127,7 @@ const RacePage = () => {
   const { setShareModal, setModalImg, setModalText } = useCommunity();
 
   const iframeRef = useRef(null);
-  const { setShowLoginForm } = useContext(DarkModeContext);
+  const { setShowLoginForm, showLoginForm } = useContext(DarkModeContext);
 
   const ud = localStorage.getItem("fin_userDetails");
   const userDetails2 = ud && JSON.parse(atob(ud));
@@ -371,6 +371,8 @@ const RacePage = () => {
       let arr = [Placeholder];
       console.log(window.location.origin);
       console.log("A", data);
+      setJoinedUsers(data.participants);
+      setParticipantsCount(data.participants.length);
       data?.participants?.map((val, index) => {
         let imgD;
         if (val?.photo?.path) {
@@ -587,11 +589,11 @@ const RacePage = () => {
       setisLoading(false);
     });
 
-    fetchAlreadyJoinedUsers(race_id, (result) => {
-      // console.log(result)
-      setParticipantsCount(result.length);
-      setJoinedUsers(result);
-    });
+    // fetchAlreadyJoinedUsers(race_id, (result) => {
+    //   // console.log(result)
+    //   setParticipantsCount(result.length);
+    //   setJoinedUsers(result);
+    // });
 
     getStocksDataForRace(
       race_id,
@@ -997,7 +999,8 @@ const RacePage = () => {
           </div>
         ) : (
           !isRaceStarted &&
-          raceDetails && (
+          raceDetails &&
+          !showLoginForm && (
             <RaceWaitingZone
               start_date={raceDetails?.start_date}
               raceStarted={isRaceStarted}
@@ -1063,7 +1066,8 @@ const RacePage = () => {
           </div>
         ) : (
           !isRaceStarted &&
-          raceDetails && (
+          raceDetails &&
+          !showLoginForm && (
             <RaceWaitingZone
               start_date={raceDetails?.start_date}
               raceStarted={isRaceStarted}
@@ -1118,36 +1122,59 @@ const RacePage = () => {
                       <h3 className="text-[1.05rem] font-bold dark:text-white font-poppins">
                         {raceDetails?.name}
                       </h3>
-                      <div className="font-medium text-[0.9rem] dark:text-white flex gap-2 items-center">
-                        <p>
-                          {raceStatus != "running"
-                            ? "Race Starts In:"
-                            : "Remaining Time"}
-                        </p>
-                        <div className="font-semibold font-poppins">
-                          {raceDetails && (
-                            <Countdown
-                              date={raceDetails["end_date"]}
-                              renderer={({ days, hours, minutes, seconds }) => {
-                                const formatTime = (time) =>
-                                  String(time).padStart(2, "0");
+                      <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
+                        {raceDetails?.end_date ? (
+                          new Date(raceDetails.end_date).getTime() >
+                          Date.now() ? (
+                            <>
+                              <p>
+                                {raceStatus !== "running"
+                                  ? "Race Starts In:"
+                                  : "Remaining Time:"}
+                              </p>
+                              <div className="font-semibold font-poppins">
+                                <Countdown
+                                  date={new Date(
+                                    raceDetails.end_date
+                                  ).getTime()}
+                                  renderer={({
+                                    days,
+                                    hours,
+                                    minutes,
+                                    seconds,
+                                  }) => {
+                                    const formatTime = (time) =>
+                                      String(time).padStart(2, "0");
 
-                                return (
-                                  <span>
-                                    {days > 0 && `${formatTime(days)}:`}
-                                    {formatTime(hours)}:{formatTime(minutes)}:
-                                    {formatTime(seconds)}
-                                  </span>
-                                );
-                              }}
-                            />
-                          )}
-                        </div>
+                                    return (
+                                      <span>
+                                        {days > 0 && `${formatTime(days)}:`}
+                                        {formatTime(hours)}:
+                                        {formatTime(minutes)}:
+                                        {formatTime(seconds)}
+                                      </span>
+                                    );
+                                  }}
+                                />
+                              </div>
+                            </>
+                          ) : (
+                            <p className="font-poppins">
+                              Race Ended On:{" "}
+                              <span>
+                                {new Date(
+                                  raceDetails.end_date
+                                ).toLocaleString()}
+                              </span>
+                            </p>
+                          )
+                        ) : (
+                          <p>Loading race details...</p>
+                        )}
+
                         {canJoinButton && (
                           <div
-                            onClick={() => {
-                              setShowJoin(true);
-                            }}
+                            onClick={() => setShowJoin(true)}
                             className="font-semibold text-lg dark:text-white bg-blue-600 px-5 cursor-pointer py-1 rounded-xl"
                           >
                             Join
@@ -1180,15 +1207,55 @@ const RacePage = () => {
                                                 </span>
                                             ))}
                                         </div> */}
-                    <IoMdShare
-                      className="text-[white] text-[30px] cursor-pointer mr-5"
-                      onClick={handleShareClick}
-                    />
+                    {raceStatus == "finsihed" || raceStatus == "running" ? (
+                      <div className="group">
+                        <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-32 z-20 opacity-85">
+                          Share in Community
+                        </div>
+                        <IoMdShare
+                          className="text-[white] text-[30px] cursor-pointer mr-5 relative"
+                          onClick={handleShareClick}
+                        />
+                      </div>
+                    ) : (
+                      <>
+                        <div
+                          onClick={() => {
+                            setIsRaceStarted(false);
+                          }}
+                          className="px-2 py-1 rounded-xl mr-3 cursor-pointer bg-blue-600 text-white font-semibold"
+                        >
+                          Invite
+                        </div>
+                        {isRaceStarted == false &&
+                          raceStatus != "running" &&
+                          raceStatus != "finished" && (
+                            <RaceWaitingZone
+                              start_date={raceDetails?.start_date}
+                              raceStarted={isRaceStarted}
+                              joinedUsersList={joinedUsers}
+                              raceName={raceDetails?.name}
+                              liveUsers={liveUsers}
+                              race_id={race_id}
+                              status={raceDetails?.status}
+                              // raceEnded = {false}
+                              closeCard={() => {
+                                setIsRaceStarted(true);
+                              }}
+                            />
+                          )}
+                      </>
+                    )}
 
-                    <HiInformationCircle
-                      className="text-[white] text-[30px] cursor-pointer"
-                      onClick={() => setshowDetails(true)}
-                    />
+                    <div className="group">
+                      <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-20 z-20 opacity-85">
+                        See race stats
+                      </div>
+                      <HiInformationCircle
+                        className="text-[white] text-[30px] cursor-pointer relative"
+                        onClick={() => setshowDetails(true)}
+                      />
+                    </div>
 
                     {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
                   </div>
@@ -1447,7 +1514,7 @@ const RacePage = () => {
                       )}
                     </div>
                     {
-                      <div className="w-full rounded-[8px] max-h-screen overflow-auto custom-scrollbar">
+                      <div className="w-full rounded-[8px] max-h-scree h-full overflow-auto custom-scrollbar">
                         {tabs === "leaderboard" ? (
                           <>
                             {/* <div className='w-full flex justify-between items-center mb-[14px]'>

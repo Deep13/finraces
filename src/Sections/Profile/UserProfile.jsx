@@ -217,7 +217,10 @@ const UserProfile = ({ userId, badges }) => {
                 ? "bg-blue-600 text-white"
                 : "border dark:border-[#00387E]"
             }`}
-            onClick={() => setActiveTab("predictions")}
+            onClick={() => {
+              setActiveTab("predictions");
+              setLoadingRaces(false); // Reset loading state when switching tabs
+            }}
           >
             Predictions
           </button>

@@ -160,6 +160,11 @@ const CreateBlog = () => {
           file,
           (data) => {
             console.log("Successfully uploaded images ", data);
+            const quill = quillRef.current?.getEditor();
+            const range = quill?.getSelection();
+            if (quill && data.file?.url && range) {
+              quill.insertEmbed(range.index, "image", data.file.id);
+            }
           },
           (error) => {
             console.log("Error uploading image ", error);

@@ -4,7 +4,13 @@ import Sidebar from "../Components/Sidebar";
 import UserProfile from "../Sections/Profile/UserProfile";
 import Person from "../assets/images/person2.png";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getAllBadges, getUser, sendFriendRequest } from "../Utils/api";
+import {
+  getAllBadges,
+  getFolloweeCount,
+  getFollowersCount,
+  getUser,
+  sendFriendRequest,
+} from "../Utils/api";
 import avatarplaceholder from "../assets/images/avatarplaceholder.png";
 import malePlaceholder from "../assets/images/manPlaceholder.jpg";
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
@@ -123,24 +129,24 @@ const IndiUserProfile = () => {
         console.log(error);
       }
     );
-    getFollowers(
+    getFollowersCount(
+      user_id,
       (data) => {
-        setFollowersCount(data.total);
+        setFollowersCount(data);
       },
       (error) => {
         console.log(error);
-      },
-      user_id
+      }
     );
 
-    getFollowing(
+    getFolloweeCount(
+      user_id,
       (data) => {
-        setFollowingCount(data.total);
+        setFollowingCount(data);
       },
       (error) => {
         console.log(error);
-      },
-      user_id
+      }
     );
   }, []);
 

@@ -196,7 +196,7 @@ const PopupSearch = ({ setPopupSearch }) => {
               }} className="text-slate-400 text-md cursor-pointer">Show More</div> */}
                   </div>
                   <div className="flex flex-wrap gap-4 justify-center">
-                    {stockList.map((stock) => (
+                    {stockList.slice(0, 5).map((stock) => (
                       <div
                         onClick={() => {
                           setPopupSearch(false);
@@ -264,7 +264,7 @@ const PopupSearch = ({ setPopupSearch }) => {
               }} className="text-slate-400 text-md cursor-pointer">Show More</div> */}
                   </div>
                   <div className="flex flex-wrap gap-4 justify-center">
-                    {races.slice(5).map((race) => (
+                    {races.slice(0, 5).map((race) => (
                       <SearchRaceCard
                         key={race.id}
                         name={race.name}

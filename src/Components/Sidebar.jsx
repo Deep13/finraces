@@ -39,7 +39,8 @@ const Sidebar = () => {
   const handleNavigation = (nav) => {
     switch (nav) {
       case "Watchlist":
-        navigate("/stockComparison");
+        if (!ud) setShowLoginForm(true);
+        else navigate("/stockComparison");
         break;
 
       case "My Races":

@@ -106,148 +106,148 @@ const RaceWaitingZone = ({
           />
 
           {/* Friend search and selection */}
-          {inviteSent ? (
-            <div className="flex justify-center items-center flex-col my-4">
-              <div className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center text-xl">
-                ✓
+          {/* Friend search and selection */}
+          {det &&
+            (inviteSent ? (
+              <div className="flex justify-center items-center flex-col my-4">
+                <div className="w-10 h-10 rounded-full bg-green-500 text-white flex items-center justify-center text-xl">
+                  ✓
+                </div>
+                <p className="text-green-600 font-semibold mt-2 text-xl">
+                  Invite sent!
+                </p>
+                <p
+                  onClick={() => setInviteSent(false)}
+                  className="text-blue-500 hover:underline cursor-pointer text-sm"
+                >
+                  Invite More Friends
+                </p>
               </div>
-              <p className="text-green-600 font-semibold mt-2 text-xl">
-                Invite sent!
-              </p>
-              <p
-                onClick={() => {
-                  setInviteSent(false);
-                }}
-                className="text-blue-500 hover:underline cursor-pointer text-sm"
-              >
-                Invite More Friends
-              </p>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-between mb-2 mt-4 w-full">
-              <div>Invite your friends</div>
-              <input
-                value={searchQuery}
-                onChange={(e) => {
-                  const query = e.target.value;
-                  setSearchQuery(query);
+            ) : (
+              <div className="flex flex-col items-center justify-between mb-2 mt-4 w-full">
+                <div>Invite your friends</div>
+                <input
+                  value={searchQuery}
+                  onChange={(e) => {
+                    const query = e.target.value;
+                    setSearchQuery(query);
 
-                  if (query.length > 0) {
-                    getFriends(
-                      (data) => {
-                        setFriendList(data.data);
-                      },
-                      (error) => {
-                        console.error("Error fetching friends:", error);
-                        setFriendList([]);
-                      },
-                      query
-                    );
-                  } else {
-                    setFriendList([]);
-                  }
-                }}
-                className="w-52 h-8 rounded-xl dark:bg-white dark:text-black border-2 border-black px-2 mt-2"
-                placeholder="Search your friends..."
-                type="text"
-              />
+                    if (query.length > 0) {
+                      getFriends(
+                        (data) => {
+                          setFriendList(data.data);
+                        },
+                        (error) => {
+                          console.error("Error fetching friends:", error);
+                          setFriendList([]);
+                        },
+                        query
+                      );
+                    } else {
+                      setFriendList([]);
+                    }
+                  }}
+                  className="w-52 h-8 rounded-xl dark:bg-white dark:text-black border-2 border-black px-2 mt-2"
+                  placeholder="Search your friends..."
+                  type="text"
+                />
 
-              <div className="w-[60%] max-h-40 overflow-y-auto mt-2">
-                {friendList?.length > 0
-                  ? friendList
-                      .filter((friend) =>
-                        friend?.firstName
-                          ?.toLowerCase()
-                          .includes(searchQuery.toLowerCase())
-                      )
-                      .map((friend) => {
-                        const isSelected = selectedFriends.some(
-                          (f) => f.id === friend.id
-                        );
-
-                        return (
-                          <div
-                            key={friend.id}
-                            onClick={() => {
-                              setSelectedFriends((prev) =>
-                                isSelected
-                                  ? prev.filter((f) => f.id !== friend.id)
-                                  : [
-                                      ...prev,
-                                      {
-                                        id: friend.id,
-                                        name: `${friend.firstName} ${friend.lastName}`,
-                                      },
-                                    ]
-                              );
-                              setSearchQuery("");
-                              setFriendList([]);
-                            }}
-                            className={`w-full px-4 py-2 cursor-pointer rounded-md flex justify-between items-center bg-gray-100 font-semibold hover:bg-gray-300`}
-                          >
-                            <span>
-                              {friend.firstName} {friend.lastName}
-                            </span>
-                          </div>
-                        );
-                      })
-                  : searchQuery.length > 0 && (
-                      <p className="text-sm text-gray-400 text-center">
-                        No friends found.
-                      </p>
-                    )}
-
-                {selectedFriends.length > 0 && (
-                  <div className="mt-3 w-full">
-                    <p className="font-semibold mb-1 text-center">
-                      Selected Friends:
-                    </p>
-                    <div className="flex flex-wrap gap-2 justify-center mb-2">
-                      {selectedFriends.map(({ id, name }) => (
-                        <div
-                          key={id}
-                          className="relative group bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium cursor-default"
-                        >
-                          {name}
-                          <button
-                            onClick={() =>
-                              setSelectedFriends((prev) =>
-                                prev.filter((f) => f.id !== id)
-                              )
-                            }
-                            className="absolute top-[-6px] right-[-6px] w-5 h-5 text-xs rounded-full bg-red-500 text-white hidden group-hover:flex items-center justify-center"
-                            title="Remove"
-                          >
-                            −
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="flex justify-center">
-                      <button
-                        onClick={() => {
-                          sendRaceInvite(
-                            race_id,
-                            selectedFriends,
-                            () => {
-                              setSelectedFriends([]);
-                              setInviteSent(true);
-                            },
-                            (error) => {
-                              console.log(error);
-                            }
+                <div className="w-[60%] max-h-40 overflow-y-auto mt-2">
+                  {friendList?.length > 0
+                    ? friendList
+                        .filter((friend) =>
+                          friend?.firstName
+                            ?.toLowerCase()
+                            .includes(searchQuery.toLowerCase())
+                        )
+                        .map((friend) => {
+                          const isSelected = selectedFriends.some(
+                            (f) => f.id === friend.id
                           );
-                        }}
-                        className="bg-[#2177cb] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#1a5ba0]"
-                      >
-                        Invite
-                      </button>
+
+                          return (
+                            <div
+                              key={friend.id}
+                              onClick={() => {
+                                setSelectedFriends((prev) =>
+                                  isSelected
+                                    ? prev.filter((f) => f.id !== friend.id)
+                                    : [
+                                        ...prev,
+                                        {
+                                          id: friend.id,
+                                          name: `${friend.firstName} ${friend.lastName}`,
+                                        },
+                                      ]
+                                );
+                                setSearchQuery("");
+                                setFriendList([]);
+                              }}
+                              className={`w-full px-4 py-2 cursor-pointer rounded-md flex justify-between items-center bg-gray-100 font-semibold hover:bg-gray-300`}
+                            >
+                              <span>
+                                {friend.firstName} {friend.lastName}
+                              </span>
+                            </div>
+                          );
+                        })
+                    : searchQuery.length > 0 && (
+                        <p className="text-sm text-gray-400 text-center">
+                          No friends found.
+                        </p>
+                      )}
+
+                  {selectedFriends.length > 0 && (
+                    <div className="mt-3 w-full">
+                      <p className="font-semibold mb-1 text-center">
+                        Selected Friends:
+                      </p>
+                      <div className="flex flex-wrap gap-2 justify-center mb-2">
+                        {selectedFriends.map(({ id, name }) => (
+                          <div
+                            key={id}
+                            className="relative group bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium cursor-default"
+                          >
+                            {name}
+                            <button
+                              onClick={() =>
+                                setSelectedFriends((prev) =>
+                                  prev.filter((f) => f.id !== id)
+                                )
+                              }
+                              className="absolute top-[-6px] right-[-6px] w-5 h-5 text-xs rounded-full bg-red-500 text-white hidden group-hover:flex items-center justify-center"
+                              title="Remove"
+                            >
+                              −
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex justify-center">
+                        <button
+                          onClick={() => {
+                            sendRaceInvite(
+                              race_id,
+                              selectedFriends,
+                              () => {
+                                setSelectedFriends([]);
+                                setInviteSent(true);
+                              },
+                              (error) => {
+                                console.log(error);
+                              }
+                            );
+                          }}
+                          className="bg-[#2177cb] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#1a5ba0]"
+                        >
+                          Invite
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          )}
+            ))}
 
           <div className="mt-4 w-full flex flex-col items-center mb-2">
             <p className="text-center font-semibold text-gray-700 mb-2">
@@ -274,11 +274,11 @@ const RaceWaitingZone = ({
           </div>
 
           {/* Joined Users */}
-          <p className="w-full text-center text-[#2177cb] uppercase text-[1.2rem] font-semibold">
-            Users joining
+          <p className="w-full text-center text-[#2177cb] uppercase text-[1.2rem] font-semibold font-poppins">
+            Users joined : {joinedUsersList?.length + liveUsers?.length}
           </p>
           <div
-            className="w-full flex-1 text-center flex flex-col items-center gap-[5px] overflow-y-auto joining-users"
+            className="w-full flex-1 text-center flex flex-col items-center gap-[5px] overflow-y-auto joining-users max-h-60"
             style={{ maxHeight: "180px" }}
           >
             {joinedUsersList?.map((curr, index) => (
@@ -299,7 +299,7 @@ const RaceWaitingZone = ({
               <div className="mt-3">
                 <button
                   onClick={() => {
-                    if (!det) {
+                    if (!userDetails) {
                       setShowLoginForm(true);
                     } else {
                       setJoinRaceFormVisible(true);

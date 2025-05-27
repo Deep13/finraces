@@ -67,6 +67,11 @@ const AllRaces = () => {
     setStartDate("");
     setEndDate("");
     setStockNames([]);
+    setFilters({
+      endDate: "",
+      startDate: "",
+      selectedStocks: [],
+    });
   }, [activeTab]);
 
   // Close menu on outside click
@@ -230,6 +235,11 @@ const AllRaces = () => {
                   setStartDate("");
                   setEndDate("");
                   setStockNames([]);
+                  setFilters({
+                    endDate: "",
+                    startDate: "",
+                    selectedStocks: [],
+                  });
                 }}
                 className="cursor-pointer bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-8 h-10 rounded-lg flex items-center justify-center text-sm font-semibold text-white"
               >
