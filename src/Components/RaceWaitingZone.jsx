@@ -283,8 +283,7 @@ const RaceWaitingZone = ({
           >
             {joinedUsersList?.map((curr, index) => (
               <p key={index}>
-                {checkSelf(curr?.user?.id, curr?.user?.firstName)} joined
-                successfully
+                {checkSelf(curr?.id, curr?.firstName)} joined successfully
               </p>
             ))}
             {liveUsers?.map((curr, index) => (

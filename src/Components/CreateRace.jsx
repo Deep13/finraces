@@ -70,7 +70,7 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
   };
 
   // const [closed, setClosed] = useState(false) // race type will be open initially
-  const [OpenCloseRaceValue, setOpenCloseRaceValue] = useState("private");
+  const [OpenCloseRaceValue, setOpenCloseRaceValue] = useState("public");
   const [percentValue, setpercentValue] = useState("price");
   const [percentage, setPercentage] = useState(false);
   const [Inputs, setInputs] = useState([
@@ -498,13 +498,13 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
                 controlRef={useRef()}
                 segments={[
                   {
-                    label: "Close",
-                    value: "private",
+                    label: "Open",
+                    value: "public",
                     ref: useRef(),
                   },
                   {
-                    label: "Open",
-                    value: "public",
+                    label: "Close",
+                    value: "private",
                     ref: useRef(),
                   },
                 ]}

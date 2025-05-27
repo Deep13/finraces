@@ -2,18 +2,16 @@ import { useRef, useState, useEffect, useContext } from "react";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 // import "./styles.css";
 
-
-
 const SegmentedControl = ({
   name,
   segments,
   callback,
   defaultIndex = 0,
-  controlRef
+  controlRef,
 }) => {
   const [activeIndex, setActiveIndex] = useState(defaultIndex);
   const componentReady = useRef();
-  const { darkModeEnabled } = useContext(DarkModeContext)
+  const { darkModeEnabled } = useContext(DarkModeContext);
 
   // Determine when the component is "ready"
   useEffect(() => {
@@ -40,7 +38,9 @@ const SegmentedControl = ({
         {segments?.map((item, i) => (
           <div
             key={item.value}
-            className={`segment dark:dark-segment ${i === activeIndex ? "active" : "inactive"}`}
+            className={`segment dark:dark-segment ${
+              i === activeIndex ? "active" : "inactive"
+            }`}
             ref={item.ref}
           >
             <input
@@ -51,7 +51,12 @@ const SegmentedControl = ({
               onChange={() => onInputChange(item.value, i)}
               checked={i === activeIndex}
             />
-            <label className={`${darkModeEnabled ? 'dark' : ''}`} htmlFor={item.label}>{item.label}</label>
+            <label
+              className={`${darkModeEnabled ? "dark" : ""}`}
+              htmlFor={item.label}
+            >
+              {item.label}
+            </label>
           </div>
         ))}
       </div>
