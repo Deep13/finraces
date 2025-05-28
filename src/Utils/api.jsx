@@ -775,9 +775,11 @@ export const debounceStockSearchj = async (
   onError = () => {}
 ) => {
   try {
-    const url = `${GlobalURL}/api/v1/public/stocks?filters=${JSON.stringify({
-      namePrefix: prefix,
-    })}`;
+    const url = `${GlobalURL}/api/v1/public/stocks?filters=${encodeURIComponent(
+      JSON.stringify({
+        searchTerm: prefix,
+      })
+    )}`;
 
     // Make the PATCH request
     const response = await fetch(url, {

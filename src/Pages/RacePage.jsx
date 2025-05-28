@@ -1394,7 +1394,7 @@ const RacePage = () => {
                       <iframe
                         className="flex-1 w-full h-[700px]"
                         ref={iframeRef}
-                        src={`/horseRace/index.html?raceId=${race_id}`} // Adjust path based on where you host the game
+                        src={`/horse-race/game/index.html?raceId=${race_id}`} // Adjust path based on where you host the game
                         // width=""
                         // height="832px"
                         // frameBorder="0"
