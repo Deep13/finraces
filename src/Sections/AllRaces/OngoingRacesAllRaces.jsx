@@ -34,6 +34,18 @@ const OngoingRacesAllRaces = ({ filters }) => {
       filters
     );
   }, [filters, page]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      setRaceList((prevRaces) =>
+        prevRaces.filter((race) => new Date(race.end_date).getTime() > now)
+      );
+    }, 1000); // check every second
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="max-w-[2000px] w-full relative mb-[3.3rem]">
       <div className="w-full gap-[1rem] flex flex-col min-h-[280px] relative">
