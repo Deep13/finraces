@@ -1156,13 +1156,19 @@ const RacePage = () => {
                           Date.now() ? (
                             <>
                               <p>
-                                {raceStatus !== "running"
+                                {new Date(raceDetails.start_date).getTime() >
+                                Date.now()
                                   ? "Race Starts In:"
                                   : "Remaining Time:"}
                               </p>
                               <div className="font-semibold font-poppins">
                                 <Countdown
-                                  date={Date.parse(raceDetails.end_date)} // Correct UTC-based timestamp
+                                  date={
+                                    new Date(raceDetails.start_date).getTime() >
+                                    Date.now()
+                                      ? Date.parse(raceDetails.start_date)
+                                      : Date.parse(raceDetails.end_date)
+                                  } // Correct UTC-based timestamp
                                   renderer={({
                                     days,
                                     hours,
@@ -1233,7 +1239,7 @@ const RacePage = () => {
                                                 </span>
                                             ))}
                                         </div> */}
-                    {raceStatus == "finsihed" || raceStatus == "running" ? (
+                    {raceStatus == "finished" || raceStatus == "running" ? (
                       <div className="group">
                         <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-32 z-20 opacity-85">
                           Share in Community
