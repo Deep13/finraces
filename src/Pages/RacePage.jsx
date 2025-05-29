@@ -362,39 +362,39 @@ const RacePage = () => {
   };
   // code by deepak
 
-  const fetchParticipantData = (id) => {
-    fetchParticipantsData(id, (data) => {
-      // console.log("Race Participants data", data)
-      // setRaceUsersData(data.participants)
-      setisLoading(false);
-      let obj = {};
-      let arr = [Placeholder];
-      console.log(window.location.origin);
-      console.log("A", data);
-      setJoinedUsers(data.participants);
-      setParticipantsCount(data.participants.length);
-      data?.participants?.map((val, index) => {
-        let imgD;
-        if (val?.photo?.path) {
-          imgD = val?.photo?.path;
-        } else {
-          if (val.gender == "female") {
-            imgD = femalePlaceholder;
-          } else {
-            imgD = malePlaceholder;
-          }
-        }
-        obj[val.id] = {
-          image: imgD,
-          position: index + 1,
-        };
+  // const fetchParticipantData = (id) => {
+  //   fetchParticipantsData(id, (data) => {
+  //     // console.log("Race Participants data", data)
+  //     // setRaceUsersData(data.participants)
+  //     setisLoading(false);
+  //     let obj = {};
+  //     let arr = [Placeholder];
+  //     console.log(window.location.origin);
+  //     console.log("A", data);
+  //     setJoinedUsers(data.participants);
+  //     setParticipantsCount(data.participants.length);
+  //     data?.participants?.map((val, index) => {
+  //       let imgD;
+  //       if (val?.photo?.path) {
+  //         imgD = val?.photo?.path;
+  //       } else {
+  //         if (val.gender == "female") {
+  //           imgD = femalePlaceholder;
+  //         } else {
+  //           imgD = malePlaceholder;
+  //         }
+  //       }
+  //       obj[val.id] = {
+  //         image: imgD,
+  //         position: index + 1,
+  //       };
 
-        arr.push(imgD);
-      });
-      setImageData(arr);
-      setImageRank(obj);
-    });
-  };
+  //       arr.push(imgD);
+  //     });
+  //     setImageData(arr);
+  //     setImageRank(obj);
+  //   });
+  // };
 
   function calculateDuration(start_date, end_date) {
     // Parse the start and end dates
@@ -540,7 +540,7 @@ const RacePage = () => {
       });
     }, 4000);
 
-    fetchParticipantData(race_id); // this is local
+    // fetchParticipantData(race_id);
 
     fetchRaceData(race_id, (res) => {
       console.log("racedata :", res);
@@ -608,6 +608,34 @@ const RacePage = () => {
 
     fetchRaceDataDetailed(race_id, (res) => {
       console.log("racedata detailed:", res);
+      setisLoading(false);
+      let obj = {};
+      let arr = [Placeholder];
+      console.log(window.location.origin);
+      console.log("A", res);
+      setJoinedUsers(res.participants);
+      setParticipantsCount(res.participants.length);
+      res?.participants?.map((val, index) => {
+        let imgD;
+        if (val?.photo?.path) {
+          imgD = val?.photo?.path;
+        } else {
+          if (val.gender == "female") {
+            imgD = femalePlaceholder;
+          } else {
+            imgD = malePlaceholder;
+          }
+        }
+        obj[val.id] = {
+          image: imgD,
+          position: index + 1,
+        };
+
+        arr.push(imgD);
+      });
+      setImageData(arr);
+      setImageRank(obj);
+
       const barColors = [
         "red",
         "blue",
@@ -1123,8 +1151,8 @@ const RacePage = () => {
                         {raceDetails?.name}
                       </h3>
                       <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
-                        {raceDetails?.start_date ? (
-                          new Date(raceDetails.start_date).getTime() >
+                        {raceDetails?.end_date ? (
+                          new Date(raceDetails.end_date).getTime() >
                           Date.now() ? (
                             <>
                               <p>
@@ -1134,7 +1162,7 @@ const RacePage = () => {
                               </p>
                               <div className="font-semibold font-poppins">
                                 <Countdown
-                                  date={Date.parse(raceDetails.start_date)} // Correct UTC-based timestamp
+                                  date={Date.parse(raceDetails.end_date)} // Correct UTC-based timestamp
                                   renderer={({
                                     days,
                                     hours,
