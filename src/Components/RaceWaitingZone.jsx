@@ -70,7 +70,7 @@ const RaceWaitingZone = ({
   const [joinRaceFormVisible, setJoinRaceFormVisible] = useState(false);
   const { setShowLoginForm } = useContext(DarkModeContext);
   const hasJoined =
-    joinedUsersList?.some((curr) => curr?.user?.id === det?.userId) ||
+    joinedUsersList?.some((curr) => curr?.id === det?.userId) ||
     liveUsers?.some((curr) => curr?.id === det?.userId);
 
   return (

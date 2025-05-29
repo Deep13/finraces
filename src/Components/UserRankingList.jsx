@@ -1,6 +1,8 @@
 import React from "react";
 import { ColorRing } from "react-loader-spinner";
 import UserRankingCard from "./UserRankingCard";
+import malePlaceholder from "../assets/images/manPlaceholder.jpg";
+import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
 
 const UserRankingList = ({ rankList, status = "" }) => {
   console.log("Ranklist item structure", rankList);
@@ -13,10 +15,15 @@ const UserRankingList = ({ rankList, status = "" }) => {
             <UserRankingCard
               key={index}
               pos={index}
-              id={curr.user.id}
+              id={curr.id}
               total={rankList.length}
-              userName={curr.user.firstName + " " + curr.user.lastName}
-              userPhoto={curr.user.photo.path}
+              userName={curr.firstName + " " + curr.lastName}
+              userPhoto={
+                curr?.photo?.path ||
+                (curr?.gender === "female"
+                  ? femalePlaceholder
+                  : malePlaceholder)
+              }
               userRank={index + 1}
               lastItem={rankList?.length === index}
             />

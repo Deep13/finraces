@@ -588,8 +588,8 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
                 }
               }
               // now for the race predictions
-              if (racePredictions.length === 0) {
-                alert("Stocks Predicitions are required");
+              if (racePredictions.length < 2) {
+                alert("Their should be at least 2 stocks for a race.");
                 return;
               } else {
                 racePredictions.forEach((element) => {

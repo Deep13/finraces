@@ -1123,8 +1123,8 @@ const RacePage = () => {
                         {raceDetails?.name}
                       </h3>
                       <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
-                        {raceDetails?.end_date ? (
-                          new Date(raceDetails.end_date).getTime() >
+                        {raceDetails?.start_date ? (
+                          new Date(raceDetails.start_date).getTime() >
                           Date.now() ? (
                             <>
                               <p>
@@ -1134,9 +1134,7 @@ const RacePage = () => {
                               </p>
                               <div className="font-semibold font-poppins">
                                 <Countdown
-                                  date={new Date(
-                                    raceDetails.end_date
-                                  ).getTime()}
+                                  date={Date.parse(raceDetails.start_date)} // Correct UTC-based timestamp
                                   renderer={({
                                     days,
                                     hours,

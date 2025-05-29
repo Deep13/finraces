@@ -183,6 +183,11 @@ export const getRaceList = async (
 ) => {
   // let token = localStorage.getItem('token')
   let url = `${GlobalURL}/api/v1/public/races/detailed?limit=10&statuses=${status}&page=${page}`;
+  let ud = localStorage.getItem("fin_userDetails");
+
+  if (!ud) {
+    url += "&privacy=public";
+  }
 
   if (filters.endDate != "") {
     let formatttedDate = new Date(filters.endDate).toISOString();
