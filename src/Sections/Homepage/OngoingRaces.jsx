@@ -36,7 +36,7 @@ const OngoingRaces = () => {
   }, []);
 
   return (
-    <div className="max-w-[1400px] relative mb-[3.3rem]">
+    <div className="max-w-[1400px] relative my-[3.3rem]">
       <a
         onClick={() => navigate("/allraces", { state: "Ongoing Races" })}
         className="absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center"
