@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import RaceCardHomepage from "../../Components/RaceCardHomepage";
 import Pagination from "../../Components/Pagination";
-import { getRaceList } from "../../Utils/api";
+import { getRaceList, getRacesLite } from "../../Utils/api";
 import { ColorRing } from "react-loader-spinner";
 import RaceCardHomepage2 from "../../Components/RaceCardHomepage2";
 
@@ -14,7 +14,7 @@ const OngoingRacesAllRaces = ({ filters }) => {
 
   useEffect(() => {
     setLoading(true);
-    getRaceList(
+    getRacesLite(
       "running",
       page,
       (data) => {
@@ -69,7 +69,7 @@ const OngoingRacesAllRaces = ({ filters }) => {
               end_date={curr.end_date}
               raceName={curr.name}
               raceId={curr.id}
-              participants={curr.participants}
+              participants={curr.participantCount}
             />
           ))
         ) : (

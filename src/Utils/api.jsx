@@ -225,6 +225,57 @@ export const getRaceList = async (
   }
 };
 
+export const getRacesLite = async (
+  status = "scheduled",
+  page = 1,
+  onSuccess = () => {},
+  onError = () => {},
+  filters = { endDate: "", selectedStocks: [], startDate: "" }
+) => {
+  // let token = localStorage.getItem('token')
+  let url = `${GlobalURL}/api/v1/public/races?limit=10&statuses=${status}&page=${page}`;
+  let ud = localStorage.getItem("fin_userDetails");
+
+  if (!ud) {
+    url += "&privacy=public";
+  }
+
+  if (filters.endDate != "") {
+    let formatttedDate = new Date(filters.endDate).toISOString();
+    url += `&endDateLessThanEqual=${formatttedDate}`;
+  }
+  if (filters.startDate != "") {
+    let formatttedDate = new Date(filters.startDate).toISOString();
+    url += `&endDateGreaterThanEqual=${formatttedDate}`;
+  }
+  if (filters.selectedStocks.length > 0) {
+    filters.selectedStocks.forEach((stock) => {
+      url += `&tickersContains=${stock}`;
+    });
+  }
+  try {
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        // 'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const responseData = await response.json();
+
+    console.log("racelist", responseData);
+    onSuccess(responseData);
+  } catch (error) {
+    console.error("Fetch request failed:", error);
+    onError(error);
+  }
+};
+
 export const fetchRaceData = async (
   // change this to the updated api
   raceId,

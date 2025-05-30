@@ -152,7 +152,9 @@ const RaceCardHomepage2 = ({
               />
             </div>
             <div className="h-full flex flex-col justify-start items-end flex-1">
-              <h3 className="text-[1.05rem] font-bold dark:text-white">{`${participants?.length} participants`}</h3>
+              <h3 className="text-[1.05rem] font-bold dark:text-white">{`${participants} ${
+                participants > 1 ? "participants" : "participant"
+              } `}</h3>
               {/* <p className='text-[0.7rem] dark:text-white'>{`${participants?.length} participants`}</p> */}
             </div>
           </div>

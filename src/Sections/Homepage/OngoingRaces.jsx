@@ -1,7 +1,7 @@
 import { BiChevronRight } from "react-icons/bi";
 import React, { useEffect, useState } from "react";
 import RaceCardHomepage from "../../Components/RaceCardHomepage";
-import { getRaceList } from "../../Utils/api";
+import { getRaceList, getRacesLite } from "../../Utils/api";
 import { useNavigate } from "react-router-dom";
 import RaceCardHomepage2 from "../../Components/RaceCardHomepage2";
 
@@ -10,7 +10,7 @@ const OngoingRaces = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    getRaceList(
+    getRacesLite(
       "running",
       1,
       (data) => {
@@ -63,7 +63,7 @@ const OngoingRaces = () => {
                     ...raceList.slice(index + 1),
                   ])
                 }
-                participants={curr.participants}
+                participants={curr.participantCount}
               />
             );
           })}
