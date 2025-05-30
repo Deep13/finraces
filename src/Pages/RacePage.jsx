@@ -238,7 +238,7 @@ const RacePage = () => {
           const relativePosition =
             ((data.data["stocks"].length - stock.rank) *
               (data.data["stocks"].length * 10)) /
-              data.data["stocks"].length +
+            data.data["stocks"].length +
             elapsedTime; // here 5 is total no. of stocks  *10 is not required here
           newPosArr.push(relativePosition);
         });
@@ -453,8 +453,8 @@ const RacePage = () => {
           user_photo: participant.user_photo
             ? participant.user_photo.path
             : participant.gender == "female"
-            ? femalePlaceholder
-            : malePlaceholder,
+              ? femalePlaceholder
+              : malePlaceholder,
           rank: rank || "-", // Use the key as rank, or "-" if rank is not found
         });
       });
@@ -468,8 +468,8 @@ const RacePage = () => {
         user_photo: participant.user_photo
           ? participant.user_photo.path
           : participant.gender == "female"
-          ? femalePlaceholder
-          : malePlaceholder,
+            ? femalePlaceholder
+            : malePlaceholder,
         rank: "-",
       });
     });
@@ -497,39 +497,6 @@ const RacePage = () => {
     setCurrentImage(1);
   };
 
-  useEffect(() => {
-    if (raceResults) {
-      const numStocks = raceResults.stocks.length;
-      // const numStocks = 3
-      // const stockNames = ["Tesla", "Gooogle", "Deepak"]
-      const stockNames = raceResults.stocks.map((curr) => curr.stock_ticker);
-      const iframe = iframeRef.current;
-      if (!iframe) return;
-
-      iframe.onload = () => {
-        const gameWindow = iframe.contentWindow;
-        if (gameWindow) {
-          gameWindow.postMessage(
-            {
-              action: "start_game",
-              num_horse: numStocks, // total number of
-              name_horse: stockNames, // stocks values
-            },
-            "*"
-          );
-          setInterval(() => {
-            gameWindow.postMessage(
-              {
-                action: "update_rank",
-                positions: [2, 3, 1, 0], // total number of
-              },
-              "*"
-            );
-          }, 3000);
-        }
-      };
-    }
-  }, [raceResults]);
 
   useEffect(() => {
     let interval = setInterval(() => {
@@ -770,21 +737,21 @@ const RacePage = () => {
         <!-- User Row -->
         <div class="flex justify-center items-start gap-[50px] mb-[30px]">
           ${[...Array(maxUserSlots)]
-            .map((_, i) => {
-              const user = rankList[i];
-              const crown = [
-                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_1.png",
-                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_2.png",
-                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_3.png",
-              ][i];
-              const userImg =
-                user?.user_photo ||
-                (user?.gender === "female"
-                  ? "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/womanPlaceholder.jpg"
-                  : "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/manPlaceholder.jpg");
-              const userName = user?.user_name || "";
+        .map((_, i) => {
+          const user = rankList[i];
+          const crown = [
+            "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_1.png",
+            "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_2.png",
+            "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_3.png",
+          ][i];
+          const userImg =
+            user?.user_photo ||
+            (user?.gender === "female"
+              ? "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/womanPlaceholder.jpg"
+              : "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/manPlaceholder.jpg");
+          const userName = user?.user_name || "";
 
-              return `
+          return `
                 <div class="flex flex-col items-center gap-4">
                   <div style="position: relative;">
                     <img class="h-36 w-36 rounded-2xl aspect-square" src="${userImg}" />
@@ -793,20 +760,20 @@ const RacePage = () => {
                   <p class="text-base font-semibold dark:text-white">${userName}</p>
                 </div>
               `;
-            })
-            .join("")}
+        })
+        .join("")}
         </div>
 
         <!-- Stock Row -->
         <div class="flex justify-center items-start gap-[50px]">
           ${[...Array(maxStockSlots)]
-            .map((_, i) => {
-              const stockIcon = stockRankList[i]?.stock_icon_url || "";
-              return stockIcon
-                ? `<img class="rounded-xl w-28 h-28" src="${stockIcon}" />`
-                : "";
-            })
-            .join("")}
+        .map((_, i) => {
+          const stockIcon = stockRankList[i]?.stock_icon_url || "";
+          return stockIcon
+            ? `<img class="rounded-xl w-28 h-28" src="${stockIcon}" />`
+            : "";
+        })
+        .join("")}
         </div>
 
       </div>
@@ -951,8 +918,8 @@ const RacePage = () => {
   const findImageUrlForStock = (id) =>
     stocksDataForRace
       ? stocksDataForRace[
-          Object.keys(stocksDataForRace)?.find((element) => element === id)
-        ]?.icon_url
+        Object.keys(stocksDataForRace)?.find((element) => element === id)
+      ]?.icon_url
       : "";
 
   useEffect(() => {
@@ -1153,11 +1120,11 @@ const RacePage = () => {
                       <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
                         {raceDetails?.end_date ? (
                           new Date(raceDetails.end_date).getTime() >
-                          Date.now() ? (
+                            Date.now() ? (
                             <>
                               <p>
                                 {new Date(raceDetails.start_date).getTime() >
-                                Date.now()
+                                  Date.now()
                                   ? "Race Starts In:"
                                   : "Remaining Time:"}
                               </p>
@@ -1165,7 +1132,7 @@ const RacePage = () => {
                                 <Countdown
                                   date={
                                     new Date(raceDetails.start_date).getTime() >
-                                    Date.now()
+                                      Date.now()
                                       ? Date.parse(raceDetails.start_date)
                                       : Date.parse(raceDetails.end_date)
                                   } // Correct UTC-based timestamp
@@ -1427,9 +1394,9 @@ const RacePage = () => {
                         className="flex-1 w-full h-[700px]"
                         ref={iframeRef}
                         src={`/horse-race/game/index.html?raceId=${race_id}`} // Adjust path based on where you host the game
-                        // width=""
-                        // height="832px"
-                        // frameBorder="0"
+                      // width=""
+                      // height="832px"
+                      // frameBorder="0"
                       />
                     )}
 
@@ -1533,17 +1500,17 @@ const RacePage = () => {
                       </button>
                       {(raceStatus == "running" ||
                         raceStatus == "finished") && (
-                        <button
-                          onClick={() => setTabs("yourbets")}
-                          className={
-                            tabs === "yourbets"
-                              ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
-                              : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
-                          }
-                        >
-                          Your Bets
-                        </button>
-                      )}
+                          <button
+                            onClick={() => setTabs("yourbets")}
+                            className={
+                              tabs === "yourbets"
+                                ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
+                                : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
+                            }
+                          >
+                            Your Bets
+                          </button>
+                        )}
                     </div>
                     {
                       <div className="w-full rounded-[8px] max-h-scree h-full overflow-auto custom-scrollbar">
@@ -1567,9 +1534,9 @@ const RacePage = () => {
                               stockRankList?.map((curr, index) => {
                                 let stock =
                                   stocksDataForRace[
-                                    Object.keys(stocksDataForRace).find(
-                                      (element) => element === curr.stock_id
-                                    )
+                                  Object.keys(stocksDataForRace).find(
+                                    (element) => element === curr.stock_id
+                                  )
                                   ];
                                 let imageUrl = stock?.icon_url;
                                 console.log(curr);
