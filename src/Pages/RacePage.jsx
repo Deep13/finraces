@@ -37,6 +37,7 @@ import {
   fetchParticipantsData,
   fetchRaceDataDetailed,
   getStocksDataForRace,
+  getStockChartData,
 } from "../Utils/api";
 import io from "socket.io-client";
 import Countdown from "react-countdown";
@@ -76,6 +77,7 @@ import JoinRace from "../Components/JoinRace";
 import { useSocket } from "../Contexts/SocketProvider";
 import { useCommunity } from "../Contexts/CommunityProvider";
 import { connectSocket } from "../Utils/socket";
+import StockChart from "../Components/StockChart";
 
 // Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -104,7 +106,7 @@ const RacePage = () => {
   const [raceResults, setRaceResults] = useState();
   const [stocksDataForRace, setStocksDataForRace] = useState(null);
   const [raceStatus, setRaceStatus] = useState("");
-  const [graphType, setGraphType] = useState("Horse");
+  const [graphType, setGraphType] = useState("Race");
   const [tempStocks, setTempStocks] = useState([]);
   const [ranks, setRanks] = useState({
     1: Math.floor(Math.random() * 3) + 1,
@@ -217,8 +219,8 @@ const RacePage = () => {
       }
       if (data.event === "race-data") {
         setRaceResults(data.data);
-        console.log("race data socket", data.data);
-        console.log("check", transformSocketData(data.data));
+        // console.log("race data socket", data.data);
+        // console.log("check", transformSocketData(data.data));
         // dataTransform(data.data)
         if (data?.data?.status) {
           setRaceStatus(data.data.status);
@@ -724,6 +726,79 @@ const RacePage = () => {
     console.log("check", stockRankList);
   }, [stockRankList]);
 
+  //fethcing dat for stock Comparison
+  useEffect(() => {
+    if (graphType == "Comparison") {
+      const formatDate = (date) => date.toISOString().split("T")[0];
+      const today = new Date();
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(today.getMonth() - 1);
+
+      const startDate = formatDate(oneMonthAgo);
+      const endDate = formatDate(today);
+
+      const stockColors = ["#00E396", "#FEB019", "#FF4560", "#775DD0"];
+
+      let allPromises = stockRankList.map((stock, index) => {
+        return new Promise((resolve, reject) => {
+          getStockChartData(
+            stock.stock_ticker,
+            startDate,
+            endDate,
+            "day",
+            (data) => {
+              resolve({ ticker: stock.ticker, data });
+            },
+            (error) => {
+              console.log("Error while fetching chart Data", error);
+            }
+          );
+        });
+      });
+      Promise.all(allPromises)
+        .then((results) => {
+          let datasets = [];
+          let dateLabels = [];
+
+          results.forEach((stockData, index) => {
+            console.log(stockData);
+
+            if (!stockData.data?.results) {
+              console.error(
+                "Unexpected API response structure:",
+                stockData.data
+              );
+              return;
+            }
+
+            let stockPrices = stockData.data.results.map((entry) => entry["c"]); // Closing prices
+            let stockDates = stockData.data.results.map((entry) => {
+              let dateObj = new Date(entry.t);
+              return dateObj.toISOString().split("T")[0]; // Extract YYYY-MM-DD
+            });
+
+            // Store the first stock's dates as labels
+            if (index === 0) {
+              dateLabels = [...stockDates]; // Reverse date labels
+              setLabels(dateLabels);
+            }
+
+            datasets.push({
+              label: stockData.data.ticker,
+              data: [...stockPrices], // Reverse stock prices
+              borderColor: stockColors[index % stockColors.length],
+              backgroundColor: stockColors[index % stockColors.length] + "33",
+              fill: graphType === "area",
+            });
+          });
+
+          console.log("datasets", datasets);
+          setChartData(datasets);
+        })
+        .catch((error) => console.log("Error fetching stock data:", error));
+    }
+  }, [graphType]);
+
   const handleShareClick = async () => {
     setShareModal(true);
     setModalText(
@@ -1210,17 +1285,21 @@ const RacePage = () => {
                     )}
                   </div>
                   <div className="h-full flex flex-row justify-center items-end">
-                    {/* <div className="border-2 dark:border-[#00387E] flex items-center rounded-lg gap-2 mr-4 text-[12px] text-[white]">
-                                            {['Horse', 'Ticker', 'Rank', 'Price'].map((item) => (
-                                                <span
-                                                    key={item}
-                                                    className={`rounded-md cursor-pointer ${item == graphType ? "bg-blue-600" : ""} p-2`}
-                                                    onClick={() => setGraphType(item)}
-                                                >
-                                                    {item}
-                                                </span>
-                                            ))}
-                                        </div> */}
+                    {raceStatus != "finished" && (
+                      <div className="border-2 dark:border-[#00387E] flex items-center rounded-lg gap-2 mr-4 text-[12px] text-[white]">
+                        {["Race", "Comparison"].map((item) => (
+                          <span
+                            key={item}
+                            className={`rounded-md cursor-pointer ${
+                              item == graphType ? "bg-blue-600" : ""
+                            } p-2`}
+                            onClick={() => setGraphType(item)}
+                          >
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                     {raceStatus == "finished" || raceStatus == "running" ? (
                       <div className="group">
                         <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-32 z-20 opacity-85">
@@ -1402,7 +1481,7 @@ const RacePage = () => {
                         plugins={[customPlugin]}
                       />
                     )}
-                  {graphType === "Horse" &&
+                  {graphType === "Race" &&
                     data.labels.length > 0 &&
                     raceStatus !== "finished" &&
                     showIframe && (
@@ -1415,6 +1494,16 @@ const RacePage = () => {
                         sandbox="allow-scripts allow-same-origin"
                       />
                     )}
+
+                  {graphType == "Comparison" && raceStatus != "finished" && (
+                    <StockChart
+                      labels={labels}
+                      datasets={chartData}
+                      area={false}
+                      disableAnimation={false}
+                      zoom={true}
+                    />
+                  )}
 
                   {graphType == "Price" && (
                     // <StockRaceChart duration={60} stocks={stockCount}/>
