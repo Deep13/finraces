@@ -68,6 +68,7 @@ const RaceWaitingZone = ({
   }, [isTimerFinished]);
 
   const [joinRaceFormVisible, setJoinRaceFormVisible] = useState(false);
+  const [copied, setCopied] = useState(false);
   const { setShowLoginForm } = useContext(DarkModeContext);
   const hasJoined =
     joinedUsersList?.some((curr) => curr?.id === det?.userId) ||
@@ -270,6 +271,25 @@ const RaceWaitingZone = ({
               {/* <MailruShareButton url={currentUrl} title="Join my race:">
                 <MailIcon size={32} round />
               </MailruShareButton> */}
+            </div>
+            <div className="w-full flex flex-col items-center mt-4 px-4">
+              <div className="flex items-center w-full bg-gray-100 rounded-md px-2 py-1">
+                <input
+                  readOnly
+                  value={currentUrl}
+                  className="flex-1 px-2 py-1 !bg-transparent text-sm !text-gray-700"
+                />
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(currentUrl);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                  className="text-sm cursor-pointer font-medium text-blue-600 hover:underline ml-2"
+                >
+                  {copied ? "Copied!" : "Copy"}
+                </button>
+              </div>
             </div>
           </div>
 

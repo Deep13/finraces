@@ -982,15 +982,10 @@ const RacePage = () => {
   //this is fix for iframe
   const [showIframe, setShowIframe] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const timeout = setTimeout(() => {
-      if (iframeRef.current) {
-        // Reload iframe after hydration
-        iframeRef.current.src += ""; // reloads iframe
-      }
       setShowIframe(true);
-    }, 500);
-
+    }, 500); // Give enough time for other React stuff to stabilize
     return () => clearTimeout(timeout);
   }, []);
 
@@ -1407,19 +1402,17 @@ const RacePage = () => {
                         plugins={[customPlugin]}
                       />
                     )}
-                  {graphType == "Horse" &&
+                  {graphType === "Horse" &&
                     data.labels.length > 0 &&
                     raceStatus !== "finished" &&
                     showIframe && (
                       <iframe
+                        key={race_id} // force reload if race_id changes
                         className="flex-1 w-full h-[700px]"
                         ref={iframeRef}
-                        src={`/horse-race/game/index.html?raceId=${race_id}`} // Adjust path based on where you host the game
+                        src={`/horse-race/game/index.html?raceId=${race_id}`}
                         loading="lazy"
                         sandbox="allow-scripts allow-same-origin"
-                        // width=""
-                        // height="832px"
-                        // frameBorder="0"
                       />
                     )}
 

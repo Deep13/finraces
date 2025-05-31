@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import UpcomingRaceCardHomepage from "../../Components/UpcomingRaceCardHomepage";
 import { BiChevronRight } from "react-icons/bi";
-import { getRaceList } from "../../Utils/api";
+import { getRaceList, getRacesLite } from "../../Utils/api";
 import { useNavigate } from "react-router-dom";
 
 const UpcomingRaces = () => {
@@ -18,7 +18,7 @@ const UpcomingRaces = () => {
   };
 
   useEffect(() => {
-    getRaceList(
+    getRacesLite(
       "scheduled",
       1,
       (data) => {
