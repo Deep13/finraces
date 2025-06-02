@@ -1540,7 +1540,7 @@ const RacePage = () => {
                       labels={labels}
                       datasets={chartData}
                       area={false}
-                      disableAnimation={true}
+                      disableAnimation={false}
                       zoom={true}
                     />
                   </div>
