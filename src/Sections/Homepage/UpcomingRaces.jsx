@@ -18,7 +18,7 @@ const UpcomingRaces = () => {
   };
 
   useEffect(() => {
-    getRacesLite(
+    getRaceList(
       "scheduled",
       1,
       (data) => {
@@ -71,15 +71,15 @@ const UpcomingRaces = () => {
                 raceName={curr.name}
                 raceId={curr.id}
                 index={index}
-                totalStocksCount={curr.stocks.length}
-                stock1={curr?.stocks["0"]?.icon_url}
-                stock2={curr?.stocks["1"]?.icon_url}
-                stock3={curr?.stocks["2"]?.icon_url}
-                stock1Name={curr?.stocks["0"]?.name}
-                stock2Name={curr?.stocks["1"]?.name}
-                stock3Name={curr?.stocks["2"]?.name}
-                participants={curr.participants.length}
-                participantsData={curr.participants}
+                totalStocksCount={curr?.stocks?.length}
+                stock1={curr?.stocks?.["0"]?.icon_url}
+                stock2={curr?.stocks?.["1"]?.icon_url}
+                stock3={curr?.stocks?.["2"]?.icon_url}
+                stock1Name={curr?.stocks?.["0"]?.name}
+                stock2Name={curr?.stocks?.["1"]?.name}
+                stock3Name={curr?.stocks?.["2"]?.name}
+                participants={curr?.participants?.length}
+                participantsData={curr?.participants}
               />
             );
           })}

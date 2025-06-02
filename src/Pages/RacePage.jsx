@@ -140,6 +140,8 @@ const RacePage = () => {
   const ud = localStorage.getItem("fin_userDetails");
   const userDetails2 = ud && JSON.parse(atob(ud));
 
+  const [compareFlag, setCompareFlag] = useState(false);
+
   const checkSelf = (id, name) => {
     if (!id || !name) return "";
 
@@ -726,79 +728,6 @@ const RacePage = () => {
     console.log("check", stockRankList);
   }, [stockRankList]);
 
-  //fethcing dat for stock Comparison
-  useEffect(() => {
-    if (graphType == "Comparison") {
-      const formatDate = (date) => date.toISOString().split("T")[0];
-      const today = new Date();
-      const oneMonthAgo = new Date();
-      oneMonthAgo.setMonth(today.getMonth() - 1);
-
-      const startDate = formatDate(oneMonthAgo);
-      const endDate = formatDate(today);
-
-      const stockColors = ["#00E396", "#FEB019", "#FF4560", "#775DD0"];
-
-      let allPromises = stockRankList.map((stock, index) => {
-        return new Promise((resolve, reject) => {
-          getStockChartData(
-            stock.stock_ticker,
-            startDate,
-            endDate,
-            "day",
-            (data) => {
-              resolve({ ticker: stock.ticker, data });
-            },
-            (error) => {
-              console.log("Error while fetching chart Data", error);
-            }
-          );
-        });
-      });
-      Promise.all(allPromises)
-        .then((results) => {
-          let datasets = [];
-          let dateLabels = [];
-
-          results.forEach((stockData, index) => {
-            console.log(stockData);
-
-            if (!stockData.data?.results) {
-              console.error(
-                "Unexpected API response structure:",
-                stockData.data
-              );
-              return;
-            }
-
-            let stockPrices = stockData.data.results.map((entry) => entry["c"]); // Closing prices
-            let stockDates = stockData.data.results.map((entry) => {
-              let dateObj = new Date(entry.t);
-              return dateObj.toISOString().split("T")[0]; // Extract YYYY-MM-DD
-            });
-
-            // Store the first stock's dates as labels
-            if (index === 0) {
-              dateLabels = [...stockDates]; // Reverse date labels
-              setLabels(dateLabels);
-            }
-
-            datasets.push({
-              label: stockData.data.ticker,
-              data: [...stockPrices], // Reverse stock prices
-              borderColor: stockColors[index % stockColors.length],
-              backgroundColor: stockColors[index % stockColors.length] + "33",
-              fill: graphType === "area",
-            });
-          });
-
-          console.log("datasets", datasets);
-          setChartData(datasets);
-        })
-        .catch((error) => console.log("Error fetching stock data:", error));
-    }
-  }, [graphType]);
-
   const handleShareClick = async () => {
     setShareModal(true);
     setModalText(
@@ -1064,7 +993,87 @@ const RacePage = () => {
     return () => clearTimeout(timeout);
   }, []);
 
-  console.log("data", data);
+  const stockColors = [
+    "#00E396", // Green
+    "#FEB019", // Orange
+    "#FF4560", // Red
+    "#775DD0", // Purple
+    "#3F51B5", // Indigo
+    "#546E7A", // Blue Grey
+    "#26A69A", // Teal
+    "#F9A825", // Amber
+    "#EC407A", // Pink
+    "#29B6F6", // Light Blue
+    "#66BB6A", // Light Green
+    "#AB47BC", // Deep Purple
+    "#FFA726", // Deep Orange
+    "#8D6E63", // Brown
+    "#42A5F5", // Sky Blue
+    "#7E57C2", // Violet
+    "#EF5350", // Soft Red
+    "#26C6DA", // Cyan
+    "#9CCC65", // Lime
+    "#FF7043", // Coral
+  ];
+
+  useEffect(() => {
+    if (!compareFlag && stockRankList?.length > 0) {
+      const formatDate = (date) => date.toISOString().split("T")[0];
+      const today = new Date();
+      const oneMonthAgo = new Date();
+      oneMonthAgo.setMonth(today.getMonth() - 1);
+
+      const startDate = formatDate(oneMonthAgo);
+      const endDate = formatDate(today);
+
+      let allPromises = stockRankList.map((stock, index) => {
+        return new Promise((resolve, reject) => {
+          getStockChartData(
+            stock.stock_ticker,
+            startDate,
+            endDate,
+            "day",
+            (data) => resolve({ ticker: stock.stock_ticker, data }),
+            (error) => reject(error)
+          );
+        });
+      });
+
+      Promise.all(allPromises)
+        .then((results) => {
+          let dateLabels = [];
+          let datasets = [];
+
+          results.forEach((stockData, index) => {
+            const res = stockData.data?.results;
+            if (!res) return;
+
+            const stockPrices = res.map((entry) => entry.c);
+            const stockDates = res.map(
+              (entry) => new Date(entry.t).toISOString().split("T")[0]
+            );
+
+            if (index === 0) {
+              dateLabels = [...stockDates];
+              setLabels(dateLabels); // ⚠️ Still causes re-render
+            }
+
+            datasets.push({
+              label: stockData.ticker,
+              data: [...stockPrices],
+              borderColor: stockColors[index % stockColors.length],
+              backgroundColor: stockColors[index % stockColors.length] + "33",
+              fill: graphType === "area",
+            });
+          });
+
+          setChartData(datasets); // ⚠️ Still causes re-render
+          setCompareFlag(true);
+        })
+        .catch((err) => console.log("Fetch error:", err));
+    }
+  }, [stockRankList, compareFlag]);
+
   if (isLoadingRaceTile && raceStatus !== "finished") {
     return (
       <>
@@ -1285,7 +1294,7 @@ const RacePage = () => {
                     )}
                   </div>
                   <div className="h-full flex flex-row justify-center items-end">
-                    {raceStatus != "finished" && (
+                    {/* {raceStatus != "finished" && (
                       <div className="border-2 dark:border-[#00387E] flex items-center rounded-lg gap-2 mr-4 text-[12px] text-[white]">
                         {["Race", "Comparison"].map((item) => (
                           <span
@@ -1299,7 +1308,7 @@ const RacePage = () => {
                           </span>
                         ))}
                       </div>
-                    )}
+                    )} */}
                     {raceStatus == "finished" || raceStatus == "running" ? (
                       <div className="group">
                         <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-32 z-20 opacity-85">
@@ -1331,7 +1340,6 @@ const RacePage = () => {
                               liveUsers={liveUsers}
                               race_id={race_id}
                               status={raceDetails?.status}
-                              // raceEnded = {false}
                               closeCard={() => {
                                 setIsRaceStarted(true);
                               }}
@@ -1349,8 +1357,6 @@ const RacePage = () => {
                         onClick={() => setshowDetails(true)}
                       />
                     </div>
-
-                    {/* <p className='text-[0.7rem] dark:text-white'>{participantsCount} Participants</p> */}
                   </div>
                 </div>
 
@@ -1481,8 +1487,7 @@ const RacePage = () => {
                         plugins={[customPlugin]}
                       />
                     )}
-                  {graphType === "Race" &&
-                    data.labels.length > 0 &&
+                  {data.labels.length > 0 &&
                     raceStatus !== "finished" &&
                     showIframe && (
                       <iframe
@@ -1494,16 +1499,6 @@ const RacePage = () => {
                         sandbox="allow-scripts allow-same-origin"
                       />
                     )}
-
-                  {graphType == "Comparison" && raceStatus != "finished" && (
-                    <StockChart
-                      labels={labels}
-                      datasets={chartData}
-                      area={false}
-                      disableAnimation={false}
-                      zoom={true}
-                    />
-                  )}
 
                   {graphType == "Price" && (
                     // <StockRaceChart duration={60} stocks={stockCount}/>
@@ -1535,6 +1530,21 @@ const RacePage = () => {
                   stocksData={stocksDataForRace} // data from api below is data from socket
                   stockRankList={stockRankList}
                 />
+
+                {raceStatus != "finished" && (
+                  <div className="w-full h-[30rem]">
+                    <p className="text-slate-300 font-semibold text-xl font-poppins w-full flex items-center justify-center mb-5">
+                      Comparison of Last 30 days
+                    </p>
+                    <StockChart
+                      labels={labels}
+                      datasets={chartData}
+                      area={false}
+                      disableAnimation={true}
+                      zoom={true}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </div>
