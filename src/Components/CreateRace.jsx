@@ -207,7 +207,7 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
 
   useEffect(() => {
     // console.log(raceDetails);
-    let { start_date, end_date, name } = raceDetails;
+    let { start_date, end_date, name, start_time, end_time } = raceDetails;
     if (!name) {
       setValidation((prev) => ({ ...prev, name: false }));
     } else {
@@ -228,6 +228,22 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
           ...prev,
           start_date: true,
           end_date: true,
+        }));
+      }
+    }
+
+    if (start_date == end_date && start_time && end_time) {
+      if (start_time >= end_time) {
+        setValidation((prev) => ({
+          ...prev,
+          start_time: false,
+          end_time: false,
+        }));
+      } else {
+        setValidation((prev) => ({
+          ...prev,
+          start_time: true,
+          end_time: true,
         }));
       }
     }
@@ -400,14 +416,25 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
                 ref={startTimeRef}
                 // step="1"
               />
-              {!validation.start_time && (
-                <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1">
-                  <span>
-                    <BiError size={15} />
-                  </span>
-                  Start time is Required
-                </p>
-              )}
+              {!validation.start_time &&
+                raceDetails.start_time <= raceDetails.end_time && (
+                  <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1">
+                    <span>
+                      <BiError size={15} />
+                    </span>
+                    Start time is Required
+                  </p>
+                )}
+              {!validation.start_time &&
+                raceDetails.start_time >= raceDetails.end_time && (
+                  <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1">
+                    <span>
+                      <BiError size={15} />
+                    </span>
+                    Start time should be less then End time for a race on same
+                    day.
+                  </p>
+                )}
               {raceDetails.start_date &&
                 raceDetails.start_time &&
                 new Date(
@@ -466,14 +493,25 @@ const CreateRace = ({ setCreateRace = () => {} }) => {
                 type="time"
                 // step="1"
               />
-              {!validation.end_time && (
-                <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1">
-                  <span>
-                    <BiError size={15} />
-                  </span>
-                  End time is required
-                </p>
-              )}
+              {!validation.end_time &&
+                raceDetails.start_time <= raceDetails.end_time && (
+                  <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1">
+                    <span>
+                      <BiError size={15} />
+                    </span>
+                    End time is required
+                  </p>
+                )}
+              {!validation.end_time &&
+                raceDetails.start_time >= raceDetails.end_time && (
+                  <p className="text-xs text-red-400 font-semibold mt-1 flex gap-1">
+                    <span>
+                      <BiError size={15} />
+                    </span>
+                    End time should be more then Start time for a race on the
+                    same day.
+                  </p>
+                )}
             </div>
           </div>
 
