@@ -10,17 +10,44 @@ import {
 } from "../Components/ui/carousel";
 import { useNavigate } from "react-router-dom";
 
-const StockRankList = ({
-  stockRankList, // this is coming from socket connection
-  stocksData, // this is coming from api
-}) => {
+const StockRankList = ({ stockRankList, stocksData }) => {
   const navigate = useNavigate();
+
+  const renderCard = (stock, rank = null) => {
+    if (!stock) return null;
+
+    const {
+      id,
+      name,
+      ticker,
+      icon_url: imageUrl,
+      price: stockLastRate,
+    } = stock;
+
+    return (
+      <StockPriceCard
+        key={id}
+        stockName={name}
+        tickerName={name}
+        ticker={ticker}
+        rank={rank}
+        percentChange={null} // If needed from stockRankList
+        stockId={id}
+        stockLastRate={stockLastRate}
+        imageUrl={imageUrl}
+        onClick={() => {
+          navigate(`/stock/${ticker}/${id}`);
+        }}
+        className="cursor-pointer"
+      />
+    );
+  };
+
   return (
-    // <div className="flex-1 flex justify-start gap-[10px] custom-scrollbar overflow-auto">
     <Carousel
       opts={{
         align: "start",
-        slidesToShow: 3, // Ensure 3 items per slide
+        slidesToShow: 3,
         infinite: true,
         autoplay: true,
         autoplaySpeed: 3000,
@@ -28,40 +55,35 @@ const StockRankList = ({
       className="mb-20"
     >
       <CarouselContent className="ml-1 w-full">
-        {stockRankList ? (
-          stockRankList?.map((curr, index) => {
-            let stock = stocksData
-              ? stocksData[
-                  Object.keys(stocksData).find(
-                    (element) => element === curr.stock_id
-                  )
-                ]
-              : null;
-            let imageUrl = stock?.icon_url;
-            let name = stock?.name;
-            // console.log(stock)
+        {stockRankList && Array.isArray(stockRankList) ? (
+          stockRankList.map((curr, index) => {
+            const stock =
+              stocksData && typeof stocksData === "object"
+                ? stocksData[curr.stock_id]
+                : null;
+
             return (
-              // <CarouselItem
-              //     key={curr.stock_id}
-              // >
               <StockPriceCard
                 key={curr.stock_id}
-                stockName={name}
+                stockName={stock?.name}
                 tickerName={curr.stock_name}
                 ticker={curr.stock_ticker}
                 rank={index + 1}
                 percentChange={curr.percent_change}
                 stockId={curr.stock_id}
                 stockLastRate={curr.stock_last_rate}
-                imageUrl={imageUrl}
+                imageUrl={stock?.icon_url}
                 onClick={() => {
-                  navigate(`/stock/${curr.ticker}/${curr.id}`);
+                  navigate(`/stock/${curr.stock_ticker}/${curr.stock_id}`);
                 }}
                 className="cursor-pointer"
               />
-              // </CarouselItem>
             );
           })
+        ) : stocksData && typeof stocksData === "object" ? (
+          Object.values(stocksData).map((stock, index) =>
+            renderCard(stock, index + 1)
+          )
         ) : (
           <ColorRing
             visible={true}
@@ -77,7 +99,6 @@ const StockRankList = ({
       <CarouselPrevious className="dark:bg-white" />
       <CarouselNext className="dark:bg-white" />
     </Carousel>
-    // </div>
   );
 };
 

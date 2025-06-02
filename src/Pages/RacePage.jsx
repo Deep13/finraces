@@ -1077,18 +1077,18 @@ const RacePage = () => {
   if (isLoadingRaceTile && raceStatus !== "finished") {
     return (
       <>
-        {isLoading && isRaceStarted ? (
+        {isLoading ? (
           <div className="fixed bg-black opacity-40 w-full h-screen top-0 left-0 grid place-items-center z-[999]">
             <div>
-              {/* <ColorRing
-                                visible={true}
-                                height="80"
-                                width="80"
-                                ariaLabel="color-ring-loading"
-                                wrapperStyle={{}}
-                                wrapperClass="color-ring-wrapper"
-                                colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
-                            /> */}
+              <ColorRing
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="color-ring-loading"
+                wrapperStyle={{}}
+                wrapperClass="color-ring-wrapper"
+                colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+              />
             </div>
           </div>
         ) : (
@@ -1126,7 +1126,7 @@ const RacePage = () => {
           }}
           className="w-full relative flex pb-8 gap-8 dark:bg-[#000924] justify-center items-center h-[90vh]"
         >
-          <ColorRing
+          {/* <ColorRing
             visible={true}
             height="80"
             width="80"
@@ -1137,7 +1137,493 @@ const RacePage = () => {
           />
           <p className="text-2xl font-bold dark:text-white">
             Race is Loading...
-          </p>
+          </p> */}
+          {isLoading ? (
+            <div className="fixed bg-black opacity-40 w-full h-screen top-0 left-0 grid place-items-center z-[999]">
+              <div>
+                <ColorRing
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="color-ring-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="color-ring-wrapper"
+                  colors={[
+                    "#e15b64",
+                    "#f47e60",
+                    "#f8b26a",
+                    "#abbd81",
+                    "#849b87",
+                  ]}
+                />
+              </div>
+            </div>
+          ) : (
+            !isRaceStarted &&
+            raceDetails &&
+            !showLoginForm && (
+              <RaceWaitingZone
+                start_date={raceDetails?.start_date}
+                raceStarted={isRaceStarted}
+                joinedUsersList={joinedUsers}
+                raceName={raceDetails?.name}
+                liveUsers={liveUsers}
+                race_id={race_id}
+                status={raceDetails?.status}
+                // raceEnded = {false}
+                closeCard={() => {
+                  setIsRaceStarted(true);
+                }}
+              />
+            )
+          )}
+          <motion.div
+            initial={{
+              y: 120,
+              opacity: 0,
+            }}
+            animate={{
+              y: 0,
+              opacity: 1,
+            }}
+            transition={{
+              duration: 0.4,
+              ease: "easeInOut",
+            }}
+            className="w-full relative h-auto flex pb-8 dark:bg-[#000924]"
+          >
+            {/* Ensure sidebar is inside a container with sufficient height */}
+            <Sidebar />
+
+            {/* dashboard  */}
+            <div className="flex-1 px-[2%] md:px-[6%] pt-[2.1rem] mt-[30rem] overflow-x-hidden">
+              {/* this is full width container cuz we need the sidebar to remain at correct place */}
+              <div className="max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-t-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
+                {showJoin && (
+                  <JoinRace
+                    raceName={raceDetails?.name}
+                    closeForm={setShowJoin}
+                    race_id={race_id}
+                    setStatus={setShowJoin}
+                  />
+                )}
+                {/* actual dashboard  */}
+                <div className="flex-1 px-[22px] py-[18px]">
+                  <div className="w-full flex justify-between mb-[20px]">
+                    <div className="flex gap-[0.76rem]">
+                      <div></div>
+                      <div className="h-full">
+                        <h3 className="text-[1.05rem] font-bold dark:text-white font-poppins">
+                          {raceDetails?.name}
+                        </h3>
+                        <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
+                          {raceDetails?.end_date ? (
+                            new Date(raceDetails.end_date).getTime() >
+                            Date.now() ? (
+                              <>
+                                <p>
+                                  {new Date(raceDetails.start_date).getTime() >
+                                  Date.now()
+                                    ? "Race Starts In:"
+                                    : "Remaining Time:"}
+                                </p>
+                                <div className="font-semibold font-poppins">
+                                  <Countdown
+                                    date={
+                                      new Date(
+                                        raceDetails.start_date
+                                      ).getTime() > Date.now()
+                                        ? Date.parse(raceDetails.start_date)
+                                        : Date.parse(raceDetails.end_date)
+                                    } // Correct UTC-based timestamp
+                                    renderer={({
+                                      days,
+                                      hours,
+                                      minutes,
+                                      seconds,
+                                    }) => {
+                                      const formatTime = (time) =>
+                                        String(time).padStart(2, "0");
+
+                                      return (
+                                        <span>
+                                          {days > 0 && `${formatTime(days)}:`}
+                                          {formatTime(hours)}:
+                                          {formatTime(minutes)}:
+                                          {formatTime(seconds)}
+                                        </span>
+                                      );
+                                    }}
+                                  />
+                                </div>
+                              </>
+                            ) : (
+                              <p className="font-poppins">
+                                Race Ended On:{" "}
+                                <span>
+                                  {new Date(
+                                    raceDetails.end_date
+                                  ).toLocaleString()}
+                                </span>
+                              </p>
+                            )
+                          ) : (
+                            <p>Loading race details...</p>
+                          )}
+
+                          {canJoinButton && (
+                            <div
+                              onClick={() => setShowJoin(true)}
+                              className="font-semibold text-lg dark:text-white bg-blue-600 px-5 cursor-pointer py-1 rounded-xl"
+                            >
+                              Join
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      {/* <div className='relative top-1'>
+                                        <img src={info} alt="info icon" />
+                                    </div> */}
+                    </div>
+                    <div>
+                      {isExploding && (
+                        <ConfettiExplosion
+                          particleCount={200}
+                          particleSize={5}
+                          duration={2800}
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex-1 rounded-[20px]  mb-4 ">
+                    <div className="flex justify-between w-full items-center mb-[10px dark:text-white"></div>
+
+                    {raceStatus === "finished" && (
+                      <div
+                        ref={cardRef}
+                        className="w-full h-full flex justify-center items-center"
+                      >
+                        <div className="rounded-[24px] w-[90%] px-[1.1rem] py-[1rem] flex flex-col overflow-hidden cursor-pointer mt-[20px]">
+                          <div className="w-full flex justify-between mb-[14px]">
+                            {/* <div className='flex gap-[0.76rem] flex-1'>
+                                                                <img className='w-12 h-12' src={darkModeEnabled ? boxdark : box} alt="box icon" />
+                                                                <div className='h-full'>
+                                                                    <h3 className='text-[1.05rem] font-bold dark:text-white line-clamp-3'>{raceDetails.name}</h3>
+                                                                    
+                                                                </div>
+                                                            </div> */}
+
+                            {/* <div className='h-full flex flex-col justify-start items-end flex-1'>
+                                                                <h3 className='text-[1.05rem] font-bold dark:text-white'>Created By</h3>
+                                                                <p className='text-[0.7rem] dark:text-white'>{raceDetails?.created_by?.firstName + " " + raceDetails?.created_by?.lastName}</p>
+                                                                <p className='text-[0.7rem] dark:text-white font-poppins'>
+                                                                    {raceDetails?.end_date &&
+                                                                        (() => {
+                                                                            const [year, month, day] = raceDetails.end_date.split("T")[0].split("-");
+                                                                            return `${day}/${month}/${year}`;
+                                                                        })()
+                                                                    }
+                                                                </p>
+                                                            </div> */}
+                          </div>
+
+                          <div className="w-full flex justify-center items-center mb-[25px] relative flex-col">
+                            <div className="w-full flex justify-center items-center gap-[25px]">
+                              <div style={{ position: "relative", flex: 1 }}>
+                                {" "}
+                                <img
+                                  className="h-72 w-96 rounded-xl"
+                                  src={
+                                    rankList?.[0]?.user_photo ||
+                                    (rankList?.[0]?.gender === "female"
+                                      ? femalePlceholder
+                                      : malePlceholder)
+                                  }
+                                />
+                                <img
+                                  className="h-30 absolute -bottom-[40px] -left-[10px]"
+                                  src={Crown_1}
+                                />
+                              </div>
+                              <div style={{ position: "relative", flex: 1 }}>
+                                <img
+                                  className="h-72 w-96 rounded-xl"
+                                  src={
+                                    rankList?.[1]?.user_photo ||
+                                    (rankList?.[1]?.gender === "female"
+                                      ? femalePlceholder
+                                      : malePlceholder)
+                                  }
+                                />
+                                <img
+                                  className="h-30 absolute -bottom-[40px] -left-[10px]"
+                                  src={Crown_2}
+                                />
+                              </div>
+                              <div style={{ position: "relative", flex: 1 }}>
+                                {" "}
+                                <img
+                                  className="h-72 w-96 rounded-xl"
+                                  src={
+                                    rankList?.[2]?.user_photo ||
+                                    (rankList?.[2]?.gender === "female"
+                                      ? femalePlceholder
+                                      : malePlceholder)
+                                  }
+                                />
+                                <img
+                                  className="h-30 absolute -bottom-[40px] -left-[10px]"
+                                  src={Crown_3}
+                                />
+                              </div>
+                            </div>
+                            <div className="w-full flex justify-center items-center gap-[25px] mt-[40px] text-white">
+                              <div className="flex flex-1 justify-center text-xl font-semibold">
+                                <p>{rankList?.[0]?.user_name} </p>
+                              </div>
+                              <div className="flex flex-1 justify-center text-xl font-semibold">
+                                <p>{rankList?.[1]?.user_name} </p>
+                              </div>
+                              <div className="flex flex-1 justify-center text-xl font-semibold">
+                                <p>{rankList?.[2]?.user_name} </p>
+                              </div>
+                            </div>
+                            <div className="w-full flex justify-center items-center gap-[25px] mt-[20px]">
+                              <div className="flex flex-1 justify-center">
+                                <img
+                                  className="rounded-xl w-60 h-60"
+                                  src={stockRankList?.[0]?.stock_icon_url}
+                                />
+                              </div>
+                              <div className="flex flex-1 justify-center">
+                                <img
+                                  className="rounded-xl w-60 h-60"
+                                  src={stockRankList?.[1]?.stock_icon_url}
+                                />
+                              </div>
+                              <div className="flex flex-1 justify-center">
+                                <img
+                                  className="rounded-xl w-60 h-60"
+                                  src={stockRankList?.[2]?.stock_icon_url}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {graphType == "Ticker" &&
+                      data.labels.length > 0 &&
+                      raceStatus !== "finished" && (
+                        <Bar
+                          data={data}
+                          options={options}
+                          plugins={[customPlugin]}
+                        />
+                      )}
+                    {data.labels.length > 0 &&
+                      raceStatus !== "finished" &&
+                      showIframe && (
+                        <iframe
+                          key={race_id} // force reload if race_id changes
+                          className="flex-1 w-full h-[700px]"
+                          ref={iframeRef}
+                          src={`https://missionatal.com/?raceId=${race_id}`}
+                          loading="lazy"
+                          sandbox="allow-scripts allow-same-origin"
+                        />
+                      )}
+
+                    {graphType == "Price" && (
+                      // <StockRaceChart duration={60} stocks={stockCount}/>
+                      <RacePriceChart
+                        staticData={true}
+                        stocks={stockCount}
+                        stopTime={stopTime}
+                      />
+                    )}
+                    {graphType == "Rank" && (
+                      // <StockRaceChart duration={60} stocks={stockCount}/>
+                      <BumpChart stocks={stockCount} />
+                      // <RacePriceChart staticData={true} stocks={stockCount} stopTime={"2025-03-20T12:51:00"}/>
+                    )}
+                  </div>
+                </div>
+              </div>
+              {/* other stocks rally  */}
+              {(raceStatus == "running" || raceStatus == "finished") && (
+                <div className="w-[100%] py-[13px] px-[70px] rounded-b-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
+                  <div className="flex justify-between w-full items-center mb-[18px]">
+                    <p className="font-medium text-[0.9rem] dark:text-white">
+                      Stock Ranking
+                    </p>
+                    {/* <button><CgChevronRightO color={darkModeEnabled ? 'white' : 'black'} size={20} /></button> */}
+                  </div>
+
+                  <StockRankList
+                    stocksData={stocksDataForRace} // data from api below is data from socket
+                    stockRankList={stockRankList}
+                  />
+
+                  {raceStatus != "finished" && userDetails && (
+                    <div className="w-full h-[30rem]">
+                      <p className="text-slate-300 font-semibold text-xl font-poppins w-full flex items-center justify-center mb-5">
+                        Comparison of Last 30 days
+                      </p>
+                      <StockChart
+                        labels={labels}
+                        datasets={chartData}
+                        area={false}
+                        disableAnimation={false}
+                        zoom={true}
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </motion.div>
+          {showDetails && (
+            <AnimatePresence>
+              <motion.div
+                initial={{
+                  opacity: 0,
+                }}
+                animate={{
+                  opacity: 1,
+                }}
+                transition={{
+                  duration: 0.4,
+                  ease: "easeInOut",
+                }}
+                exit={{
+                  opacity: 0,
+                }}
+                className="fixed top-0 left-0 w-full h-screen py-[3%] backdrop-blur-md z-[100] grid place-items-center"
+              >
+                <div className="bg-[#000D38] h-[100%] text-[white] rounded-[8px] ">
+                  <div className="flex justify-end p-[10px]">
+                    <IoMdCloseCircleOutline
+                      className="text-[30px] cursor-pointer"
+                      onClick={() => setshowDetails(false)}
+                    />
+                  </div>
+                  <div className="px-[30px]">
+                    {raceDetails?.created_by?.firstName && (
+                      <p className="font-medium text-[1.05rem]">
+                        Race created by -{" "}
+                        {raceDetails?.created_by?.firstName +
+                          " " +
+                          raceDetails?.created_by?.lastName}
+                      </p>
+                    )}
+
+                    <p className="text-[0.9rem] dark:text-white">
+                      Race Duration:
+                      <span className="font-semibold ml-2 font-poppins">
+                        {duration}
+                      </span>
+                    </p>
+                    <h3 className="text-[0.9rem] font-bold dark:text-white flex gap-1 font-poppins pb-[20px]">
+                      {participantsCount}{" "}
+                      <span className="font-sans">
+                        {participantsCount === 1
+                          ? "Participant"
+                          : "Participants"}
+                      </span>{" "}
+                    </h3>
+                    <div className="flex flex-col max-w-[295px]">
+                      <div className="flex gap-[6px] mb-[11px]">
+                        <button
+                          onClick={() => {
+                            updateUser();
+                            updateUser2();
+                            updateUser3();
+                            setTabs("leaderboard");
+                          }}
+                          className={
+                            tabs === "leaderboard"
+                              ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
+                              : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
+                          }
+                        >
+                          Leaderboard
+                        </button>
+                        {(raceStatus == "running" ||
+                          raceStatus == "finished") && (
+                          <button
+                            onClick={() => setTabs("yourbets")}
+                            className={
+                              tabs === "yourbets"
+                                ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
+                                : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
+                            }
+                          >
+                            Your Bets
+                          </button>
+                        )}
+                      </div>
+                      {
+                        <div className="w-full rounded-[8px] max-h-scree h-full overflow-auto custom-scrollbar">
+                          {tabs === "leaderboard" ? (
+                            <>
+                              {/* <div className='w-full flex justify-between items-center mb-[14px]'>
+                                                            <p className="font-semibold text-4 dark:text-white">View all</p>
+                                                        </div> */}
+                              {raceStatus == "running" ? (
+                                <UserRankingList rankList={rankList} />
+                              ) : (
+                                <UserRankingList
+                                  rankList={joinedUsers}
+                                  status="f"
+                                />
+                              )}
+                            </>
+                          ) : (
+                            <div className="w-full max-h-96 pr-3 flex flex-col gap-4">
+                              {stockRankList ? (
+                                stockRankList?.map((curr, index) => {
+                                  let stock =
+                                    stocksDataForRace[
+                                      Object.keys(stocksDataForRace).find(
+                                        (element) => element === curr.stock_id
+                                      )
+                                    ];
+                                  let imageUrl = stock?.icon_url;
+                                  console.log(curr);
+                                  return (
+                                    <YourBetsCard
+                                      key={curr?.stock_id}
+                                      stocksDataForRace={stocksDataForRace}
+                                      stockName={curr?.stock_name}
+                                      imageUrl={imageUrl}
+                                      participants={curr?.participants}
+                                    />
+                                  );
+                                })
+                              ) : (
+                                <ColorRing
+                                  visible={true}
+                                  height="25"
+                                  width="25"
+                                  ariaLabel="color-ring-loading"
+                                  wrapperStyle={{}}
+                                  wrapperClass="color-ring-wrapper"
+                                  colors={["#e15b64", "#f47e60"]}
+                                />
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          )}
         </motion.div>
       </>
     );
@@ -1531,7 +2017,7 @@ const RacePage = () => {
                   stockRankList={stockRankList}
                 />
 
-                {raceStatus != "finished" && (
+                {raceStatus != "finished" && userDetails && (
                   <div className="w-full h-[30rem]">
                     <p className="text-slate-300 font-semibold text-xl font-poppins w-full flex items-center justify-center mb-5">
                       Comparison of Last 30 days
