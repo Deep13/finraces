@@ -89,8 +89,13 @@ const Market = () => {
   const [hasNext, setHasNext] = useState(false);
   const observerRef = useRef(null); // Observer reference for last item
   const { setShowLoginForm } = useContext(DarkModeContext);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const today = new Date();
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(today.getDate() - 7);
+  const fromDate = sevenDaysAgo.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+  const toDate = today.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+  const [startDate, setStartDate] = useState(fromDate);
+  const [endDate, setEndDate] = useState(toDate);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -356,6 +361,7 @@ const Market = () => {
                       setStartDate={setStartDate}
                       setEndDate={setEndDate}
                       transform={false}
+                      restrict={"Finished Races"}
                     />
                   </div>
                 </div>

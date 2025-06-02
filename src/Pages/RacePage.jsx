@@ -1494,7 +1494,7 @@ const RacePage = () => {
                         key={race_id} // force reload if race_id changes
                         className="flex-1 w-full h-[700px]"
                         ref={iframeRef}
-                        src={`/horse-race/game/index.html?raceId=${race_id}`}
+                        src={`https://missionatal.com/?raceId=${race_id}`}
                         loading="lazy"
                         sandbox="allow-scripts allow-same-origin"
                       />

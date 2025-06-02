@@ -233,7 +233,9 @@ const StockComparison = () => {
     []
   );
 
-  useEffect(() => {}, [timeRange]);
+  useEffect(() => {
+    fetchStockDataForChart(); //update charts when range changes
+  }, [startDate, endDate]);
 
   const buttonClick = () => {
     let token = localStorage.getItem("token");
@@ -544,6 +546,7 @@ const StockComparison = () => {
                 setStartDate={setStartDate}
                 setEndDate={setEndDate}
                 transform={false}
+                restrict={"Finished Races"}
               />
               {/* Time Range Dropdown */}
               {/* <div className="relative">
