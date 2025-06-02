@@ -146,7 +146,7 @@ const Comparison = () => {
           {selectedStocks.map((stockData, index) => (
             <StockWatchlistCard
               key={index}
-              data={stockData.data[0]}
+              data={stockData?.data?.[0]}
               clickable={true}
             />
           ))}
