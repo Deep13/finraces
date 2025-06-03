@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import { getBlogCategories, postBlog, uploadImage } from "../Utils/api";
@@ -147,23 +147,22 @@ const CreateBlog = () => {
     ["clean"],
   ];
 
-  const handleImageUpload = () => {
+  const handleImageUpload = useCallback(() => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.click();
 
     input.onchange = async () => {
-      const file = input.files[0];
+      const file = input.files?.[0];
 
       if (file) {
         uploadImage(
           file,
           (data) => {
-            console.log("Successfully uploaded images ", data);
             const quill = quillRef.current?.getEditor();
             const range = quill?.getSelection();
-            if (quill && data.file?.url && range) {
-              quill.insertEmbed(range.index, "image", data.file.id);
+            if (quill && data.file?.path && range) {
+              quill.insertEmbed(range.index, "image", data.file.path);
             }
           },
           (error) => {
@@ -172,7 +171,7 @@ const CreateBlog = () => {
         );
       }
     };
-  };
+  }, []);
 
   const modules = useMemo(
     () => ({
