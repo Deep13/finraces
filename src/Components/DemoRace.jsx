@@ -33,8 +33,8 @@ const DemoRace = () => {
         <JoinRace
           raceName={"test user 's Investor's Arena 1749040135341"}
           closeForm={setJoinRaceFormVisible}
-          race_id={"c50e3bf9-148d-4350-8562-dc64f8bb6598"}
-          demo={false}
+          race_id={"d7a525f0-de95-4d51-9b1b-75108f0a1401"}
+          demo={true}
         />
       )}
       <h2 className="text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white">
@@ -42,7 +42,7 @@ const DemoRace = () => {
           start_Date={"2025-06-04T12:34:00.000Z"}
           end_date={"2025-06-05T12:34:00.000Z"}
           raceName={"test user 's Investor's Arena 1749040135341"}
-          raceId={"c50e3bf9-148d-4350-8562-dc64f8bb6598"}
+          raceId={"d7a525f0-de95-4d51-9b1b-75108f0a1401"}
           onRaceFinished={() => {}}
           participants={race?.participantCount}
         />

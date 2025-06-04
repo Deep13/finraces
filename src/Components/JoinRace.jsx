@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import StockEntryRow2 from "./StockEntryRow2";
 import SegmentedControl from "./SegmentedControl";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
+import { useCommunity } from "../Contexts/CommunityProvider";
 
 const JoinRace = ({
   closeForm = () => {},
@@ -24,6 +25,8 @@ const JoinRace = ({
 
   const [stockList, setStockList] = useState([]);
   // const [percentage, setPercentage] = useState('')
+  //tesst only
+  const { setTest } = useCommunity();
   const [racePredictions, setRacePredicitons] = useState([
     {
       prediction_price: 0,
@@ -136,10 +139,11 @@ const JoinRace = ({
             // console.log(racePredictions)
             // console.log(race_id)
             if (demo) {
+              setTest(true);
               joinDemoRace(
                 racePredictions,
                 (data) => {
-                  console.log("JOined Successfully ", data);
+                  console.log("Joined Successfully ", data);
                   navigate(`/race/${race_id}`);
                 },
                 (error) => {

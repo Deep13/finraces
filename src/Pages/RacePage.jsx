@@ -128,6 +128,9 @@ const RacePage = () => {
   const [dataset, setDataset] = useState([]);
   const [duration, setDuration] = useState("");
 
+  //tesst only
+  const { test } = useCommunity();
+
   const flag = useRef(0);
   const userDetails = localStorage.getItem("fin_userDetails");
   const navigate = useNavigate();
@@ -952,6 +955,8 @@ const RacePage = () => {
   // },[isRaceStarted])
 
   const canUserJoin = () => {
+    if (test) return false;
+
     let encodedUserDetails =
       localStorage.getItem("fin_userDetails") ||
       localStorage.getItem("guest_details");

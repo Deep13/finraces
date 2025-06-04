@@ -11,6 +11,9 @@ export const CommunityProvider = ({ children }) => {
   const [modalImg, setModalImg] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
 
+  //only for testing
+  const [test, setTest] = useState(false);
+
   const location = useLocation();
 
   useEffect(() => {
@@ -31,6 +34,8 @@ export const CommunityProvider = ({ children }) => {
         setModalImg,
         selectedUser,
         setSelectedUser,
+        test,
+        setTest,
       }}
     >
       {children}
