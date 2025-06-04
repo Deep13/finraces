@@ -424,16 +424,15 @@ export const fetchStocks = async (
   onError = () => {}
 ) => {
   try {
-    const token = localStorage.getItem("token");
-    if (!token) throw new Error("No token found in localStorage");
+    // const token = localStorage.getItem("token");
+    // if (!token) throw new Error("No token found in localStorage");
 
     const response = await fetch(
-      `${GlobalURL}/api/v1/race-stocks/search?race_id=${race_id}`,
+      `${GlobalURL}/api/v1/public/race-stocks/search?race_id=${race_id}`,
       {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       }
     );
