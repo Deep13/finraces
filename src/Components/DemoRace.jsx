@@ -25,10 +25,13 @@ const DemoRace = () => {
         onClick={() => {
           setJoinRaceFormVisible(true);
         }}
-        className=" bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-4 h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold absolute top-5 right-5"
+        className=" bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-4 h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold absolute top-24 right-5"
       >
         Join
       </button>
+      <h2 className="text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white">
+        Demo Race
+      </h2>
       {joinRaceFormVisible && (
         <JoinRace
           raceName={"test user 's Investor's Arena 1749040135341"}
