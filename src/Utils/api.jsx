@@ -3238,3 +3238,58 @@ export const getFollowersCount = async (userId, onSuccess, onError) => {
     onError(error);
   }
 };
+
+//demo race apis
+
+export const createDemoRace = async (onSuccess, onError) => {
+  try {
+    let url = `${GlobalURL}/api/v1/public/race-users/demo-race`;
+
+    const resposnse = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    if (!resposnse.ok) {
+      const errorText = await resposnse.text();
+      throw new Error(errorText);
+    }
+
+    const data = await resposnse.json();
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};
+
+export const joinDemoRace = async (predictions, onSuccess, onError) => {
+  try {
+    let url = `${GlobalURL}/api/v1/public/race-users/demo-race`;
+    const payload = {
+      Payload: {
+        is_demo_user: true,
+        racePredictions: predictions,
+      },
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      onError(errorText);
+    }
+
+    let data = await response.json();
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};

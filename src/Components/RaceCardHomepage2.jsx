@@ -83,6 +83,15 @@ const RaceCardHomepage2 = ({
     return remainingSeconds > 0 ? remainingSeconds : 0; // Return 0 if the date has passed
   };
 
+  console.log(
+    "Data Recieved",
+    raceName,
+    raceId,
+    start_Date,
+    end_date,
+    participants
+  );
+
   return (
     <>
       {loading ? (
@@ -152,9 +161,11 @@ const RaceCardHomepage2 = ({
               />
             </div>
             <div className="h-full flex flex-col justify-start items-end flex-1">
-              <h3 className="text-[1.05rem] font-bold dark:text-white">{`${participants} ${
-                participants > 1 ? "participants" : "participant"
-              } `}</h3>
+              {participants && (
+                <h3 className="text-[1.05rem] font-bold dark:text-white">{`${participants} ${
+                  participants > 1 ? "participants" : "participant"
+                } `}</h3>
+              )}
               {/* <p className='text-[0.7rem] dark:text-white'>{`${participants?.length} participants`}</p> */}
             </div>
           </div>

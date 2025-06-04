@@ -127,6 +127,7 @@ const RacePage = () => {
   const [labels, setLabels] = useState([]);
   const [dataset, setDataset] = useState([]);
   const [duration, setDuration] = useState("");
+
   const flag = useRef(0);
   const userDetails = localStorage.getItem("fin_userDetails");
   const navigate = useNavigate();
@@ -140,7 +141,7 @@ const RacePage = () => {
   const ud = localStorage.getItem("fin_userDetails");
   const userDetails2 = ud && JSON.parse(atob(ud));
 
-  const [compareFlag, setCompareFlag] = useState(false);
+  const compareFlag = useRef(false);
 
   const checkSelf = (id, name) => {
     if (!id || !name) return "";
@@ -235,6 +236,10 @@ const RacePage = () => {
           )
         );
         setStockRankList(data.data["stocks"]);
+        if (!compareFlag.current) {
+          compareFlag.current = true;
+          fetchData(data.data["stocks"]);
+        }
         flag.current += 1;
         // console.log('this Race data', data)
 
@@ -1016,8 +1021,16 @@ const RacePage = () => {
     "#FF7043", // Coral
   ];
 
-  useEffect(() => {
-    if (!compareFlag && stockRankList?.length > 0) {
+  // useEffect(() => {
+  //   if (compareFlag.current || !listOfStocks?.length) return;
+
+  //   compareFlag.current = true;
+
+  //   fetchData();
+  // }, [listOfStocks]);
+
+  const fetchData = async (listOfStocks) => {
+    try {
       const formatDate = (date) => date.toISOString().split("T")[0];
       const today = new Date();
       const oneMonthAgo = new Date();
@@ -1026,53 +1039,61 @@ const RacePage = () => {
       const startDate = formatDate(oneMonthAgo);
       const endDate = formatDate(today);
 
-      let allPromises = stockRankList.map((stock, index) => {
-        return new Promise((resolve, reject) => {
-          getStockChartData(
-            stock.stock_ticker,
-            startDate,
-            endDate,
-            "day",
-            (data) => resolve({ ticker: stock.stock_ticker, data }),
-            (error) => reject(error)
-          );
+      const allPromises = listOfStocks.map(
+        (stock, index) =>
+          new Promise((resolve, reject) => {
+            getStockChartData(
+              stock.stock_ticker,
+              startDate,
+              endDate,
+              "day",
+              (data) => resolve({ ticker: stock.stock_ticker, data }),
+              (error) => reject(error)
+            );
+          })
+      );
+
+      const results = await Promise.all(allPromises);
+
+      const datasets = [];
+      let dateLabels = [];
+
+      results.forEach((stockData, index) => {
+        const res = stockData.data?.results;
+        if (!res?.length) return;
+
+        const stockPrices = res.map((entry) => entry.c);
+        const stockDates = res.map(
+          (entry) => new Date(entry.t).toISOString().split("T")[0]
+        );
+
+        if (index === 0) {
+          dateLabels = stockDates;
+        }
+
+        datasets.push({
+          label: stockData.ticker,
+          data: stockPrices,
+          borderColor: stockColors[index % stockColors.length],
+          backgroundColor: stockColors[index % stockColors.length] + "33",
+          fill: graphType === "area",
         });
       });
 
-      Promise.all(allPromises)
-        .then((results) => {
-          let dateLabels = [];
-          let datasets = [];
-
-          results.forEach((stockData, index) => {
-            const res = stockData.data?.results;
-            if (!res) return;
-
-            const stockPrices = res.map((entry) => entry.c);
-            const stockDates = res.map(
-              (entry) => new Date(entry.t).toISOString().split("T")[0]
-            );
-
-            if (index === 0) {
-              dateLabels = [...stockDates];
-              setLabels(dateLabels); // ⚠️ Still causes re-render
-            }
-
-            datasets.push({
-              label: stockData.ticker,
-              data: [...stockPrices],
-              borderColor: stockColors[index % stockColors.length],
-              backgroundColor: stockColors[index % stockColors.length] + "33",
-              fill: graphType === "area",
-            });
-          });
-
-          setChartData(datasets); // ⚠️ Still causes re-render
-          setCompareFlag(true);
-        })
-        .catch((err) => console.log("Fetch error:", err));
+      if (datasets.length && dateLabels.length) {
+        setLabels((prev) =>
+          JSON.stringify(prev) === JSON.stringify(dateLabels)
+            ? prev
+            : dateLabels
+        );
+        setChartData((prev) =>
+          JSON.stringify(prev) === JSON.stringify(datasets) ? prev : datasets
+        );
+      }
+    } catch (err) {
+      console.error("Chart fetch error:", err);
     }
-  }, [stockRankList, compareFlag]);
+  };
 
   if (isLoadingRaceTile && raceStatus !== "finished") {
     return (

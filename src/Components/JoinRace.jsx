@@ -6,7 +6,7 @@ import boxdark from "../assets/images/boxdark.svg";
 import info from "../assets/images/ongoingRaces/info_icon.svg";
 import { Switch } from "@headlessui/react";
 import Select from "react-select";
-import { fetchStocks, joinUserToRace } from "../Utils/api";
+import { fetchStocks, joinDemoRace, joinUserToRace } from "../Utils/api";
 import { useNavigate } from "react-router-dom";
 import StockEntryRow2 from "./StockEntryRow2";
 import SegmentedControl from "./SegmentedControl";
@@ -17,6 +17,7 @@ const JoinRace = ({
   race_id = "fi9eofjisf309oj09rj4fm",
   raceName = "Any Race",
   setStatus,
+  demo = false,
 }) => {
   // this is join race so here we will only get stocks and their curent values not the
   // inputs will be only prediction price and rank rest are static.
@@ -134,9 +135,22 @@ const JoinRace = ({
             });
             // console.log(racePredictions)
             // console.log(race_id)
-            joinUserToRace(race_id, racePredictions, () => {
-              navigate(`/race/${race_id}`);
-            });
+            if (demo) {
+              joinDemoRace(
+                racePredictions,
+                (data) => {
+                  console.log("JOined Successfully ", data);
+                  navigate(`/race/${race_id}`);
+                },
+                (error) => {
+                  console.log("Failed to join the race ", error);
+                }
+              );
+            } else {
+              joinUserToRace(race_id, racePredictions, () => {
+                navigate(`/race/${race_id}`);
+              });
+            }
           }}
           className="px-[1.5rem] py-[.7rem] font-semibold flex gap-2 bg-[#e4eaf0] rounded-[8px] active:scale-95 dark:text-white dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
         >
