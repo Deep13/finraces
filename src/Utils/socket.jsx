@@ -2,28 +2,36 @@
 import { io } from "socket.io-client";
 import { globalUrl } from "../Config";
 
-let socket;
+let socket = null;
 
 export const connectSocket = (userId, token) => {
-  if (!socket && userId && token) {
-    socket = io(globalUrl, {
-      auth: { token },
-      query: { userId },
-      reconnection: true,
-      reconnectionAttempts: Infinity,
-      reconnectionDelay: 1000,
-      reconnectionDelayMax: 5000,
-      transports: ["websocket"],
-    });
-
-    socket.on("connect", () => console.log("Connected to WebSocket Server"));
-    socket.on("connect_error", (err) =>
-      console.error(" Connection Error:", err)
-    );
-    socket.on("disconnect", (reason) =>
-      console.warn("Disconnected from server:", reason)
-    );
+  if (socket) {
+    return socket; // Already connected
   }
+
+  const options = {
+    reconnection: true,
+    reconnectionAttempts: Infinity,
+    reconnectionDelay: 1000,
+    reconnectionDelayMax: 5000,
+    transports: ["websocket"],
+  };
+
+  if (token) {
+    options.auth = { token };
+  }
+
+  if (userId) {
+    options.query = { userId };
+  }
+
+  socket = io(globalUrl, options);
+
+  socket.on("connect", () => console.log("Connected to WebSocket Server"));
+  socket.on("connect_error", (err) => console.error("Connection Error:", err));
+  socket.on("disconnect", (reason) =>
+    console.warn("Disconnected from server:", reason)
+  );
 
   return socket;
 };

@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { createDemoRace } from "../Utils/api";
 import RaceCardHomepage2 from "./RaceCardHomepage2";
 import JoinRace from "./JoinRace";
+import { useSocket } from "../Contexts/SocketProvider";
 
 const DemoRace = () => {
   const [race, setRace] = useState({});
   const [joinRaceFormVisible, setJoinRaceFormVisible] = useState(false);
+  const socket = useSocket();
 
+  //  Step 1: Create demo race initially
   useEffect(() => {
     createDemoRace(
       (data) => {
@@ -14,10 +17,34 @@ const DemoRace = () => {
         setRace(data);
       },
       (error) => {
-        console.log("Error creatring demo race", error);
+        console.log("Error creating demo race", error);
       }
     );
   }, []);
+
+  // Step 2: Handle socket notifications
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNotification = (data) => {
+      console.log("Socket notification data", data);
+      const raceObj = data?.notification?.payload?.race;
+
+      if (raceObj?.is_demo_race) {
+        setRace(raceObj);
+      }
+    };
+
+    socket.on("notifications", handleNotification);
+    socket.onAny((event, data) => {
+      console.log(`Event received: ${event}`, data);
+    });
+
+    // Clean up on unmount or socket change
+    return () => {
+      socket.off("notifications", handleNotification);
+    };
+  }, [socket]);
 
   return (
     <div className="max-w-[1400px] relative my-[3.3rem]">

@@ -33,26 +33,6 @@ const Notification = () => {
       return;
     }
 
-    // const socket = io("https://www.missionatal.com", {
-    //   auth: { token },
-    //   query: { userId },
-    //   reconnection: true,
-    //   reconnectionAttempts: Infinity,
-    //   reconnectionDelay: 1000,
-    //   reconnectionDelayMax: 5000,
-    //   transports: ["websocket"],
-    // });
-
-    // socket.on("connect", () => console.log("✅ Connected to WebSocket Server"));
-    // socket.on("connect_error", (err) =>
-    //   console.error("❌ Connection Error:", err)
-    // );
-    // socket.on("disconnect", (reason) => {
-    //   console.warn("⚠️ Disconnected from server:", reason);
-    //   setNotifications([]);
-    //   setFilteredNotifications([]);
-    // });
-
     socket.on("notifications", (data) => {
       if (!data.notification.is_read) {
         setNotificationIds((prev) => [...prev, data.notification.id]);

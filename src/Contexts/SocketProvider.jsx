@@ -13,10 +13,10 @@ export const SocketProvider = ({ children }) => {
     const { userId } = userDetails || {};
     const token = localStorage.getItem("token");
 
-    if (!userId || !token) {
-      console.error("User ID or token is missing");
-      return;
-    }
+    // if (!userId || !token) {
+    //   console.error("User ID or token is missing");
+    //   return;
+    // }
 
     const s = connectSocket(userId, token);
     setSocket(s);
