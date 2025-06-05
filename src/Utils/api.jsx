@@ -40,7 +40,7 @@ export const RegisterUser = async (
       "Registration failed:",
       error.response ? error.response.data : error.message
     );
-    onError();
+    onError(error);
   }
 };
 

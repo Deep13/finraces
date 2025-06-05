@@ -34,18 +34,18 @@ const DemoRace = () => {
       </h2>
       {joinRaceFormVisible && (
         <JoinRace
-          raceName={"test user 's Investor's Arena 1749040135341"}
+          raceName={race?.name}
           closeForm={setJoinRaceFormVisible}
-          race_id={"d7a525f0-de95-4d51-9b1b-75108f0a1401"}
+          race_id={race?.id}
           demo={true}
         />
       )}
       <h2 className="text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white">
         <RaceCardHomepage2
-          start_Date={"2025-06-04T12:34:00.000Z"}
-          end_date={"2025-06-05T12:34:00.000Z"}
-          raceName={"test user 's Investor's Arena 1749040135341"}
-          raceId={"d7a525f0-de95-4d51-9b1b-75108f0a1401"}
+          start_Date={race?.start_date}
+          end_date={race?.end_date}
+          raceName={race?.name}
+          raceId={race?.id}
           onRaceFinished={() => {}}
           participants={race?.participantCount}
         />
