@@ -132,7 +132,7 @@ const RaceCardHomepage2 = ({
                     </div> */}
             </div>
             <div className="flex-1 flex justify-center">
-              {end_date && (
+              {start_Date && end_date && new Date() >= new Date(start_Date) && (
                 <CountDownTimer
                   deadline={end_date}
                   setIsTimerFinished={setIsTimerFinished}
