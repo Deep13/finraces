@@ -122,8 +122,8 @@ const RaceCardHomepage2 = ({
                 alt="box icon"
               />
               <div className="h-full">
-                <h3 className="text-[0.85rem] line-clamp-3 font-bold dark:text-white">
-                  {raceName}
+                <h3 className="text-[1.5rem] line-clamp-3 font-bold dark:text-white">
+                  {raceName.charAt(0).toUpperCase() + raceName.slice(1)}
                 </h3>
                 {/* <p className='text-[0.7rem]'>XYZ</p> */}
               </div>

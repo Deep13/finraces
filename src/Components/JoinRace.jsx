@@ -59,6 +59,17 @@ const JoinRace = ({
     console.log("stock predictions in stockList", stockList);
   }, [stockList]);
 
+  useEffect(() => {
+    if (demo && stockList?.length) {
+      const updatedList = stockList.map((stock, index) => ({
+        ...stock,
+        prediction_price: stock?.stock?.price,
+        prediction_rank: index + 1,
+      }));
+      setStockList(updatedList);
+    }
+  }, [demo, stockList]);
+
   return (
     <div className="fixed inset-0 z-[50] overflow-y-auto bg-black/30 backdrop-blur-sm flex justify-center items-start py-10">
       <div className="rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem] dark:bg-[#002763]">
@@ -70,11 +81,13 @@ const JoinRace = ({
               src={darkModeEnabled ? boxdark : box}
               alt="box icon"
             />
-            <div className="flex-1 flex gap-[8px]">
-              <h3 className="text-[1.75rem] font-semibold dark:text-white w-full max-w-[80%]">
-                Join {raceName}
-              </h3>
-            </div>
+            {!demo && (
+              <div className="flex-1 flex gap-[8px]">
+                <h3 className="text-[1.75rem] font-semibold dark:text-white w-full max-w-[80%]">
+                  Join {raceName}
+                </h3>
+              </div>
+            )}
           </div>
           <button
             className="absolute right-0 top-0"
@@ -144,7 +157,7 @@ const JoinRace = ({
                 racePredictions,
                 (data) => {
                   console.log("Joined Successfully ", data);
-                  navigate(`/race/${race_id}`);
+                  navigate(`/race/${data?.id}`);
                 },
                 (error) => {
                   console.log("Failed to join the race ", error);
