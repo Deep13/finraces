@@ -3267,10 +3267,8 @@ export const joinDemoRace = async (predictions, onSuccess, onError) => {
   try {
     let url = `${GlobalURL}/api/v1/public/race-users/demo-race`;
     const payload = {
-      Payload: {
-        is_demo_user: true,
-        racePredictions: predictions,
-      },
+      is_demo_user: true,
+      racePredictions: predictions,
     };
 
     const response = await fetch(url, {

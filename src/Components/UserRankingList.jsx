@@ -17,7 +17,7 @@ const UserRankingList = ({ rankList, status = "" }) => {
               pos={index}
               id={curr.id}
               total={rankList.length}
-              userName={curr.firstName + " " + curr.lastName}
+              userName={curr.firstName + " " + curr?.lastName}
               userPhoto={
                 curr?.photo?.path ||
                 (curr?.gender === "female"

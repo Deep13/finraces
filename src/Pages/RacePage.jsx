@@ -459,15 +459,21 @@ const RacePage = () => {
     stockRankList?.slice().sort((a, b) => a.ticker.localeCompare(b.ticker));
 
   const getParticipantsWithRanks = (raceResult, participantsWithNoRank) => {
-    // console.log(raceResult, participantsWithNoRank)
+    console.log("check", raceResult, participantsWithNoRank);
     const result = [];
+
+    // Helper to clean user_name
+    const formatUserName = (name) => {
+      if (!name || typeof name !== "string") return "Unknown User";
+      return name.replace(/null/g, "").trim() || "Unknown User";
+    };
 
     // Add participants with ranks from race_result
     Object.entries(raceResult).forEach(([rank, rankData]) => {
       rankData?.participants?.forEach((participant) => {
         result.push({
           user_id: participant.user_id,
-          user_name: participant.user_name,
+          user_name: formatUserName(participant.user_name),
           user_photo: participant.user_photo
             ? participant.user_photo.path
             : participant.gender == "female"
@@ -1120,7 +1126,8 @@ const RacePage = () => {
         ) : (
           !isRaceStarted &&
           raceDetails &&
-          !showLoginForm && (
+          !showLoginForm &&
+          !test && (
             <RaceWaitingZone
               start_date={raceDetails?.start_date}
               raceStarted={isRaceStarted}
@@ -1187,7 +1194,8 @@ const RacePage = () => {
           ) : (
             !isRaceStarted &&
             raceDetails &&
-            !showLoginForm && (
+            !showLoginForm &&
+            !test && (
               <RaceWaitingZone
                 start_date={raceDetails?.start_date}
                 raceStarted={isRaceStarted}
@@ -1673,7 +1681,8 @@ const RacePage = () => {
         ) : (
           !isRaceStarted &&
           raceDetails &&
-          !showLoginForm && (
+          !showLoginForm &&
+          !test && (
             <RaceWaitingZone
               start_date={raceDetails?.start_date}
               raceStarted={isRaceStarted}
@@ -1843,7 +1852,8 @@ const RacePage = () => {
                         </div>
                         {isRaceStarted == false &&
                           raceStatus != "running" &&
-                          raceStatus != "finished" && (
+                          raceStatus != "finished" &&
+                          !test && (
                             <RaceWaitingZone
                               start_date={raceDetails?.start_date}
                               raceStarted={isRaceStarted}

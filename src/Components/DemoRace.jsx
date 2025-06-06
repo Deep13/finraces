@@ -23,20 +23,20 @@ const DemoRace = () => {
   }, []);
 
   // Step 2: Update dem0 race via socket
-  useEffect(() => {
-    if (!socket) return;
+  // useEffect(() => {
+  //   if (!socket) return;
 
-    const handleNotification = (data) => {
-      console.log("Socket notification data", data);
-      const raceObj = data?.notification?.payload?.race;
+  //   const handleNotification = (data) => {
+  //     console.log("Socket notification data", data);
+  //     const raceObj = data?.notification?.payload?.race;
 
-      if (raceObj?.is_demo_race) {
-        setRace(raceObj);
-      }
-    };
+  //     if (raceObj?.is_demo_race) {
+  //       setRace(raceObj);
+  //     }
+  //   };
 
-    socket.on("notifications", handleNotification);
-  }, [socket]);
+  //   socket.on("notifications", handleNotification);
+  // }, [socket]);
 
   return (
     <div className="max-w-[1400px] relative my-[3.3rem]">
