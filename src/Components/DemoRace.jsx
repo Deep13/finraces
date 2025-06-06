@@ -22,7 +22,7 @@ const DemoRace = () => {
     );
   }, []);
 
-  // Step 2: Handle socket notifications
+  // Step 2: Update dem0 race via socket
   useEffect(() => {
     if (!socket) return;
 
@@ -36,14 +36,6 @@ const DemoRace = () => {
     };
 
     socket.on("notifications", handleNotification);
-    socket.onAny((event, data) => {
-      console.log(`Event received: ${event}`, data);
-    });
-
-    // Clean up on unmount or socket change
-    return () => {
-      socket.off("notifications", handleNotification);
-    };
   }, [socket]);
 
   return (

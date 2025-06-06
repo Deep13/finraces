@@ -132,33 +132,13 @@ const RaceCardHomepage2 = ({
                     </div> */}
             </div>
             <div className="flex-1 flex justify-center">
-              {/* <CountdownCircleTimer
-                isPlaying
-                size={50}
-                strokeWidth={3}
-                duration={getRemainingSeconds(end_date, start_Date)} // total duration depcits a full circle.
-                colors={["#5b89ff"]}
-                initialRemainingTime={getRemainingSeconds(end_date, new Date())} // time that is remaining from now
-                colorsTime={[7]}
-              >
-                
-                {({ remainingTime }) => {
-                  const hours = Math.floor(remainingTime / 3600);
-                  const minutes = Math.floor((remainingTime % 3600) / 60);
-                  const seconds = remainingTime % 60;
-
-                  return (
-                    <div className="text-[0.63rem] font-semibold dark:text-white font-poppins">
-                      {hours}:{minutes}:{seconds}
-                    </div>
-                  );
-                }}
-              </CountdownCircleTimer> */}
-              <CountDownTimer
-                deadline={end_date}
-                setIsTimerFinished={setIsTimerFinished}
-                mode={"Home"}
-              />
+              {end_date && (
+                <CountDownTimer
+                  deadline={end_date}
+                  setIsTimerFinished={setIsTimerFinished}
+                  mode={"Home"}
+                />
+              )}
             </div>
             <div className="h-full flex flex-col justify-start items-end flex-1">
               {participants && (
