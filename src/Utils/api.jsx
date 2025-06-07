@@ -3242,10 +3242,10 @@ export const getFollowersCount = async (userId, onSuccess, onError) => {
 
 export const createDemoRace = async (onSuccess, onError) => {
   try {
-    let url = `${GlobalURL}/api/v1/public/race-users/demo-race`;
+    let url = `${GlobalURL}/api/v1/public/races/demo-races?is_demo_user=false&statuses=running`;
 
     const resposnse = await fetch(url, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-type": "application/json",
       },

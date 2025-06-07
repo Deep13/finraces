@@ -66,6 +66,7 @@ const RaceCardHomepage2 = ({
   start_Date,
   onRaceFinished,
   participants,
+  demo = false,
 }) => {
   const { darkModeEnabled } = useContext(DarkModeContext);
   const [loading, setLoading] = useState(false);
@@ -121,29 +122,34 @@ const RaceCardHomepage2 = ({
                 src={darkModeEnabled ? boxdark : box}
                 alt="box icon"
               />
-              <div className="h-full">
-                <h3 className="text-[1.5rem] line-clamp-3 font-bold dark:text-white">
+              <div className="h-full w-full">
+                <h3 className="text-left text-[1.5rem] line-clamp-3 font-bold dark:text-white">
                   {raceName.charAt(0).toUpperCase() + raceName.slice(1)}
                 </h3>
-                {/* <p className='text-[0.7rem]'>XYZ</p> */}
               </div>
+
               {/* <div className=''>
                         <img className='w-[10px] h-[10px]' src={info} alt="info icon" />
                     </div> */}
             </div>
             <div className="flex-1 flex justify-center">
-              {end_date &&
-                start_Date &&
-                new Date(start_Date).getTime() <= Date.now() && (
-                  <CountDownTimer
-                    deadline={end_date} // Only show countdown to end after race has started
-                    setIsTimerFinished={setIsTimerFinished}
-                    mode={"Home"}
-                    type={"end_date"}
-                  />
-                )}
+              {start_Date && end_date && !demo && (
+                <CountDownTimer
+                  deadline={
+                    new Date(start_Date).getTime() > Date.now()
+                      ? start_Date // Countdown to start
+                      : end_date // Countdown to end after race starts
+                  }
+                  setIsTimerFinished={setIsTimerFinished}
+                  mode="Home"
+                  type={
+                    new Date(start_Date).getTime() > Date.now()
+                      ? "start_Date"
+                      : "end_date"
+                  }
+                />
+              )}
             </div>
-
             <div className="h-full flex flex-col justify-start items-end flex-1">
               {participants && (
                 <h3 className="text-[1.05rem] font-bold dark:text-white">{`${participants} ${
@@ -162,12 +168,15 @@ const RaceCardHomepage2 = ({
                     )} */}
 
           <div
-            className="w-full min-h-[200px] h-[27rem] cursor-pointer"
+            className="w-full h-[27rem] overflow-hidden cursor-pointer"
             onClick={() => navigate(`/race/${raceId}`)}
           >
             <iframe
-              className="w-full h-full pointer-events-none"
+              className="w-full h-full border-0"
               src={`/game/index.html?raceId=${raceId}`}
+              scrolling="no"
+              style={{ overflow: "hidden" }}
+              sandbox="allow-scripts allow-same-origin"
             />
           </div>
         </div>

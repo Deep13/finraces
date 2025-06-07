@@ -14,7 +14,7 @@ const DemoRace = () => {
     createDemoRace(
       (data) => {
         console.log("Data of Demo race", data);
-        setRace(data);
+        setRace(data.data[0]);
       },
       (error) => {
         console.log("Error creating demo race", error);
@@ -44,7 +44,7 @@ const DemoRace = () => {
         onClick={() => {
           setJoinRaceFormVisible(true);
         }}
-        className=" bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-4 h-[2.35rem] text-[0.7rem] md:text-[0.9rem] rounded-[8px] flex gap-2 items-center text-black font-semibold absolute top-24 right-5"
+        className=" bg-[#e4eaf0] dark:text-white dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] px-6 h-[2.5rem] text-md md:text-[1.3rem] rounded-[8px] flex gap-2 items-center text-black font-semibold absolute top-24 right-5"
       >
         Join
       </button>
@@ -67,6 +67,7 @@ const DemoRace = () => {
           raceId={race?.id}
           onRaceFinished={() => {}}
           participants={race?.participantCount}
+          demo={true}
         />
       </h2>
       <div className="w-full gap-[1.4rem] grid grid-cols-1 mb-5">Here</div>

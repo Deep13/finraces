@@ -1238,7 +1238,11 @@ const RacePage = () => {
             <Sidebar />
 
             {/* dashboard  */}
-            <div className="flex-1 px-[2%] md:px-[6%] pt-[2.1rem] mt-[30rem] overflow-x-hidden">
+            <div
+              className={`flex-1 px-[2%] md:px-[6%] pt-[2.1rem] ${
+                test ? " mt-[10rem]" : "mt-[30rem]"
+              } overflow-x-hidden`}
+            >
               {/* this is full width container cuz we need the sidebar to remain at correct place */}
               <div className="max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-t-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
                 {showJoin && (
