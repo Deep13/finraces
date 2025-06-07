@@ -2176,10 +2176,7 @@ const RacePage = () => {
                             {raceStatus == "running" ? (
                               <UserRankingList rankList={rankList} />
                             ) : (
-                              <UserRankingList
-                                rankList={joinedUsers}
-                                status="f"
-                              />
+                              <UserRankingList rankList={rankList} />
                             )}
                           </>
                         ) : (
