@@ -61,7 +61,7 @@ const rankImages = {
 
 const RaceCardHomepage2 = ({
   raceId = "54asdffasaFSf",
-  raceName = "Abstrace Race",
+  raceName = " ",
   end_date,
   start_Date,
   onRaceFinished,
@@ -132,14 +132,18 @@ const RaceCardHomepage2 = ({
                     </div> */}
             </div>
             <div className="flex-1 flex justify-center">
-              {start_Date && end_date && new Date() >= new Date(start_Date) && (
-                <CountDownTimer
-                  deadline={end_date}
-                  setIsTimerFinished={setIsTimerFinished}
-                  mode={"Home"}
-                />
-              )}
+              {end_date &&
+                start_Date &&
+                new Date(start_Date).getTime() <= Date.now() && (
+                  <CountDownTimer
+                    deadline={end_date} // Only show countdown to end after race has started
+                    setIsTimerFinished={setIsTimerFinished}
+                    mode={"Home"}
+                    type={"end_date"}
+                  />
+                )}
             </div>
+
             <div className="h-full flex flex-col justify-start items-end flex-1">
               {participants && (
                 <h3 className="text-[1.05rem] font-bold dark:text-white">{`${participants} ${

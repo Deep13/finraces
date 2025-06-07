@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Countdown from "react-countdown";
 
-const CountDownTimer = ({ deadline, setIsTimerFinished, mode }) => {
+const CountDownTimer = ({ deadline, setIsTimerFinished, mode, type = "" }) => {
   const renderer = ({ days, hours, minutes, seconds, completed }) => {
     if (completed) {
       setIsTimerFinished(true);

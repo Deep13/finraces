@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { createDemoRace } from "../Utils/api";
 import RaceCardHomepage2 from "./RaceCardHomepage2";
 import JoinRace from "./JoinRace";
-import { useSocket } from "../Contexts/SocketProvider";
+// import { useSocket } from "../Contexts/SocketProvider";
 
 const DemoRace = () => {
   const [race, setRace] = useState({});
   const [joinRaceFormVisible, setJoinRaceFormVisible] = useState(false);
-  const socket = useSocket();
+  // const socket = useSocket();
 
   //  Step 1: Create demo race initially
   useEffect(() => {

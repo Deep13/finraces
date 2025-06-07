@@ -2255,7 +2255,7 @@ export const getStockChartData = async (
   try {
     let token = localStorage.getItem("token");
 
-    let url = `${GlobalURL}/api/v1/stocks/${ticker}/aggregates?multiplierNum=1&timespanUnit=${units}&startDate=${startDate}&endDate=${endDate}`;
+    let url = `${GlobalURL}/api/v1/public/stocks/${ticker}/aggregates?multiplierNum=1&timespanUnit=${units}&startDate=${startDate}&endDate=${endDate}`;
 
     const response = await axios.get(url, {
       headers: {

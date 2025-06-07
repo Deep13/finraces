@@ -1841,7 +1841,8 @@ const RacePage = () => {
                         ))}
                       </div>
                     )} */}
-                    {raceStatus == "finished" || raceStatus == "running" ? (
+                    {(raceStatus == "finished" || raceStatus == "running") &&
+                    ud ? (
                       <div className="group">
                         <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-32 z-20 opacity-85">
                           Share in Community
@@ -1852,33 +1853,35 @@ const RacePage = () => {
                         />
                       </div>
                     ) : (
-                      <>
-                        <div
-                          onClick={() => {
-                            setIsRaceStarted(false);
-                          }}
-                          className="px-2 py-1 rounded-xl mr-3 cursor-pointer bg-blue-600 text-white font-semibold"
-                        >
-                          Invite
-                        </div>
-                        {isRaceStarted == false &&
-                          raceStatus != "running" &&
-                          raceStatus != "finished" &&
-                          !test && (
-                            <RaceWaitingZone
-                              start_date={raceDetails?.start_date}
-                              raceStarted={isRaceStarted}
-                              joinedUsersList={joinedUsers}
-                              raceName={raceDetails?.name}
-                              liveUsers={liveUsers}
-                              race_id={race_id}
-                              status={raceDetails?.status}
-                              closeCard={() => {
-                                setIsRaceStarted(true);
-                              }}
-                            />
-                          )}
-                      </>
+                      ud && (
+                        <>
+                          <div
+                            onClick={() => {
+                              setIsRaceStarted(false);
+                            }}
+                            className="px-2 py-1 rounded-xl mr-3 cursor-pointer bg-blue-600 text-white font-semibold"
+                          >
+                            Invite
+                          </div>
+                          {isRaceStarted == false &&
+                            raceStatus != "running" &&
+                            raceStatus != "finished" &&
+                            !test && (
+                              <RaceWaitingZone
+                                start_date={raceDetails?.start_date}
+                                raceStarted={isRaceStarted}
+                                joinedUsersList={joinedUsers}
+                                raceName={raceDetails?.name}
+                                liveUsers={liveUsers}
+                                race_id={race_id}
+                                status={raceDetails?.status}
+                                closeCard={() => {
+                                  setIsRaceStarted(true);
+                                }}
+                              />
+                            )}
+                        </>
+                      )
                     )}
 
                     <div className="group">
