@@ -172,7 +172,7 @@ const RaceCardHomepage2 = ({
             onClick={() => navigate(`/race/${raceId}`)}
           >
             <iframe
-              className="w-full h-full border-0"
+              className="w-full h-full border-0 pointer-events-none"
               src={`/game/index.html?raceId=${raceId}`}
               scrolling="no"
               style={{ overflow: "hidden" }}
