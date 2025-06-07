@@ -12,6 +12,7 @@ import StockEntryRow2 from "./StockEntryRow2";
 import SegmentedControl from "./SegmentedControl";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import { useCommunity } from "../Contexts/CommunityProvider";
+import { ColorRing } from "react-loader-spinner";
 
 const JoinRace = ({
   closeForm = () => {},
@@ -34,6 +35,8 @@ const JoinRace = ({
       stock_id: "",
     },
   ]);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const { darkModeEnabled } = useContext(DarkModeContext);
 
@@ -49,9 +52,11 @@ const JoinRace = ({
   };
 
   useEffect(() => {
+    setLoading(true);
     // fetch the race details and stock here together with their current price
     fetchStocks(race_id, (res) => {
       setStockList(res);
+      setLoading(false);
     });
   }, []);
 
@@ -68,7 +73,7 @@ const JoinRace = ({
 
   return (
     <div className="fixed inset-0 z-[50] overflow-y-auto bg-black/30 backdrop-blur-sm flex justify-center items-start py-10">
-      <div className="rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem] dark:bg-[#002763]">
+      <div className="rounded-[10px] shadow-xl bg-white px-[1.8rem] py-[3rem] dark:bg-[#002763] min-w-[80%]">
         {/* heading  */}
         <div className="flex items-center mb-[1.8rem] relative">
           <div className="flex gap-[12px] items-center">
@@ -105,7 +110,19 @@ const JoinRace = ({
           <hr className="my-[1.2rem] border-t border-solid border-black" />
 
           {/* stocks with prices and values  */}
-          {stockList[0] ? (
+          {loading ? (
+            <div className="w-full mx-auto flex items-center justify-center">
+              <ColorRing
+                visible={true}
+                height="65"
+                width="65"
+                ariaLabel="color-ring-loading"
+                wrapperStyle={{}}
+                wrapperClass="color-ring-wrapper"
+                colors={["#e15b64", "#f47e60"]}
+              />
+            </div>
+          ) : stockList[0] ? (
             stockList?.map((curr, index) => {
               return (
                 <StockEntryRow2

@@ -1474,7 +1474,6 @@ const RacePage = () => {
                       raceStatus !== "finished" &&
                       showIframe && (
                         <iframe
-                          key={race_id} // force reload if race_id changes
                           className="flex-1 w-full h-[700px]"
                           ref={iframeRef}
                           src={`https://missionatal.com/?raceId=${race_id}`}
@@ -2031,7 +2030,6 @@ const RacePage = () => {
                     raceStatus !== "finished" &&
                     showIframe && (
                       <iframe
-                        key={race_id} // force reload if race_id changes
                         className="flex-1 w-full h-[700px]"
                         ref={iframeRef}
                         src={`https://missionatal.com/?raceId=${race_id}`}
