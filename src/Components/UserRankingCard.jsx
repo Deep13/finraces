@@ -41,9 +41,14 @@ const UserRankingCard = ({
           !guestDetails && navigate("/profile");
           return;
         }
+        if (userName == "You" || userName == "You ") {
+          return;
+        }
         navigate(`/userprofile/${id}`);
       }}
-      className={`rounded-[20px] cursor-pointer flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md dark:border-[#00387E] dark:bg-[#002763]`}
+      className={`rounded-[20px] ${
+        userName == "You" || userName == "You " ? "" : "cursor-pointer"
+      }  flex justify-between w-full items-center px-[10px] py-[7px] border shadow-md dark:border-[#00387E] dark:bg-[#002763]`}
     >
       <div className="flex gap-[15px] items-center ">
         <div className="w-[2.8rem] aspect-square rounded-md">
