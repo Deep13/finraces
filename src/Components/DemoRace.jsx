@@ -70,7 +70,6 @@ const DemoRace = () => {
           demo={true}
         />
       </h2>
-      <div className="w-full gap-[1.4rem] grid grid-cols-1 mb-5">Here</div>
     </div>
   );
 };
