@@ -464,8 +464,16 @@ const RacePage = () => {
 
     // Helper to clean user_name
     const formatUserName = (name) => {
-      if (!name || typeof name !== "string") return "Unknown User";
-      return name.replace(/null/g, "").trim() || "Unknown User";
+      let wordsArray = name.split(" ");
+      let n = "";
+
+      wordsArray.map((word) => {
+        if (word != null && word != "null") {
+          n += word + " ";
+        }
+      });
+
+      return n;
     };
 
     // Add participants with ranks from race_result
@@ -488,7 +496,7 @@ const RacePage = () => {
     participantsWithNoRank?.forEach((participant) => {
       result.push({
         user_id: participant.user_id,
-        user_name: participant.user_name,
+        user_name: formatUserName(participant.user_name),
         user_photo: participant.user_photo
           ? participant.user_photo.path
           : participant.gender == "female"
@@ -1248,7 +1256,8 @@ const RacePage = () => {
                       <div></div>
                       <div className="h-full">
                         <h3 className="text-[1.05rem] font-bold dark:text-white font-poppins">
-                          {raceDetails?.name}
+                          {raceDetails?.name?.charAt(0)?.toUpperCase() +
+                            raceDetails?.name?.slice(1)}
                         </h3>
                         <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
                           {raceDetails?.end_date ? (
@@ -1548,9 +1557,10 @@ const RacePage = () => {
                     {raceDetails?.created_by?.firstName && (
                       <p className="font-medium text-[1.05rem]">
                         Race created by -{" "}
-                        {raceDetails?.created_by?.firstName +
-                          " " +
-                          raceDetails?.created_by?.lastName}
+                        {raceDetails.created_by.firstName +
+                          (raceDetails.created_by.lastName
+                            ? ` ${raceDetails.created_by.lastName}`
+                            : "")}
                       </p>
                     )}
 
@@ -1735,7 +1745,8 @@ const RacePage = () => {
                     <div></div>
                     <div className="h-full">
                       <h3 className="text-[1.05rem] font-bold dark:text-white font-poppins">
-                        {raceDetails?.name}
+                        {raceDetails?.name?.charAt(0)?.toUpperCase() +
+                          raceDetails?.name?.slice(1)}
                       </h3>
                       <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
                         {raceDetails?.end_date ? (
@@ -2100,9 +2111,10 @@ const RacePage = () => {
                   {raceDetails?.created_by?.firstName && (
                     <p className="font-medium text-[1.05rem]">
                       Race created by -{" "}
-                      {raceDetails?.created_by?.firstName +
-                        " " +
-                        raceDetails?.created_by?.lastName}
+                      {raceDetails.created_by.firstName +
+                        (raceDetails.created_by.lastName
+                          ? ` ${raceDetails.created_by.lastName}`
+                          : "")}
                     </p>
                   )}
 

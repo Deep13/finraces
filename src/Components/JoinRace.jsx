@@ -56,10 +56,6 @@ const JoinRace = ({
   }, []);
 
   useEffect(() => {
-    console.log("stock predictions in stockList", stockList);
-  }, [stockList]);
-
-  useEffect(() => {
     if (demo && stockList?.length) {
       const updatedList = stockList.map((stock, index) => ({
         ...stock,
