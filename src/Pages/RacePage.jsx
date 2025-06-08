@@ -256,7 +256,7 @@ const RacePage = () => {
           const relativePosition =
             ((data.data["stocks"].length - stock.rank) *
               (data.data["stocks"].length * 10)) /
-              data.data["stocks"].length +
+            data.data["stocks"].length +
             elapsedTime; // here 5 is total no. of stocks  *10 is not required here
           newPosArr.push(relativePosition);
         });
@@ -485,8 +485,8 @@ const RacePage = () => {
           user_photo: participant.user_photo
             ? participant.user_photo.path
             : participant.gender == "female"
-            ? femalePlaceholder
-            : malePlaceholder,
+              ? femalePlaceholder
+              : malePlaceholder,
           rank: rank || "-", // Use the key as rank, or "-" if rank is not found
         });
       });
@@ -500,8 +500,8 @@ const RacePage = () => {
         user_photo: participant.user_photo
           ? participant.user_photo.path
           : participant.gender == "female"
-          ? femalePlaceholder
-          : malePlaceholder,
+            ? femalePlaceholder
+            : malePlaceholder,
         rank: "-",
       });
     });
@@ -768,21 +768,21 @@ const RacePage = () => {
         <!-- User Row -->
         <div class="flex justify-center items-start gap-[50px] mb-[30px]">
           ${[...Array(maxUserSlots)]
-            .map((_, i) => {
-              const user = rankList[i];
-              const crown = [
-                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_1.png",
-                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_2.png",
-                "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_3.png",
-              ][i];
-              const userImg =
-                user?.user_photo ||
-                (user?.gender === "female"
-                  ? "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/womanPlaceholder.jpg"
-                  : "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/manPlaceholder.jpg");
-              const userName = user?.user_name || "";
+        .map((_, i) => {
+          const user = rankList[i];
+          const crown = [
+            "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_1.png",
+            "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_2.png",
+            "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/Crown_3.png",
+          ][i];
+          const userImg =
+            user?.user_photo ||
+            (user?.gender === "female"
+              ? "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/womanPlaceholder.jpg"
+              : "https://finracerdev-7891.s3.us-east-1.amazonaws.com/statics/manPlaceholder.jpg");
+          const userName = user?.user_name || "";
 
-              return `
+          return `
                 <div class="flex flex-col items-center gap-4">
                   <div style="position: relative;">
                     <img class="h-36 w-36 rounded-2xl aspect-square" src="${userImg}" />
@@ -791,20 +791,20 @@ const RacePage = () => {
                   <p class="text-base font-semibold dark:text-white">${userName}</p>
                 </div>
               `;
-            })
-            .join("")}
+        })
+        .join("")}
         </div>
 
         <!-- Stock Row -->
         <div class="flex justify-center items-start gap-[50px]">
           ${[...Array(maxStockSlots)]
-            .map((_, i) => {
-              const stockIcon = stockRankList[i]?.stock_icon_url || "";
-              return stockIcon
-                ? `<img class="rounded-xl w-28 h-28" src="${stockIcon}" />`
-                : "";
-            })
-            .join("")}
+        .map((_, i) => {
+          const stockIcon = stockRankList[i]?.stock_icon_url || "";
+          return stockIcon
+            ? `<img class="rounded-xl w-28 h-28" src="${stockIcon}" />`
+            : "";
+        })
+        .join("")}
         </div>
 
       </div>
@@ -949,8 +949,8 @@ const RacePage = () => {
   const findImageUrlForStock = (id) =>
     stocksDataForRace
       ? stocksDataForRace[
-          Object.keys(stocksDataForRace)?.find((element) => element === id)
-        ]?.icon_url
+        Object.keys(stocksDataForRace)?.find((element) => element === id)
+      ]?.icon_url
       : "";
 
   useEffect(() => {
@@ -1239,9 +1239,8 @@ const RacePage = () => {
 
             {/* dashboard  */}
             <div
-              className={`flex-1 px-[2%] md:px-[6%] pt-[2.1rem] ${
-                test ? " mt-[10rem]" : "mt-[30rem]"
-              } overflow-x-hidden`}
+              className={`flex-1 px-[2%] md:px-[6%] pt-[2.1rem] ${test ? " mt-[10rem]" : "mt-[30rem]"
+                } overflow-x-hidden`}
             >
               {/* this is full width container cuz we need the sidebar to remain at correct place */}
               <div className="max-w-[1400px] w-full py-[11px] px-[20px] flex flex-col lg:flex-row gap-[15px] rounded-t-[24px] dark:bg-[#000D38] bg-[#EDF7FF]">
@@ -1266,11 +1265,11 @@ const RacePage = () => {
                         <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
                           {raceDetails?.end_date ? (
                             new Date(raceDetails.end_date).getTime() >
-                            Date.now() ? (
+                              Date.now() ? (
                               <>
                                 <p>
                                   {new Date(raceDetails.start_date).getTime() >
-                                  Date.now()
+                                    Date.now()
                                     ? "Race Starts In:"
                                     : "Remaining Time:"}
                                 </p>
@@ -1600,17 +1599,17 @@ const RacePage = () => {
                         </button>
                         {(raceStatus == "running" ||
                           raceStatus == "finished") && (
-                          <button
-                            onClick={() => setTabs("yourbets")}
-                            className={
-                              tabs === "yourbets"
-                                ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
-                                : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
-                            }
-                          >
-                            Your Bets
-                          </button>
-                        )}
+                            <button
+                              onClick={() => setTabs("yourbets")}
+                              className={
+                                tabs === "yourbets"
+                                  ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
+                                  : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
+                              }
+                            >
+                              Your Bets
+                            </button>
+                          )}
                       </div>
                       {
                         <div className="w-full rounded-[8px] max-h-scree h-full overflow-auto custom-scrollbar">
@@ -1634,9 +1633,9 @@ const RacePage = () => {
                                 stockRankList?.map((curr, index) => {
                                   let stock =
                                     stocksDataForRace[
-                                      Object.keys(stocksDataForRace).find(
-                                        (element) => element === curr.stock_id
-                                      )
+                                    Object.keys(stocksDataForRace).find(
+                                      (element) => element === curr.stock_id
+                                    )
                                     ];
                                   let imageUrl = stock?.icon_url;
                                   console.log(curr);
@@ -1754,11 +1753,11 @@ const RacePage = () => {
                       <div className="font-medium text-[0.9rem] dark:text-white flex gap-4 items-center flex-wrap">
                         {raceDetails?.end_date ? (
                           new Date(raceDetails.end_date).getTime() >
-                          Date.now() ? (
+                            Date.now() ? (
                             <>
                               <p>
                                 {new Date(raceDetails.start_date).getTime() >
-                                Date.now()
+                                  Date.now()
                                   ? "Race Starts In:"
                                   : "Remaining Time:"}
                               </p>
@@ -1766,7 +1765,7 @@ const RacePage = () => {
                                 <Countdown
                                   date={
                                     new Date(raceDetails.start_date).getTime() >
-                                    Date.now()
+                                      Date.now()
                                       ? Date.parse(raceDetails.start_date)
                                       : Date.parse(raceDetails.end_date)
                                   } // Correct UTC-based timestamp
@@ -1845,7 +1844,7 @@ const RacePage = () => {
                       </div>
                     )} */}
                     {(raceStatus == "finished" || raceStatus == "running") &&
-                    ud ? (
+                      ud ? (
                       <div className="group">
                         <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-32 z-20 opacity-85">
                           Share in Community
@@ -2069,7 +2068,7 @@ const RacePage = () => {
                   stockRankList={stockRankList}
                 />
 
-                {raceStatus != "finished" && userDetails && (
+                {raceStatus != "finished" && (
                   <div className="w-full h-[30rem]">
                     <p className="text-slate-300 font-semibold text-xl font-poppins w-full flex items-center justify-center mb-5">
                       Comparison of Last 30 days
@@ -2154,17 +2153,17 @@ const RacePage = () => {
                       </button>
                       {(raceStatus == "running" ||
                         raceStatus == "finished") && (
-                        <button
-                          onClick={() => setTabs("yourbets")}
-                          className={
-                            tabs === "yourbets"
-                              ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
-                              : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
-                          }
-                        >
-                          Your Bets
-                        </button>
-                      )}
+                          <button
+                            onClick={() => setTabs("yourbets")}
+                            className={
+                              tabs === "yourbets"
+                                ? "w-[9rem] flex justify-center items-center py-[12.25px] bg-blue-600 text-white font-semibold rounded-[70px] text-[14px] dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF]"
+                                : "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:text-white"
+                            }
+                          >
+                            Your Bets
+                          </button>
+                        )}
                     </div>
                     {
                       <div className="w-full rounded-[8px] max-h-scree h-full overflow-auto custom-scrollbar">
@@ -2185,9 +2184,9 @@ const RacePage = () => {
                               stockRankList?.map((curr, index) => {
                                 let stock =
                                   stocksDataForRace[
-                                    Object.keys(stocksDataForRace).find(
-                                      (element) => element === curr.stock_id
-                                    )
+                                  Object.keys(stocksDataForRace).find(
+                                    (element) => element === curr.stock_id
+                                  )
                                   ];
                                 let imageUrl = stock?.icon_url;
                                 console.log(curr);
