@@ -119,7 +119,12 @@ const StockChart = ({
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    animation: disableAnimation ? false : animation,
+    animation: disableAnimation
+      ? {
+          duration: 300,
+          easing: "easeOutQuart",
+        }
+      : animation,
     scales: {
       x: {
         ticks: { color: darkModeEnabled ? "#fff" : "#000" },
