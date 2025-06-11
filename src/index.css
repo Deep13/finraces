@@ -1,0 +1,480 @@
+@tailwind base;
+
+input {
+  @apply placeholder-[#b3bfbc] font-poppins rounded-[14px] dark:bg-[#010B2C] dark:text-white bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32];
+}
+textarea {
+  @apply placeholder-[#b3bfbc] font-poppins rounded-[14px] dark:bg-[#010B2C] dark:text-white bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32];
+}
+
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin; /* Firefox */
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  html::-webkit-scrollbar-thumb,
+  body::-webkit-scrollbar-thumb {
+    background-color: #00387e;
+    border-radius: 4px;
+  }
+
+  html::-webkit-scrollbar-track,
+  body::-webkit-scrollbar-track {
+    background: #010b2c;
+  }
+}
+
+.dark {
+  scrollbar-color: #00387e transparent; /* Firefox */
+}
+
+.dark::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark::-webkit-scrollbar-thumb {
+  background-color: #00387e;
+  border-radius: 4px;
+}
+
+@layer base {
+  @font-face {
+    font-family: "Raleway";
+    src: url("./assets/fonts/Raleway/Raleway-VariableFont_wght.ttf")
+      format("truetype");
+  }
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+  :root {
+    --radius: 0.5rem;
+  }
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer components {
+  .rdp .rdp-nav_icon {
+    @apply text-white;
+    stroke: white; /* Tailwind doesn’t cover this by default */
+  }
+}
+
+/* input[type='password'] {
+    font-family: Verdana;
+}
+
+input[type='password'] {
+    font-family: Verdana;
+    letter-spacing: 0.125em;
+} */
+/* This was meant for making passwod dots bigger */
+
+/* Firefox - Light mode */
+html:not(.dark) .notificationScrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff transparent; /* Light thumb */
+}
+
+/* Firefox - Dark mode */
+html.dark .notificationScrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #00387e transparent; /* Dark thumb */
+}
+
+/* Chrome, Safari, Edge - WebKit support */
+.notificationScrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.notificationScrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Light mode thumb */
+html:not(.dark) .notificationScrollbar::-webkit-scrollbar-thumb {
+  background-color: #ffffff;
+  border-radius: 4px;
+}
+
+/* Dark mode thumb */
+html.dark .notificationScrollbar::-webkit-scrollbar-thumb {
+  background-color: #00387e;
+  border-radius: 4px;
+}
+
+.hero-gradient {
+  background: rgb(229, 244, 255);
+  background: linear-gradient(
+    90deg,
+    rgba(229, 244, 255, 1) 49%,
+    rgba(0, 0, 0, 0.2508059376094187) 100%
+  );
+}
+
+.profile_card_button_grad {
+  background: rgb(102, 217, 255);
+  background: linear-gradient(
+    90deg,
+    rgba(102, 217, 255, 1) 0%,
+    rgba(18, 83, 153, 1) 100%
+  );
+}
+
+/** Text Gradient Example */
+.text-gradient {
+  color: #06896a;
+  background-image: linear-gradient(45deg, #06896a 16%, #045841 75%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Custom scrollbar for users joining container */
+.joining-users {
+  max-height: 150px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: rgba(150, 150, 150, 0.6) transparent;
+  /* Grey thumb with transparent track for Firefox */
+}
+
+/* For WebKit-based browsers (Chrome, Safari) */
+.joining-users::-webkit-scrollbar {
+  width: 8px;
+}
+
+.joining-users::-webkit-scrollbar-track {
+  background: transparent;
+  /* Transparent track */
+}
+
+.joining-users::-webkit-scrollbar-thumb {
+  background-color: rgba(150, 150, 150, 0.6);
+  /* Visible grey thumb */
+  border-radius: 8px;
+  /* Rounded ends */
+}
+
+.joining-users::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(100, 100, 100, 0.8);
+  /* Darker grey on hover */
+}
+
+.selected-item {
+  text-align: center;
+}
+
+.controls-container {
+  --highlight-width: auto;
+  --highlight-x-pos: 0;
+
+  display: flex;
+  margin: 100px 0 25px;
+}
+
+.controls {
+  display: inline-flex;
+  justify-content: space-between;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  max-width: 500px;
+  padding: 5px;
+  margin: auto;
+  overflow: hidden;
+  @apply bg-white dark:bg-[#010b2c];
+  position: relative;
+}
+.controls_dark {
+  display: inline-flex;
+  justify-content: space-between;
+  background: #010b2c;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  max-width: 500px;
+  padding: 5px;
+  margin: auto;
+  overflow: hidden;
+  position: relative;
+}
+
+.controls input {
+  opacity: 0;
+  margin: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  cursor: pointer;
+  height: 100%;
+}
+.controls_dark input {
+  opacity: 0;
+  margin: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  width: 100%;
+  cursor: pointer;
+  height: 100%;
+  background-color: #010b2c;
+}
+
+.segment {
+  /* width: 100%; uncomment for each segment to have matching width */
+  min-width: 120px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+  background-color: transparent;
+  border-color: #00387e;
+}
+
+.segment label {
+  cursor: pointer;
+  display: block;
+  /* font-weight: 700; */
+  padding: 10px;
+  font-size: 16px;
+  transition: color 0.5s ease;
+  @apply text-black dark:text-white;
+}
+
+.segment.active label {
+  color: #000;
+  font-size: 1rem;
+  @apply text-black dark:text-white;
+  font-weight: bold;
+}
+
+.controls::before {
+  content: "";
+  @apply dark:text-white dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF] dark:bg-[#e4eaf0];
+  /* background: #e4eaf0; */
+  border-radius: 8px;
+  width: var(--highlight-width);
+  transform: translateX(var(--highlight-x-pos));
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  z-index: 0;
+}
+.controls_dark::before {
+  content: "";
+  /* background: #e4eaf0; */
+  @apply dark:text-white dark:bg-gradient-to-r from-[#005BFF] to-[#5B89FF];
+  border-radius: 8px;
+  width: var(--highlight-width);
+  transform: translateX(var(--highlight-x-pos));
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  z-index: 0;
+}
+.segment {
+  /* width: 100%; uncomment for each segment to have matching width */
+  min-width: 120px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+  background-color: transparent;
+  border-color: #00387e;
+}
+
+.segment label {
+  cursor: pointer;
+  display: block;
+  /* font-weight: 700; */
+  padding: 10px;
+  font-size: 16px;
+  transition: color 0.5s ease;
+}
+
+.segment.active label {
+  color: #000;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.controls::before {
+  content: "";
+  background: #e4eaf0;
+  border-radius: 8px;
+  width: var(--highlight-width);
+  transform: translateX(var(--highlight-x-pos));
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0;
+  z-index: 0;
+}
+.segment-dark {
+  /* width: 100%; uncomment for each segment to have matching width */
+  min-width: 120px;
+  position: relative;
+  text-align: center;
+  z-index: 1;
+  background-color: transparent;
+  border-color: #00387e;
+}
+
+.segment-dark label {
+  cursor: pointer;
+  display: block;
+  /* font-weight: 700; */
+  padding: 10px;
+  font-size: 16px;
+  transition: color 0.5s ease;
+}
+
+.segment-dark.active label {
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+/* Only allow transitions once component is ready */
+.controls.ready::before {
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+.controls_dark.ready::before {
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+
+.custom-scrollbar {
+  overflow: auto;
+  /* Enables scrolling for vertical overflow */
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  /* Width of the scrollbar */
+  height: 8px;
+  /* Height of the scrollbar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Darker blackish color */
+  border-radius: 20px;
+  /* Rounded edges */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  /* Transparent track */
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  /* Thin scrollbar for Firefox */
+  scrollbar-color: rgba(0, 0, 0, 0.6) transparent;
+  /* Dark thumb, transparent track */
+}
+
+/* .online_text{
+  text-shadow: rgba(12, 159, 66, 0.67) 0px 0px 21px;
+} */
+
+/* This controls the post posted via community
+.postContent{
+
+} */
+
+/* This controls the comments on community posts
+.commentContent:{
+  
+} */
+
+.ql-toolbar {
+  border: none !important;
+}
+
+.ql-container {
+  border: none !important;
+  flex: 1;
+}
+
+.table-row-light:hover {
+  background-color: none;
+}
+
+.table-row-dark:hover {
+  background-color: none;
+}
+
+.antd-table-head {
+  background: #000;
+}
+
+.shadowImperial {
+  box-shadow: inset -1px -4px 20px 6px #0000004d;
+}
+
+.glow {
+  box-shadow: -1px -20px 91px 3px #0076d6;
+}
+
+.triangle-up {
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 50px solid #555;
+}
+
+/* for text editor */
+/* .ql-toolbar button::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.ql-toolbar button:hover::after {
+  opacity: 1;
+} */
+
+/* input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+} */
+/* this thing war removing the calendar icon  */
+
+select option {
+  margin: 40px;
+  /* background: rgba(0, 0, 0, 0.3); */
+  color: #fff;
+  /* text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4); */
+  @apply placeholder-[#b3bfbc] rounded-[14px] dark:bg-[#010B2C] dark:text-white bg-[#f5f5f5] px-[13px] py-[14px] text-[#292D32] border-none;
+}

@@ -1,0 +1,60 @@
+import React from "react";
+import { ColorRing } from "react-loader-spinner";
+import UserRankingCard from "./UserRankingCard";
+import malePlaceholder from "../assets/images/manPlaceholder.jpg";
+import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
+
+const UserRankingList = ({ rankList, status = "" }) => {
+  console.log("Ranklist item structure", rankList);
+
+  return (
+    <div className="w-full flex flex-col gap-[9px] items-center overflow-auto h-full max-h-[30rem] pr-2 notificationScrollbar">
+      {rankList ? (
+        status == "f" ? (
+          rankList?.map((curr, index) => (
+            <UserRankingCard
+              key={index}
+              pos={index}
+              id={curr.id}
+              total={rankList.length}
+              userName={curr.firstName + " " + curr?.lastName}
+              userPhoto={
+                curr?.photo?.path ||
+                (curr?.gender === "female"
+                  ? femalePlaceholder
+                  : malePlaceholder)
+              }
+              userRank={index + 1}
+              lastItem={rankList?.length === index}
+            />
+          ))
+        ) : (
+          rankList?.map((curr, index) => (
+            <UserRankingCard
+              key={index}
+              pos={index}
+              id={curr.user_id}
+              total={rankList.length}
+              userName={curr.user_name}
+              userPhoto={curr.user_photo}
+              userRank={curr.rank}
+              lastItem={rankList?.length === index}
+            />
+          ))
+        )
+      ) : (
+        <ColorRing
+          visible={true}
+          height="25"
+          width="25"
+          ariaLabel="color-ring-loading"
+          wrapperStyle={{}}
+          wrapperClass="color-ring-wrapper"
+          colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+        />
+      )}
+    </div>
+  );
+};
+
+export default UserRankingList;

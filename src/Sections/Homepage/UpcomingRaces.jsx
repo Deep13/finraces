@@ -1,0 +1,96 @@
+import React, { useEffect, useState } from "react";
+import UpcomingRaceCardHomepage from "../../Components/UpcomingRaceCardHomepage";
+import { BiChevronRight } from "react-icons/bi";
+import { getRaceList, getRacesLite } from "../../Utils/api";
+import { useNavigate } from "react-router-dom";
+
+const UpcomingRaces = () => {
+  // State to keep track of the active tab
+  const [activeTab, setActiveTab] = useState("Tech Stocks");
+  const [raceList, setRaceList] = useState([]);
+  const [tabChangeKey, setTabChangeKey] = useState(0); // Key to retrigger animations
+  const navigate = useNavigate();
+
+  // Handler for button clicks
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
+    setTabChangeKey((prevKey) => prevKey + 1); // Increment key to trigger re-render
+  };
+
+  useEffect(() => {
+    getRaceList(
+      "scheduled",
+      1,
+      (data) => {
+        console.log("race list here", data);
+        setRaceList(data.data);
+      },
+      () => {
+        console.error("Failed to fetch race list");
+      }
+    );
+  }, []);
+
+  return (
+    <div className="max-w-[1400px] relative mb-[3.29rem]">
+      <a
+        onClick={() => navigate("/allraces", { state: "Upcoming Races" })}
+        className="absolute right-0 top-2 text-[#8d8d8d] text-[0.94rem] font-semibold hover:underline flex items-center"
+        href=""
+      >
+        See All <BiChevronRight size={18} />
+      </a>
+      <h2 className="text-[2.14rem] text-center font-bold mb-[1.4rem] dark:text-white">
+        Upcoming Races
+      </h2>
+
+      {/* Tab layout */}
+      {/* <div className='w-full gap-[0.7rem] flex justify-center items-center mb-[1.4rem]'>
+        {["Tech Stocks", "Healthcare", "Energy", "Pharmaceuticals", "Automotive"].map((tab) => (
+          <button
+            key={tab}
+            onClick={() => handleTabClick(tab)}
+            className={`flex dark:text-white justify-center items-center w-[5rem] md:w-[9rem] px-[0.9rem] py-[0.76rem] rounded-[70px] shadow-xl font-semibold text-[0.6rem] md:text-[0.94rem] 
+              ${activeTab === tab ? 'bg-[#e5f4ff] dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff]' : 'bg-white dark:bg-transparent dark:border dark:border-[#00387E]'}`}
+          >
+            {tab}
+          </button>
+        ))}
+      </div> */}
+
+      {/* Upcoming race cards */}
+      <div className="gap-[1.76rem] grid grid-cols-1 md:grid-cols-2 w-full">
+        {raceList &&
+          raceList.length > 0 &&
+          raceList?.slice(0, 4).map((curr, index) => {
+            return (
+              <UpcomingRaceCardHomepage
+                key={`${tabChangeKey}-${index}`} // Unique key based on tabChangeKey
+                startDate={curr.start_date}
+                endDate={curr.end_date}
+                raceName={curr.name}
+                raceId={curr.id}
+                index={index}
+                totalStocksCount={curr?.stocks?.length}
+                stock1={curr?.stocks?.["0"]?.icon_url}
+                stock2={curr?.stocks?.["1"]?.icon_url}
+                stock3={curr?.stocks?.["2"]?.icon_url}
+                stock1Name={curr?.stocks?.["0"]?.name}
+                stock2Name={curr?.stocks?.["1"]?.name}
+                stock3Name={curr?.stocks?.["2"]?.name}
+                participants={curr?.participants?.length}
+                participantsData={curr?.participants}
+              />
+            );
+          })}
+      </div>
+      {raceList.length === 0 && (
+        <p className="dark:text-white w-full text-center">
+          There are no recent upcoming races.
+        </p>
+      )}
+    </div>
+  );
+};
+
+export default UpcomingRaces;

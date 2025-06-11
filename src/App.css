@@ -1,0 +1,51 @@
+.ongoing-users {
+  border-radius: 8px;
+  height: 200px;
+  width: 100%;
+}
+.ongoing-rank {
+  width: 200px;
+  position: absolute;
+  bottom: -30px;
+  left: -10px;
+}
+
+.finished-stocks {
+  height: 100px;
+  border-radius: 8px;
+}
+
+iframe {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+.rdp-chevron {
+  fill: #ffffff !important;
+}
+.rdp-range_middle {
+  background-color: #3c79ff !important;
+}
+
+.rdp-range_start {
+  background: #3c79ff !important;
+  border-radius: 30px 0px 0px 30px !important;
+}
+.rdp-range_end {
+  background: #3c79ff !important;
+  border-radius: 0px 30px 30px 0px !important;
+}
+
+.rdp-range_start.rdp-range_end {
+  background: #3c79ff !important;
+  border-radius: 30px 30px 30px 30px !important;
+}
+.rdp-range_start .rdp-day_button {
+  background-color: #3c79ff !important;
+  border: 0px !important;
+}
+
+.rdp-range_end .rdp-day_button {
+  background-color: #3c79ff !important;
+  border: 0px !important;
+}
