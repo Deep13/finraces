@@ -24,7 +24,7 @@ import { MailIcon } from "lucide-react";
 
 // Get current URL
 const currentUrl = window.location.href;
-const shareMessage = `Hey there,\nJoin this race on Finraces: ${currentUrl}`;
+const shareMessage = `Hey there,\nJoin this race on FinRacers: ${currentUrl}`;
 
 const RaceWaitingZone = ({
   closeCard = () => {},

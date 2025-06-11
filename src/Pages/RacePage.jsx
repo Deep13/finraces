@@ -78,6 +78,7 @@ import { useSocket } from "../Contexts/SocketProvider";
 import { useCommunity } from "../Contexts/CommunityProvider";
 import { connectSocket } from "../Utils/socket";
 import StockChart from "../Components/StockChart";
+import { set } from "lodash";
 
 // Register Chart.js components
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -106,7 +107,6 @@ const RacePage = () => {
   const [raceResults, setRaceResults] = useState();
   const [stocksDataForRace, setStocksDataForRace] = useState(null);
   const [raceStatus, setRaceStatus] = useState("");
-  const [notFinished, setNotFinished] = useState(true);
   const [graphType, setGraphType] = useState("Race");
   const [tempStocks, setTempStocks] = useState([]);
   const [ranks, setRanks] = useState({
@@ -210,7 +210,7 @@ const RacePage = () => {
     socket.on("message", (data) => {
       // console.log('Message from server:', JSON.stringify(data, null, 2));
       if (data.event === "user-joined") {
-        console.log(data.data.firstName);
+        // console.log(data.data.firstName);
         if (data.data.firstName) {
           // setJoinedUsers(previous => ([...previous, data.data.firstName]))
           const objectAlreadyThere = joinedUsersRef.current.filter(
@@ -229,12 +229,18 @@ const RacePage = () => {
         // console.log("race data socket", data.data);
         // console.log("check", transformSocketData(data.data));
         // dataTransform(data.data)
-        if (data?.data?.status) {
-          setRaceStatus(data.data.status);
-          if (data.data.status == "finished") {
-            setNotFinished(false);
-          }
-        } // somehow this is not reflecting
+        if (data?.data?.status === "running" && raceStatus !== "running") {
+          setRaceStatus("running");
+        }
+        if (data?.data?.status === "finished" && raceStatus !== "finished") {
+          setRaceStatus("finished");
+        }
+        if (data?.data?.status === "upcoming" && raceStatus !== "upcoming") {
+          setRaceStatus("upcoming");
+        }
+        // if (data?.data?.status && data.data.status != raceStatus) {
+        //   setRaceStatus(data.data.status);
+        // } // somehow this is not reflecting
         setIsLoadingRaceTile(false);
         setRankList(
           getParticipantsWithRanks(
@@ -243,6 +249,8 @@ const RacePage = () => {
           )
         );
         setStockRankList(data.data["stocks"]);
+
+        //stock comparison chart data
         if (!compareFlag.current) {
           compareFlag.current = true;
           fetchData(data.data["stocks"]);
@@ -575,7 +583,6 @@ const RacePage = () => {
             setRaceResults(data.result);
             setIsExploding(true);
             setRaceStatus("finished");
-            setNotFinished(false);
             setStockRankList(data.result.stocks);
             setRankList(
               getParticipantsWithRanks(
@@ -587,6 +594,8 @@ const RacePage = () => {
               setIsExploding(false);
             }, 4000);
           });
+        } else {
+          setRaceStatus("upcoming");
         }
       }
       setisLoading(false);
@@ -742,7 +751,7 @@ const RacePage = () => {
   }, [raceResults]);
 
   useEffect(() => {
-    console.log("This is race status >>>>>>>>", raceStatus);
+    // console.log("This is race status >>>>>>>>", raceStatus);
     if (raceStatus === "finished") {
       setIsExploding(true);
       setTimeout(() => {
@@ -751,18 +760,21 @@ const RacePage = () => {
     }
   }, [raceStatus]);
 
-  useEffect(() => {
-    console.log("check", stockRankList);
-  }, [stockRankList]);
+  // useEffect(() => {
+  //   console.log("status", raceStatus);
+  // }, [raceStatus]);
 
   //this prevents rerendering of iframe when race status changes
   const [iframeVisible, setIframeVisible] = useState(false);
 
   useEffect(() => {
-    if (data.labels.length > 0 && notFinished && !iframeVisible) {
+    if (
+      (raceStatus == "running" || raceStatus == "upcoming") &&
+      !iframeVisible
+    ) {
       setIframeVisible(true);
     }
-  }, [data.labels, raceStatus]);
+  }, [raceStatus, iframeVisible]);
 
   //this prevents stock comparison chart from flickering
 
@@ -920,9 +932,9 @@ const RacePage = () => {
     setDataset(generateStaticDatasets(stockCount));
   }, [stockCount]); // Regenerate datasets whenever stockCount changes
 
-  useEffect(() => {
-    console.log("state of data", labels, dataset);
-  }, [labels, dataset]);
+  // useEffect(() => {
+  //   console.log("state of data", labels, dataset);
+  // }, [labels, dataset]);
 
   const transformSocketData = (raceData) => {
     if (!raceData || !raceData.stocks || !raceData.start_date)
@@ -969,16 +981,16 @@ const RacePage = () => {
         ]?.icon_url
       : "";
 
-  useEffect(() => {
-    console.log("raceDetails", raceDetails);
-  }, [raceDetails]);
+  // useEffect(() => {
+  //   console.log("raceDetails", raceDetails);
+  // }, [raceDetails]);
 
-  useEffect(() => {
-    console.log(
-      "Race status this is pain in >>>>>>>>>>>>>",
-      raceDetails?.status
-    );
-  }, [raceStatus]);
+  // useEffect(() => {
+  //   console.log(
+  //     "Race status this is pain in >>>>>>>>>>>>>",
+  //     raceDetails?.status
+  //   );
+  // }, [raceStatus]);
 
   // useEffect(()=>{
   //     console.log(isRaceStarted)
@@ -1008,8 +1020,8 @@ const RacePage = () => {
       (entry) => entry?.user?.id === currentUser.id
     );
 
-    console.log("Time until race (in minutes):", timeDiffInMinutes);
-    console.log("Has user joined:", userHasJoined);
+    // console.log("Time until race (in minutes):", timeDiffInMinutes);
+    // console.log("Has user joined:", userHasJoined);
 
     return !userHasJoined && timeDiffInMinutes > 15;
   };
@@ -1019,18 +1031,8 @@ const RacePage = () => {
 
   useEffect(() => {
     let c = canUserJoin();
-    console.log(c);
+    // console.log(c);
     setCanJoinButton(c);
-  }, []);
-
-  //this is fix for iframe
-  const [showIframe, setShowIframe] = useState(false);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowIframe(true);
-    }, 500); // Give enough time for other React stuff to stabilize
-    return () => clearTimeout(timeout);
   }, []);
 
   const stockColors = [
@@ -1396,7 +1398,7 @@ const RacePage = () => {
                               <div style={{ position: "relative", flex: 1 }}>
                                 {" "}
                                 <img
-                                  className="h-72 w-96 rounded-xl"
+                                  className="h-80 w-80 rounded-xl aspect-square"
                                   src={
                                     rankList?.[0]?.user_photo ||
                                     (rankList?.[0]?.gender === "female"
@@ -1411,7 +1413,7 @@ const RacePage = () => {
                               </div>
                               <div style={{ position: "relative", flex: 1 }}>
                                 <img
-                                  className="h-72 w-96 rounded-xl"
+                                  className="h-80 w-80 rounded-xl aspect-square"
                                   src={
                                     rankList?.[1]?.user_photo ||
                                     (rankList?.[1]?.gender === "female"
@@ -1427,7 +1429,7 @@ const RacePage = () => {
                               <div style={{ position: "relative", flex: 1 }}>
                                 {" "}
                                 <img
-                                  className="h-72 w-96 rounded-xl"
+                                  className="h-80 w-80 rounded-xl aspect-square"
                                   src={
                                     rankList?.[2]?.user_photo ||
                                     (rankList?.[2]?.gender === "female"
@@ -1653,7 +1655,7 @@ const RacePage = () => {
                                       )
                                     ];
                                   let imageUrl = stock?.icon_url;
-                                  console.log(curr);
+                                  // console.log(curr);
                                   return (
                                     <YourBetsCard
                                       key={curr?.stock_id}
@@ -1950,7 +1952,7 @@ const RacePage = () => {
                             <div style={{ position: "relative", flex: 1 }}>
                               {" "}
                               <img
-                                className="h-72 w-96 rounded-xl"
+                                className="h-80 w-80 rounded-xl aspect-square"
                                 src={
                                   rankList?.[0]?.user_photo ||
                                   (rankList?.[0]?.gender === "female"
@@ -1965,7 +1967,7 @@ const RacePage = () => {
                             </div>
                             <div style={{ position: "relative", flex: 1 }}>
                               <img
-                                className="h-72 w-96 rounded-xl"
+                                className="h-80 w-80 rounded-xl aspect-square"
                                 src={
                                   rankList?.[1]?.user_photo ||
                                   (rankList?.[1]?.gender === "female"
@@ -1981,7 +1983,7 @@ const RacePage = () => {
                             <div style={{ position: "relative", flex: 1 }}>
                               {" "}
                               <img
-                                className="h-72 w-96 rounded-xl"
+                                className="h-80 w-80 rounded-xl aspect-square"
                                 src={
                                   rankList?.[2]?.user_photo ||
                                   (rankList?.[2]?.gender === "female"
@@ -2202,7 +2204,7 @@ const RacePage = () => {
                                     )
                                   ];
                                 let imageUrl = stock?.icon_url;
-                                console.log(curr);
+                                // console.log(curr);
                                 return (
                                   <YourBetsCard
                                     key={curr?.stock_id}

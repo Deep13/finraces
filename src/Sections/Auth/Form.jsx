@@ -279,7 +279,7 @@ const Form = ({ closeForm = () => {} }) => {
               Congratulations
             </div>
             <p className="text-[#384453] dark:text-white">
-              Welcome to finraces
+              Welcome to FinRacers
             </p>
             <button
               onClick={() => setActiveTab(tabs.login)}
