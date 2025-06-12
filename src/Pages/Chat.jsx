@@ -306,12 +306,7 @@ const Chat = () => {
               msg.receiver.id === userDetails.userId)
         );
 
-        setMessages((prevMessages) => {
-          const newMessages = userMessages.filter(
-            (msg) => !prevMessages.some((prevMsg) => prevMsg.id === msg.id)
-          );
-          return [...newMessages];
-        });
+        setMessages(userMessages);
         // setMessage([...userMessages])
 
         setHasNextPage(res.hasNextPage);
