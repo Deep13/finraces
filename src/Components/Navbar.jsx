@@ -5,7 +5,7 @@ import { IoIosAdd } from "react-icons/io";
 import { HiMenu } from "react-icons/hi";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/icons/logofinraces.svg";
+import logo from "../assets/images/finracersLogo2.png";
 import globe from "../assets/icons/globe_icon.svg";
 import searchIcon from "../assets/icons/search_icon.svg";
 import support from "../assets/icons/support_icon.svg";
