@@ -774,6 +774,9 @@ const RacePage = () => {
     ) {
       setIframeVisible(true);
     }
+    if (raceStatus == "finished" && iframeVisible) {
+      setIframeVisible(false);
+    }
   }, [raceStatus, iframeVisible]);
 
   //this prevents stock comparison chart from flickering
