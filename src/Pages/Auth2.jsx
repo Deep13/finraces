@@ -34,6 +34,11 @@ const Auth2 = () => {
     const storedEmail = import.meta.env.VITE_EMAIL_ID;
     const storedPassword = import.meta.env.VITE_PASSWORD;
 
+    if (!storedEmail || !storedPassword) {
+      alert("Environment variables for email and password are not set.");
+      return;
+    }
+
     if (email === storedEmail && password === storedPassword) {
       const encoded = btoa(
         JSON.stringify({ email, password, timestamp: Date.now() })
