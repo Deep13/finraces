@@ -25,6 +25,7 @@ const JoinRace = ({
   // inputs will be only prediction price and rank rest are static.
 
   const [stockList, setStockList] = useState([]);
+  const checkRef = useRef(true);
   // const [percentage, setPercentage] = useState('')
   //tesst only
   const { setTest } = useCommunity();
@@ -61,7 +62,8 @@ const JoinRace = ({
   }, []);
 
   useEffect(() => {
-    if (demo && stockList?.length) {
+    if (demo && stockList?.length && checkRef.current) {
+      checkRef.current = false; // Prevents this effect from running again
       const updatedList = stockList.map((stock, index) => ({
         ...stock,
         prediction_price: stock?.stock?.price,
