@@ -53,7 +53,7 @@ const IndiUserProfile = () => {
   const [followingCount, setFollowingCount] = useState(0);
   const [badges, setBadges] = useState([]);
 
-  const { setSelectedUser } = useCommunity();
+  const { setSelectedUser, setSelectedUser2 } = useCommunity();
   const sd = localStorage.getItem("fin_userDetails");
   let selfDetails = sd && JSON.parse(atob(sd));
 
@@ -353,7 +353,10 @@ const IndiUserProfile = () => {
                     </button>
                   )}
                   <button
-                    onClick={() => {}}
+                    onClick={() => {
+                      setSelectedUser2(userDetails);
+                      navigate("/chat");
+                    }}
                     className={
                       "w-[9rem] flex justify-center items-center py-[12.25px] border-[#00387e] border rounded-[70px] text-[14px] dark:border-[#00387E] dark:text-white"
                     }

@@ -3026,7 +3026,11 @@ export const getFollowing = async (onSuccess, onError, userId) => {
 export const getFollowees = async (onSuccess, onError) => {
   try {
     let token = localStorage.getItem("token");
-    let url = `${GlobalURL}/api/v1/public/follows/followees`;
+    let url = `${GlobalURL}/api/v1/follows/followees`;
+
+    if (!token) {
+      return [];
+    }
 
     const response = await fetch(url, {
       method: "GET",

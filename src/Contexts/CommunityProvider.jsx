@@ -10,6 +10,7 @@ export const CommunityProvider = ({ children }) => {
   const [modalText, setModalText] = useState("");
   const [modalImg, setModalImg] = useState("");
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser2, setSelectedUser2] = useState(); // Active chat
 
   //only for testing
   const [test, setTest] = useState(false);
@@ -36,6 +37,8 @@ export const CommunityProvider = ({ children }) => {
         setSelectedUser,
         test,
         setTest,
+        selectedUser2,
+        setSelectedUser2,
       }}
     >
       {children}

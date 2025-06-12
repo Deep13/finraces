@@ -20,6 +20,7 @@ import malePlaceholder from "../assets/images/manPlaceholder.jpg";
 import femalePlaceholder from "../assets/images/womanPlaceholder.jpg";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import { useSocket } from "../Contexts/SocketProvider";
+import { useCommunity } from "../Contexts/CommunityProvider";
 
 const Chat = () => {
   const userId = JSON.parse(
@@ -34,7 +35,7 @@ const Chat = () => {
   const [searchMode, setSearchMode] = useState(false); // Indicates whether we're searching globally or among friends
   const [chatUsers, setChatUsers] = useState([]);
   const [chatData, setChatData] = useState();
-  const [selectedUser, setSelectedUser] = useState(); // Active chat
+  const { selectedUser2, setSelectedUser2 } = useCommunity();
   const [messages, setMessages] = useState([]); // Chat messages
   const chatContainerRef = useRef(null);
   const userDetails = JSON.parse(atob(localStorage.getItem("fin_userDetails")));
@@ -65,7 +66,7 @@ const Chat = () => {
     );
   }, []);
   const scrollToBottom = () => {
-    if (selectedUser) {
+    if (selectedUser2) {
       requestAnimationFrame(() => {
         if (chatContainerRef.current) {
           chatContainerRef.current.scrollTop =
@@ -78,7 +79,7 @@ const Chat = () => {
   // handle Scrolling
   useEffect(() => {
     scrollToBottom();
-  }, [messages, selectedUser]);
+  }, [messages, selectedUser2]);
 
   // Initialize socket connection
 
@@ -217,7 +218,7 @@ const Chat = () => {
   // const [messages, setMessages] = useState([]);
 
   const handleSendMessage = () => {
-    if (!selectedUser || !selectedUser.id) {
+    if (!selectedUser2 || !selectedUser2.id) {
       console.error("Error: No user selected for chat.");
       return;
     }
@@ -225,7 +226,7 @@ const Chat = () => {
     if (message.trim() !== "") {
       postChats(
         message,
-        selectedUser.id,
+        selectedUser2.id,
         (response) => {
           console.log("Message Sent:", response);
 
@@ -275,11 +276,13 @@ const Chat = () => {
   // },[selectedUser])
 
   useEffect(() => {
-    console.log("Selected user changed:", selectedUser);
-  }, [selectedUser]);
+    console.log("Selected user changed:", selectedUser2);
+  }, [selectedUser2]);
 
   const handleSelectUser = (user) => {
-    setSelectedUser(user);
+    if (user != selectedUser2) {
+      setSelectedUser2(user);
+    }
     selectedRef.current = user;
     setFilteredFriends([]);
     setSearchQuery("");
@@ -335,7 +338,7 @@ const Chat = () => {
   };
 
   const fetchChats = (pageNumber = 1) => {
-    if (!selectedUser) return;
+    if (!selectedUser2) return;
 
     getChats(
       (res) => {
@@ -353,17 +356,10 @@ const Chat = () => {
       (error) => {
         console.error("Error fetching chats:", error);
       },
-      selectedUser.id,
+      selectedUser2.id,
       pageNumber
     );
   };
-
-  // Fetch initial messages when user selects a chat
-  useEffect(() => {
-    if (page > 1) {
-      fetchChats(page);
-    }
-  }, [page]);
 
   // Handle scroll event
   const handleScroll = () => {
@@ -402,6 +398,12 @@ const Chat = () => {
       fetchChats(page);
     }
   }, [page]);
+
+  useEffect(() => {
+    if (selectedUser2) {
+      handleSelectUser(selectedUser2);
+    }
+  }, []);
 
   return (
     <div className="w-full relative h-[40rem] flex pb-8 pt-8 dark:bg-[#000924]">
@@ -480,21 +482,21 @@ const Chat = () => {
 
         {/* Right Panel (Chat Messages) */}
         <div className="w-[60%] h-[32rem] dark:bg-[#001B51] border dark:border-[#00387E] rounded-xl pl-3 pr-1 py-2 flex flex-col">
-          {selectedUser && (
+          {selectedUser2 && (
             <div className="flex items-center gap-4 border-b border-gray-200 dark:border-[#00387E] pb-3 mb-2">
               <img
                 className="rounded-full h-10 w-10 object-cover"
                 src={
-                  selectedUser?.photo?.path
-                    ? selectedUser.photo.path
-                    : selectedUser?.gender === "female"
+                  selectedUser2?.photo?.path
+                    ? selectedUser2.photo.path
+                    : selectedUser2?.gender === "female"
                     ? femalePlaceholder
                     : malePlaceholder
                 }
                 alt="User"
               />
               <span className="font-semibold text-lg">
-                {selectedUser.firstName} {selectedUser.lastName}
+                {selectedUser2.firstName} {selectedUser2.lastName}
               </span>
             </div>
           )}
@@ -522,7 +524,7 @@ const Chat = () => {
               ))
             ) : (
               <p className="text-gray-400 text-center mt-5">
-                {selectedUser ? "No messages yet." : "Please select a User."}
+                {selectedUser2 ? "No messages yet." : "Please select a User."}
               </p>
             )}
           </div>
