@@ -15,6 +15,7 @@ import {
   searchStock,
   debounceStockSearchj,
   addToWatchList,
+  getMarketGainersAndLosers,
 } from "../Utils/api";
 import { DarkModeContext } from "../Contexts/DarkModeProvider";
 import { FiMinusCircle } from "react-icons/fi";
@@ -151,39 +152,48 @@ const Market = () => {
   };
 
   useEffect(() => {
-    getMarketLosers(
-      async (data) => {
-        console.log(data);
-        try {
-          const results = await Promise.all(
-            data.map((stock) => searchStock(stock.ticker))
-          );
-          setMarketLosers(results); // Updates state with resolved values
-        } catch (error) {
-          console.error("Error fetching stocks:", error);
-        }
-      },
+    getMarketGainersAndLosers(
       (data) => {
-        console.log("error", data);
-      }
-    );
-
-    getMarketGainers(
-      async (data) => {
-        console.log(data);
-        try {
-          const results = await Promise.all(
-            data.map((stock) => searchStock(stock.ticker))
-          );
-          setMarketGainers(results); // Updates state with resolved values
-        } catch (error) {
-          console.error("Error fetching stocks:", error);
-        }
+        setMarketGainers(data.gainers);
+        setMarketLosers(data.loosers);
       },
       (error) => {
-        console.log("error", error);
+        console.log("error while getting gainers and losers", error);
       }
     );
+    // getMarketLosers(
+    //   async (data) => {
+    //     console.log(data);
+    //     try {
+    //       const results = await Promise.all(
+    //         data.map((stock) => searchStock(stock.ticker))
+    //       );
+    //       setMarketLosers(results); // Updates state with resolved values
+    //     } catch (error) {
+    //       console.error("Error fetching stocks:", error);
+    //     }
+    //   },
+    //   (data) => {
+    //     console.log("error", data);
+    //   }
+    // );
+
+    // getMarketGainers(
+    //   async (data) => {
+    //     console.log(data);
+    //     try {
+    //       const results = await Promise.all(
+    //         data.map((stock) => searchStock(stock.ticker))
+    //       );
+    //       setMarketGainers(results); // Updates state with resolved values
+    //     } catch (error) {
+    //       console.error("Error fetching stocks:", error);
+    //     }
+    //   },
+    //   (error) => {
+    //     console.log("error", error);
+    //   }
+    // );
 
     if (localStorage.getItem("token")) {
       getWatchList(
@@ -603,11 +613,9 @@ const Market = () => {
             className="flex overflow-x-hidden flex-nowrap p-2 scroll-smooth"
           >
             {marketGainers && marketGainers.length > 0 ? (
-              marketGainers
-                .filter((arr) => Array.isArray(arr) && arr.length > 0) // Ensure arr is an array & not empty
-                .map((arr, index) => (
-                  <StockWatchlistCard key={index} data={arr[0]} />
-                ))
+              marketGainers.map((arr, index) => (
+                <StockWatchlistCard key={index} data={arr.details} />
+              ))
             ) : (
               <p>Loading market data...</p> // Fallback UI
             )}
@@ -640,11 +648,9 @@ const Market = () => {
             className="flex overflow-x-hidden flex-nowrap p-2 scroll-smooth"
           >
             {marketLosers && marketLosers.length > 0 ? (
-              marketLosers
-                .filter((arr) => Array.isArray(arr) && arr.length > 0) // Ensure arr is an array & not empty
-                .map((arr, index) => (
-                  <StockWatchlistCard key={index} data={arr[0]} />
-                ))
+              marketLosers.map((arr, index) => (
+                <StockWatchlistCard key={index} data={arr.details} />
+              ))
             ) : (
               <p>Loading market data...</p> // Fallback UI
             )}

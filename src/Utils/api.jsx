@@ -3290,3 +3290,25 @@ export const joinDemoRace = async (predictions, onSuccess, onError) => {
     onError(error);
   }
 };
+
+export const getMarketGainersAndLosers = async (onSuccess, onError) => {
+  try {
+    let url = `${GlobalURL}/api/v1/public/stocks/gainers-loosers`;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);
+    }
+
+    const data = await response.json();
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};
