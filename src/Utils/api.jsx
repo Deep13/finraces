@@ -3316,3 +3316,26 @@ export const getMarketGainersAndLosers = async (onSuccess, onError) => {
     onError(error);
   }
 };
+
+//get demo race data
+export const getDemoRaceData = async (onSuccess, onError) => {
+  try {
+    const response = await fetch(
+      `${GlobalURL}/api/v1/public/demo-race-configs`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    onSuccess(data);
+  } catch (error) {
+    onError(error);
+  }
+};

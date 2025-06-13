@@ -6,7 +6,12 @@ import boxdark from "../assets/images/boxdark.svg";
 import info from "../assets/images/ongoingRaces/info_icon.svg";
 import { Switch } from "@headlessui/react";
 import Select from "react-select";
-import { fetchStocks, joinDemoRace, joinUserToRace } from "../Utils/api";
+import {
+  fetchStocks,
+  getDemoRaceData,
+  joinDemoRace,
+  joinUserToRace,
+} from "../Utils/api";
 import { useNavigate } from "react-router-dom";
 import StockEntryRow2 from "./StockEntryRow2";
 import SegmentedControl from "./SegmentedControl";
@@ -54,11 +59,40 @@ const JoinRace = ({
 
   useEffect(() => {
     setLoading(true);
-    // fetch the race details and stock here together with their current price
-    fetchStocks(race_id, (res) => {
-      setStockList(res);
-      setLoading(false);
-    });
+    if (demo) {
+      getDemoRaceData(
+        (data) => {
+          console.log("Data demo config", data);
+          const stocks = data?.data?.[0]?.stocks || [];
+          // Transform to match what StockEntryRow2 expects
+          const transformed = stocks.map((stock, index) => ({
+            stock: {
+              id: stock.id,
+              name: stock.name,
+              price: stock.price,
+              icon_url: stock.icon_url,
+              logo_url: stock.logo_url,
+              ticker: stock.ticker,
+            },
+            prediction_price: stock.price, // default prediction = current price
+            prediction_rank: index + 1, // default rank
+            value_type_percent: false, // default to false unless you want percent
+          }));
+          setStockList(transformed);
+          setLoading(false);
+        },
+        (error) => {
+          console.log("Error fetching stocks", error);
+          setLoading(false);
+        }
+      );
+    } else {
+      // fetch the race details and stock here together with their current price
+      fetchStocks(race_id, (res) => {
+        setStockList(res);
+        setLoading(false);
+      });
+    }
   }, []);
 
   useEffect(() => {
