@@ -121,43 +121,52 @@ const Blogs = () => {
   };
 
   const getTextFromHTML = (html) => {
-    var plainString = html.replace(/<[^>]+>/g, '');
-    plainString = plainString.replaceAll('&nbsp', '');
+    var plainString = html.replace(/<[^>]+>/g, "");
+    plainString = plainString.replaceAll("&nbsp", "");
     return plainString;
-  }
-
+  };
 
   const renderBlogs = (blogs) => {
-    return blogs.length > 0 ? blogs.map((blog, idx) => (
-      <div key={idx} className="cursor-pointer flex flex-col gap-3 rounded-2xl" onClick={() => navigate(`/blog/${blog.id}`)}>
-        <div className="h-40 w-full">
-          {/* Show the blog image path if available */}
-          <img
-            src={blog?.image?.path || blogImg}
-            className="w-full h-full object-cover rounded-2xl"
-            alt={blog.title}
-          />
-        </div>
-        <div className="flex flex-col gap-1">
-          <div className="font-semibold text-lg">{blog.title.length > 90 ? `${blog.title.slice(0, 90)}...` : blog.title}</div>
-          <div className="text-slate-600 dark:text-slate-300 line-clamp-2">
-            {/* Display the first 100 characters of the content */}
-            {blog.content ? `${getTextFromHTML(blog.content).slice(0, 100)}...` : ""}
+    return blogs.length > 0 ? (
+      blogs.map((blog, idx) => (
+        <div
+          key={idx}
+          className="cursor-pointer flex flex-col gap-3 rounded-2xl"
+          onClick={() => navigate(`/blog/${blog.id}`)}
+        >
+          <div className="h-40 w-full">
+            {/* Show the blog image path if available */}
+            <img
+              src={blog?.image?.path || blogImg}
+              className="w-full h-full object-cover rounded-2xl"
+              alt={blog.title}
+            />
           </div>
-          <div
-            className="cursor-pointer font-semibold text-blue-400"
-            onClick={() => navigate(`/blog/${blog.id}`)}
-          >
-            Read Now
+          <div className="flex flex-col gap-1">
+            <div className="font-semibold text-lg">
+              {blog.title.length > 90
+                ? `${blog.title.slice(0, 90)}...`
+                : blog.title}
+            </div>
+            <div className="text-slate-600 dark:text-slate-300 line-clamp-2">
+              {/* Display the first 100 characters of the content */}
+              {blog.content
+                ? `${getTextFromHTML(blog.content).slice(0, 100)}...`
+                : ""}
+            </div>
+            <div
+              className="cursor-pointer font-semibold text-blue-400"
+              onClick={() => navigate(`/blog/${blog.id}`)}
+            >
+              Read Now
+            </div>
           </div>
         </div>
-      </div>
-    )) : (
+      ))
+    ) : (
       <div className="text-slate-400">No blogs available in this category.</div>
     );
   };
-
-
 
   return (
     <div className="w-full relative h-auto flex pb-8 pt-8 dark:bg-[#000924]">
@@ -172,7 +181,7 @@ const Blogs = () => {
             onClick={() => {
               navigate("/write_blogs");
             }}
-            className="px-3 py-1 cursor-pointer rounded-xl border dark:border-slate-300 dark:text-white dark:bg-[#001B51]"
+            className="px-3 py-1 cursor-pointer rounded-xl border dark:border-slate-300 text-white dark:bg-[#001B51] bg-blue-600"
           >
             Create Blog
           </div>
@@ -188,17 +197,23 @@ const Blogs = () => {
                   state: "Races",
                 })
               }
-              className="font-light text-sm text-slate-300 cursor-pointer"
+              className="dark:font-light text-sm dark:text-slate-300 text-slate-700 cursor-pointer hover:underline"
             >
               Show More
             </div>
           </div>
           <div className="w-full grid grid-cols-4 gap-5">
-            {raceBlogs ? raceBlogs.length > 0 ? (
-              renderBlogs(raceBlogs)
+            {raceBlogs ? (
+              raceBlogs.length > 0 ? (
+                renderBlogs(raceBlogs)
+              ) : (
+                <div className="text-slate-400 w-[200%] flex items-center justif-center">
+                  No blogs in this category. Be the first to write one.
+                </div>
+              )
             ) : (
-              <div className="text-slate-400 w-[200%] flex items-center justif-center">No blogs in this category. Be the first to write one.</div>
-            ) : <div className="text-slate-400">Loading blogs...</div>}
+              <div className="text-slate-400">Loading blogs...</div>
+            )}
           </div>
         </div>
 
@@ -207,7 +222,7 @@ const Blogs = () => {
           <div className="flex items-center justify-between">
             <div className="font-semibold text-xl">Stocks</div>
             <div
-              className="font-light text-sm text-slate-300 cursor-pointer"
+              className="dark:font-light text-sm dark:text-slate-300 text-slate-700 cursor-pointer hover:underline"
               onClick={() =>
                 navigate("/allBlogs?type=Stocks", {
                   state: "Stocks",
@@ -218,11 +233,19 @@ const Blogs = () => {
             </div>
           </div>
           <div className="w-full grid grid-cols-4 gap-5">
-            {stockBlogs ? stockBlogs.length > 0 ? (
-              renderBlogs(stockBlogs)
+            {stockBlogs ? (
+              stockBlogs.length > 0 ? (
+                renderBlogs(stockBlogs)
+              ) : (
+                <div className="text-slate-400 w-[200%] flex items-center justif-center">
+                  No blogs in this category. Be the first to write one.
+                </div>
+              )
             ) : (
-              <div className="text-slate-400 w-[200%] flex items-center justif-center">No blogs in this category. Be the first to write one.</div>
-            ) : <div className="text-slate-400 w-[200%] flex items-center justif-center">Loading blogs...</div>}
+              <div className="text-slate-400 w-[200%] flex items-center justif-center">
+                Loading blogs...
+              </div>
+            )}
           </div>
         </div>
 
@@ -231,7 +254,7 @@ const Blogs = () => {
           <div className="flex items-center justify-between">
             <div className="font-semibold text-xl">Investment</div>
             <div
-              className="font-light text-sm text-slate-300 cursor-pointer"
+              className="dark:font-light text-sm dark:text-slate-300 text-slate-700 cursor-pointer hover:underline"
               onClick={() =>
                 navigate("/allBlogs?type=Crypto", {
                   state: "Crypto",
@@ -242,11 +265,19 @@ const Blogs = () => {
             </div>
           </div>
           <div className="w-full grid grid-cols-4 gap-5">
-            {investingBlogs ? investingBlogs.length > 0 ? (
-              renderBlogs(investingBlogs)
+            {investingBlogs ? (
+              investingBlogs.length > 0 ? (
+                renderBlogs(investingBlogs)
+              ) : (
+                <div className="text-slate-400 w-[200%] flex items-center justif-center">
+                  No blogs in this category. Be the first to write one.
+                </div>
+              )
             ) : (
-              <div className="text-slate-400 w-[200%] flex items-center justif-center">No blogs in this category. Be the first to write one.</div>
-            ) : <div className="text-slate-400 w-[200%] flex items-center justif-center">Loading blogs...</div>}
+              <div className="text-slate-400 w-[200%] flex items-center justif-center">
+                Loading blogs...
+              </div>
+            )}
           </div>
         </div>
 
@@ -255,7 +286,7 @@ const Blogs = () => {
           <div className="flex items-center justify-between">
             <div className="font-semibold text-xl">Crypto</div>
             <div
-              className="font-light text-sm text-slate-300 cursor-pointer"
+              className="dark:font-light text-sm dark:text-slate-300 text-slate-700 cursor-pointer hover:underline"
               onClick={() =>
                 navigate("/allBlogs?type=Crypto", {
                   state: "Crypto",
@@ -266,11 +297,19 @@ const Blogs = () => {
             </div>
           </div>
           <div className="w-full grid grid-cols-4 gap-5">
-            {cryptoBlogs ? cryptoBlogs.length > 0 ? (
-              renderBlogs(cryptoBlogs)
+            {cryptoBlogs ? (
+              cryptoBlogs.length > 0 ? (
+                renderBlogs(cryptoBlogs)
+              ) : (
+                <div className="text-slate-400 w-[200%] flex items-center justif-center">
+                  No blogs in this category. Be the first to write one.
+                </div>
+              )
             ) : (
-              <div className="text-slate-400 w-[200%] flex items-center justif-center">No blogs in this category. Be the first to write one.</div>
-            ) : <div className="text-slate-400 w-[200%] flex items-center justif-center">Loading blogs...</div>}
+              <div className="text-slate-400 w-[200%] flex items-center justif-center">
+                Loading blogs...
+              </div>
+            )}
           </div>
         </div>
       </div>

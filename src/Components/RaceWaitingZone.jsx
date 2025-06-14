@@ -336,6 +336,7 @@ const RaceWaitingZone = ({
                 raceName={raceName}
                 closeForm={() => setJoinRaceFormVisible(false)}
                 race_id={race_id}
+                start_Time={start_date}
               />
             )}
 

@@ -58,6 +58,7 @@ const Community = () => {
   const [joinRaceFormVisible, setJoinRaceFormVisible] = useState(false);
   const [selectedRaceId, setSelectedRaceId] = useState();
   const [selectedRaceName, setSelectedRaceName] = useState("");
+  const [selectedStartdate, setSelectedStartdate] = useState("");
   const [followees, setFollowees] = useState([]);
 
   // Proper Post Data
@@ -549,6 +550,7 @@ const Community = () => {
             raceName={selectedRaceName}
             closeForm={setJoinRaceFormVisible}
             race_id={selectedRaceId}
+            start_Time={selectedStartdate}
           />
         )}
         {/* Title */}
@@ -712,10 +714,11 @@ const Community = () => {
                     onClick={() => sendPost()}
                     disabled={!postContent?.trim()}
                     className={`dark:text-white p-2 rounded-full h-12 w-12 flex items-center justify-center transition-all 
-                  ${postContent?.trim()
-                        ? "bg-blue-500 hover:bg-blue-600"
-                        : "bg-gray-400 cursor-not-allowed"
-                      }`}
+                  ${
+                    postContent?.trim()
+                      ? "bg-blue-500 hover:bg-blue-600"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
                   >
                     <BsFillSendFill size={20} />
                   </button>
@@ -729,10 +732,11 @@ const Community = () => {
                     .map((tab, index) => (
                       <span
                         key={index}
-                        className={`cursor-pointer transition-all ${activeTab === tab && !selectedUser
-                          ? "text-blue-400"
-                          : "dark:text-gray-300"
-                          }`}
+                        className={`cursor-pointer transition-all ${
+                          activeTab === tab && !selectedUser
+                            ? "text-blue-400"
+                            : "dark:text-gray-300"
+                        }`}
                         onClick={() => {
                           setSelectedUser(null);
                           setActiveTab(tab);
@@ -746,16 +750,16 @@ const Community = () => {
                         prev === null
                           ? [curr]
                           : [
-                            ...prev,
-                            <span
-                              key={`sep-${prev.length}`}
-                              className="text-gray-500"
-                            >
-                              {" "}
-                              |{" "}
-                            </span>,
-                            curr,
-                          ],
+                              ...prev,
+                              <span
+                                key={`sep-${prev.length}`}
+                                className="text-gray-500"
+                              >
+                                {" "}
+                                |{" "}
+                              </span>,
+                              curr,
+                            ],
                       null
                     )}
                 </div>
@@ -786,8 +790,8 @@ const Community = () => {
                               user?.photo?.path
                                 ? user.photo.path
                                 : user?.gender === "female"
-                                  ? femalePlaceholder
-                                  : malePlaceholder
+                                ? femalePlaceholder
+                                : malePlaceholder
                             }
                             alt={user.firstName}
                             className="w-8 h-8 rounded-full object-cover"
@@ -920,8 +924,9 @@ const Community = () => {
 
                         {/* Follow/Unfollow Button */}
                         <button
-                          className={`p-2 z-10 ml-3 border-2 border-[#00387E] rounded-xl dark:hover:bg-[#00387E] transition ${isFollowed ? "hidden group-hover:block" : ""
-                            }`}
+                          className={`p-2 z-10 ml-3 border-2 border-[#00387E] rounded-xl dark:hover:bg-[#00387E] transition ${
+                            isFollowed ? "hidden group-hover:block" : ""
+                          }`}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleFollow(isFollowed, leader);
@@ -1004,6 +1009,7 @@ const Community = () => {
                             if (userDetails || guestDetails) {
                               setSelectedRaceId(stock.id);
                               setSelectedRaceName(stock.name);
+                              setSelectedStartdate(stock.start_date);
                               setJoinRaceFormVisible(true);
                             } else {
                               setShowLoginForm(true);

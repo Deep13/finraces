@@ -241,7 +241,7 @@ const CreateBlog = () => {
                         category: e.target.value,
                       }))
                     }
-                    className="cursor-pointer w-full h-10 p-2 rounded-sm dark:bg-[#001B51] text-white"
+                    className="cursor-pointer w-full h-10 p-2 rounded-sm dark:bg-[#001B51] dark:text-white border-2 dark:border-0"
                   >
                     <option value="" disabled>
                       Select a category
@@ -277,7 +277,7 @@ const CreateBlog = () => {
                   />
                 </div>
                 <div
-                  className="w-64 h-64 min-w-[160px] cursor-pointer rounded-lg border border-dashed border-slate-500 bg-[#001B51] overflow-hidden flex items-center justify-center"
+                  className="w-64 h-64 min-w-[160px] cursor-pointer rounded-lg border border-dashed border-slate-500 dark:bg-[#001B51] overflow-hidden flex items-center justify-center"
                   onClick={() => fileInputRef.current.click()}
                 >
                   {formData.bannerImg ? (
@@ -309,7 +309,7 @@ const CreateBlog = () => {
               <label className="text-sm mb-1 block">
                 Content <span className="text-slate-400">(i)</span>
               </label>
-              <div className="dark:bg-[#001B51] bg-white rounded-md overflow-hidden min-h-[200px] h-[500px]">
+              <div className="dark:bg-[#001B51] border-2 dark:border-0 bg-white rounded-md overflow-hidden min-h-[200px] h-[500px]">
                 <ReactQuill
                   value={content}
                   ref={quillRef}

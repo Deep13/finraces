@@ -27,6 +27,7 @@ import { getUser, updateNotification } from "../Utils/api";
 import io from "socket.io-client";
 import { useSocket } from "../Contexts/SocketProvider";
 import { set } from "lodash";
+import { MdSearch } from "react-icons/md";
 
 const Navbar = () => {
   const [notifications, setNotifications] = useState([]);
@@ -203,7 +204,8 @@ const Navbar = () => {
             onClick={() => setSearch((prev) => !prev)}
             className="aspect-square h-[2.35rem] dark:bg-[#001a50] grid place-items-center rounded-[8px]"
           >
-            <img src={searchIcon} alt="Search" />
+            {/* <img src={searchIcon} alt="Search" /> */}
+            <MdSearch color={darkModeEnabled ? "white" : "black"} size={24} />
           </button>
           {!userDetails && (
             <button

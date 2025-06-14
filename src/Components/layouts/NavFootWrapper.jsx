@@ -145,7 +145,7 @@ const NavFootWrapper = () => {
       )}
       {shareModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-blue-900 rounded-lg shadow-lg p-6 w-[100%] max-w-[650px]">
+          <div className="dark:bg-blue-900 bg-[#e5f4ff] rounded-lg shadow-lg p-6 w-[100%] max-w-[650px]">
             <h2 className="text-xl font-bold dark:text-white mb-3">
               Share in Community
             </h2>
@@ -187,7 +187,7 @@ const NavFootWrapper = () => {
                 </button>
                 <button
                   onClick={shareWithCommunity}
-                  className="px-4 py-2 rounded-md dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] text-white"
+                  className="px-4 py-2 rounded-md bg-gradient-to-r from-[#005bff] to-[#5b89ff] text-white"
                 >
                   Share
                 </button>
@@ -317,7 +317,7 @@ const NavFootWrapper = () => {
                 </button>
                 <button
                   onClick={submitBugReport}
-                  className="px-4 py-2 rounded-md dark:bg-gradient-to-r from-[#005bff] to-[#5b89ff] text-white"
+                  className="px-4 py-2 rounded-md bg-gradient-to-r from-[#005bff] to-[#5b89ff] text-white"
                 >
                   Submit
                 </button>

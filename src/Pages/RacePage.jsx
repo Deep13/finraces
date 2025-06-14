@@ -1272,6 +1272,7 @@ const RacePage = () => {
                     closeForm={setShowJoin}
                     race_id={race_id}
                     setStatus={setShowJoin}
+                    start_Time={raceDetails?.start_date}
                   />
                 )}
                 {/* actual dashboard  */}
@@ -1532,20 +1533,23 @@ const RacePage = () => {
                     stockRankList={stockRankList}
                   />
 
-                  {raceStatus != "finished" && userDetails && (
-                    <div className="w-full h-[30rem]">
-                      <p className="text-slate-300 font-semibold text-xl font-poppins w-full flex items-center justify-center mb-5">
-                        Comparison of Last 30 days
-                      </p>
-                      <StockChart
-                        labels={labels}
-                        datasets={chartData}
-                        area={false}
-                        disableAnimation={true}
-                        zoom={true}
-                      />
-                    </div>
-                  )}
+                  {raceStatus != "finished" &&
+                    userDetails &&
+                    labels &&
+                    chartData && (
+                      <div className="w-full h-[30rem]">
+                        <p className="dark:text-slate-300 text-slate-700 font-semibold text-xl font-poppins w-full flex items-center justify-center mb-5">
+                          Comparison of Last 30 days
+                        </p>
+                        <StockChart
+                          labels={labels}
+                          datasets={chartData}
+                          area={false}
+                          disableAnimation={true}
+                          zoom={true}
+                        />
+                      </div>
+                    )}
                 </div>
               )}
             </div>
@@ -1758,6 +1762,7 @@ const RacePage = () => {
                   closeForm={setShowJoin}
                   race_id={race_id}
                   setStatus={setShowJoin}
+                  start_Time={raceDetails?.start_date}
                 />
               )}
               {/* actual dashboard  */}
@@ -1866,11 +1871,11 @@ const RacePage = () => {
                     {(raceStatus == "finished" || raceStatus == "running") &&
                     ud ? (
                       <div className="group">
-                        <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-32 z-20 opacity-85">
+                        <div className="hidden group-hover:flex dark:bg-white bg-blue-200 px-2 py-1 absolute rounded-xl top-24 right-32 z-20 opacity-85">
                           Share in Community
                         </div>
                         <IoMdShare
-                          className="text-[white] text-[30px] cursor-pointer mr-5 relative"
+                          className="dark:text-[white] text-slate-500 text-[30px] cursor-pointer mr-5 relative"
                           onClick={handleShareClick}
                         />
                       </div>
@@ -1907,11 +1912,11 @@ const RacePage = () => {
                     )}
 
                     <div className="group">
-                      <div className="hidden group-hover:flex dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-20 z-20 opacity-85">
+                      <div className="hidden group-hover:flex bg-blue-200 dark:bg-white px-2 py-1 absolute rounded-xl top-24 right-20 z-20 opacity-85">
                         See race stats
                       </div>
                       <HiInformationCircle
-                        className="text-[white] text-[30px] cursor-pointer relative"
+                        className="dark:text-[white] text-slate-600 text-[30px] cursor-pointer relative"
                         onClick={() => setshowDetails(true)}
                       />
                     </div>
@@ -2086,9 +2091,9 @@ const RacePage = () => {
                   stockRankList={stockRankList}
                 />
 
-                {raceStatus != "finished" && (
+                {raceStatus != "finished" && labels && chartData && (
                   <div className="w-full h-[30rem]">
-                    <p className="text-slate-300 font-semibold text-xl font-poppins w-full flex items-center justify-center mb-5">
+                    <p className="dark:text-slate-300 text-slate-700 font-semibold text-xl font-poppins w-full flex items-center justify-center mb-5">
                       Comparison of Last 30 days
                     </p>
                     <StockChart
@@ -2122,7 +2127,7 @@ const RacePage = () => {
               }}
               className="fixed top-0 left-0 w-full h-screen py-[3%] backdrop-blur-md z-[100] grid place-items-center"
             >
-              <div className="bg-[#000D38] h-[100%] text-[white] rounded-[8px] ">
+              <div className="dark:bg-[#000D38] bg-[#e5f4ff] h-[100%] dark:text-[white] rounded-[8px] ">
                 <div className="flex justify-end p-[10px]">
                   <IoMdCloseCircleOutline
                     className="text-[30px] cursor-pointer"

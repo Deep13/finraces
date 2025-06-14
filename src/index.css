@@ -79,6 +79,31 @@ input[type='password'] {
     letter-spacing: 0.125em;
 } */
 /* This was meant for making passwod dots bigger */
+/* Day number (individual days) */
+.rdp-day {
+  @apply text-black dark:text-white;
+}
+
+/* Month + year (header) */
+.rdp-caption_label {
+  @apply text-black dark:text-white font-semibold;
+}
+
+/* Day names (Sun, Mon, etc.) */
+.rdp-head_cell {
+  @apply text-black dark:text-white;
+}
+
+.rdp-weekday {
+  @apply text-black dark:text-white;
+}
+/* Nav arrows */
+.rdp-button_next {
+  @apply text-black dark:text-white;
+}
+.rdp-nav_button {
+  @apply text-black dark:text-white;
+}
 
 /* Firefox - Light mode */
 html:not(.dark) .notificationScrollbar {

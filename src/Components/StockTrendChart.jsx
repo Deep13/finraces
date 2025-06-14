@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -10,6 +10,7 @@ import {
   Legend,
   Filler,
 } from "chart.js";
+import { DarkModeContext } from "../Contexts/DarkModeProvider";
 
 // Register Chart.js components
 ChartJS.register(
@@ -28,7 +29,7 @@ const StockTrendChart = ({
   filter = "1M",
 }) => {
   const [chartData, setChartData] = useState({ labels: [], closePrices: [] });
-
+  const { darkModeEnabled, chartRef } = useContext(DarkModeContext);
   useEffect(() => {
     if (!stockData || !stockData.results || stockData.results.length === 0) {
       return;
@@ -132,11 +133,11 @@ const StockTrendChart = ({
     scales: {
       x: {
         grid: { display: false },
-        ticks: { color: "#fff" },
+        ticks: { color: darkModeEnabled ? "#fff" : "#000" },
       },
       y: {
         grid: { display: false },
-        ticks: { color: "#fff" },
+        ticks: { color: darkModeEnabled ? "#fff" : "#000" },
       },
     },
   };

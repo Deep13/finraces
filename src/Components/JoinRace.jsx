@@ -25,11 +25,14 @@ const JoinRace = ({
   raceName = "Any Race",
   setStatus,
   demo = false,
+  start_Time = null,
 }) => {
   // this is join race so here we will only get stocks and their curent values not the
   // inputs will be only prediction price and rank rest are static.
 
   const [stockList, setStockList] = useState([]);
+  const [validationError, setValidationError] = useState("");
+
   const checkRef = useRef(true);
   // const [percentage, setPercentage] = useState('')
   //tesst only
@@ -144,7 +147,11 @@ const JoinRace = ({
           {/* inputs  */}
 
           <hr className="my-[1.2rem] border-t border-solid border-black" />
-
+          {validationError && (
+            <div className="text-red-500 text-center mb-3 font-medium">
+              {validationError}
+            </div>
+          )}
           {/* stocks with prices and values  */}
           {loading ? (
             <div className="w-full mx-auto flex items-center justify-center">
@@ -180,6 +187,45 @@ const JoinRace = ({
         </div>
         <button
           onClick={() => {
+            setValidationError(""); // clear old error
+            // Check if race already started
+            if (start_Time) {
+              const raceStart = new Date(start_Time).getTime();
+              const now = new Date().getTime();
+              if (now > raceStart) {
+                setValidationError(
+                  "You cannot join this race. It has already started."
+                );
+                return;
+              }
+            }
+
+            // Check for empty price or rank
+            for (let stock of stockList) {
+              if (
+                stock.prediction_price === null ||
+                stock.prediction_price === undefined ||
+                stock.prediction_price === "" ||
+                stock.prediction_rank === null ||
+                stock.prediction_rank === undefined ||
+                stock.prediction_rank === "" ||
+                isNaN(stock.prediction_rank)
+              ) {
+                setValidationError(
+                  "Please fill all prediction prices and ranks."
+                );
+                return;
+              }
+            }
+
+            // Check for duplicate ranks
+            const ranks = stockList.map((s) => s.prediction_rank);
+            const uniqueRanks = new Set(ranks);
+            if (uniqueRanks.size !== ranks.length) {
+              setValidationError("Each stock must have a unique rank.");
+              return;
+            }
+
             let racePredictions = stockList.map((curr) => {
               if (curr.value_type_percent) {
                 return {
